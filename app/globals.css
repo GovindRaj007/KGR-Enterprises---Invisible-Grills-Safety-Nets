@@ -1,26 +1,370 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Keyframe Animations */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  100% {
+    transform: translateX(-50%);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes net-float {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  33% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+
+  66% {
+    transform: translateY(5px) rotate(-1deg);
+  }
 }
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px hsl(24 95% 53% / 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 30px hsl(24 95% 53% / 0.6);
+  }
+}
+
+/* floating rhombus/diamond background animation for subtle 3D effect */
+@keyframes rhombus-drift {
+  0% {
+    background-position: 0 0, 24px 24px;
+    opacity: 0.9;
+    transform: translateZ(0) scale(1);
+  }
+  50% {
+    background-position: 8px -8px, 32px 16px;
+    opacity: 1;
+    transform: translate3d(4px, -3px, 0) scale(1.01);
+  }
+  100% {
+    background-position: 0 0, 24px 24px;
+    opacity: 0.9;
+    transform: translateZ(0) scale(1);
+  }
+}
+
+/* Root Variables - Design System */
+:root {
+  /* Base Colors */
+  --background: 0 0% 100%;
+  --foreground: 220 23% 15%;
+
+  /* Card */
+  --card: 0 0% 100%;
+  --card-foreground: 220 23% 15%;
+
+  /* Popover */
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 23% 15%;
+
+  /* Primary */
+  --primary: 224 76% 27%;
+  --primary-foreground: 0 0% 98%;
+
+  /* Secondary */
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 224 76% 27%;
+
+  /* Muted */
+  --muted: 220 23% 95%;
+  --muted-foreground: 220 23% 45%;
+
+  /* Accent */
+  --accent: 174 72% 30%;
+  --accent-foreground: 0 0% 98%;
+
+  /* Safety */
+  --safety: 24 95% 53%;
+  --safety-foreground: 0 0% 98%;
+
+  /* Destructive */
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 40% 98%;
+
+  /* Border & Input */
+  --border: 220 23% 85%;
+  --input: 220 23% 85%;
+  --ring: 224 76% 27%;
+
+  /* Border Radius */
+  --radius: 0.75rem;
+
+  /* Safety Nets Brand Colors */
+  --brand-blue: 224 76% 27%;
+  --brand-orange: 24 95% 53%;
+  --brand-teal: 174 72% 30%;
+  --brand-navy: 220 39% 11%;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, hsl(224 76% 27%), hsl(174 72% 30%));
+  --gradient-safety: linear-gradient(135deg, hsl(24 95% 53%), hsl(224 76% 27%));
+  --gradient-hero: linear-gradient(135deg, hsl(220 39% 11% / 0.95), hsl(224 76% 27% / 0.9));
+
+  /* Shadows */
+  --shadow-soft: 0 4px 6px -1px hsl(224 76% 27% / 0.1);
+  --shadow-medium: 0 10px 15px -3px hsl(224 76% 27% / 0.1);
+  --shadow-strong: 0 25px 50px -12px hsl(224 76% 27% / 0.25);
+
+  /* Animations */
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* Sidebar */
+  --sidebar-background: 0 0% 98%;
+  --sidebar-foreground: 240 5.3% 26.1%;
+  --sidebar-primary: 240 5.9% 10%;
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 240 4.8% 95.9%;
+  --sidebar-accent-foreground: 240 5.9% 10%;
+  --sidebar-border: 220 13% 91%;
+  --sidebar-ring: 217.2 91.2% 59.8%;
+}
+
+/* Base Styles */
+* {
+  border-color: hsl(var(--border));
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+}
+
+/* 3D Background Elements */
+.bg-3d-elements {
+  position: absolute;
+  inset: 0;
+  z-index: 0; /* sits above the section background but below content (content uses z-10) */
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bg-3d-elements::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* subtle layered color fields to give depth without morphing */
+  background: radial-gradient(circle at 20% 50%, hsl(224 76% 27% / 0.32) 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, hsl(174 72% 30% / 0.28) 0%, transparent 40%),
+    radial-gradient(circle at 40% 80%, hsl(24 95% 53% / 0.18) 0%, transparent 40%);
+  background-blend-mode: screen, screen, screen;
+  z-index: 0;
+  will-change: opacity, transform;
+}
+
+/* subtle animated grid/mesh overlay to emulate floating 3D structure */
+.bg-3d-elements::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  /* Create rhombus/diamond pattern by overlaying two angled linear-gradients and offsetting them */
+  background-image: 
+    linear-gradient(135deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(225deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  /* base tile size controls diamond size/density */
+  background-size: 48px 48px, 48px 48px;
+  background-position: 0 0, 24px 24px; /* offset second layer to form rhombus shapes */
+  mix-blend-mode: overlay;
+  opacity: 0.95;
+  transform-origin: center;
+  /* subtle floating motion using background-position + tiny transform */
+  animation: rhombus-drift 18s ease-in-out infinite;
+  will-change: transform, opacity, background-position;
+}
+
+/* floating-orb styles removed (orbs removed from markup) */
+
+/* Component Styles */
+.safety-net-bg {
+  background-image: radial-gradient(circle at 25px 25px, hsl(224 76% 27% / 0.1) 2px, transparent 0),
+    radial-gradient(circle at 75px 75px, hsl(174 72% 30% / 0.1) 2px, transparent 0);
+  background-size: 50px 50px;
+  animation: net-float 20s ease-in-out infinite;
+}
+
+.floating-contact {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.language-selector {
+  position: relative;
+  z-index: 40;
+}
+
+.hero-pattern {
+  background-image: linear-gradient(30deg, hsl(224 76% 27% / 0.05) 12%, transparent 12.5%, transparent 87%, hsl(224 76% 27% / 0.05) 87.5%, hsl(224 76% 27% / 0.05)),
+    linear-gradient(150deg, hsl(224 76% 27% / 0.05) 12%, transparent 12.5%, transparent 87%, hsl(224 76% 27% / 0.05) 87.5%, hsl(224 76% 27% / 0.05)),
+    linear-gradient(30deg, hsl(174 72% 30% / 0.05) 12%, transparent 12.5%, transparent 87%, hsl(174 72% 30% / 0.05) 87.5%, hsl(174 72% 30% / 0.05)),
+    linear-gradient(150deg, hsl(174 72% 30% / 0.05) 12%, transparent 12.5%, transparent 87%, hsl(174 72% 30% / 0.05) 87.5%, hsl(174 72% 30% / 0.05));
+  background-size: 76px 76px;
+  background-position: 0 0, 0 0, 38px 38px, 38px 38px;
+}
+
+/* Mobile-First Container Utilities */
+.container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
+
+/* Utility Classes */
+.text-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.shadow-safety {
+  box-shadow: var(--shadow-medium);
+}
+
+.transition-smooth {
+  transition: var(--transition-smooth);
+}
+
+.transition-spring {
+  transition: var(--transition-spring);
+}
+
+/* Scrollbar Hide Utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari and Opera */
+}
+
+/* Mobile-First Optimizations */
+@media (max-width: 640px) {
+
+  /* Hide scrollbars globally on mobile devices */
+  * {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+
+  *::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari and Opera */
+  }
+
+  body {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Optimize touch targets for mobile */
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Prevent text size adjustment on orientation change */
+  html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* Optimize animations for mobile performance */
+  /* Optimize animations for mobile performance */
+
+  .bg-3d-elements::before {
+    /* keep background subtle on small screens */
+    will-change: opacity, transform;
+  }
+}
+
+/* Ensure category tab labels in mobile services menu wrap on very small screens (<370px) */
+@media (max-width: 369px) {
+  .mobile-wrap-tab {
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 641px) and (max-width: 1024px) {
+  /* No floating orbs on tablet/desktop: removed per design request */
+}
+
+/* sheet-close rules removed; custom close button is provided inside the sheet markup */
