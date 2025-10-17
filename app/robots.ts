@@ -18,6 +18,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/api/', '/admin/', '/_next/'],
       },
     ],
-    sitemap: 'https://safetypronets.com/sitemap.xml',
+  sitemap: 'https://invisiblegrillsandsafetynets.in/sitemap.xml',
   };
 }

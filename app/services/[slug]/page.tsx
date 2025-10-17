@@ -61,6 +61,36 @@ export default async function ServiceDetailPage({ params }: Props) {
     generateLocationContent(service.title, loc.name)
   );
 
+  const branches =  {
+      icon: MapPin,
+      title: "Main Branches",
+      details: [
+        {
+          label: "Hyderabad",
+          value: "15-21-150/17, JK Heights, Balaji Nagar, Kukatpally - 500072",
+        },
+        {
+          label: "Bangalore",
+          value:
+            "367, 2nd A Main Road, Gokula Extension, Mathikera, Bangalore Division - 560054",
+        },
+        {
+          label: "Chennai",
+          value:
+            "25/9a, Sathya Moorthy Street, Kamaraj Nagar, Choolaimedu - 600094",
+        },
+        {
+          label: "Andhra Pradesh",
+          value: "3-12, Ayyappa Nagar, Benz Circle, Vijayawada - 520007",
+        },
+        {
+          label: "Andhra Pradesh",
+          value:
+            "21-3/4/3, Viman Nagar, Kakani Nagar, Visakhapatnam, Andhra Pradesh 530009",
+        },
+      ],
+    };
+    
   // Build a concise main locations string for SEO (used in H1)
   const mainLocationString = PRIMARY_LOCATIONS.slice(0, 4)
     .map((l) => l.name)
@@ -162,11 +192,11 @@ export default async function ServiceDetailPage({ params }: Props) {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'KGR Enterprises',
-    url: 'https://safetypronets.com',
-    logo: 'https://safetypronets.com/logo.png',
+  url: 'https://invisiblegrillsandsafetynets.in',
+  logo: 'https://invisiblegrillsandsafetynets.in/logo.png',
     contactPoint: {
       '@type': 'ContactPoint',
-  telephone: PRIMARY.tel.replace('tel:+', '+'),
+  telephone: PRIMARY.phone,
       contactType: 'Customer Support',
       areaServed: 'IN',
       availableLanguage: 'en',
@@ -177,16 +207,17 @@ export default async function ServiceDetailPage({ params }: Props) {
       'https://www.google.com/maps/place/KGR+Enterprises',
     ],
   };
-
+    
+  const BranchIcon = branches.icon;
   // Local Business Schema
   const localBusinessSchema = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     name: 'KGR Enterprises',
-    image: 'https://safetypronets.com/logo.png',
-  telephone: PRIMARY.tel.replace('tel:+', '+'),
+  image: 'https://invisiblegrillsandsafetynets.in/logo.png',
+  telephone: PRIMARY.phone,
     priceRange: '₹₹',
-    url: 'https://safetypronets.com',
+  url: 'https://invisiblegrillsandsafetynets.in',
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Hyderabad',
@@ -228,23 +259,24 @@ export default async function ServiceDetailPage({ params }: Props) {
 
       <div className="min-h-screen bg-background">
         {/* Breadcrumb - Aligned with content container */}
-        <div className="bg-muted/30 pt-4 md:py-4 md:mt-[26px]">
-          <div className="container mx-auto">
-            <div className="max-w-4xl mx-auto">
-              <nav className="flex md:items-center space-x-4 text-base md:text-lg text-muted-foreground overflow-x-auto">
-                <Link href="/" className="hover:text-primary whitespace-nowrap">
-                  Home
-                </Link>
-                <span>/</span>
-                <Link href="/services" className="hover:text-primary whitespace-nowrap">
-                  Services
-                </Link>
-                <span>/</span>
-                <span className="text-foreground truncate">{service.title}</span>
-              </nav>
-            </div>
-          </div>
-        </div>
+{/* Breadcrumb - Aligned with content container */}
+<div className="bg-muted/30 pt-4 md:py-4 md:mt-[26px]">
+  <div className="container mx-auto px-4">
+    <div className="max-w-4xl mx-auto">
+      <nav className="flex md:items-center gap-2 text-base md:text-lg text-muted-foreground overflow-x-auto">
+        <Link href="/" className="hover:text-primary whitespace-nowrap flex-shrink-0">
+          Home
+        </Link>
+        <span className="flex-shrink-0">/</span>
+        <Link href="/services" className="hover:text-primary whitespace-nowrap flex-shrink-0">
+          Services
+        </Link>
+        <span className="flex-shrink-0">/</span>
+        <span className="text-foreground truncate min-w-0">{service.title}</span>
+      </nav>
+    </div>
+  </div>
+</div>
 
         <div className="container mx-auto pb-2 md:py-4">
           <div className="max-w-4xl mx-auto space-y-8 md:space-y-12">
@@ -365,6 +397,30 @@ export default async function ServiceDetailPage({ params }: Props) {
                 </CardContent>
               </Card>
 
+              {/* Branches */}
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center space-x-3 mb-4">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                        <BranchIcon className="h-5 w-5 text-primary" />
+                      </div>
+                      <h3 className="font-semibold">{branches.title}</h3>
+                    </div>
+                    <div className="space-y-3">
+                      {branches.details.map((detail, idx) => (
+                        <div key={idx} className="space-y-1">
+                          <p className="text-xs text-muted-foreground">
+                            {detail.label}
+                          </p>
+                            <p className="text-sm font-medium">
+                              {detail.value}
+                            </p>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+
               {/* Location-Specific Content */}
               <Card>
                 <CardContent className="p-4 md:p-6 space-y-6">
@@ -448,7 +504,7 @@ export default async function ServiceDetailPage({ params }: Props) {
             </div>
           </div>
         </div>
-      </div>
+        </div>
     </>
   );
 }

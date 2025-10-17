@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     title: "Contact KGR Enterprises - Free Consultation",
     description:
       "Get in touch for professional safety solutions. Free site inspection and quote.",
-    url: "https://safetypronets.com/contact",
+  url: "https://invisiblegrillsandsafetynets.in/contact",
     images: [
       {
         url: "/og-contact.jpg",

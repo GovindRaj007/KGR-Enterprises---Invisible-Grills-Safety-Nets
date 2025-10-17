@@ -46,7 +46,7 @@ const HeroSection = () => {
             </h1>
 
             {/* Description - Concise for mobile */}
-            <p className="text-sm md:text-base lg:text-lg text-muted-foreground">
+            <p className="text-base md:text-lg lg:text-xl text-muted-foreground">
               Professional invisible grills, balcony safety nets, children protection nets, 
               bird nets & pet safety solutions. Trusted by 5000+ families across South India.
             </p>
@@ -56,7 +56,7 @@ const HeroSection = () => {
               {features.map((feature, index) => (
                 <div 
                   key={index}
-                  className="flex items-center space-x-2 text-xs md:text-sm"
+                  className="flex items-center space-x-2 text-xs md:text-base"
                 >
                   <CheckCircle2 className="h-3 w-3 md:h-4 md:w-4 text-accent flex-shrink-0" />
                   <span>{feature}</span>

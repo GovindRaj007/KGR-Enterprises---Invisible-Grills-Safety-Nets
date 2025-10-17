@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "KGR Enterprises - Professional Safety Solutions",
     description: "Best invisible grills, safety nets, bird protection, and sports nets in South India",
-    url: "https://safetypronets.com",
+  url: "https://invisiblegrillsandsafetynets.in",
     images: [
       {
         url: "/og-home.jpg",

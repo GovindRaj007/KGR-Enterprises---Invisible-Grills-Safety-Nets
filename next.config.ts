@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'safetypronets.com',
+  hostname: 'invisiblegrillsandsafetynets.in',
       },
     ],
     qualities: [75, 85, 100],

@@ -7,21 +7,37 @@ export const PRIMARY_LOCATIONS = [
     name: 'Hyderabad',
     state: 'Telangana',
     areas: ['Uppal', 'Kukatpally', 'Madhapur', 'Gachibowli', 'Kondapur', 'Miyapur'],
+    streetAddress: '15-21-150/17, JK Heights, Balaji Nagar, Kukatpally',
+    postalCode: '500072',
+    latitude: 17.48134,
+    longitude: 78.40828,
   },
   {
     name: 'Bangalore',
     state: 'Karnataka',
     areas: ['Whitefield', 'Electronic City', 'Marathahalli', 'HSR Layout', 'Koramangala'],
+    streetAddress: '367, 2nd A Main Road, Gokula Extension, Mathikera, Bangalore Division',
+    postalCode: '560054',
+    latitude: 13.04237,
+    longitude: 77.55302,
   },
   {
     name: 'Chennai',
     state: 'Tamil Nadu',
     areas: ['Anna Nagar', 'T Nagar', 'Velachery', 'Adyar', 'Porur'],
+    streetAddress: "25/9a, Sathya Moorthy Street, Kamaraj Nagar, Choolaimedu",
+    postalCode: '600094',
+    latitude: 13.06523,
+    longitude: 80.22148,
   },
   {
     name: 'Vijayawada',
     state: 'Andhra Pradesh',
     areas: ['Benz Circle', 'Governorpet', 'Patamata', 'Auto Nagar'],
+    streetAddress: '3-12, Ayyappa Nagar, Benz Circle',
+    postalCode: '520007',
+    latitude: 16.48304,
+    longitude: 80.66898,
   },
 ];
 
@@ -72,12 +88,12 @@ const description = `${shortDescription} Expert installation${locationSuffix}. Q
     description,
     keywords: generateLocationKeywords(serviceName),
     alternates: {
-      canonical: `https://safetypronets.com/services/${serviceSlug}`,
+  canonical: `https://invisiblegrillsandsafetynets.in/services/${serviceSlug}`,
     },
     openGraph: {
       title,
       description: shortDescription,
-      url: `https://safetypronets.com/services/${serviceSlug}`,
+  url: `https://invisiblegrillsandsafetynets.in/services/${serviceSlug}`,
       siteName: 'KGR Enterprises',
       images: [
         {
@@ -115,11 +131,11 @@ export function generateServiceSchema(params: {
     'name': serviceName,
     'serviceType': serviceName,
     'description': description,
-    'image': `https://safetypronets.com${image}`,
+  'image': `https://invisiblegrillsandsafetynets.in${image}`,
     'provider': {
       '@type': 'LocalBusiness',
       'name': 'KGR Enterprises',
-  'telephone': PRIMARY.tel.replace('tel:+', '+'),
+  'telephone': PRIMARY.phone,
       'priceRange': priceRange,
       'hasOfferCatalog': {
         '@type': 'OfferCatalog',
@@ -149,7 +165,7 @@ export function generateServiceSchema(params: {
       'availability': 'https://schema.org/InStock',
       'priceRange': priceRange,
     },
-    'url': `https://safetypronets.com/services/${slug}`,
+  'url': `https://invisiblegrillsandsafetynets.in/services/${slug}`,
   };
 }
 
@@ -162,7 +178,7 @@ export function generateBreadcrumbSchema(items: Array<{ name: string; url: strin
       '@type': 'ListItem',
       'position': index + 1,
       'name': item.name,
-      'item': `https://safetypronets.com${item.url}`,
+  'item': `https://invisiblegrillsandsafetynets.in${item.url}`,
     })),
   };
 }

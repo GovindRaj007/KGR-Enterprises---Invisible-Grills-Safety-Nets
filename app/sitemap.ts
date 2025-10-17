@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { servicesData } from '@/data/servicesData';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://safetypronets.com';
+  const baseUrl = 'https://invisiblegrillsandsafetynets.in';
   
   // Static pages
   const staticPages = [

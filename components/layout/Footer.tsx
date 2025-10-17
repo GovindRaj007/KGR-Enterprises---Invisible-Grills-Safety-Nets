@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronUp, Phone, Mail, MapPin, Clock, ArrowRight, Shield } from 'lucide-react';
 import { PRIMARY, SECONDARY, } from '@/constants/contacts';
+import { PRIMARY_LOCATIONS } from '@/lib/seo-metadata';
 
 const Footer = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -25,7 +26,7 @@ const Footer = () => {
     { name: 'All Sports Nets', href: '/services/all-sports-practice' },
   ];
 
-  const locations = ['Bangalore', 'Hyderabad', 'Chennai', 'Vijayawada', 'Andhra Pradesh'];
+  const locations = PRIMARY_LOCATIONS.map(loc => ({ name: loc.name, slug: loc.name.toLowerCase() }));
 
   return (
     <>
@@ -92,10 +93,10 @@ const Footer = () => {
               <ul className="space-y-2 md:space-y-3">
                 {locations.map((location, index) => (
                   <li key={index}>
-                    <div className="text-gray-300 text-sm md:text-base flex items-center space-x-2">
+                    <Link href={`/locations/${location.slug}`} className="text-gray-300 hover:text-safety transition-colors text-sm md:text-base flex items-center space-x-2">
                       <MapPin className="h-3 w-3" />
-                      <span>{location}</span>
-                    </div>
+                      <span>{location.name}</span>
+                    </Link>
                   </li>
                 ))}
               </ul>
