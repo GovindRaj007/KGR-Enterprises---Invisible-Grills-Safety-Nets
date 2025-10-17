@@ -144,7 +144,7 @@ const AboutSection = () => {
               <div className="space-y-3 md:space-y-4">
                 <div className="flex items-center space-x-2 text-safety">
                   <Shield className="h-4 w-4 md:h-5 md:w-5" />
-                  <span className="text-xs md:text-sm font-semibold uppercase tracking-wide">
+                  <span className="text-sm md:text-base font-semibold uppercase tracking-wide">
                     About KGR Enterprises
                   </span>
                 </div>
@@ -154,7 +154,7 @@ const AboutSection = () => {
                   <span className="text-gradient block">Quality & Safety</span>
                 </h2>
 
-                <p className="text-sm md:text-base lg:text-lg text-muted-foreground">
+                <p className="text-base md:text-lg lg:text-lg text-muted-foreground">
                   KGR Enterprises is a trusted partner, delivering the best
                   quality services in invisible grills and safety nets across
                   Hyderabad, Bangalore, Chennai, and Andhra Pradesh. We
@@ -169,8 +169,8 @@ const AboutSection = () => {
                     key={index}
                     className="flex items-center space-x-3"
                   >
-                    <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-accent flex-shrink-0 mt-0.5" />
-                    <span className="text-xs md:text-sm lg:text-base">
+                    <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-accent flex-shrink-0" />
+                    <span className="text-sm md:text-base lg:text-base">
                       {feature}
                     </span>
                   </div>
@@ -241,7 +241,7 @@ const AboutSection = () => {
                     <h3 className="text-lg md:text-xl font-semibold">
                       Why Choose Us?
                     </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3 text-xs md:text-sm">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3 text-sm md:text-base">
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 rounded-full bg-primary"></div>
                         <span>ISI Certified Materials</span>

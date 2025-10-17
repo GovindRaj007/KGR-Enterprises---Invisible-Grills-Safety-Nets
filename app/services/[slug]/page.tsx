@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
@@ -230,7 +231,7 @@ export default async function ServiceDetailPage({ params }: Props) {
         <div className="bg-muted/30 pt-4 md:py-4 md:mt-[26px]">
           <div className="container mx-auto">
             <div className="max-w-4xl mx-auto">
-              <nav className="flex md:items-center space-x-2 text-sm md:text-base text-muted-foreground overflow-x-auto">
+              <nav className="flex md:items-center space-x-4 text-base md:text-lg text-muted-foreground overflow-x-auto">
                 <Link href="/" className="hover:text-primary whitespace-nowrap">
                   Home
                 </Link>
@@ -319,9 +320,9 @@ export default async function ServiceDetailPage({ params }: Props) {
                     </h2>
                     <div className="space-y-2">
                       {service.features.map((feature, index) => (
-                        <div key={index} className="flex items-start space-x-2">
-                          <CheckCircle2 className="h-4 w-4 text-accent flex-shrink-0 mt-0.5" />
-                          <span className="text-xs md:text-sm">{feature}</span>
+                        <div key={index} className="flex items-center space-x-2">
+                          <CheckCircle2 className="h-4 w-4 text-accent flex-shrink-0" />
+                          <span className="text-sm md:text-base">{feature}</span>
                         </div>
                       ))}
                     </div>
@@ -336,9 +337,9 @@ export default async function ServiceDetailPage({ params }: Props) {
                     </h2>
                     <div className="space-y-2">
                       {service.benefits.map((benefit, index) => (
-                        <div key={index} className="flex items-start space-x-2">
-                          <CheckCircle2 className="h-4 w-4 text-safety flex-shrink-0 mt-0.5" />
-                          <span className="text-xs md:text-sm">{benefit}</span>
+                        <div key={index} className="flex items-center space-x-2">
+                          <CheckCircle2 className="h-4 w-4 text-safety flex-shrink-0" />
+                          <span className="text-sm md:text-base">{benefit}</span>
                         </div>
                       ))}
                     </div>
@@ -397,8 +398,8 @@ export default async function ServiceDetailPage({ params }: Props) {
                   <div className="space-y-4">
                     {faqs.map((faq, index) => (
                       <div key={index} className="space-y-2">
-                        <h3 className="font-semibold text-sm md:text-base">{faq.question}</h3>
-                        <p className="text-xs md:text-sm text-muted-foreground">{faq.answer}</p>
+                        <h3 className="font-semibold text-base md:text-lg">{faq.question}</h3>
+                        <p className="text-sm md:text-base text-muted-foreground">{faq.answer}</p>
                       </div>
                     ))}
                   </div>

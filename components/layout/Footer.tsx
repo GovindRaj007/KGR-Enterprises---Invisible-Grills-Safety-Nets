@@ -49,13 +49,13 @@ const Footer = () => {
             <div className="space-y-2 md:space-y-3">
               <div className="space-y-4">
                 <Image
-                  src="/images/footer-logo.png"
+                  src="/images/logo.png"
                   alt="KGR Enterprises Logo"
                   width={160}
                   height={10}
                   className="h-[4rem] w-auto object-cover -ml-[1rem] -mt-[5px] md:-mt-[10px]"
                 />
-                <p className="text-gray-300 text-xs md:text-sm leading-relaxed mt-0">
+                <p className="text-gray-300 text-sm md:text-base leading-relaxed mt-0">
                   KGR Enterprises delivers best quality invisible grills and safety nets across
                   Hyderabad, Bangalore, Chennai, and Andhra Pradesh. Protecting families with
                   premium safety solutions.
@@ -76,7 +76,7 @@ const Footer = () => {
                   <li key={index}>
                     <Link
                       href={service.href}
-                      className="text-gray-300 hover:text-safety transition-colors text-xs md:text-sm flex items-center space-x-2 group"
+                      className="text-gray-300 hover:text-safety transition-colors text-sm md:text-base flex items-center space-x-2 group"
                     >
                       <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
                       <span>{service.name}</span>
@@ -92,7 +92,7 @@ const Footer = () => {
               <ul className="space-y-2 md:space-y-3">
                 {locations.map((location, index) => (
                   <li key={index}>
-                    <div className="text-gray-300 text-xs md:text-sm flex items-center space-x-2">
+                    <div className="text-gray-300 text-sm md:text-base flex items-center space-x-2">
                       <MapPin className="h-3 w-3" />
                       <span>{location}</span>
                     </div>
@@ -106,26 +106,26 @@ const Footer = () => {
               <h3 className="text-base md:text-lg font-semibold">Contact Info</h3>
 
               <div className="space-y-3 md:space-y-4">
-                <a href={PRIMARY.tel} className="flex items-start space-x-3 text-safety hover:underline group">
+                <a href={PRIMARY.tel} className="flex items-start space-x-3 text-safety hover:underline group min-h-0">
                   <Phone className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                  <span className="text-xs md:text-sm font-medium">{PRIMARY.display}</span>
+                  <span className="text-sm md:text-base font-medium">{PRIMARY.display}</span>
                 </a>
 
-                <a href={SECONDARY.tel} className="flex items-start space-x-3 text-gray-300 hover:text-safety hover:underline group">
+                <a href={SECONDARY.tel} className="flex items-start space-x-3 text-gray-300 hover:text-safety hover:underline group min-h-0">
                   <Phone className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                  <span className="text-xs md:text-sm font-medium">{SECONDARY.display}</span>
+                  <span className="text-sm md:text-base font-medium">{SECONDARY.display}</span>
                 </a>
 
                 <div className="flex items-start space-x-3">
                   <Mail className="h-4 w-4 text-safety mt-0.5 flex-shrink-0" />
-                  <a href="mailto:kgr.invisiblegrills.nets@gmail.com" className="text-xs md:text-sm hover:text-safety transition-colors break-all">
+                  <a href="mailto:kgr.invisiblegrills.nets@gmail.com" className="text-sm md:text-base hover:text-safety transition-colors break-all min-h-0">
                     kgr.invisiblegrills.nets@gmail.com
                   </a>
                 </div>
 
                 <div className="flex items-start space-x-3">
                   <Clock className="h-4 w-4 text-safety mt-0.5 flex-shrink-0" />
-                  <div className="text-xs md:text-sm text-gray-300">
+                  <div className="text-sm md:text-base text-gray-300">
                     <div>Mon - Sat: 8:00 AM - 8:00 PM</div>
                     <div>Sun: 9:00 AM - 6:00 PM</div>
                   </div>
@@ -139,12 +139,12 @@ const Footer = () => {
         <div className="border-t border-gray-700">
           <div className="container mx-auto px-4 py-4 md:py-6">
             <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-              <div className="text-xs md:text-sm text-gray-400 text-center md:text-left">© 2024 KGR Enterprises. All rights reserved.</div>
+              <div className="text-xs md:text-sm text-gray-400 text-center md:text-left">© 2025 KGR Enterprises. All rights reserved.</div>
 
               <div className="flex flex-wrap justify-center md:justify-end gap-4 md:gap-6 text-xs md:text-sm">
-                <Link href="/about" className="text-gray-400 hover:text-white transition-colors">About Us</Link>
-                <Link href="/services" className="text-gray-400 hover:text-white transition-colors">Services</Link>
-                <Link href="/contact" className="text-gray-400 hover:text-white transition-colors">Contact</Link>
+                <Link href="/about" className="text-gray-400 hover:text-white transition-colors min-h-0">About Us</Link>
+                <Link href="/services" className="text-gray-400 hover:text-white transition-colors min-h-0">Services</Link>
+                <Link href="/contact" className="text-gray-400 hover:text-white transition-colors min-h-0">Contact</Link>
               </div>
             </div>
 

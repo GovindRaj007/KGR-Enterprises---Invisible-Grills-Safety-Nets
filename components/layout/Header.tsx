@@ -349,7 +349,7 @@ const Header = () => {
                 alt="KGR Enterprises - Best Safety Nets & Invisible Grills"
                 width={140}
                 height={140}
-                className="h-[11rem] w-auto object-contain md:object-cover -ml-[3.2rem] md:-ml-4"
+                className="h-[5.5rem] w-auto object-contain -ml-[22px]"
                 priority
               />
             </Link>
@@ -391,7 +391,7 @@ const Header = () => {
                 <div className="flex items-center justify-between px-4">
                   <div className="flex items-center gap-3">
                     <Image
-                      src="/images/footer-logo.png"
+                      src="/images/logo.png"
                       alt="KGR Enterprises"
                       width={140}
                       height={60}
