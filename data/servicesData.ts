@@ -89,7 +89,7 @@ export const servicesData = {
       "Tailored solutions"
     ],
     images: ["/images/balcony-invisible-grill-1.jpg", "/images/balcony-invisible-grill-2.jpg", "/images/balcony-invisible-grill-3.jpg"],
-    image: "/images/balcony-invisible-grill-1.jpg",
+    image: "/images/balcony-invisible-grill-2.jpg",
     specifications: [
       { label: "Material", value: "316 Grade Stainless Steel" },
       { label: "Cable Thickness", value: "2.5mm" },
