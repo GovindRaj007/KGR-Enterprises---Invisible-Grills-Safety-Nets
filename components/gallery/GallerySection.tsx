@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -121,13 +120,7 @@ const GallerySection = () => {
               onClick={() => setSelectedImage(image.src)}
             >
               <div className="relative overflow-hidden aspect-square">
-                <Image
-                  src={image.src}
-                  alt={image.alt}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
-                  sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-                />
+                <img src={image.src} alt={image.alt} className="object-cover group-hover:scale-110 transition-transform duration-500 w-full h-full absolute inset-0" />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
                 <Badge className="absolute top-2 left-2 bg-primary/90 text-xs">
                   {image.category}
@@ -205,14 +198,7 @@ const GallerySection = () => {
             <DialogTitle className="sr-only">Gallery Image Preview</DialogTitle>
             {selectedImage && (
               <div className="relative w-full h-[70vh] md:h-[80vh]">
-                <Image
-                  src={selectedImage}
-                  alt="Gallery Image"
-                  fill
-                  className="object-contain"
-                  sizes="100vw"
-                  quality={85}
-                />
+                <img src={selectedImage} alt="Gallery Image" className="object-contain w-full h-full absolute inset-0" />
               </div>
             )}
           </DialogContent>

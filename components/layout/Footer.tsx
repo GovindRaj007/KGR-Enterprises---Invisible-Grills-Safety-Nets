@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+// using native <img> instead of next/image
 import { ChevronUp, Phone, Mail, MapPin, Clock, ArrowRight, Shield } from 'lucide-react';
 import { PRIMARY, SECONDARY, } from '@/constants/contacts';
 import { PRIMARY_LOCATIONS } from '@/lib/seo-metadata';
@@ -49,13 +49,7 @@ const Footer = () => {
             {/* Company Info */}
             <div className="space-y-2 md:space-y-3">
               <div className="space-y-4">
-                <Image
-                  src="/images/logo.png"
-                  alt="KGR Enterprises Logo"
-                  width={160}
-                  height={10}
-                  className="h-[4rem] w-auto object-cover -ml-[1rem] -mt-[5px] md:-mt-[10px]"
-                />
+                <img src="/images/logo.png" alt="KGR Enterprises Logo" className="h-[4rem] w-auto object-cover -ml-[1rem] -mt-[5px] md:-mt-[10px]" />
                 <p className="text-gray-300 text-sm md:text-base leading-relaxed mt-0">
                   KGR Enterprises delivers best quality invisible grills and safety nets across
                   Hyderabad, Bangalore, Chennai, and Andhra Pradesh. Protecting families with

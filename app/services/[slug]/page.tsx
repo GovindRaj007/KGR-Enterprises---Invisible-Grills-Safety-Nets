@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import Image from 'next/image';
+// using native <img> instead of next/image
 import Link from 'next/link';
 import { servicesData, serviceSpecificLocationFAQs } from '@/data/servicesData';
 import {
@@ -308,13 +308,7 @@ export default async function ServiceDetailPage({ params }: Props) {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
                 {((service.images && service.images.length) ? service.images : [service.image]).map((img, index) => (
                   <div key={index} className="relative h-48 md:h-64 rounded-lg overflow-hidden">
-                    <Image
-                      src={img}
-                      alt={`${service.title} ${index + 1}`}
-                      fill
-                      className="object-cover hover:scale-110 transition-transform duration-500"
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                    />
+                    <img src={img} alt={`${service.title} ${index + 1}`} className="object-cover hover:scale-110 transition-transform duration-500 w-full h-full absolute inset-0" />
                   </div>
                 ))}
               </div>
@@ -456,14 +450,8 @@ export default async function ServiceDetailPage({ params }: Props) {
                           href={`/services/${id}`}
                           className="flex items-center space-x-3 p-3 rounded-lg border hover:border-primary transition-colors group"
                         >
-                          <div className="relative h-16 w-16 flex-shrink-0 rounded overflow-hidden">
-                            <Image
-                              src={relatedService.image}
-                              alt={relatedService.title}
-                              fill
-                              className="object-cover"
-                              sizes="64px"
-                            />
+                            <div className="relative h-16 w-16 flex-shrink-0 rounded overflow-hidden">
+                            <img src={relatedService.image} alt={relatedService.title} className="object-cover w-full h-full absolute inset-0" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium truncate group-hover:text-primary">

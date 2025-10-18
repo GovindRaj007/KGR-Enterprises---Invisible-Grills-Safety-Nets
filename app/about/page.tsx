@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import AboutSection from "@/components/about/AboutSection";
-import Image from "next/image";
+// using native <img> instead of next/image
 import TestimonialsSection from "@/components/testimonials/TestimonialsSection";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -29,13 +29,7 @@ export default function AboutPage() {
     <div>
       {/* Full-bleed background hero for About page (using next/image for optimization) */}
       <section className="relative overflow-hidden mb-6">
-        <Image
-          src="/images/hero-image.jpg"
-          alt="About KGR Enterprises"
-          fill
-          priority
-          className="object-cover"
-        />
+        <img src="/images/hero-image.jpg" alt="About KGR Enterprises" className="object-cover w-full h-full absolute inset-0" />
         <div className="absolute inset-0 bg-black/45" />
         <div className="relative container mx-auto px-4 py-20 md:py-28 lg:py-36 text-center">
           <div className="max-w-3xl mx-auto">

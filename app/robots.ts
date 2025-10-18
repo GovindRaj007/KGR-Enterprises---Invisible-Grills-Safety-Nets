@@ -1,5 +1,7 @@
 import { MetadataRoute } from 'next';
 
+export const dynamic = "force-static";
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
@@ -18,6 +20,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/api/', '/admin/', '/_next/'],
       },
     ],
-  sitemap: 'https://invisiblegrillsandsafetynets.in/sitemap.xml',
+    sitemap: 'https://invisiblegrillsandsafetynets.in/sitemap.xml',
   };
 }

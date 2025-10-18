@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
+// removed next/image usage; using native <img>
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { X, Menu, Phone, MessageCircle, Home, Info, Briefcase, Image as ImageIcon, Mail, ChevronRight } from "lucide-react";
@@ -345,14 +345,7 @@ const Header = () => {
           <div className="flex items-center justify-between h-14 md:h-16 lg:h-20">
             {/* Logo */}
             <Link href="/" className="flex items-center">
-              <Image
-                src="/images/logo.png"
-                alt="KGR Enterprises - Best Safety Nets & Invisible Grills"
-                width={140}
-                height={140}
-                className="h-[5.5rem] w-auto object-contain -ml-[22px]"
-                priority
-              />
+              <img src="/images/logo.png" alt="KGR Enterprises - Best Safety Nets & Invisible Grills" className="h-[5.5rem] w-auto object-contain -ml-[22px]" />
             </Link>
 
             {/* Desktop Navigation */}
@@ -391,13 +384,7 @@ const Header = () => {
               >
                 <div className="flex items-center justify-between px-4">
                   <div className="flex items-center gap-3">
-                    <Image
-                      src="/images/logo.png"
-                      alt="KGR Enterprises"
-                      width={140}
-                      height={60}
-                      className="h-[3.5rem] w-auto object-contain -ml-[25px]"
-                    />
+                    <img src="/images/logo.png" alt="KGR Enterprises" className="h-[3.5rem] w-auto object-contain -ml-[25px]" />
                   </div>
                   <button
                     aria-label="Close menu"

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+// replaced next/image with native <img>
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -116,13 +116,7 @@ const ServicesSection = () => {
                   >
                     <CardHeader className="p-0">
                       <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
-                        <Image
-                          src={service.image}
-                          alt={service.title}
-                          fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-500"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        />
+                        <img src={service.image} alt={service.title} className="object-cover group-hover:scale-110 transition-transform duration-500 w-full h-full absolute inset-0" />
                         <Badge className="absolute top-3 left-3 bg-primary/90">
                           {category.title}
                         </Badge>
