@@ -1,4 +1,3 @@
-
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
@@ -91,12 +90,10 @@ export default async function ServiceDetailPage({ params }: Props) {
       ],
     };
     
-  // Build a concise main locations string for SEO (used in H1)
   const mainLocationString = PRIMARY_LOCATIONS.slice(0, 4)
     .map((l) => l.name)
     .join(', ');
 
-  // Generate FAQs specific to this service
   const productName = service.title.replace(/\b(dealer|supplier|vendor)\b/gi, '').trim() || service.title;
 
   const faqs = [
@@ -114,7 +111,6 @@ export default async function ServiceDetailPage({ params }: Props) {
     },
   ];
 
-  // Add category-specific FAQ
   const categoryFaqTemplates: Record<string, { question: string; answer: string }> = {
     'invisible-grills': {
       question: `Can ${productName} be customized to my balcony or window size?`,
@@ -144,7 +140,6 @@ export default async function ServiceDetailPage({ params }: Props) {
     });
   }
 
-  // Append service-specific, location-aware FAQs
   try {
     const serviceFAQs = serviceSpecificLocationFAQs[slug];
     if (serviceFAQs) {
@@ -230,7 +225,7 @@ export default async function ServiceDetailPage({ params }: Props) {
       { '@type': 'City', name: 'Chennai' },
       { '@type': 'City', name: 'Vijayawada' },
     ],
-    openingHours: 'Mo-Su 09:00-19:00',
+    workingHours: 'Mo-Su 09:00-19:00',
   };
 
   return (
@@ -258,8 +253,6 @@ export default async function ServiceDetailPage({ params }: Props) {
       />
 
       <div className="min-h-screen bg-background">
-        {/* Breadcrumb - Aligned with content container */}
-{/* Breadcrumb - Aligned with content container */}
 <div className="bg-muted/30 pt-4 md:py-4 md:mt-[26px]">
   <div className="container mx-auto px-4">
     <div className="max-w-4xl mx-auto">
@@ -280,9 +273,7 @@ export default async function ServiceDetailPage({ params }: Props) {
 
         <div className="container mx-auto pb-2 md:py-4">
           <div className="max-w-4xl mx-auto space-y-8 md:space-y-12">
-            {/* Main Content */}
             <div className="space-y-6 md:space-y-8">
-              {/* Hero Section */}
               <div className="space-y-4">
                 <div className="flex items-center space-x-2 text-safety">
                   <Shield className="h-4 w-4 md:h-5 md:w-5" />
@@ -298,9 +289,6 @@ export default async function ServiceDetailPage({ params }: Props) {
                   </span>
                 </h1>
 
-                {/* short description removed as per request */}
-
-                {/* Quick Stats */}
                 <div className="flex flex-wrap gap-4 py-4 border-y">
                   <div className="flex items-center gap-2 text-sm">
                     <Star className="h-4 w-4 text-safety" />
@@ -317,7 +305,6 @@ export default async function ServiceDetailPage({ params }: Props) {
                 </div>
               </div>
 
-              {/* Image Gallery */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
                 {((service.images && service.images.length) ? service.images : [service.image]).map((img, index) => (
                   <div key={index} className="relative h-48 md:h-64 rounded-lg overflow-hidden">
@@ -332,7 +319,6 @@ export default async function ServiceDetailPage({ params }: Props) {
                 ))}
               </div>
 
-              {/* Description */}
               <Card>
                 <CardContent className="p-4 md:p-6 space-y-4">
                   <h2 className="text-xl md:text-2xl font-bold">About This Service</h2>
@@ -342,7 +328,6 @@ export default async function ServiceDetailPage({ params }: Props) {
                 </CardContent>
               </Card>
 
-              {/* Features & Benefits */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 <Card>
                   <CardContent className="p-4 md:p-6 space-y-4">
@@ -379,7 +364,6 @@ export default async function ServiceDetailPage({ params }: Props) {
                 </Card>
               </div>
 
-              {/* Specifications */}
               <Card>
                 <CardContent className="p-4 md:p-6 space-y-4">
                   <h2 className="text-lg md:text-xl font-bold">Technical Specifications</h2>
@@ -397,7 +381,6 @@ export default async function ServiceDetailPage({ params }: Props) {
                 </CardContent>
               </Card>
 
-              {/* Branches */}
                 <Card>
                   <CardContent className="p-6">
                     <div className="flex items-center space-x-3 mb-4">
@@ -421,7 +404,6 @@ export default async function ServiceDetailPage({ params }: Props) {
                   </CardContent>
                 </Card>
 
-              {/* Location-Specific Content */}
               <Card>
                 <CardContent className="p-4 md:p-6 space-y-6">
                   <h2 className="text-lg md:text-xl font-bold flex items-center gap-2">
@@ -447,7 +429,6 @@ export default async function ServiceDetailPage({ params }: Props) {
                 </CardContent>
               </Card>
 
-              {/* FAQs */}
               <Card>
                 <CardContent className="p-4 md:p-6 space-y-4">
                   <h2 className="text-lg md:text-xl font-bold">Frequently Asked Questions</h2>
@@ -462,7 +443,6 @@ export default async function ServiceDetailPage({ params }: Props) {
                 </CardContent>
               </Card>
 
-              {/* Related Services */}
               <Card>
                 <CardContent className="p-4 md:p-6 space-y-4">
                   <h2 className="text-lg md:text-xl font-bold">You May Also Need</h2>

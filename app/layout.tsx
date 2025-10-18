@@ -123,7 +123,7 @@ export default function RootLayout({
         "areaServed": "Hyderabad",
         "priceRange": "₹₹",
         "telephone": phoneNumber,
-        "openingHours": "Mo-Sa 08:00-20:00, Su 09:00-18:00"
+        "workingHours": "Mo-Sa 08:00-20:00, Su 09:00-18:00"
       ,
       "url": "https://invisiblegrillsandsafetynets.in/locations/hyderabad"
       },
@@ -225,28 +225,28 @@ export default function RootLayout({
       "ratingValue": "4.9",
       "reviewCount": "230"
     },
-    "review": [
-      {
-        "@type": "Review",
-        "author": "Priya Sharma",
-        "datePublished": "2025-03-14",
-        "reviewBody": "Very professional invisible grill installation. The team did a great job!",
-        "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": "5"
-        }
-      },
-      {
-        "@type": "Review",
-        "author": "Ravi Kumar",
-        "datePublished": "2025-02-10",
-        "reviewBody": "Affordable pricing and quick installation. Highly recommend for balcony safety nets.",
-        "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": "5"
-        }
-      }
-    ]
+    // "review": [
+    //   {
+    //     "@type": "Review",
+    //     "author": "Priya Sharma",
+    //     "datePublished": "2025-03-14",
+    //     "reviewBody": "Very professional invisible grill installation. The team did a great job!",
+    //     "reviewRating": {
+    //       "@type": "Rating",
+    //       "ratingValue": "5"
+    //     }
+    //   },
+    //   {
+    //     "@type": "Review",
+    //     "author": "Ravi Kumar",
+    //     "datePublished": "2025-02-10",
+    //     "reviewBody": "Affordable pricing and quick installation. Highly recommend for balcony safety nets.",
+    //     "reviewRating": {
+    //       "@type": "Rating",
+    //       "ratingValue": "5"
+    //     }
+    //   }
+    // ]
   };
   return (
   <html lang="en" data-scroll-behavior="smooth">
@@ -254,7 +254,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.png" type="image/png" />
   <link rel="canonical" href="https://invisiblegrillsandsafetynets.in" />
 
-        {/* ✅ Structured Data: Organization + LocalBusiness + Reviews (canonicalized) */}
+        {/* Structured Data: Organization + LocalBusiness + Reviews (canonicalized) */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

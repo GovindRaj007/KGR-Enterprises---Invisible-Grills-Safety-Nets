@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { PRIMARY, SECONDARY, } from '@/constants/contacts';
 import { Card, CardContent } from "@/components/ui/card";
-import ConsultationForm from "@/components/shared/ConsultationForm";
+const ConsultationForm = dynamic(() => import('@/components/shared/ConsultationFormClient'), { loading: () => <div className="p-4">Loading...</div> });
 
 export const metadata: Metadata = {
   title: "Contact Us - Get Free Consultation & Quote",
@@ -94,21 +96,25 @@ export default function ContactPage() {
   ];
 
   return (
-    <div className="py-16 lg:py-24">
-      {/* Hero Section */}
-      <div className="container mx-auto px-4 mb-16">
-        <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl lg:text-6xl font-bold mb-6">
-            Get In <span className="text-gradient">Touch</span>
-          </h1>
-          <p className="text-xl text-muted-foreground">
-            Have questions? We are here to help. Contact us for a free
-            consultation and site inspection.
-          </p>
+    <>
+      {/* Full-bleed background hero for Contact page (using next/image for optimization) */}
+      <section className="relative overflow-hidden mb-6">
+        <Image src="/images/hero-image.jpg" alt="Contact KGR Enterprises" fill priority className="object-cover" />
+        <div className="absolute inset-0 bg-black/45" />
+        <div className="relative container mx-auto px-4 py-20 md:py-28 lg:py-36 text-center">
+          <div className="max-w-3xl mx-auto">
+            <h1 className="text-4xl lg:text-6xl font-bold mb-6 text-white">
+              Get In <span className="text-gradient">Touch</span>
+            </h1>
+            <p className="text-xl text-white/90">
+              Have questions? We are here to help. Contact us for a free
+              consultation and site inspection.
+            </p>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 mb-4">
         <div className="grid lg:grid-cols-3 gap-12">
           {/* Contact Form */}
           <div className="lg:col-span-2">
@@ -245,6 +251,6 @@ export default function ContactPage() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

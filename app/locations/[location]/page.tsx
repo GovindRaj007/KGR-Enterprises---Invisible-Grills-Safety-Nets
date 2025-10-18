@@ -6,15 +6,16 @@ import { PRIMARY_LOCATIONS } from '@/lib/seo-metadata';
 import { PRIMARY } from '@/constants/contacts';
 import { generateLocationContent } from '@/lib/seo-metadata';
 
-type Params = { params: { location: string } | Promise<{ location: string }> };
-
 export async function generateStaticParams() {
   return PRIMARY_LOCATIONS.map(loc => ({ location: loc.name.toLowerCase() }));
 }
 
-export async function generateMetadata({ params }: { params: { location: string } | Promise<{ location: string }> }): Promise<Metadata> {
-  const resolvedParams = await params;
-  const locName = resolvedParams.location;
+type PageParams = {
+  params: Promise<{ location: string }>;
+};
+
+export async function generateMetadata({ params }: PageParams): Promise<Metadata> {
+  const { location: locName } = await params;
   const title = `Invisible Grills & Safety Nets in ${capitalize(locName)}`;
   return {
     title,
@@ -26,9 +27,8 @@ function capitalize(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-export default async function LocationPage({ params }: Params) {
-  const resolvedParams = await params;
-  const locName = resolvedParams.location;
+export default async function LocationPage({ params }: { params: Promise<{ location: string }> }) {
+  const { location: locName } = await params;
   const matched = PRIMARY_LOCATIONS.find(l => l.name.toLowerCase() === locName.toLowerCase());
   const locationDisplay = matched ? matched.name : capitalize(locName);
 
@@ -55,15 +55,15 @@ export default async function LocationPage({ params }: Params) {
       'latitude': matched['latitude'],
       'longitude': matched['longitude']
     } : undefined,
-    'openingHoursSpecification': [
+    'workingHoursSpecification': [
       {
-        '@type': 'OpeningHoursSpecification',
+        '@type': 'workingHoursSpecification',
         'dayOfWeek': ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
         'opens': '08:00',
         'closes': '20:00'
       },
       {
-        '@type': 'OpeningHoursSpecification',
+        '@type': 'workingHoursSpecification',
         'dayOfWeek': 'Sunday',
         'opens': '09:00',
         'closes': '18:00'
@@ -77,12 +77,13 @@ export default async function LocationPage({ params }: Params) {
         {/* LocalBusiness JSON-LD (render inside main to avoid mounting a separate <head>) */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
         <LocationHero location={locationDisplay} />
-        {/* Unique location intro to reduce duplicate content */}
         <section className="max-w-4xl mx-auto px-6 pb-6">
-          {/* <h2 className="text-2xl font-semibold mb-2">{locContent.heading}</h2> */}
+          <h2 className="text-2xl font-semibold mb-2">{locContent.heading}</h2>
           <p className="text-muted-foreground">{locContent.description}</p>
         </section>
-        <AboutSection />
+        <div className='pb-6'>
+          <AboutSection />
+        </div>
       </main>
     </>
   );

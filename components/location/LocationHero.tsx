@@ -1,17 +1,21 @@
-import React from 'react';
+import Image from 'next/image';
 
+// Server component: renders the hero (title + description) so the main business
+// heading is present in server HTML for SEO and crawler indexing.
 type Props = {
   location: string;
 };
 
 export default function LocationHero({ location }: Props) {
   return (
-    <section className="bg-gradient-to-b from-background/50 to-muted/10 py-12">
-      <div className="container mx-auto px-4 text-center">
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
+    <section className="relative overflow-hidden mb-6">
+      <Image src="/images/hero-image.jpg" alt={`Invisible Grills in ${location}`} fill priority className="object-cover" />
+      <div className="absolute inset-0 bg-black/45" />
+      <div className="relative container mx-auto px-4 py-20 md:py-28 lg:py-36 text-center">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white">
           Invisible Grills and Safety Nets in {location}
         </h1>
-        <p className="mt-4 text-base md:text-lg text-muted-foreground">
+        <p className="mt-4 text-base md:text-lg text-white/90 max-w-3xl mx-auto">
           Trusted invisible grills and safety nets installation throughout {location}. Complimentary site inspection and reliable, quality workmanship guaranteed.
         </p>
       </div>

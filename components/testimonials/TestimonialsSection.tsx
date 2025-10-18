@@ -11,43 +11,43 @@ const TestimonialsSection = () => {
 
   const testimonials = [
     {
-      name: "Peeter",
+      name: "Rasool Basha",
       service: "Pigeon Nets",
       rating: 5,
       review: "Very good service by the team, for pigeon safety nets. They came and finished the work within 4 hours of contacting them. Thank you for the awesome service.",
-      initials: "P",
+      initials: "RB",
       location: "Hyderabad"
     },
     {
-      name: "David",
+      name: "Srinivas Rao Potturi",
       service: "Pigeon Nets", 
       rating: 5,
       review: "Excellent service. Within few hours of raising request, pigeon net was put on my both my balcony. They have variety of nets, you can choose accordingly to your need.",
-      initials: "D",
+      initials: "SRP",
       location: "Bangalore"
     },
     {
-      name: "Sai Ram",
+      name: "R.N Marimuthu",
       service: "Pigeon Safety Nets",
       rating: 5,
       review: "We have issue with Pigeons, we called through online his team came resolved issue with in 2hrs. We fully satisfied and Reasonable cost. I highly recommend.",
-      initials: "SR",
+      initials: "RNM",
       location: "Chennai"
     },
     {
-      name: "Priya Sharma",
+      name: "Shruti Rander",
       service: "Children Protection Nets",
       rating: 5,
       review: "Amazing service for child safety nets. My kids can now play safely on the balcony. Professional installation and quality materials used.",
-      initials: "PS",
+      initials: "SR",
       location: "Hyderabad"
     },
     {
-      name: "Rajesh Kumar",
+      name: "Manish Shrivastava",
       service: "Invisible Grills",
       rating: 5,
       review: "Excellent invisible grill installation. Maintains the view while providing security. Team was punctual and work quality is outstanding.",
-      initials: "RK",
+      initials: "MS",
       location: "Bangalore"
     },
     {

@@ -82,10 +82,11 @@ const Header = () => {
   }, []);
 
   // Hide SEO banner while mobile menu (sheet) is open and restore previous state on close
+  // Note: depend only on `isMenuOpen` to avoid this effect re-running when showSeoBanner changes
   useEffect(() => {
     if (isMenuOpen) {
-      // store previous value then hide
-      prevBannerRef.current = showSeoBanner;
+      // store previous value only if not already stored then hide
+      if (prevBannerRef.current === null) prevBannerRef.current = showSeoBanner;
       setShowSeoBanner(false);
     } else {
       // restore previous value if we stored one, otherwise keep current
