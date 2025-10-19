@@ -18,7 +18,7 @@ const TestimonialsSection = () => {
       initials: "RB",
       location: "Hyderabad"
     },
-    {
+    { 
       name: "Srinivas Rao Potturi",
       service: "Pigeon Nets", 
       rating: 5,

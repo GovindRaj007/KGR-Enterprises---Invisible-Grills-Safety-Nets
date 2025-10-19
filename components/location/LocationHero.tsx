@@ -1,4 +1,3 @@
-// using native <img> instead of next/image
 
 // Server component: renders the hero (title + description) so the main business
 // heading is present in server HTML for SEO and crawler indexing.

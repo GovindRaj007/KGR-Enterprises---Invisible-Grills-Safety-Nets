@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,6 +33,31 @@ const AboutSection = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const phoneRef = useRef<HTMLInputElement | null>(null);
+  const locationRef = useRef<HTMLInputElement | null>(null);
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVal = e.target.value;
+    const prevDigits = formData.phone.replace(/\D/g, "");
+    const newDigits = newVal.replace(/\D/g, "");
+    setFormData({ ...formData, phone: newVal });
+
+    // When phone just reached 10 digits and matches the expected pattern, move focus
+    if (prevDigits.length < 10 && newDigits.length === 10) {
+      const phoneValid = /^[6-9]\d{9}$/.test(newDigits);
+      if (phoneValid) {
+        // small timeout helps on mobile to ensure keyboard/input state settles
+        setTimeout(() => {
+          if (locationRef.current) {
+            locationRef.current.focus();
+          } else {
+            const el = document.getElementById("consult-location") as HTMLInputElement | null;
+            el?.focus();
+          }
+        }, 50);
+      }
+    }
+  };
 
   const stats = [
     {
@@ -86,6 +111,26 @@ const AboutSection = () => {
       toast({
         title: "Missing Information",
         description: "Please fill in all fields.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const nameLetters = formData.name.replace(/[^a-zA-Z]/g, "");
+    if (nameLetters.length < 5) {
+      toast({
+        title: "No Proper Name",
+        description: "Enter valid full name",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const locationLetters = formData.location.replace(/[^a-zA-Z]/g, "");
+    if (locationLetters.length < 6) {
+      toast({
+        title: "No Proper Location",
+        description: "Enter valid location.",
         variant: "destructive",
       });
       return;
@@ -328,9 +373,8 @@ const AboutSection = () => {
                 placeholder="Phone Number"
                 type="tel"
                 value={formData.phone}
-                onChange={(e) =>
-                  setFormData({ ...formData, phone: e.target.value })
-                }
+                onChange={handlePhoneChange}
+                ref={phoneRef}
                 className="pl-10 bg-background"
                 disabled={isSubmitting}
               />
@@ -339,6 +383,7 @@ const AboutSection = () => {
             <div className="relative">
               <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
               <Input
+                id="consult-location"
                 placeholder="Your Location"
                 value={formData.location}
                 onChange={(e) =>
@@ -346,6 +391,7 @@ const AboutSection = () => {
                 }
                 className="pl-10 bg-background"
                 disabled={isSubmitting}
+                ref={locationRef}
               />
             </div>
 

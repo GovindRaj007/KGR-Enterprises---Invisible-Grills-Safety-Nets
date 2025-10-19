@@ -1,17 +1,35 @@
 import type { Metadata } from "next";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
-// using native <img> instead of next/image
 import dynamic from 'next/dynamic';
 import { PRIMARY, SECONDARY, } from '@/constants/contacts';
 import { Card, CardContent } from "@/components/ui/card";
 const ConsultationForm = dynamic(() => import('@/components/shared/ConsultationFormClient'), { loading: () => <div className="p-4">Loading...</div> });
 
 export const metadata: Metadata = {
-  title: "Contact Us - Get Free Consultation & Quote",
+  title: "Contact Us - KGR Invisible Grills & Safety Nets",
   description:
-    `Contact KGR Enterprises for free consultation on invisible grills and safety nets. Call ${PRIMARY.spaced} or visit us in Hyderabad. Available Mon-Sat 8AM-8PM.`,
+    `Contact KGR Invisible Grills & Safety Nets for free consultation on invisible grills and safety nets. Call ${PRIMARY.spaced} or visit us in Hyderabad. Available Mon-Sat 8AM-8PM.`,
+        keywords: [
+      "kgr invisible grills",
+      "invisible grills in hyderabad",
+      "best invisible grills in hyderabad",
+      "safety nets in hyderabad",
+      "best safety nets in hyderabad",
+      "best invisible grills in bangalore",
+      "invisible grills in bangalore",
+      "safety nets in bangalore",
+      "invisible grills in chennai",
+      "best safety nets in bangalore",
+      "safety nets in chennai",
+      "invisible grills in visakhapatnam",
+      "safety nets in visakhapatnam",
+      "best invisible grills in chennai",
+      "best safety nets in chennai",
+      "best invisible grills in visakhapatnam",
+      "best safety nets in visakhapatnam",
+  ],
   openGraph: {
-    title: "Contact KGR Enterprises - Free Consultation",
+    title: "Contact KGR Invisible Grills & Safety Nets - Free Consultation",
     description:
       "Get in touch for professional safety solutions. Free site inspection and quote.",
   url: "https://invisiblegrillsandsafetynets.in/contact",
@@ -20,7 +38,7 @@ export const metadata: Metadata = {
         url: "/og-contact.jpg",
         width: 1200,
         height: 630,
-        alt: "Contact KGR Enterprises",
+        alt: "Contact KGR Invisible Grills & Safety Nets",
       },
     ],
   },
@@ -97,7 +115,6 @@ export default function ContactPage() {
 
   return (
     <>
-      {/* Full-bleed background hero for Contact page (using next/image for optimization) */}
       <section className="relative overflow-hidden mb-6">
         <img src="/images/hero-image.jpg" alt="Contact KGR Enterprises" className="object-cover w-full h-full absolute inset-0" />
         <div className="absolute inset-0 bg-black/45" />

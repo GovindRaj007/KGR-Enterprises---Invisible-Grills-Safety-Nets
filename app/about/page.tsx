@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import AboutSection from "@/components/about/AboutSection";
-// using native <img> instead of next/image
 import TestimonialsSection from "@/components/testimonials/TestimonialsSection";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -8,6 +7,26 @@ export const metadata: Metadata = {
   title: "About Us - 15+ Years Experience in Safety Solutions",
   description:
     "KGR Enterprises has 15+ years of experience in invisible grills and safety nets installation. Certified team, 5000+ happy customers across Hyderabad, Bangalore, Chennai.",
+    keywords: [
+      "kgr invisible grills",
+      "kgr safety nets",
+      "kgr pegion nets",
+      "invisible grills in hyderabad",
+      "best invisible grills in hyderabad",
+      "best safety nets in hyderabad",
+      "best invisible grills in bangalore",
+      "safety nets in hyderabad",
+      "invisible grills in bangalore",
+      "safety nets in bangalore",
+      "invisible grills in chennai",
+      "safety nets in chennai",
+      "invisible grills in visakhapatnam",
+      "safety nets in visakhapatnam",
+      "best invisible grills in chennai",
+      "best safety nets in chennai",
+      "best invisible grills in visakhapatnam",
+      "best safety nets in visakhapatnam",
+  ],
   openGraph: {
     title: "About KGR Enterprises - Invisible Grills & Safety Nets Experts",
     description:

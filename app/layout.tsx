@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/FooterClient";
@@ -15,26 +14,45 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://invisiblegrillsandsafetynets.in"),
   title: {
     default:
-      "Best Invisible Grills & Safety Nets Services",
-    template: "%s | Invisible Grills & Safety Nets",
+      "Best Invisible Grills & Safety Nets Services | Call 7339306098, 9618568669",
+    template: "%s | Invisible Grills & Safety Nets | Call 7339306098, 9618568669",
   },
   description: `Professional safety nets installation in Hyderabad, Bangalore, Chennai, and Andhra Pradesh. Balcony nets, children protection, bird nets, invisible grills. Free inspection. Call ${PRIMARY.display.trim()}.`,
   keywords: [
-    "safety nets Hyderabad",
-    "balcony safety nets",
-    "children protection nets",
+    "Kgr invisible grills",
+    "invisible grills in Hyderabad",
+    "invisible grills near me",
+    "invisible grills in Bangalore",
+    "safety nets in Hyderabad",
+    "safety nets near me",
+    "Kgr safety nets",
+    "best invisible grills in hyderabad",
+    "best invisible grills in bangalore",
+    "balcony safety nets in bangalore",
+    "pigeon nets in hyderabad",
+    "best invisible grills in chennai",
+    "safety nets in bangalore",
+    "balcony safety nets in hyderabad",
+    "invisible grills in chennai",
+    "safety nets in Chennai",
+    "balcony safety nets in Chennai",
+    "pigeon nets in chennai",
+    "invisible grills in vijayawada",
+    "safety nets in vijayawada",
+    "balcony safety nets in vijayawada",
+    "children safety nets in Hyderabad",
+    "children safety nets in Visakhapatnam",
     "bird nets",
     "invisible grills",
     "pigeon nets",
     "duct area nets",
-    "Bangalore",
     "Chennai",
     "Vijayawada",
     "Visakhapatnam",
   ],
-  authors: [{ name: "KGR Enterprises" }],
-  creator: "KGR Enterprises",
-  publisher: "KGR Enterprises",
+  authors: [{ name: "KGR Invisible Grills & Safety Nets" }],
+  creator: "KGR Invisible Grills & Safety Nets",
+  publisher: "KGR Invisible Grills & Safety Nets",
   formatDetection: {
     email: false,
     address: false,
@@ -45,7 +63,7 @@ export const metadata: Metadata = {
     locale: "en_IN",
   url: "https://invisiblegrillsandsafetynets.in",
     title:
-      "Best Invisible Grills & Safety Nets Services",
+      "Best Invisible Grills & Safety Nets Services | Call 7339306098, 9618568669",
     description:
       "Trusted Invisible Grills & Safety Nets installation services for balconies, children protection, and bird control. Professional team, quality materials, 5-year warranty.",
     siteName: "Invisible Grills & Safety Nets",
@@ -54,17 +72,18 @@ export const metadata: Metadata = {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "KGR - Invisible Grills & Safety Nets",
+        alt: "KGR Invisible Grills & Safety Nets",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    site: "@invisiblegrillsandsafetynets",
+    site: "@Kgr_Grills_Nets",
     title:
       "Best Invisible Grills & Safety Nets Services",
     description: `Professional safety nets installation services. Balcony nets, children protection, bird control. Call ${PRIMARY.display.trim()}.`,
-    images: ["/twitter-image.jpg"],
+    images: ["/logo.png"],
+    creator: "@Kgr_Grills_Nets",
   },
   robots: {
     index: true,
@@ -91,7 +110,7 @@ export default function RootLayout({
   const organizationLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "KGR - Invisible Grills & Safety Nets",
+    "name": "KGR Invisible Grills & Safety Nets",
     "url": "https://invisiblegrillsandsafetynets.in",
     "logo": "https://invisiblegrillsandsafetynets.in/logo.png",
     "contactPoint": {
@@ -105,7 +124,7 @@ export default function RootLayout({
       {
         "@type": "LocalBusiness",
         "@id": "https://invisiblegrillsandsafetynets.in/locations/hyderabad#localbusiness",
-        "name": "Invisible Grills & Safety Nets - Hyderabad Branch",
+        "name": "Invisible Grills & Safety Nets in Hyderabad",
         "image": "https://invisiblegrillsandsafetynets.in/og-image.jpg",
         "address": {
           "@type": "PostalAddress",
@@ -130,7 +149,7 @@ export default function RootLayout({
       {
         "@type": "LocalBusiness",
         "@id": "https://invisiblegrillsandsafetynets.in/locations/bangalore#localbusiness",
-        "name": "Invisible Grills & Safety Nets - Bangalore Branch",
+        "name": "Invisible Grills & Safety Nets in Bangalore",
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "367, 2nd A Main Road, Gokula Extension, Mathikera, Bangalore Division",
@@ -153,7 +172,7 @@ export default function RootLayout({
       {
         "@type": "LocalBusiness",
         "@id": "https://invisiblegrillsandsafetynets.in/locations/chennai#localbusiness",
-        "name": "Invisible Grills & Safety Nets - Chennai Branch",
+        "name": "Invisible Grills & Safety Nets in Chennai",
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "25/9a, Sathya Moorthy Street, Kamaraj Nagar, Choolaimedu",
@@ -176,7 +195,7 @@ export default function RootLayout({
       {
         "@type": "LocalBusiness",
         "@id": "https://invisiblegrillsandsafetynets.in/locations/vijayawada#localbusiness",
-        "name": "Invisible Grills & Safety Nets - Vijayawada Branch",
+        "name": "Invisible Grills & Safety Nets in Vijayawada",
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "3-12, Ayyappa Nagar, Benz Circle",
@@ -199,7 +218,7 @@ export default function RootLayout({
       {
         "@type": "LocalBusiness",
         "@id": "https://invisiblegrillsandsafetynets.in/locations/visakhapatnam#localbusiness",
-        "name": "Invisible Grills & Safety Nets - Visakhapatnam Branch",
+        "name": "Invisible Grills & Safety Nets in Visakhapatnam",
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "21-3/4/3, Viman Nagar, Kakani Nagar",
@@ -272,7 +291,6 @@ export default function RootLayout({
             <FloatingContact />
           </div>
           <Toaster />
-          <Sonner />
         </TooltipProvider>
       </body>
     </html>

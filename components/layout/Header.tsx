@@ -2,7 +2,6 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-// removed next/image usage; using native <img>
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { X, Menu, Phone, MessageCircle, Home, Info, Briefcase, Image as ImageIcon, Mail, ChevronRight } from "lucide-react";
@@ -81,8 +80,6 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Hide SEO banner while mobile menu (sheet) is open and restore previous state on close
-  // Note: depend only on `isMenuOpen` to avoid this effect re-running when showSeoBanner changes
   useEffect(() => {
     if (isMenuOpen) {
       // store previous value only if not already stored then hide
@@ -297,7 +294,7 @@ const Header = () => {
     <>
       {/* SEO Banner - 60px mobile, 48px desktop */}
 {showSeoBanner && (
-  <div className="w-full bg-gradient-to-r from-safety to-accent text-white fixed top-0 left-0 z-[99999] h-[60px] md:h-[48px]">
+  <div className="w-full bg-gradient-to-r from-safety to-accent text-white fixed top-0 left-0 z-[99990] h-[60px] md:h-[48px]">
     <div className="flex items-center justify-between px-3 py-3 md:py-2 md:px-4 h-full">
       <div className="flex-1 overflow-hidden">
         <div className="font-bold text-xs md:text-sm lg:text-base whitespace-nowrap seo-marquee-track">
@@ -345,7 +342,7 @@ const Header = () => {
           <div className="flex items-center justify-between h-14 md:h-16 lg:h-20">
             {/* Logo */}
             <Link href="/" className="flex items-center">
-              <img src="/images/logo.png" alt="KGR Enterprises - Best Safety Nets & Invisible Grills" className="h-[5.5rem] w-auto object-contain -ml-[22px]" />
+              <img src="/logo.png" alt="KGR Enterprises - Best Safety Nets & Invisible Grills" className="h-[5.5rem] w-auto object-contain -ml-[22px]" />
             </Link>
 
             {/* Desktop Navigation */}
@@ -384,7 +381,7 @@ const Header = () => {
               >
                 <div className="flex items-center justify-between px-4">
                   <div className="flex items-center gap-3">
-                    <img src="/images/logo.png" alt="KGR Enterprises" className="h-[3.5rem] w-auto object-contain -ml-[25px]" />
+                    <img src="/logo.png" alt="KGR Enterprises" className="h-[3.5rem] w-auto object-contain -ml-[25px]" />
                   </div>
                   <button
                     aria-label="Close menu"

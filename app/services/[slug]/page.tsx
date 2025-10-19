@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-// using native <img> instead of next/image
 import Link from 'next/link';
 import { servicesData, serviceSpecificLocationFAQs } from '@/data/servicesData';
 import {
@@ -186,7 +185,7 @@ export default async function ServiceDetailPage({ params }: Props) {
   const organizationSchema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'KGR Enterprises',
+    name: 'KGR Invisible Grills & Safety Nets',
   url: 'https://invisiblegrillsandsafetynets.in',
   logo: 'https://invisiblegrillsandsafetynets.in/logo.png',
     contactPoint: {
@@ -196,11 +195,11 @@ export default async function ServiceDetailPage({ params }: Props) {
       areaServed: 'IN',
       availableLanguage: 'en',
     },
-    sameAs: [
-      'https://www.facebook.com/',
-      'https://www.instagram.com/',
-      'https://www.google.com/maps/place/KGR+Enterprises',
-    ],
+    // sameAs: [
+    //   'https://www.facebook.com/',
+    //   'https://www.instagram.com/',
+    //   'https://www.google.com/maps/place/KGR+Enterprises',
+    // ],
   };
     
   const BranchIcon = branches.icon;
@@ -208,7 +207,7 @@ export default async function ServiceDetailPage({ params }: Props) {
   const localBusinessSchema = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    name: 'KGR Enterprises',
+    name: 'KGR Invisible Grills & Safety Nets',
   image: 'https://invisiblegrillsandsafetynets.in/logo.png',
   telephone: PRIMARY.phone,
     priceRange: '₹₹',
@@ -225,7 +224,7 @@ export default async function ServiceDetailPage({ params }: Props) {
       { '@type': 'City', name: 'Chennai' },
       { '@type': 'City', name: 'Vijayawada' },
     ],
-    workingHours: 'Mo-Su 09:00-19:00',
+    workingHours: "Mo-Sa 08:00-20:00, Su 09:00-18:00",
   };
 
   return (

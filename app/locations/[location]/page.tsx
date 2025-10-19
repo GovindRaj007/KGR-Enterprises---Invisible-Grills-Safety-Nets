@@ -20,6 +20,25 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
   return {
     title,
     description: `Trusted invisible grills and safety nets installation throughout ${capitalize(locName)}. Complimentary site inspection and reliable, quality workmanship guaranteed.`,
+     keywords: [
+      "kgr invisible grills",
+      "invisible grills in hyderabad",
+      "best invisible grills in hyderabad",
+      "safety nets in hyderabad",
+      "best safety nets in hyderabad",
+      "best invisible grills in bangalore",
+      "invisible grills in bangalore",
+      "safety nets in bangalore",
+      "invisible grills in chennai",
+      "best safety nets in bangalore",
+      "safety nets in chennai",
+      "invisible grills in visakhapatnam",
+      "safety nets in visakhapatnam",
+      "best invisible grills in chennai",
+      "best safety nets in chennai",
+      "best invisible grills in visakhapatnam",
+      "best safety nets in visakhapatnam",
+  ],
   };
 }
 
@@ -40,7 +59,7 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     '@id': `https://invisiblegrillsandsafetynets.in/locations/${locName}#localbusiness`,
-    'name': `KGR - Invisible Grills & Safety Nets - ${locationDisplay} Branch`,
+    'name': `KGR Invisible Grills & Safety Nets in ${locationDisplay}`,
     'telephone': phone,
     'url': `https://invisiblegrillsandsafetynets.in/locations/${locName}`,
     'address': matched ? {
