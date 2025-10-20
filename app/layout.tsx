@@ -17,10 +17,10 @@ export const metadata: Metadata = {
       "Best Invisible Grills & Safety Nets Services | Call 7339306098, 9618568669",
     template: "%s | Invisible Grills & Safety Nets | Call 7339306098, 9618568669",
   },
-  description: `Professional safety nets installation in Hyderabad, Bangalore, Chennai, and Andhra Pradesh. Balcony nets, children protection, bird nets, invisible grills. Free inspection. Call ${PRIMARY.display.trim()}.`,
+  description: "KGR Enterprises offers professional invisible grills and safety nets installation in Hyderabad, Bangalore, Chennai, Vijayawada. Quality service, 5-year warranty. Call 7339306098, 9618568669",
   keywords: [
+     "invisible grills in Hyderabad",
     "Kgr invisible grills",
-    "invisible grills in Hyderabad",
     "invisible grills near me",
     "invisible grills in Bangalore",
     "safety nets in Hyderabad",
@@ -97,7 +97,10 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "your-google-verification-code",
+    google: "P8HUVCb--rZ-IF-X_ZwXQX1FOPvjQI5M0MWRtAwVMfc",
+    other: {
+       "msvalidate.01": "A59B620A02512B76293509176B16FF32",
+    }
   },
 };
 

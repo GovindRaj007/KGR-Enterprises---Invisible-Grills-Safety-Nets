@@ -8,15 +8,15 @@ export const metadata: Metadata = {
   description:
     "KGR Enterprises has 15+ years of experience in invisible grills and safety nets installation. Certified team, 5000+ happy customers across Hyderabad, Bangalore, Chennai.",
     keywords: [
-      "kgr invisible grills",
-      "kgr safety nets",
-      "kgr pegion nets",
       "invisible grills in hyderabad",
       "best invisible grills in hyderabad",
       "best safety nets in hyderabad",
       "best invisible grills in bangalore",
       "safety nets in hyderabad",
       "invisible grills in bangalore",
+      "kgr invisible grills",
+      "kgr safety nets",
+      "kgr pigeon nets",
       "safety nets in bangalore",
       "invisible grills in chennai",
       "safety nets in chennai",
