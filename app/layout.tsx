@@ -283,6 +283,14 @@ export default function RootLayout({
             __html: JSON.stringify(organizationLd),
           }}
         />
+
+        {/* Google tag (gtag.js) - Global site tag for Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-339PTXCP6X"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\n\ngtag('config', 'G-339PTXCP6X');`,
+          }}
+        />
       </head>
 
       <body className={inter.className}>
