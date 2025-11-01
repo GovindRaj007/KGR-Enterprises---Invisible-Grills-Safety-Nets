@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { servicesData, serviceSpecificLocationFAQs } from '@/data/servicesData';
+import { getCanonicalUrl } from '@/lib/canonical-url';
 import {
   generateServiceMetadata,
   generateServiceSchema,
@@ -18,9 +19,22 @@ import { Badge } from '@/components/ui/badge';
 
 type FAQ = { question: string; answer: string };
 
+interface ServiceData {
+  id: string;
+  title: string;
+  description: string;
+  detailedDescription: string;
+  category: string;
+  features: string[];
+  benefits: string[];
+  images?: string[];
+  image: string;
+  specifications: Array<{ label: string; value: string }>;
+}
+
 type Props = {
-  params?: { slug: string } | Promise<{ slug: string }>;
-  searchParams?: Record<string, string | string[] | undefined>;
+  params: Promise<{ slug: string }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
 // Generate static params for all services
@@ -30,27 +44,53 @@ export async function generateStaticParams() {
 
 // Generate metadata for SEO with location keywords
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const resolvedParams = await params;
-  const slug = resolvedParams?.slug;
-  const service = slug ? servicesData[slug] : undefined;
+  const { slug } = await params;
+  const service = servicesData[slug as keyof typeof servicesData];
 
   if (!service) {
-    return { title: 'Service Not Found - KGR Enterprises' };
+    return { 
+      title: 'Service Not Found - KGR Enterprises',
+      verification: {
+        google: "P8HUVCb--rZ-IF-X_ZwXQX1FOPvjQI5M0MWRtAwVMfc",
+      },
+      robots: {
+        index: false,
+        follow: true
+      }
+    };
   }
 
-  return generateServiceMetadata({
+  const baseMetadata = generateServiceMetadata({
     serviceName: service.title,
     serviceSlug: slug,
     shortDescription: service.description,
     longDescription: service.detailedDescription,
     image: service.image,
   });
+
+  // Generate ETag based on content
+  const etag = `W/"${slug}-${service.title.replace(/\s+/g, '-').toLowerCase()}"`;
+
+  const canonicalUrl = getCanonicalUrl(`/services/${slug}`);
+
+  return {
+    ...baseMetadata,
+    verification: {
+      google: "P8HUVCb--rZ-IF-X_ZwXQX1FOPvjQI5M0MWRtAwVMfc",
+    },
+    alternates: {
+      canonical: canonicalUrl
+    },
+    other: {
+      ...(baseMetadata.other as Record<string, string>),
+      'ETag': etag,
+    } as Record<string, string>
+  };
 }
 
 export default async function ServiceDetailPage({ params }: Props) {
-  const resolvedParams = await params;
-  const slug = resolvedParams?.slug;
-  const service = slug ? servicesData[slug] : undefined;
+  const { slug } = await params;
+  const service: ServiceData | undefined = servicesData[slug as keyof typeof servicesData];
 
   if (!service) notFound();
 
@@ -170,7 +210,7 @@ export default async function ServiceDetailPage({ params }: Props) {
     serviceName: service.title,
     description: service.detailedDescription,
     image: service.image,
-    slug,
+    slug: slug,
   });
 
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -186,20 +226,19 @@ export default async function ServiceDetailPage({ params }: Props) {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'KGR Invisible Grills & Safety Nets',
-  url: 'https://invisiblegrillsandsafetynets.in',
-  logo: 'https://invisiblegrillsandsafetynets.in/logo.png',
+    url: 'https://invisiblegrillsandsafetynets.in',
+    logo: 'https://invisiblegrillsandsafetynets.in/logo.png',
     contactPoint: {
       '@type': 'ContactPoint',
-  telephone: PRIMARY.phone,
+      telephone: PRIMARY.phone,
       contactType: 'Customer Support',
-      areaServed: 'IN',
-      availableLanguage: 'en',
+      areaServed: ['IN'],
+      availableLanguage: 'en-IN'
     },
-    // sameAs: [
-    //   'https://www.facebook.com/',
-    //   'https://www.instagram.com/',
-    //   'https://www.google.com/maps/place/KGR+Enterprises',
-    // ],
+    sameAs: [
+      'https://x.com/Kgr_Grills_Nets?t=bVFltLBFrViXV15cgk_15Q&s=08',
+    ],
+    inLanguage: 'en-IN'
   };
     
   const BranchIcon = branches.icon;
@@ -208,10 +247,10 @@ export default async function ServiceDetailPage({ params }: Props) {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     name: 'KGR Invisible Grills & Safety Nets',
-  image: 'https://invisiblegrillsandsafetynets.in/logo.png',
-  telephone: PRIMARY.phone,
+    image: 'https://invisiblegrillsandsafetynets.in/logo.png',
+    telephone: PRIMARY.phone,
     priceRange: '₹₹',
-  url: 'https://invisiblegrillsandsafetynets.in',
+    url: 'https://invisiblegrillsandsafetynets.in',
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Hyderabad',
@@ -225,6 +264,8 @@ export default async function ServiceDetailPage({ params }: Props) {
       { '@type': 'City', name: 'Vijayawada' },
     ],
     workingHours: "Mo-Sa 08:00-20:00, Su 09:00-18:00",
+    availableLanguage: 'en-IN',
+    inLanguage: 'en-IN'
   };
 
   return (
@@ -305,9 +346,17 @@ export default async function ServiceDetailPage({ params }: Props) {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
-                {((service.images && service.images.length) ? service.images : [service.image]).map((img, index) => (
+                {((service.images && service.images.length) ? service.images : [service.image]).map((img: string, index: number) => (
                   <div key={index} className="relative h-48 md:h-64 rounded-lg overflow-hidden">
-                    <img src={img} alt={`${service.title} ${index + 1}`} className="object-cover hover:scale-110 transition-transform duration-500 w-full h-full absolute inset-0" />
+                    <img 
+                      src={img} 
+                      alt={`${service.title} ${index + 1}`} 
+                      className="object-cover hover:scale-110 transition-transform duration-500 w-full h-full absolute inset-0" 
+                      loading={index === 0 ? "eager" : "lazy"}
+                      decoding="async"
+                      width="800"
+                      height="600"
+                    />
                   </div>
                 ))}
               </div>
@@ -329,7 +378,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                       Key Features
                     </h2>
                     <div className="space-y-2">
-                      {service.features.map((feature, index) => (
+                      {service.features.map((feature: string, index: number) => (
                         <div key={index} className="flex items-center space-x-2">
                           <CheckCircle2 className="h-4 w-4 text-accent flex-shrink-0" />
                           <span className="text-sm md:text-base">{feature}</span>
@@ -346,7 +395,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                       Benefits
                     </h2>
                     <div className="space-y-2">
-                      {service.benefits.map((benefit, index) => (
+                      {service.benefits.map((benefit: string, index: number) => (
                         <div key={index} className="flex items-center space-x-2">
                           <CheckCircle2 className="h-4 w-4 text-safety flex-shrink-0" />
                           <span className="text-sm md:text-base">{benefit}</span>
@@ -361,7 +410,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                 <CardContent className="p-4 md:p-6 space-y-4">
                   <h2 className="text-lg md:text-xl font-bold">Technical Specifications</h2>
                   <div className="space-y-2">
-                    {service.specifications.map((spec, index) => (
+                    {service.specifications.map((spec: { label: string; value: string }, index: number) => (
                       <div
                         key={index}
                         className="flex justify-between items-center py-2 border-b last:border-0 text-sm md:text-base"
@@ -405,7 +454,11 @@ export default async function ServiceDetailPage({ params }: Props) {
                   </h2>
                   <div className="grid sm:grid-cols-2 gap-4">
                     {locationContents.map((loc, index) => (
-                      <div key={index} className="space-y-2 p-3 rounded-lg bg-muted/30">
+                      <Link 
+                        key={index} 
+                        href={`/services/${slug}/${loc.heading.split(' ').pop()?.toLowerCase().replace(/[^a-z]/g, '')}`}
+                        className="space-y-2 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
+                      >
                         <h3 className="font-semibold text-sm md:text-base">{loc.heading}</h3>
                         <p className="text-sm text-muted-foreground">{loc.description}</p>
                         <div className="space-y-1">
@@ -416,7 +469,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                             </div>
                           ))}
                         </div>
-                      </div>
+                      </Link>
                     ))}
                   </div>
                 </CardContent>
@@ -450,7 +503,15 @@ export default async function ServiceDetailPage({ params }: Props) {
                           className="flex items-center space-x-3 p-3 rounded-lg border hover:border-primary transition-colors group"
                         >
                             <div className="relative h-16 w-16 flex-shrink-0 rounded overflow-hidden">
-                            <img src={relatedService.image} alt={relatedService.title} className="object-cover w-full h-full absolute inset-0" />
+                            <img 
+                              src={relatedService.image} 
+                              alt={relatedService.title} 
+                              className="object-cover w-full h-full absolute inset-0"
+                              loading="lazy"
+                              decoding="async"
+                              width="160"
+                              height="160"
+                            />
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium truncate group-hover:text-primary">

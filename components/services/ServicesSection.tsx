@@ -115,7 +115,7 @@ const ServicesSection = () => {
                   >
                     <CardHeader className="p-0">
                       <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
-                        <img src={service.image} alt={service.title} className="object-cover group-hover:scale-110 transition-transform duration-500 w-full h-full absolute inset-0" />
+                        <img src={service.image} alt={`${service.title} - Professional Installation Services in Hyderabad, Bangalore, Chennai & Vijayawada`} className="object-cover group-hover:scale-110 transition-transform duration-500 w-full h-full absolute inset-0" />
                         <Badge className="absolute top-3 left-3 bg-primary/90">
                           {category.title}
                         </Badge>
@@ -148,7 +148,7 @@ const ServicesSection = () => {
                           className="flex-1 gap-2 text-xs md:text-sm"
                           asChild
                         >
-                          <Link href={`/services/${service.id}`}>
+                          <Link href={`/services/${service.id}`} aria-label={`Learn more about ${service.title}`}>
                             <Info className="h-3 w-3 md:h-4 md:w-4" />
                             Details
                           </Link>
@@ -158,7 +158,7 @@ const ServicesSection = () => {
                           className="flex-1 gap-2 text-xs md:text-sm"
                           asChild
                         >
-                          <a href={PRIMARY.tel}>
+                          <a href={PRIMARY.tel} aria-label={`Call now to inquire about ${service.title}`} rel="noopener">
                             <Phone className="h-3 w-3 md:h-4 md:w-4" />
                             Call
                           </a>

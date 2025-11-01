@@ -16,28 +16,71 @@ type PageParams = {
 
 export async function generateMetadata({ params }: PageParams): Promise<Metadata> {
   const { location: locName } = await params;
+  const matched = PRIMARY_LOCATIONS.find(l => l.name.toLowerCase() === locName.toLowerCase());
   const title = `Invisible Grills & Safety Nets in ${capitalize(locName)}`;
+  const locationMeta = matched ? {
+    areaServed: matched.areas.join(', '),
+    state: matched.state,
+    fullAddress: matched.streetAddress
+  } : {
+    areaServed: 'all areas',
+    state: 'South India',
+    fullAddress: ''
+  };
+
   return {
     title,
-    description: `Trusted invisible grills and safety nets installation throughout ${capitalize(locName)}. Complimentary site inspection and reliable, quality workmanship guaranteed.`,
-     keywords: [
-      "kgr invisible grills",
-      "invisible grills in hyderabad",
-      "best invisible grills in hyderabad",
-      "safety nets in hyderabad",
-      "best safety nets in hyderabad",
-      "best invisible grills in bangalore",
-      "invisible grills in bangalore",
-      "safety nets in bangalore",
-      "invisible grills in chennai",
-      "best safety nets in bangalore",
-      "safety nets in chennai",
-      "invisible grills in visakhapatnam",
-      "safety nets in visakhapatnam",
-      "best invisible grills in chennai",
-      "best safety nets in chennai",
-      "best invisible grills in visakhapatnam",
-      "best safety nets in visakhapatnam",
+    verification: {
+      google: "P8HUVCb--rZ-IF-X_ZwXQX1FOPvjQI5M0MWRtAwVMfc",
+    },
+    robots: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-video-preview': -1,
+      'max-snippet': -1,
+    },
+    description: `Professional invisible grills and safety nets installation in ${capitalize(locName)}. Serving ${locationMeta.areaServed}. Free site inspection, 15-year warranty, and expert installation guaranteed. Contact us for quality safety solutions.`,
+    alternates: {
+      canonical: `https://invisiblegrillsandsafetynets.in/locations/${locName.toLowerCase()}`
+    },
+    openGraph: {
+      title: `KGR Enterprises - Invisible Grills & Safety Nets in ${capitalize(locName)}`,
+      description: `Leading provider of invisible grills and safety nets in ${capitalize(locName)}. Professional installation, marine-grade materials, and lifetime support.`,
+      url: `https://invisiblegrillsandsafetynets.in/locations/${locName.toLowerCase()}`,
+      siteName: 'KGR Enterprises',
+      type: 'website'
+    },
+    keywords: [
+         "invisible grills in Hyderabad",
+    "Kgr invisible grills",
+    "invisible grills near me",
+    "invisible grills in Bangalore",
+    "safety nets in Hyderabad",
+    "safety net installation near me",
+    "Kgr safety nets",
+    "invisible grill installation",
+    "best invisible grills in hyderabad",
+    "best invisible grills in bangalore",
+    "balcony safety nets in bangalore",
+    "pigeon nets in hyderabad",
+    "best invisible grills in chennai",
+    "safety nets in bangalore",
+    "balcony safety nets in hyderabad",
+    "invisible grills in chennai",
+    "safety nets in Chennai",
+    "balcony safety nets in Chennai",
+    "pigeon nets in chennai",
+    "invisible grills in vijayawada",
+    "safety nets in vijayawada",
+    "balcony safety nets in vijayawada",
+    "children safety nets in Hyderabad",
+    "children safety nets in Visakhapatnam",
+    "best invisible grills in visakhapatnam",
+    "bird nets",
+    "invisible grills",
+    "pigeon nets",
+    "duct area nets",
   ],
   };
 }
@@ -62,6 +105,42 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
     'name': `KGR Invisible Grills & Safety Nets in ${locationDisplay}`,
     'telephone': phone,
     'url': `https://invisiblegrillsandsafetynets.in/locations/${locName}`,
+    'priceRange': '₹₹',
+    'image': 'https://invisiblegrillsandsafetynets.in/logo.png',
+    'description': locContent.description,
+    'areaServed': {
+      '@type': 'City',
+      'name': locationDisplay,
+      'containedInPlace': matched?.state ? {
+        '@type': 'State',
+        'name': matched.state
+      } : undefined
+    },
+    'aggregateRating': {
+      '@type': 'AggregateRating',
+      'ratingValue': '4.9',
+      'reviewCount': '1000',
+      'bestRating': '5',
+      'worstRating': '1'
+    },
+    'makesOffer': [
+      {
+        '@type': 'Offer',
+        'itemOffered': {
+          '@type': 'Service',
+          'name': 'Invisible Grills Installation',
+          'areaServed': matched?.areas
+        }
+      },
+      {
+        '@type': 'Offer',
+        'itemOffered': {
+          '@type': 'Service',
+          'name': 'Safety Nets Installation',
+          'areaServed': matched?.areas
+        }
+      }
+    ],
     'address': matched ? {
       '@type': 'PostalAddress',
       'streetAddress': matched['streetAddress'] || '',

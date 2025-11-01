@@ -1,0 +1,65 @@
+# Enable rewriting
+RewriteEngine On
+
+# Force HTTPS and remove www (Hostinger specific)
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^www\. [NC]
+RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [L,R=301]
+
+# Handle trailing slashes
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} (.+)/$
+RewriteRule ^ %1 [R=301,L]
+
+# Redirect old URLs to new ones (using RewriteRule for better compatibility)
+RewriteRule ^grill/?$ /services/invisible-grills [R=301,L]
+RewriteRule ^grills/?$ /services/invisible-grills [R=301,L]
+RewriteRule ^nets/?$ /services/safety-nets [R=301,L]
+RewriteRule ^net/?$ /services/safety-nets [R=301,L]
+RewriteRule ^safety-net/?$ /services/safety-nets [R=301,L]
+RewriteRule ^invisible-grill/?$ /services/invisible-grills [R=301,L]
+RewriteRule ^contact-us/?$ /contact [R=301,L]
+RewriteRule ^about-us/?$ /about [R=301,L]
+
+# Security Headers for Hostinger
+<IfModule mod_headers.c>
+    # Security Headers
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    
+    # Content Security Policy optimized for Hostinger
+    Header always set Content-Security-Policy "default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'"
+
+    # Set canonical URLs for documents
+    <FilesMatch "\.(pdf|doc|docx)$">
+        Header always set Link '<https://invisiblegrillsandsafetynets.in%{REQUEST_URI}>; rel="canonical"'
+    </FilesMatch>
+</IfModule>
+
+# Custom 404 error page
+ErrorDocument 404 /404.html
+
+# Prevent directory listings
+Options -Indexes
+
+# Enable compression for better performance
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/x-javascript application/json
+</IfModule>
+
+# Browser caching for static assets
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+</IfModule>

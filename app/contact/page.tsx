@@ -9,24 +9,43 @@ export const metadata: Metadata = {
   title: "Contact Us - KGR Invisible Grills & Safety Nets",
   description:
     `Contact KGR Invisible Grills & Safety Nets for free consultation on invisible grills and safety nets. Call ${PRIMARY.spaced} or visit us in Hyderabad. Available Mon-Sat 8AM-8PM.`,
-        keywords: [
-      "kgr invisible grills",
-      "invisible grills in hyderabad",
-      "best invisible grills in hyderabad",
-      "safety nets in hyderabad",
-      "best safety nets in hyderabad",
-      "best invisible grills in bangalore",
-      "invisible grills in bangalore",
-      "safety nets in bangalore",
-      "invisible grills in chennai",
-      "best safety nets in bangalore",
-      "safety nets in chennai",
-      "invisible grills in visakhapatnam",
-      "safety nets in visakhapatnam",
-      "best invisible grills in chennai",
-      "best safety nets in chennai",
-      "best invisible grills in visakhapatnam",
-      "best safety nets in visakhapatnam",
+  robots: {
+    index: true,
+    follow: true,
+    'max-image-preview': 'large',
+    'max-video-preview': -1,
+    'max-snippet': -1,
+  },
+  keywords: [
+         "invisible grills in Hyderabad",
+    "Kgr invisible grills",
+    "invisible grills near me",
+    "invisible grills in Bangalore",
+    "safety nets in Hyderabad",
+    "safety net installation near me",
+    "Kgr safety nets",
+    "invisible grill installation",
+    "best invisible grills in hyderabad",
+    "best invisible grills in bangalore",
+    "balcony safety nets in bangalore",
+    "pigeon nets in hyderabad",
+    "best invisible grills in chennai",
+    "safety nets in bangalore",
+    "balcony safety nets in hyderabad",
+    "invisible grills in chennai",
+    "safety nets in Chennai",
+    "balcony safety nets in Chennai",
+    "pigeon nets in chennai",
+    "invisible grills in vijayawada",
+    "safety nets in vijayawada",
+    "balcony safety nets in vijayawada",
+    "children safety nets in Hyderabad",
+    "children safety nets in Visakhapatnam",
+    "best invisible grills in visakhapatnam",
+    "bird nets",
+    "invisible grills",
+    "pigeon nets",
+    "duct area nets",
   ],
   openGraph: {
     title: "Contact KGR Invisible Grills & Safety Nets - Free Consultation",
@@ -116,7 +135,16 @@ export default function ContactPage() {
   return (
     <>
       <section className="relative overflow-hidden mb-6">
-        <img src="/images/hero-image.jpg" alt="Contact KGR Enterprises" className="object-cover w-full h-full absolute inset-0" />
+        <img 
+          src="/images/hero-image.jpg" 
+          alt="Contact KGR Enterprises" 
+          className="object-cover w-full h-full absolute inset-0"
+          loading="eager"
+          decoding="async"
+          width="1920"
+          height="1080"
+          fetchPriority="high"
+        />
         <div className="absolute inset-0 bg-black/45" />
         <div className="relative container mx-auto px-4 py-20 md:py-28 lg:py-36 text-center">
           <div className="max-w-3xl mx-auto">

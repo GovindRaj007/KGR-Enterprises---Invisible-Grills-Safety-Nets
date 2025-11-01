@@ -40,12 +40,14 @@ const CONTACTS = [
   },
 ];
 
+import { normalizeInternalLink } from "@/lib/url-utils";
+
 const menuItems = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Services", href: "/services", isServices: true },
-  { label: "Gallery", href: "/gallery" },
-  { label: "Contact", href: "/contact" },
+  { label: "Home", href: normalizeInternalLink("/") },
+  { label: "About", href: normalizeInternalLink("/about") },
+  { label: "Services", href: normalizeInternalLink("/services"), isServices: true },
+  { label: "Gallery", href: normalizeInternalLink("/gallery") },
+  { label: "Contact", href: normalizeInternalLink("/contact") },
 ];
 
 const MOBILE_ICONS: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {

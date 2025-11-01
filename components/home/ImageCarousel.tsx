@@ -89,7 +89,13 @@ const ImageCarousel = () => {
               index === currentIndex ? 'opacity-100' : 'opacity-0'
             }`}
           >
-            <img src={image.src} alt={image.alt} className="object-cover w-full h-full absolute inset-0" />
+            <img 
+              src={image.src} 
+              alt={image.alt} 
+              loading={index === 0 ? "eager" : "lazy"}
+              decoding="async"
+              className="object-cover w-full h-full absolute inset-0" 
+            />
             <div className="absolute inset-0 bg-black/40" />
           </div>
         ))}

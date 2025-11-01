@@ -47,7 +47,7 @@ const Footer = () => {
             {/* Company Info */}
             <div className="space-y-2 md:space-y-3">
               <div className="space-y-4">
-                <img src="/logo.png" alt="KGR Enterprises Logo" className="h-[4rem] w-auto object-cover -ml-[1rem] -mt-[5px] md:-mt-[10px]" />
+                <img src="/logo.png" alt="KGR Enterprises - Professional Invisible Grills and Safety Nets Installation Services" className="h-[4rem] w-auto object-cover -ml-[1rem] -mt-[5px] md:-mt-[10px]" />
                 <p className="text-gray-300 text-sm md:text-base leading-relaxed mt-0">
                   KGR Enterprises delivers best quality invisible grills and safety nets across
                   Hyderabad, Bangalore, Chennai, and Andhra Pradesh. Protecting families with
@@ -99,19 +99,19 @@ const Footer = () => {
               <h3 className="text-base md:text-lg font-semibold">Contact Info</h3>
 
               <div className="space-y-3 md:space-y-4">
-                <a href={PRIMARY.tel} className="flex items-start space-x-3 text-safety hover:underline group min-h-0">
+                <a href={PRIMARY.tel} className="flex items-start space-x-3 text-safety hover:underline group min-h-0" rel="noopener">
                   <Phone className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                  <span className="text-sm md:text-base font-medium">{PRIMARY.display}</span>
+                  <span className="text-sm md:text-base font-medium" aria-label="Primary Contact Number">{PRIMARY.display}</span>
                 </a>
 
-                <a href={SECONDARY.tel} className="flex items-start space-x-3 text-gray-300 hover:text-safety hover:underline group min-h-0">
+                <a href={SECONDARY.tel} className="flex items-start space-x-3 text-gray-300 hover:text-safety hover:underline group min-h-0" rel="noopener">
                   <Phone className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                  <span className="text-sm md:text-base font-medium">{SECONDARY.display}</span>
+                  <span className="text-sm md:text-base font-medium" aria-label="Secondary Contact Number">{SECONDARY.display}</span>
                 </a>
 
                 <div className="flex items-start space-x-3">
                   <Mail className="h-4 w-4 text-safety mt-0.5 flex-shrink-0" />
-                  <a href="mailto:kgr.invisiblegrills.nets@gmail.com" className="text-sm md:text-base hover:text-safety transition-colors break-all min-h-0">
+                  <a href="mailto:kgr.invisiblegrills.nets@gmail.com" className="text-sm md:text-base hover:text-safety transition-colors break-all min-h-0" rel="noopener">
                     kgr.invisiblegrills.nets@gmail.com
                   </a>
                 </div>

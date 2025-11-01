@@ -119,7 +119,14 @@ const GallerySection = () => {
               onClick={() => setSelectedImage(image.src)}
             >
               <div className="relative overflow-hidden aspect-square">
-                <img src={image.src} alt={image.alt} className="object-cover group-hover:scale-110 transition-transform duration-500 w-full h-full absolute inset-0" />
+                <img 
+                  src={image.src} 
+                  alt={image.alt} 
+                  loading="lazy"
+                  decoding="async"
+                  fetchPriority={startIndex + index < 4 ? "high" : "low"}
+                  className="object-cover group-hover:scale-110 transition-transform duration-500 w-full h-full absolute inset-0" 
+                />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
                 <Badge className="absolute top-2 left-2 bg-primary/90 text-xs">
                   {image.category}
@@ -197,7 +204,13 @@ const GallerySection = () => {
             <DialogTitle className="sr-only">Gallery Image Preview</DialogTitle>
             {selectedImage && (
               <div className="relative w-full h-[70vh] md:h-[80vh]">
-                <img src={selectedImage} alt="Gallery Image" className="object-contain w-full h-full absolute inset-0" />
+                <img 
+                  src={selectedImage} 
+                  alt="Gallery Image Preview" 
+                  loading="lazy"
+                  decoding="async"
+                  className="object-contain w-full h-full absolute inset-0" 
+                />
               </div>
             )}
           </DialogContent>
