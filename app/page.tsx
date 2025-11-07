@@ -5,6 +5,7 @@ import ImageCarouselClient from '@/components/home/ImageCarouselClient';
 import AboutClient from '@/components/about/AboutClient';
 import GalleryClient from '@/components/gallery/GalleryClient';
 import TestimonialsClient from '@/components/testimonials/TestimonialsClient';
+import FeaturedLocations from '@/components/home/FeaturedLocations';
 
 export const metadata: Metadata = {
   title: "KGR Enterprises - Best Invisible Grills & Safety Nets Manufacturer in South India | call 7339306098, 9618568669",
@@ -43,7 +44,7 @@ export const metadata: Metadata = {
     "Visakhapatnam",
   ],
   openGraph: {
-    locale: "en_US",
+    locale: "en_IN",
     type: "website",
     title: "KGR Enterprises - Best Invisible Grills & Safety Nets Manufacturer in South India | call 7339306098, 9618568669",
     description: "Premium invisible grills and safety nets installation across Hyderabad, Bangalore, Chennai. Marine-grade stainless steel, superior protection, 15-year warranty. Best quality, trusted service since 2008",
@@ -70,139 +71,15 @@ export const metadata: Metadata = {
   },
 };
 
-const homePageSchema = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebPage",
-      "@id": "https://invisiblegrillsandsafetynets.in/",
-      "url": "https://invisiblegrillsandsafetynets.in/",
-      "name": "KGR Enterprises - Best Invisible Grills & Safety Nets Manufacturer in South India | call 7339306098, 9618568669",
-      "isPartOf": {
-        "@id": "https://invisiblegrillsandsafetynets.in/#website"
-      },
-      "primaryImageOfPage": {
-        "@id": "https://invisiblegrillsandsafetynets.in/#primaryimage"
-      },
-      "image": {
-        "@id": "https://invisiblegrillsandsafetynets.in/#primaryimage"
-      },
-      "thumbnailUrl": "https://invisiblegrillsandsafetynets.in/logo.png",
-      "datePublished": "2008-01-01T00:00:00+00:00",
-      "dateModified": "2025-10-29T13:06:13+00:00",
-      "description": "Premium invisible grills and safety nets installation across Hyderabad, Bangalore, Chennai. Marine-grade stainless steel, superior protection, 15-year warranty. Best quality, trusted service since 2008",
-      "breadcrumb": {
-        "@id": "https://invisiblegrillsandsafetynets.in/#breadcrumb"
-      },
-      "inLanguage": "en-US",
-      "potentialAction": [
-        {
-          "@type": "ReadAction",
-          "target": [
-            "https://invisiblegrillsandsafetynets.in/"
-          ]
-        }
-      ]
-    },
-    {
-      "@type": "ImageObject",
-      "inLanguage": "en-US",
-      "@id": "https://invisiblegrillsandsafetynets.in/#primaryimage",
-      "url": "https://invisiblegrillsandsafetynets.in/logo.png",
-      "contentUrl": "https://invisiblegrillsandsafetynets.in/logo.png",
-      "width": 300,
-      "height": 300,
-      "caption": "kgr-logo"
-    },
-    {
-      "@type": "BreadcrumbList",
-      "@id": "https://invisiblegrillsandsafetynets.in/#breadcrumb",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://invisiblegrillsandsafetynets.in/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Services",
-          "item": "https://invisiblegrillsandsafetynets.in/services/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "About",
-          "item": "https://invisiblegrillsandsafetynets.in/about/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 4,
-          "name": "Gallery",
-          "item": "https://invisiblegrillsandsafetynets.in/gallery/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 5,
-          "name": "Contact",
-          "item": "https://invisiblegrillsandsafetynets.in/contact/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 6,
-          "name": "Hyderabad",
-          "item": "https://invisiblegrillsandsafetynets.in/locations/hyderabad/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 7,
-          "name": "Bangalore",
-          "item": "https://invisiblegrillsandsafetynets.in/locations/bangalore/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 8,
-          "name": "Chennai",
-          "item": "https://invisiblegrillsandsafetynets.in/locations/chennai/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 9,
-          "name": "Vijayawada",
-          "item": "https://invisiblegrillsandsafetynets.in/locations/vijayawada/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 10,
-          "name": "Visakhapatnam",
-          "item": "https://invisiblegrillsandsafetynets.in/locations/visakhapatnam/"
-        }
-      ]
-    },
-    {
-      "@type": "WebSite",
-      "@id": "https://invisiblegrillsandsafetynets.in/#website",
-      "url": "https://invisiblegrillsandsafetynets.in/",
-      "name": "KGR Enterprises",
-      "description": "Premium invisible grills and safety nets installation across Hyderabad, Bangalore, Chennai. Marine-grade stainless steel, superior protection, 15-year warranty. Best quality, trusted service since 2008",
-      "inLanguage": "en-US"
-    }
-  ]
-};
+
 
 export default function HomePage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(homePageSchema),
-        }}
-      />
       <HeroSection />
       <ImageCarouselClient />
       <ServicesSection />
+      <FeaturedLocations />
       <AboutClient />
       <GalleryClient />
       <TestimonialsClient />

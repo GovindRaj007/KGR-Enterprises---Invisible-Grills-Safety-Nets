@@ -58,9 +58,34 @@ export const metadata: Metadata = {
 };
 
 export default function GalleryPage() {
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      {
+        '@type': 'ListItem',
+        'position': 1,
+        'name': 'Home',
+        'item': 'https://invisiblegrillsandsafetynets.in/'
+      },
+      {
+        '@type': 'ListItem',
+        'position': 2,
+        'name': 'Gallery',
+        'item': 'https://invisiblegrillsandsafetynets.in/gallery'
+      }
+    ]
+  };
+
   return (
-    <div className="min-h-screen bg-background">
-  <GalleryClient />
-    </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <div className="min-h-screen bg-background">
+        <GalleryClient />
+      </div>
+    </>
   );
 }

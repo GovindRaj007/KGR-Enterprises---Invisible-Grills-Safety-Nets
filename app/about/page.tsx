@@ -5,10 +5,12 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export const metadata: Metadata = {
   title: "About Us - 15+ Years Experience in Safety Solutions",
-  description:
-    "KGR Enterprises has 15+ years of experience in invisible grills and safety nets installation. Certified team, 5000+ happy customers across Hyderabad, Bangalore, Chennai.",
-    keywords: [
-      "invisible grills in Hyderabad",
+  description: "KGR Enterprises has 15+ years of experience in invisible grills and safety nets installation. Certified team, 5000+ happy customers across Hyderabad, Bangalore, Chennai.",
+  alternates: {
+    canonical: 'https://invisiblegrillsandsafetynets.in/about',
+  },
+  keywords: [
+    "invisible grills in Hyderabad",
     "Kgr invisible grills",
     "invisible grills near me",
     "invisible grills in Bangalore",
@@ -36,7 +38,7 @@ export const metadata: Metadata = {
     "bird nets",
     "invisible grills",
     "pigeon nets",
-    "duct area nets",
+    "duct area nets"
   ],
   robots: {
     index: true,
@@ -47,23 +49,46 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "About KGR Enterprises - Invisible Grills & Safety Nets Experts",
-    description:
-      "Trusted safety solutions provider with 15+ years experience and 5000+ satisfied customers",
+    description: "Trusted safety solutions provider with 15+ years experience and 5000+ satisfied customers",
     url: "https://invisiblegrillsandsafetynets.in/about",
     images: [
       {
         url: "/og-about.jpg",
         width: 1200,
         height: 630,
-        alt: "About KGR Enterprises",
-      },
-    ],
-  },
+        alt: "About KGR Enterprises"
+      }
+    ]
+  }
 };
 
 export default function AboutPage() {
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      {
+        '@type': 'ListItem',
+        'position': 1,
+        'name': 'Home',
+        'item': 'https://invisiblegrillsandsafetynets.in/'
+      },
+      {
+        '@type': 'ListItem',
+        'position': 2,
+        'name': 'About',
+        'item': 'https://invisiblegrillsandsafetynets.in/about'
+      }
+    ]
+  };
+
   return (
-    <div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <div>
       {/* Full-bleed background hero for About page (using next/image for optimization) */}
       <section className="relative overflow-hidden mb-6">
         <img 
@@ -121,6 +146,7 @@ export default function AboutPage() {
       </div>
 
       <TestimonialsSection />
-    </div>
+      </div>
+    </>
   );
 }

@@ -5,12 +5,12 @@ import { servicesData, serviceSpecificLocationFAQs } from '@/data/servicesData';
 import { getCanonicalUrl } from '@/lib/canonical-url';
 import {
   generateServiceMetadata,
-  generateServiceSchema,
   generateBreadcrumbSchema,
   generateServiceFAQSchema,
   generateLocationContent,
   PRIMARY_LOCATIONS,
 } from '@/lib/seo-metadata';
+import { generateServiceSchema } from '@/lib/service-schema';
 import { PRIMARY } from '@/constants/contacts';
 import { CheckCircle2, MapPin, Shield, Star, Phone } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -211,6 +211,8 @@ export default async function ServiceDetailPage({ params }: Props) {
     description: service.detailedDescription,
     image: service.image,
     slug: slug,
+    category: service.category,
+    specifications: service.specifications,
   });
 
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -221,75 +223,59 @@ export default async function ServiceDetailPage({ params }: Props) {
 
   const faqSchema = generateServiceFAQSchema(faqs);
 
-  // Organization Schema
-  const organizationSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'KGR Invisible Grills & Safety Nets',
-    url: 'https://invisiblegrillsandsafetynets.in',
-    logo: 'https://invisiblegrillsandsafetynets.in/logo.png',
-    contactPoint: {
-      '@type': 'ContactPoint',
-      telephone: PRIMARY.phone,
-      contactType: 'Customer Support',
-      areaServed: ['IN'],
-      availableLanguage: 'en-IN'
-    },
-    sameAs: [
-      'https://x.com/Kgr_Grills_Nets?t=bVFltLBFrViXV15cgk_15Q&s=08',
-    ],
-    inLanguage: 'en-IN'
+  // Combine all schemas
+  const combinedSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      serviceSchema,
+      breadcrumbSchema,
+      faqSchema,
+      {
+        "@type": "LocalBusiness",
+        "@id": "https://invisiblegrillsandsafetynets.in#organization",
+        "name": "KGR Invisible Grills & Safety Nets",
+        "image": {
+          "@type": "ImageObject",
+          "url": "https://invisiblegrillsandsafetynets.in/logo.png",
+          "width": "180",
+          "height": "180"
+        },
+        "telephone": PRIMARY.phone,
+        "priceRange": "₹₹₹",
+        "url": "https://invisiblegrillsandsafetynets.in",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Hyderabad",
+          "addressRegion": "Telangana",
+          "addressCountry": "IN"
+        },
+        "areaServed": [
+          { "@type": "City", "name": "Hyderabad" },
+          { "@type": "City", "name": "Bangalore" },
+          { "@type": "City", "name": "Chennai" },
+          { "@type": "City", "name": "Vijayawada" }
+        ],
+        "openingHoursSpecification": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday", "Tuesday", "Wednesday", "Thursday",
+            "Friday", "Saturday", "Sunday"
+          ],
+          "opens": "09:00",
+          "closes": "21:00"
+        }
+      }
+    ]
   };
-    
+  
   const BranchIcon = branches.icon;
-  // Local Business Schema
-  const localBusinessSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
-    name: 'KGR Invisible Grills & Safety Nets',
-    image: 'https://invisiblegrillsandsafetynets.in/logo.png',
-    telephone: PRIMARY.phone,
-    priceRange: '₹₹',
-    url: 'https://invisiblegrillsandsafetynets.in',
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Hyderabad',
-      addressRegion: 'Telangana',
-      addressCountry: 'IN',
-    },
-    areaServed: [
-      { '@type': 'City', name: 'Hyderabad' },
-      { '@type': 'City', name: 'Bangalore' },
-      { '@type': 'City', name: 'Chennai' },
-      { '@type': 'City', name: 'Vijayawada' },
-    ],
-    workingHours: "Mo-Sa 08:00-20:00, Su 09:00-18:00",
-    availableLanguage: 'en-IN',
-    inLanguage: 'en-IN'
-  };
 
   return (
     <>
       {/* Structured Data */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(combinedSchema) }}
       />
 
       <div className="min-h-screen bg-background">

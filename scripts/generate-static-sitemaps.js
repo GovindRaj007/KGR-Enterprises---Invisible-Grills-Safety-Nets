@@ -18,26 +18,49 @@ const BASE_URL = 'https://invisiblegrillsandsafetynets.in';
 const LOCATIONS = ['hyderabad', 'bangalore', 'chennai', 'vijayawada', 'visakhapatnam'];
 
 function generateSitemap() {
-  const pages = [
-    '',
-    '/about',
-    '/contact',
-    '/gallery',
-    '/services',
-    ...LOCATIONS.map(loc => `/locations/${loc}`),
-    ...Object.keys(servicesData).map(slug => `/services/${slug}`),
-    ...Object.keys(servicesData).flatMap(slug => 
-      LOCATIONS.map(loc => `/services/${slug}/${loc}`)
-    )
+  const mainPages = [
+    { url: '', priority: '1.0', changefreq: 'daily' },
+    { url: '/about', priority: '0.8', changefreq: 'monthly' },
+    { url: '/contact', priority: '0.8', changefreq: 'monthly' },
+    { url: '/gallery', priority: '0.9', changefreq: 'weekly' },
+    { url: '/services', priority: '0.9', changefreq: 'daily' }
   ];
 
+  const locationPages = LOCATIONS.map(loc => ({
+    url: `/locations/${loc}`,
+    priority: '0.8',
+    changefreq: 'weekly'
+  }));
+
+  const servicePages = Object.keys(servicesData).map(slug => ({
+    url: `/services/${slug}`,
+    priority: '0.9',
+    changefreq: 'weekly'
+  }));
+
+  const serviceLocationPages = Object.keys(servicesData).flatMap(slug => 
+    LOCATIONS.map(loc => ({
+      url: `/services/${slug}/${loc}`,
+      priority: '0.8',
+      changefreq: 'weekly'
+    }))
+  );
+
+  const allPages = [...mainPages, ...locationPages, ...servicePages, ...serviceLocationPages];
+
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${pages.map(page => `  <url>
-    <loc>${BASE_URL}${page}</loc>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${allPages.map(page => `  <url>
+    <loc>${BASE_URL}${page.url}</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
-    <changefreq>${page === '' ? 'daily' : 'weekly'}</changefreq>
-    <priority>${page === '' ? '1.0' : '0.8'}</priority>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>
+    ${['hi', 'te', 'ta', 'kn'].map(lang => 
+      `<xhtml:link rel="alternate" hreflang="${lang}" href="${BASE_URL}${page.url}" />`
+    ).join('\n    ')}
+    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}${page.url}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${BASE_URL}${page.url}" />
   </url>`).join('\n')}
 </urlset>`;
 
@@ -106,6 +129,22 @@ generateSitemap();
 generateImageSitemap();
 generateServicesSitemap();
 
+// Generate hreflang sitemap
+const { generateHreflangSitemap } = require('./generate-hreflang-sitemap');
+const allPages = [
+  '',
+  '/about',
+  '/contact',
+  '/gallery',
+  '/services',
+  ...LOCATIONS.map(loc => `/locations/${loc}`),
+  ...Object.keys(servicesData).map(slug => `/services/${slug}`),
+  ...Object.keys(servicesData).flatMap(slug => 
+    LOCATIONS.map(loc => `/services/${slug}/${loc}`)
+  )
+];
+generateHreflangSitemap(allPages);
+
 // Generate sitemap index
 const sitemapIndex = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -119,6 +158,10 @@ const sitemapIndex = `<?xml version="1.0" encoding="UTF-8"?>
   </sitemap>
   <sitemap>
     <loc>${BASE_URL}/sitemap-images.xml</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>${BASE_URL}/sitemap-hreflang.xml</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
   </sitemap>
 </sitemapindex>`;

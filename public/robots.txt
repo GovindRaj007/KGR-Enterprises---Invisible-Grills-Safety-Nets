@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+
+# Disallow admin or sensitive URLs
+Disallow: /admin/
+Disallow: /private/
+Disallow: /temp/
+
+# Allow CSS, JS, and Images
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.webp$
+Allow: /*.svg$
+
+# Sitemaps
+Sitemap: https://invisiblegrillsandsafetynets.in/sitemap-index.xml
+Sitemap: https://invisiblegrillsandsafetynets.in/sitemap.xml
+Sitemap: https://invisiblegrillsandsafetynets.in/sitemap-services.xml
+Sitemap: https://invisiblegrillsandsafetynets.in/sitemap-images.xml
+Sitemap: https://invisiblegrillsandsafetynets.in/sitemap-hreflang.xml
+
+# Crawl-delay directive for better server performance
+Crawl-delay: 5

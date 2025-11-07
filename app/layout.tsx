@@ -12,6 +12,9 @@ import { PRIMARY } from '@/constants/contacts';
 
 const inter = Inter({ subsets: ["latin"] });
 
+// Get current date for metadata
+const currentDate = new Date().toISOString();
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://invisiblegrillsandsafetynets.in"),
   alternates: {
@@ -62,7 +65,7 @@ export const metadata: Metadata = {
     "og:description": "Premium invisible grills and safety nets installation across Hyderabad, Bangalore, Chennai. Marine-grade stainless steel, superior protection, 15-year warranty. Best quality, trusted service since 2008",
     "og:url": "https://invisiblegrillsandsafetynets.in/",
     "og:site_name": "KGR Enterprises",
-    "article:modified_time": "2025-10-30T13:06:13+00:00"
+    "article:modified_time": currentDate
   },
   openGraph: {
     images: [{
@@ -96,6 +99,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const phoneNumber = PRIMARY.phone || '+919618568669';
+  const currentDate = new Date().toISOString();
   const schemaData = {
     "@context": "https://schema.org",
     "@graph": [
@@ -116,11 +120,9 @@ export default function RootLayout({
         },
         "thumbnailUrl": "https://invisiblegrillsandsafetynets.in/logo.png",
         "datePublished": "2008-01-01T00:00:00+00:00",
-        "dateModified": "2025-10-30T13:06:13+00:00",
+        "dateModified": currentDate,
         "description": "Premium invisible grills and safety nets installation across Hyderabad, Bangalore, Chennai. Marine-grade stainless steel, superior protection, 15-year warranty. Best quality, trusted service since 2008",
-        "breadcrumb": {
-          "@id": "https://invisiblegrillsandsafetynets.in/#breadcrumb"
-        },
+
         "inLanguage": "en-IN",
         "potentialAction": [{
           "@type": "ReadAction",

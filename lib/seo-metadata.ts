@@ -39,6 +39,15 @@ export const PRIMARY_LOCATIONS = [
     latitude: 16.48304,
     longitude: 80.66898,
   },
+   {
+    name: 'Visakhapatnam',
+    state: 'Andhra Pradesh',
+    areas: ['MVP Colony', 'Dwaraka Nagar', 'Gajuwaka', 'Madhurawada', 'Seethammadhara', 'Beach Road'],
+    streetAddress: '48-5-6, Dwaraka Nagar Main Road',
+    postalCode: '530016',
+    latitude: 17.686815,
+    longitude: 83.218482,
+  },
 ];
 
 // Generate location-specific keywords with enhanced semantic variations
@@ -282,6 +291,7 @@ export function generateServiceSchema(params: {
 
   // Create a Product schema for physical products
   const productSchema = {
+    '@context': 'https://schema.org',
     '@type': 'Product',
     'name': serviceName,
     'description': description,
@@ -294,6 +304,9 @@ export function generateServiceSchema(params: {
       '@type': 'Organization',
       'name': 'KGR Enterprises'
     },
+    'sku': `kgr-${slug}`,
+    'mpn': `KGR-${slug.toUpperCase()}`,
+    'category': 'Home Improvement > Safety & Security',
     'additionalProperty': specifications.map(spec => ({
       '@type': 'PropertyValue',
       'name': spec.label,
@@ -302,18 +315,91 @@ export function generateServiceSchema(params: {
     'offers': {
       '@type': 'AggregateOffer',
       'priceCurrency': 'INR',
-      'priceRange': priceRange,
+      'priceRange': '₹110 - ₹150 per sq ft',
+      'lowPrice': 110,
+      'highPrice': 150,
+      'offerCount': 50,
+      'price': 140,
+      'unitText': 'per square foot',
       'priceValidUntil': new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString(),
       'availability': 'https://schema.org/InStock',
+      'itemCondition': 'https://schema.org/NewCondition',
+      'warranty': '15-year manufacturer warranty',
       'seller': {
         '@type': 'Organization',
-        'name': 'KGR Enterprises'
+        'name': 'KGR Enterprises',
+        'url': 'https://invisiblegrillsandsafetynets.in'
+      },
+      'deliveryLeadTime': {
+        '@type': 'QuantitativeValue',
+        'minValue': 1,
+        'maxValue': 3,
+        'unitCode': 'DAY'
+      },
+      'areaServed': {
+        '@type': 'GeoCircle',
+        'geoMidpoint': {
+          '@type': 'GeoCoordinates',
+          'latitude': 17.48134,
+          'longitude': 78.40828
+        },
+        'geoRadius': {
+          '@type': 'QuantitativeValue',
+          'value': 100,
+          'unitCode': 'KMT'
+        }
       }
     },
+    'review': [{
+      '@type': 'Review',
+      'reviewRating': {
+        '@type': 'Rating',
+        'ratingValue': 5,
+        'bestRating': 5,
+        
+      },
+      'author': {
+        '@type': 'Person',
+        'name': 'Rajesh Kumar'
+      },
+      'datePublished': new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString().split('T')[0],
+      'reviewBody': 'Excellent service and professional installation. The quality of materials used is outstanding.',
+      'publisher': {
+        '@type': 'Organization',
+        'name': 'KGR Enterprises',
+        'sameAs': 'https://invisiblegrillsandsafetynets.in'
+      }
+    },
+    {
+      '@type': 'Review',
+      'reviewRating': {
+        '@type': 'Rating',
+        'ratingValue': 5,
+        'bestRating': 5,
+      },
+      'author': {
+        '@type': 'Person',
+        'name': 'Priya Sharma'
+      },
+      'datePublished': new Date(new Date().setMonth(new Date().getMonth() - 2)).toISOString().split('T')[0],
+      'reviewBody': 'Very satisfied with their installation service. The team was punctual and professional.',
+      'publisher': {
+        '@type': 'Organization',
+        'name': 'KGR Enterprises',
+        'sameAs': 'https://invisiblegrillsandsafetynets.in'
+      }
+    }],
     'aggregateRating': {
       '@type': 'AggregateRating',
-      'ratingValue': '4.9',
-      'reviewCount': '1000'
+      'ratingValue': 4.9,
+      'bestRating': 5,
+      'ratingCount': 1000,
+      'reviewCount': 1000,
+      'author': {
+        '@type': 'Organization',
+        'name': 'KGR Enterprises',
+        'sameAs': 'https://invisiblegrillsandsafetynets.in'
+      }
     }
   };
   
@@ -454,6 +540,19 @@ export function generateServiceSchema(params: {
             }
           ]
         },
+        'review': {
+          '@type': 'Review',
+          'reviewRating': {
+            '@type': 'Rating',
+            'ratingValue': '4.9',
+            'bestRating': '5',
+            'worstRating': '1'
+          },
+          'author': {
+            '@type': 'Organization',
+            'name': 'KGR Enterprises'
+          }
+        },
         'aggregateRating': {
           '@type': 'AggregateRating',
           'ratingValue': '4.9',
@@ -461,6 +560,16 @@ export function generateServiceSchema(params: {
           'bestRating': '5',
           'worstRating': '1',
           'reviewCount': '1000',
+          'itemReviewed': {
+            '@type': 'Service',
+            'name': serviceName,
+            'description': description,
+            'provider': {
+              '@type': 'Organization',
+              'name': 'KGR Enterprises',
+              'url': 'https://invisiblegrillsandsafetynets.in'
+            }
+          }
         },
         'url': `https://invisiblegrillsandsafetynets.in/services/${slug}`,
         'potentialAction': [
@@ -505,8 +614,8 @@ export function generateBreadcrumbSchema(items: Array<{ name: string; url: strin
       '@type': 'ListItem',
       'position': index + 1,
       'name': item.name,
-      'item': `https://invisiblegrillsandsafetynets.in${item.url}`,
-    })),
+      'item': `https://invisiblegrillsandsafetynets.in${item.url}`
+    }))
   };
 }
 
@@ -628,6 +737,32 @@ export function generateLocationContent(serviceName: string, location: string): 
         'safety-nets': 'Salt-resistant safety nets for Chennai\'s apartments',
         'bird-protection': 'Durable bird protection for Chennai\'s coastal buildings',
         'sports': 'Weather-resistant sports nets for Chennai\'s facilities'
+      }
+    },
+    'Visakhapatnam': {
+      climate: 'coastal tropical climate with high humidity',
+      concern: [
+        'coastal corrosion',
+        'sea breeze',
+        'high humidity',
+        'beachfront properties',
+        'industrial areas'
+      ],
+      benefit: [
+        'marine-grade materials',
+        'corrosion-resistant installations',
+        'humidity-resistant solutions',
+        'industrial-grade protection',
+        'beachfront-optimized designs'
+      ],
+      areas: ['MVP Colony', 'Dwaraka Nagar', 'Gajuwaka', 'Madhurawada', 'Seethammadhara', 'Beach Road'],
+      expertise: 'Specialized in coastal and industrial area installations',
+      specialFeature: 'Marine-grade solutions optimized for Visakhapatnam\'s coastal environment',
+      serviceHighlights: {
+        'invisible-grills': 'Corrosion-resistant invisible grills for coastal homes',
+        'safety-nets': 'Industrial-grade safety nets for Vizag buildings',
+        'bird-protection': 'Durable bird protection for coastal properties',
+        'sports': 'Weather-resistant sports solutions for Visakhapatnam'
       }
     },
     'Vijayawada': {

@@ -1,6 +1,17 @@
 # Enable Apache modules
 <IfModule mod_rewrite.c>
     RewriteEngine On
+
+    # Handle malformed URLs with trailing special characters
+    RewriteRule ^(.*)[&?]+$ /$1 [L,R=301]
+    
+    # Force HTTPS
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    
+    # Remove double slashes
+    RewriteCond %{THE_REQUEST} //
+    RewriteRule .* /$0 [R=301,L]
 </IfModule>
 
 # Enable headers module for ETags and cache control

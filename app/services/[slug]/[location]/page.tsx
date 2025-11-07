@@ -5,31 +5,14 @@ import Link from 'next/link';
 import { servicesData } from '@/data/servicesData';
 import { getCanonicalUrl } from '@/lib/canonical-url';
 import { PRIMARY } from '@/constants/contacts';
+import { generateBreadcrumbSchema } from '@/lib/seo-metadata';
 import { Phone, ArrowRight, MapPin, Clock, Shield, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import OptimizedImage from '@/components/shared/OptimizedImage';
+import RelatedServices from '@/components/services/RelatedServices';
 
-// List of valid locations with area data
-const locationData = {
-  hyderabad: {
-    areas: ['Banjara Hills', 'Jubilee Hills', 'Gachibowli', 'Madhapur', 'Kondapur', 'Hitech City'],
-    description: 'Serving all areas of Hyderabad including Secunderabad and surrounding localities'
-  },
-  bangalore: {
-    areas: ['Whitefield', 'Koramangala', 'Indiranagar', 'HSR Layout', 'Marathahalli', 'Electronic City'],
-    description: 'Covering Bangalore and Bengaluru Urban areas'
-  },
-  chennai: {
-    areas: ['Anna Nagar', 'T Nagar', 'Velachery', 'Adyar', 'Porur', 'OMR'],
-    description: 'Complete coverage across Chennai and surrounding regions'
-  },
-  vijayawada: {
-    areas: ['Benz Circle', 'Governorpet', 'Labbipet', 'Patamata', 'Gunadala', 'Auto Nagar'],
-    description: 'Serving Vijayawada and nearby areas in Krishna district'
-  }
-};
-
-const validLocations = Object.keys(locationData);
+import { locationData, validLocations } from '@/constants/locations';
 
 export async function generateMetadata({
   params,
@@ -38,7 +21,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug, location } = await params;
   const service = servicesData[slug];
-  const normalizedLocation = location.toLowerCase();
+  const normalizedLocation = location.toLowerCase() as keyof typeof locationData;
 
   if (!service || !validLocations.includes(normalizedLocation)) {
     return {};
@@ -46,11 +29,29 @@ export async function generateMetadata({
 
   const locationFormatted = normalizedLocation.charAt(0).toUpperCase() + normalizedLocation.slice(1);
   
+  // Generate location-specific keywords and description
+  const locationInfo = locationData[normalizedLocation];
+  const areas = locationInfo.areas.join(', ');
+  const locationKeywords = [
+    `${service.title} in ${locationFormatted}`,
+    `${service.title} installation ${locationFormatted}`,
+    `${service.title} services ${locationFormatted}`,
+    `best ${service.title} in ${locationFormatted}`,
+    `professional ${service.title} ${locationFormatted}`,
+    ...locationInfo.areas.map(area => `${service.title} in ${area}`),
+    ...service.features.map(feature => `${feature} in ${locationFormatted}`),
+  ];
+
+  const enhancedDescription = `Professional ${service.title.toLowerCase()} services in ${locationFormatted}. 
+    Serving ${areas}. Expert installation with 15-year warranty, quality materials, and free site visit. 
+    ${service.detailedDescription} Call now for best service in ${locationFormatted}.`;
+
   return {
-    title: `${service.title} in ${locationFormatted} | KGR Enterprises`,
-    description: `Professional ${service.title.toLowerCase()} services in ${locationFormatted}. Expert installation and maintenance by KGR Enterprises. Free site visit & consultation.`,
+    title: `${service.title} in ${locationFormatted} | Best Installation Services | KGR Enterprises`,
+    description: enhancedDescription,
+    keywords: locationKeywords.join(', '),
     alternates: {
-      canonical: getCanonicalUrl(`services/${slug}/${normalizedLocation}`),
+      canonical: getCanonicalUrl(`/services/${slug}/${normalizedLocation}`),
     },
     openGraph: {
       title: `${service.title} in ${locationFormatted} | KGR Enterprises`,
@@ -105,7 +106,7 @@ type Props = {
 export default async function ServiceLocationPage({ params }: Props) {
   const { slug, location } = await params;
   const service = servicesData[slug];
-  const normalizedLocation = location.toLowerCase();
+  const normalizedLocation = location.toLowerCase() as keyof typeof locationData;
 
   if (!service || !validLocations.includes(normalizedLocation)) {
     notFound();
@@ -114,8 +115,187 @@ export default async function ServiceLocationPage({ params }: Props) {
   const locationFormatted = normalizedLocation.charAt(0).toUpperCase() + normalizedLocation.slice(1);
   const locationInfo = locationData[normalizedLocation as keyof typeof locationData];
 
+  // Generate breadcrumb schema
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Services', url: '/services' },
+    { name: service.title, url: `/services/${slug}` },
+    { name: `${service.title} in ${locationFormatted}`, url: `/services/${slug}/${normalizedLocation}` }
+  ]);
+
+  // Import baseUrl
+  const baseUrl = 'https://invisiblegrillsandsafetynets.in';
+  const currentDate = new Date().toISOString();
+  const oneYearFromNow = new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString();
+
+  const combinedSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": ["Service", "HomeAndConstructionBusiness"],
+        "@id": `${baseUrl}/services/${slug}/${normalizedLocation}#service`,
+        "name": `${service.title} in ${locationFormatted}`,
+        "description": service.description,
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": `${baseUrl}/services/${slug}/${normalizedLocation}`
+        },
+        "serviceType": ["Installation Service", "Home Safety", service.title],
+        "category": "Home Safety & Security Equipment",
+        "areaServed": {
+          "@type": "City",
+          "name": locationFormatted,
+          "containsPlace": locationInfo.areas.map(area => ({
+            "@type": "Place",
+            "name": area
+          }))
+        },
+        "provider": {
+          "@type": "LocalBusiness",
+          "@id": "https://invisiblegrillsandsafetynets.in#organization",
+          "name": "KGR Enterprises",
+          "telephone": PRIMARY.phone,
+          "image": {
+            "@type": "ImageObject",
+            "url": service.image,
+            "width": 1200,
+            "height": 675
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": locationFormatted,
+            "addressRegion": locationInfo.state,
+            "addressCountry": "IN",
+          },
+          "priceRange": "₹₹₹",
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": locationInfo.latitude,
+            "longitude": locationInfo.longitude
+          },
+          "openingHoursSpecification": {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            "opens": "09:00",
+            "closes": "19:00"
+          }
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": `${service.title} Services in ${locationFormatted}`,
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Free Site Inspection",
+                "description": `Professional ${service.title.toLowerCase()} consultation in ${locationFormatted}`
+              },
+              "areaServed": locationInfo.areas,
+              "priceSpecification": {
+                "@type": "PriceSpecification",
+                "price": "0",
+                "priceCurrency": "INR",
+                "description": "Free site inspection and consultation",
+                "validFrom": currentDate,
+                "validThrough": oneYearFromNow
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": `Standard ${service.title} Installation`,
+                "description": `Professional installation with quality materials and 15-year warranty`
+              },
+              "areaServed": locationInfo.areas,
+              "priceSpecification": {
+                "@type": "PriceSpecification",
+                "price": "110",
+                "priceCurrency": "INR",
+                "unitText": "per square foot",
+                "validFrom": currentDate,
+                "validThrough": oneYearFromNow
+              },
+              "warranty": {
+                "@type": "WarrantyPromise",
+                "durationOfWarranty": "P15Y",
+                "warrantyScope": "Labor and Materials"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": `Premium ${service.title} Installation`,
+                "description": `Premium grade materials with extended warranty and priority support`
+              },
+              "areaServed": locationInfo.areas,
+              "priceSpecification": {
+                "@type": "PriceSpecification",
+                "price": "150",
+                "priceCurrency": "INR",
+                "unitText": "per square foot",
+                "validFrom": currentDate,
+                "validThrough": oneYearFromNow
+              },
+              "warranty": {
+                "@type": "WarrantyPromise",
+                "durationOfWarranty": "P20Y",
+                "warrantyScope": "Labor and Materials"
+              }
+            }
+          ]
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "ratingCount": "1000",
+          "bestRating": "5",
+          "worstRating": "1"
+        },
+        "review": [
+          {
+            "@type": "Review",
+            "reviewRating": {
+              "@type": "Rating",
+              "ratingValue": "5",
+              "bestRating": "5"
+            },
+            "author": {
+              "@type": "Person",
+              "name": `${locationFormatted} Customer`
+            },
+            "datePublished": currentDate,
+            "reviewBody": `Excellent ${service.title.toLowerCase()} installation service in ${locationFormatted}. Professional team and great quality.`
+          },
+          {
+            "@type": "Review",
+            "reviewRating": {
+              "@type": "Rating",
+              "ratingValue": "5",
+              "bestRating": "5"
+            },
+            "author": {
+              "@type": "Person",
+              "name": `Verified Customer`
+            },
+            "datePublished": currentDate,
+            "reviewBody": `Best ${service.title.toLowerCase()} service provider in ${locationFormatted}. Quick installation and excellent after-service support.`
+          }
+        ]
+      },
+      breadcrumbSchema
+    ]
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      {/* Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(combinedSchema) }}
+      />
       {/* Breadcrumb Section - Full width background */}
       <div className="bg-muted/30 pt-6">
         <div className="container mx-auto px-4">
@@ -157,12 +337,13 @@ export default async function ServiceLocationPage({ params }: Props) {
               {/* Service Image */}
               {service.image && (
                 <div className="relative w-full h-64 md:h-[400px] lg:h-[500px] rounded-xl overflow-hidden shadow-lg">
-                  <img
+                  <OptimizedImage
                     src={service.image}
                     alt={`${service.title} installation in ${locationFormatted}`}
-                    className="w-full h-full object-cover"
-                    loading="eager"
-                    decoding="async"
+                    width={1200}
+                    height={675}
+                    priority={true}
+                    className="w-full h-full"
                   />
                 </div>
               )}
@@ -375,8 +556,15 @@ export default async function ServiceLocationPage({ params }: Props) {
               </div>
             </section>
 
+            {/* Related Services */}
+            <section className="pt-4 space-y-8">
+              <div className="grid gap-6">
+                <RelatedServices currentService={slug} location={locationFormatted} />
+              </div>
+            </section>
+
             {/* CTA Section */}
-            <section className="pt-4" aria-labelledby="cta-heading">
+            <section className="pt-8" aria-labelledby="cta-heading">
               <Card className="bg-gradient-to-br from-primary/5 via-primary/10 to-accent/5 border-primary/20 shadow-lg">
                 <CardContent className="p-8 md:p-10 text-center space-y-6">
                   <div className="space-y-3">

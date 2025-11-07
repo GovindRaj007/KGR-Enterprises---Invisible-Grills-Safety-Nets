@@ -1,13 +1,16 @@
 import React from 'react';
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import LocationHero from '@/components/location/LocationHero';
-import AboutSection from '@/components/about/AboutSection';
+import LocationAboutClient from '@/components/about/LocationAboutClient';
 import { PRIMARY_LOCATIONS } from '@/lib/seo-metadata';
 import { PRIMARY } from '@/constants/contacts';
 import { generateLocationContent } from '@/lib/seo-metadata';
 
 export async function generateStaticParams() {
-  return PRIMARY_LOCATIONS.map(loc => ({ location: loc.name.toLowerCase() }));
+  return PRIMARY_LOCATIONS.map(loc => ({
+    location: loc.name.toLowerCase().replace(/[^a-z]/g, '')
+  }));
 }
 
 type PageParams = {
@@ -16,16 +19,22 @@ type PageParams = {
 
 export async function generateMetadata({ params }: PageParams): Promise<Metadata> {
   const { location: locName } = await params;
-  const matched = PRIMARY_LOCATIONS.find(l => l.name.toLowerCase() === locName.toLowerCase());
-  const title = `Invisible Grills & Safety Nets in ${capitalize(locName)}`;
-  const locationMeta = matched ? {
+  const normalizedLocation = locName.toLowerCase();
+  const matched = PRIMARY_LOCATIONS.find(l => l.name.toLowerCase() === normalizedLocation);
+  
+  if (!matched) {
+    return {
+      title: 'Location Not Found',
+      robots: { index: false, follow: true }
+    };
+  }
+
+  const title = `Invisible Grills & Safety Nets in ${matched.name}`;
+  const canonicalPath = `/locations/${normalizedLocation}`;
+  const locationMeta = {
     areaServed: matched.areas.join(', '),
     state: matched.state,
     fullAddress: matched.streetAddress
-  } : {
-    areaServed: 'all areas',
-    state: 'South India',
-    fullAddress: ''
   };
 
   return {
@@ -40,9 +49,9 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
       'max-video-preview': -1,
       'max-snippet': -1,
     },
-    description: `Professional invisible grills and safety nets installation in ${capitalize(locName)}. Serving ${locationMeta.areaServed}. Free site inspection, 15-year warranty, and expert installation guaranteed. Contact us for quality safety solutions.`,
+    description: `Professional invisible grills and safety nets installation in ${matched.name}. Serving ${locationMeta.areaServed}. Free site inspection, 15-year warranty, and expert installation guaranteed. Contact us for quality safety solutions.`,
     alternates: {
-      canonical: `https://invisiblegrillsandsafetynets.in/locations/${locName.toLowerCase()}`
+      canonical: `https://invisiblegrillsandsafetynets.in${canonicalPath}`
     },
     openGraph: {
       title: `KGR Enterprises - Invisible Grills & Safety Nets in ${capitalize(locName)}`,
@@ -91,6 +100,11 @@ function capitalize(s: string) {
 
 export default async function LocationPage({ params }: { params: Promise<{ location: string }> }) {
   const { location: locName } = await params;
+  
+  // Validate location parameter
+  if (!locName || typeof locName !== 'string') {
+    notFound();
+  }
   const matched = PRIMARY_LOCATIONS.find(l => l.name.toLowerCase() === locName.toLowerCase());
   const locationDisplay = matched ? matched.name : capitalize(locName);
 
@@ -169,18 +183,38 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
     ]
   };
 
+  // Generate breadcrumb schema for location page
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      {
+        '@type': 'ListItem',
+        'position': 1,
+        'name': 'Home',
+        'item': 'https://invisiblegrillsandsafetynets.in/'
+      },
+      {
+        '@type': 'ListItem',
+        'position': 2,
+        'name': locationDisplay,
+        'item': `https://invisiblegrillsandsafetynets.in/locations/${locName}`
+      }
+    ]
+  };
+
   return (
     <>
       <main>
-        {/* LocalBusiness JSON-LD (render inside main to avoid mounting a separate <head>) */}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+        {/* LocalBusiness and Breadcrumb JSON-LD */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([ld, breadcrumbSchema]) }} />
         <LocationHero location={locationDisplay} />
         <section className="max-w-4xl mx-auto px-6 pb-6">
           <h2 className="text-2xl font-semibold mb-2">{locContent.heading}</h2>
           <p className="text-muted-foreground">{locContent.description}</p>
         </section>
         <div className='pb-6'>
-          <AboutSection />
+          <LocationAboutClient location={locationDisplay} />
         </div>
       </main>
     </>

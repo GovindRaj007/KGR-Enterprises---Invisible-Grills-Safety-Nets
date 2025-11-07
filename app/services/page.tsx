@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import ServicesSection from '@/components/services/ServicesSection';
+import LocationsGrid from '@/components/services/LocationsGrid';
+import { servicesData } from '@/data/servicesData';
 
 export const metadata: Metadata = {
   title: "Our Services - Invisible Grills, Safety Nets & Bird Protection",
@@ -10,6 +12,9 @@ export const metadata: Metadata = {
     'max-image-preview': 'large',
     'max-video-preview': -1,
     'max-snippet': -1,
+  },
+  alternates: {
+    canonical: 'https://invisiblegrillsandsafetynets.in/services',
   },
   keywords: [
          "invisible grills in Hyderabad",
@@ -59,5 +64,64 @@ export const metadata: Metadata = {
 };
 
 export default function ServicesPage() {
-  return <ServicesSection />;
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      {
+        '@type': 'ListItem',
+        'position': 1,
+        'name': 'Home',
+        'item': 'https://invisiblegrillsandsafetynets.in/'
+      },
+      {
+        '@type': 'ListItem',
+        'position': 2,
+        'name': 'Services',
+        'item': 'https://invisiblegrillsandsafetynets.in/services'
+      }
+    ]
+  };
+
+  const servicesPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    'name': 'KGR Enterprises Services',
+    'description': 'Complete range of safety solutions including invisible grills, safety nets, bird protection, and sports nets.',
+    'url': 'https://invisiblegrillsandsafetynets.in/services',
+    'mainEntity': {
+      '@type': 'ItemList',
+      'itemListElement': Object.entries(servicesData).map(([slug, service], index) => ({
+        '@type': 'ListItem',
+        'position': index + 1,
+        'item': {
+          '@type': 'Service',
+          'name': service.title,
+          'description': service.description,
+          'url': `https://invisiblegrillsandsafetynets.in/services/${slug}`,
+          'image': service.image,
+          'provider': {
+            '@type': 'Organization',
+            'name': 'KGR Enterprises',
+            'url': 'https://invisiblegrillsandsafetynets.in'
+          }
+        }
+      }))
+    }
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesPageSchema) }}
+      />
+      <ServicesSection />
+      <LocationsGrid />
+    </>
+  );
 }
