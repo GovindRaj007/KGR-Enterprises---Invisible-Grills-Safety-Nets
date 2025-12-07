@@ -12,10 +12,12 @@ import {
 } from '@/lib/seo-metadata';
 import { generateServiceSchema } from '@/lib/service-schema';
 import { PRIMARY } from '@/constants/contacts';
-import { CheckCircle2, MapPin, Shield, Star, Phone } from 'lucide-react';
+import { CheckCircle2, MapPin, Shield, Star } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import ServiceHero from '@/components/services/ServiceHero';
+import ServiceImageSlider from '@/components/services/ServiceImageSlider';
+import ServiceLocationsSlider from '@/components/services/ServiceLocationsSlider';
 
 type FAQ = { question: string; answer: string };
 
@@ -93,11 +95,6 @@ export default async function ServiceDetailPage({ params }: Props) {
   const service: ServiceData | undefined = servicesData[slug as keyof typeof servicesData];
 
   if (!service) notFound();
-
-  // Generate location-specific content
-  const locationContents = PRIMARY_LOCATIONS.map((loc) =>
-    generateLocationContent(service.title, loc.name)
-  );
 
   const branches =  {
       icon: MapPin,
@@ -300,52 +297,15 @@ export default async function ServiceDetailPage({ params }: Props) {
         <div className="container mx-auto pb-2 md:py-4">
           <div className="max-w-4xl mx-auto space-y-8 md:space-y-12">
             <div className="space-y-6 md:space-y-8">
-              <div className="space-y-4">
-                <div className="flex items-center space-x-2 text-safety">
-                  <Shield className="h-4 w-4 md:h-5 md:w-5" />
-                  <Badge variant="secondary" className="text-xs md:text-sm">
-                    Professional Installation
-                  </Badge>
-                </div>
+              <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <div className="max-w-6xl mx-auto space-y-6 md:space-y-8">
+        
+        {/* Hero Card - Title and Features */}
+        <ServiceHero service={{ title: service.title, image: service.image }} mainLocationString={mainLocationString} />
 
-                <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight">
-                  {service.title}
-                  <span className="block text-sm md:text-base text-muted-foreground font-medium mt-2">
-                    in {mainLocationString}
-                  </span>
-                </h1>
-
-                <div className="flex flex-wrap gap-4 py-4 border-y">
-                  <div className="flex items-center gap-2 text-sm">
-                    <Star className="h-4 w-4 text-safety" />
-                    <span>4.9/5 Rating</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Shield className="h-4 w-4 text-accent" />
-                    <span>Quality Service</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Phone className="h-4 w-4 text-primary" />
-                    <span>Free site inspection</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
-                {((service.images && service.images.length) ? service.images : [service.image]).map((img: string, index: number) => (
-                  <div key={index} className="relative h-48 md:h-64 rounded-lg overflow-hidden">
-                    <img 
-                      src={img} 
-                      alt={`${service.title} ${index + 1}`} 
-                      className="object-cover hover:scale-110 transition-transform duration-500 w-full h-full absolute inset-0" 
-                      loading={index === 0 ? "eager" : "lazy"}
-                      decoding="async"
-                      width="800"
-                      height="600"
-                    />
-                  </div>
-                ))}
-              </div>
+              
+        {/* Image Gallery (client) */}
+        <ServiceImageSlider images={service.images && service.images.length ? service.images : [service.image]} altPrefix={service.title} />
 
               <Card>
                 <CardContent className="p-4 md:p-6 space-y-4">
@@ -432,34 +392,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                   </CardContent>
                 </Card>
 
-              <Card>
-                <CardContent className="p-4 md:p-6 space-y-6">
-                  <h2 className="text-lg md:text-xl font-bold flex items-center gap-2">
-                    <MapPin className="h-5 w-5 text-primary" />
-                    Service Locations
-                  </h2>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    {locationContents.map((loc, index) => (
-                      <Link 
-                        key={index} 
-                        href={`/services/${slug}/${loc.heading.split(' ').pop()?.toLowerCase().replace(/[^a-z]/g, '')}`}
-                        className="space-y-2 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
-                      >
-                        <h3 className="font-semibold text-sm md:text-base">{loc.heading}</h3>
-                        <p className="text-sm text-muted-foreground">{loc.description}</p>
-                        <div className="space-y-1">
-                          {loc.features.slice(0, 2).map((feature, idx) => (
-                            <div key={idx} className="flex items-center gap-2 text-sm">
-                              <div className="w-1 h-1 rounded-full bg-primary"></div>
-                              <span>{feature}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+              <ServiceLocationsSlider variant='stats' slug={slug}/>
 
               <Card>
                 <CardContent className="p-4 md:p-6 space-y-4">
@@ -517,6 +450,8 @@ export default async function ServiceDetailPage({ params }: Props) {
               </Card>
             </div>
           </div>
+        </div>
+        </div>
         </div>
         </div>
     </>

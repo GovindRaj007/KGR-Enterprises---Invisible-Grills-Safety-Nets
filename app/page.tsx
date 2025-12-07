@@ -1,15 +1,17 @@
-import type { Metadata } from 'next';
-import HeroSection from '@/components/home/HeroSection';
-import ServicesSection from '@/components/services/ServicesSection';
-import ImageCarouselClient from '@/components/home/ImageCarouselClient';
-import AboutClient from '@/components/about/AboutClient';
-import GalleryClient from '@/components/gallery/GalleryClient';
-import TestimonialsClient from '@/components/testimonials/TestimonialsClient';
-import FeaturedLocations from '@/components/home/FeaturedLocations';
+import type { Metadata } from "next";
+import HeroSection from "@/components/home/HeroSection";
+import ServicesSection from "@/components/services/ServicesSection";
+import ImageCarouselClient from "@/components/home/ImageCarouselClient";
+import AboutClient from "@/components/about/AboutClient";
+import GalleryClient from "@/components/gallery/GalleryClient";
+import TestimonialsClient from "@/components/testimonials/TestimonialsClient";
+import ServiceLocationsSlider from "@/components/services/ServiceLocationsSlider";
 
 export const metadata: Metadata = {
-  title: "KGR Enterprises - Best Invisible Grills & Safety Nets Manufacturer in South India | call 7339306098, 9618568669",
-  description: "Premium invisible grills and safety nets installation across Hyderabad, Bangalore, Chennai. Marine-grade stainless steel, superior protection, 15-year warranty. Best quality, trusted service since 2008",
+  title:
+    "KGR Enterprises - Best Invisible Grills & Safety Nets Manufacturer in South India | call 7339306098, 9618568669",
+  description:
+    "Premium invisible grills and safety nets installation across Hyderabad, Bangalore, Chennai. Marine-grade stainless steel, superior protection, 15-year warranty. Best quality, trusted service since 2008",
   keywords: [
     "invisible grills in Hyderabad",
     "Kgr invisible grills",
@@ -46,8 +48,10 @@ export const metadata: Metadata = {
   openGraph: {
     locale: "en_IN",
     type: "website",
-    title: "KGR Enterprises - Best Invisible Grills & Safety Nets Manufacturer in South India | call 7339306098, 9618568669",
-    description: "Premium invisible grills and safety nets installation across Hyderabad, Bangalore, Chennai. Marine-grade stainless steel, superior protection, 15-year warranty. Best quality, trusted service since 2008",
+    title:
+      "KGR Enterprises - Best Invisible Grills & Safety Nets Manufacturer in South India | call 7339306098, 9618568669",
+    description:
+      "Premium invisible grills and safety nets installation across Hyderabad, Bangalore, Chennai. Marine-grade stainless steel, superior protection, 15-year warranty. Best quality, trusted service since 2008",
     url: "https://invisiblegrillsandsafetynets.in/",
     siteName: "KGR Enterprises",
     images: [
@@ -55,8 +59,8 @@ export const metadata: Metadata = {
         url: "/logo.png",
         width: 300,
         height: 300,
-        type: "image/png"
-      }
+        type: "image/png",
+      },
     ],
   },
   twitter: {
@@ -71,15 +75,17 @@ export const metadata: Metadata = {
   },
 };
 
-
-
 export default function HomePage() {
   return (
     <>
       <HeroSection />
       <ImageCarouselClient />
       <ServicesSection />
-      <FeaturedLocations />
+      <section className="pb-12 md:pb-16">
+        <div className="container mx-auto px-4">
+          <ServiceLocationsSlider variant="services" slug="" />
+        </div>
+      </section>
       <AboutClient />
       <GalleryClient />
       <TestimonialsClient />
