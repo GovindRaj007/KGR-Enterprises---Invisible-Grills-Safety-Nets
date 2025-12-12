@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import ServicesSection from "@/components/services/ServicesSection";
-import LocationsGrid from "@/components/services/LocationsGrid";
 import { servicesData } from "@/data/servicesData";
 import ServiceLocationsSlider from "@/components/services/ServiceLocationsSlider";
 

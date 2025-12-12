@@ -7,7 +7,6 @@ import {
   generateServiceMetadata,
   generateBreadcrumbSchema,
   generateServiceFAQSchema,
-  generateLocationContent,
   PRIMARY_LOCATIONS,
 } from "@/lib/seo-metadata";
 import { generateServiceSchema } from "@/lib/service-schema";
@@ -277,8 +276,6 @@ export default async function ServiceDetailPage({ params }: Props) {
       },
     ],
   };
-
-  const BranchIcon = branches.icon;
 
   return (
     <>
