@@ -5,9 +5,7 @@ import {
   MapPin,
   ArrowRight,
   Clock,
-  CheckCircle,
   Phone,
-  Star,
 } from "lucide-react";
 
 
@@ -228,7 +226,7 @@ const ServiceLocationsSlider = ({ variant = 'stats',slug }) => {
           <div
             className="relative overflow-hidden rounded-3xl shadow-2xl"
             style={{ 
-              minHeight: variant === 'services' ? '550px' : '400px',
+              minHeight: variant === 'services' ? '560px' : '420px',
             }}
           >
             {locations.map((location, index) => (
@@ -256,12 +254,12 @@ const ServiceLocationsSlider = ({ variant = 'stats',slug }) => {
                         {/* Top Section */}
                         <div className="space-y-4">
                           {/* City Icon & Name */}
-                          <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-3">
                             <span className="text-5xl md:text-6xl">
                               {location.icon}
                             </span>
                             <div>
-                              <h3 className="text-3xl md:text-5xl font-bold text-white">
+                              <h3 className="text-2xl md:text-5xl font-bold text-white">
                                 {location.city}
                               </h3>
                               <p className="text-white/90 text-sm md:text-base font-medium">
@@ -273,38 +271,38 @@ const ServiceLocationsSlider = ({ variant = 'stats',slug }) => {
                           {/* Stats Grid */}
                           <div className="grid grid-cols-3 gap-3 mt-6">
                             {/* Projects */}
-                            <div className="bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl p-4">
-                              <div className="flex items-center gap-2 mb-1">
-                                <CheckCircle className="h-4 w-4 text-white" />
-                                <p className="text-2xl md:text-3xl font-bold text-white">
-                                  {location.projects}
+                            <div className="flex-column md:justify-center bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl p-4">
+                              <div className="flex justify-center gap-2 mb-1">
+                                <p className="flex justify-center text-2xl md:text-3xl font-bold text-white">
+                                  {location.projects}    
                                 </p>
                               </div>
-                              <p className="text-xs text-white/80">
+                              <p className="flex justify-center text-xs text-white/80">
                                 Projects Done
                               </p>
                             </div>
 
                             {/* Rating */}
-                            <div className="bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl p-4">
-                              <div className="flex items-center gap-2 mb-1">
-                                <Star className="h-4 w-4 text-yellow-300 fill-yellow-300" />
-                                <p className="text-2xl md:text-3xl font-bold text-white">
+                            <div className="flex-column md:justify-center bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl p-4">
+                              <div className="flex items-center justify-center gap-2 mb-1">
+                                {/* <Star className="h-8 w-8 text-yellow-300 fill-yellow-300" /> */}
+                                <p>⭐</p>
+                                <p className="flex justify-center text-2xl md:text-3xl font-bold text-white">
                                   {location.rating}
                                 </p>
                               </div>
-                              <p className="text-xs text-white/80">Rating</p>
+                              <p className="flex justify-center text-xs text-white/80">Rating</p>
                             </div>
 
                             {/* Response Time */}
-                            <div className="bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl p-4">
-                              <div className="flex items-center gap-2 mb-1">
+                            <div className="flex-column md:justify-center bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl p-4">
+                              <div className="flex items-center md:justify-center gap-2 mb-1">
                                 <Clock className="h-4 w-4 text-white" />
                               </div>
-                              <p className="text-xs font-semibold text-white">
+                              <p className="flex justify-center text-xs font-semibold text-white">
                                 {location.responseTime}
                               </p>
-                              <p className="text-xs text-white/80">Response</p>
+                              <p className="flex justify-center text-xs text-white/80">Response</p>
                             </div>
                           </div>
                         </div>
@@ -313,12 +311,12 @@ const ServiceLocationsSlider = ({ variant = 'stats',slug }) => {
                       <>
                         <div className="space-y-6">
                           {/* City Header */}
-                          <div className="flex items-start gap-4">
+                          <div className="flex items-start gap-3">
                             <span className="text-5xl md:text-6xl">
                               {location.icon}
                             </span>
                             <div>
-                              <h3 className="text-3xl md:text-4xl font-bold text-white">
+                              <h3 className="text-2xl md:text-4xl font-bold text-white">
                                 {location.city}
                               </h3>
                               <p className="text-white/90 text-sm md:text-base font-medium">
@@ -352,7 +350,7 @@ const ServiceLocationsSlider = ({ variant = 'stats',slug }) => {
                     )}
 
                     {/* Bottom Section */}
-                    <div className="space-y-4">
+                    <div className="space-y-4 mt-4">
                       {/* Areas Served */}
                       <div className="bg-white/15 backdrop-blur-md border border-white/30 rounded-2xl p-4">
                         <p className="text-white/80 text-xs font-semibold mb-2">

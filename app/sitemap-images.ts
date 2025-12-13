@@ -8,6 +8,14 @@ const languages = {
   'en-IN': 'English'
 };
 
+type ImageEntry = {
+  url: string;
+  title?: string;
+  caption?: string;
+  geoLocation?: string;
+  license?: string;
+};
+
 type ExtendedSitemapField = {
   url: string;
   lastModified?: string | Date;
@@ -17,14 +25,18 @@ type ExtendedSitemapField = {
     href: string;
     hreflang: string;
   }>;
-  images?: Array<{
-    url: string;
-    title?: string;
-    caption?: string;
-    geoLocation?: string;
-    license?: string;
-  }>;
+  images?: Array<ImageEntry>;
 };
+
+// Helper to clean empty image fields
+function cleanImageEntry(img: ImageEntry): ImageEntry {
+  const cleaned: ImageEntry = { url: img.url };
+  if (img.title && img.title.trim()) cleaned.title = img.title.trim();
+  if (img.caption && img.caption.trim()) cleaned.caption = img.caption.trim();
+  if (img.geoLocation && img.geoLocation.trim()) cleaned.geoLocation = img.geoLocation.trim();
+  if (img.license && img.license.trim()) cleaned.license = img.license.trim();
+  return cleaned;
+}
 
 export default function imagesSitemap(): Array<ExtendedSitemapField> {
   const baseUrl = 'https://invisiblegrillsandsafetynets.in';
@@ -44,14 +56,14 @@ export default function imagesSitemap(): Array<ExtendedSitemapField> {
         hreflang: lang
       })),
       images: [
-        {
+        cleanImageEntry({
           url: `${baseUrl}${service.image}`,
           title: service.title,
           caption: service.description,
           license: 'https://invisiblegrillsandsafetynets.in/license'
-        },
+        }),
         // Add multiple images if available
-        ...(service.images || []).map(img => ({
+        ...(service.images || []).map(img => cleanImageEntry({
           url: `${baseUrl}${img}`,
           title: `${service.title} - Installation Example`,
           caption: `Professional ${service.title} installation by KGR Enterprises`,
@@ -73,13 +85,13 @@ export default function imagesSitemap(): Array<ExtendedSitemapField> {
           hreflang: lang
         })),
         images: [
-          {
+          cleanImageEntry({
             url: `${baseUrl}${service.image}`,
             title: `${service.title} in ${location.name}`,
             caption: `Professional ${service.title} installation services in ${location.name}`,
             geoLocation: `${location.name}, ${location.state}, India`,
             license: 'https://invisiblegrillsandsafetynets.in/license'
-          }
+          })
         ]
       };
       entries.push(locationPage);

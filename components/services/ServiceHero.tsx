@@ -27,7 +27,7 @@ export default function ServiceHero({ service, mainLocationString }: { service: 
         <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 md:p-5">
           <div className="flex items-center gap-3">
             <div className="bg-amber-400/20 rounded-xl p-2.5 flex-shrink-0">
-              <Star className="h-5 w-5 md:h-6 md:w-6 text-amber-300 fill-amber-300" />
+              <Star className="h-4 w-4 md:h-6 md:w-6 text-amber-300 fill-amber-300" />
             </div>
             <div>
               <p className="text-xl md:text-2xl font-bold text-white leading-tight whitespace-normal">4.9/5</p>
@@ -39,7 +39,7 @@ export default function ServiceHero({ service, mainLocationString }: { service: 
         <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 md:p-5">
           <div className="flex items-center gap-3">
             <div className="bg-emerald-400/20 rounded-xl p-2.5 flex-shrink-0">
-              <Shield className="h-5 w-5 md:h-6 md:w-6 text-emerald-300" />
+              <Shield className="h-4 w-4 md:h-6 md:w-6 text-emerald-300" />
             </div>
             <div>
               <p className="text-lg md:text-xl font-bold text-white leading-tight whitespace-normal">Quality</p>
@@ -51,7 +51,7 @@ export default function ServiceHero({ service, mainLocationString }: { service: 
         <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 md:p-5">
           <div className="flex items-center gap-3">
             <div className="bg-sky-400/20 rounded-xl p-2.5 flex-shrink-0">
-              <Phone className="h-5 w-5 md:h-6 md:w-6 text-sky-300" />
+              <Phone className="h-4 w-4 md:h-6 md:w-6 text-sky-300" />
             </div>
             <div>
               <p className="text-lg md:text-xl font-bold text-white leading-tight whitespace-normal">Free</p>
@@ -60,13 +60,13 @@ export default function ServiceHero({ service, mainLocationString }: { service: 
           </div>
         </div>
 
-        <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 md:p-5">
+        <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-2 py-4 md:p-5">
           <div className="flex items-center gap-3">
             <div className="bg-purple-400/20 rounded-xl p-2.5 flex-shrink-0">
-              <Award className="h-5 w-5 md:h-6 md:w-6 text-purple-300" />
+              <Award className="h-4 w-4 md:h-6 md:w-6 text-purple-300" />
             </div>
             <div>
-              <p className="text-lg md:text-xl font-bold text-white leading-tight whitespace-normal">Certified</p>
+              <p className="text-md md:text-xl font-bold text-white leading-tight whitespace-normal">Certified</p>
               <p className="text-xs md:text-sm text-blue-100 whitespace-normal">Professionals</p>
             </div>
           </div>
