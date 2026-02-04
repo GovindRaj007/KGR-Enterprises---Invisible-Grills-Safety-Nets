@@ -10,25 +10,31 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Static pages with prioritized order
   const staticPages = [
     {
-      url: baseUrl,
+      url: `${baseUrl}/`,
       lastModified: currentDate,
       changeFrequency: 'daily' as const,
-      priority: 1.0, // Highest priority for homepage
+      priority: 1.0,
     },
     {
-      url: `${baseUrl}/contact`,
+      url: `${baseUrl}/services/`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/contact/`,
       lastModified: currentDate,
       changeFrequency: 'monthly' as const,
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/about`,
+      url: `${baseUrl}/about/`,
       lastModified: currentDate,
       changeFrequency: 'monthly' as const,
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/gallery`,
+      url: `${baseUrl}/gallery/`,
       lastModified: currentDate,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
@@ -73,7 +79,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Main category service pages (higher priority)
   const mainServicePages = mainCategoryServices.map(service => ({
-    url: `${baseUrl}/services/${service}`,
+    url: `${baseUrl}/services/${service}/`,
     lastModified: currentDate,
     changeFrequency: 'weekly' as const,
     priority: 0.9,
@@ -81,7 +87,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Other service pages (lower priority)
   const otherServicePages = otherServices.map(service => ({
-    url: `${baseUrl}/services/${service}`,
+    url: `${baseUrl}/services/${service}/`,
     lastModified: currentDate,
     changeFrequency: 'weekly' as const,
     priority: 0.8,
@@ -89,21 +95,46 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Location pages (high priority, just below homepage)
   const locationPages = PRIMARY_LOCATIONS.map(location => ({
-    url: `${baseUrl}/locations/${location.name.toLowerCase().replace(/[^a-z]/g, '')}`,
+    url: `${baseUrl}/locations/${location.name.toLowerCase()}/`,
     lastModified: currentDate,
     changeFrequency: 'weekly' as const,
-    priority: 0.95, // Higher than services, lower than homepage
+    priority: 0.95,
   }));
+
+  // Service-Location pages (service + location combinations)
+  // Main category services with all locations
+  const mainServiceLocationPages = mainCategoryServices.flatMap(service =>
+    PRIMARY_LOCATIONS.map(location => ({
+      url: `${baseUrl}/services/${service}/${location.name.toLowerCase()}/`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.85,
+    }))
+  );
+
+  // Other services with all locations
+  const otherServiceLocationPages = otherServices.flatMap(service =>
+    PRIMARY_LOCATIONS.map(location => ({
+      url: `${baseUrl}/services/${service}/${location.name.toLowerCase()}/`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.75,
+    }))
+  );
 
   // Combine all URLs in priority order:
   // 1. Static pages (with homepage first)
   // 2. Location pages
   // 3. Main category services
-  // 4. Other services
+  // 4. Main category service-location pages
+  // 5. Other services
+  // 6. Other service-location pages
   return [
     ...staticPages,
     ...locationPages,
     ...mainServicePages,
+    ...mainServiceLocationPages,
     ...otherServicePages,
+    ...otherServiceLocationPages,
   ];
 }

@@ -106,7 +106,7 @@ const Header = () => {
           <Link
             key={serviceId}
             href={`/services/${serviceId}`}
-            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-all duration-300 bg-background border border-border shadow-safety hover:bg-primary/5 hover:shadow-md hover:scale-[1.02] focus:bg-primary/10"
+            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-all duration-300 bg-white hover:bg-primary/5 hover:shadow-md hover:scale-[1.02] focus:bg-primary/10"
             onClick={() => setOpenMenu("")}
           >
             <div className="text-sm md:text-base font-semibold leading-snug text-foreground hover:text-primary transition-colors">
@@ -151,7 +151,7 @@ const Header = () => {
                   Services
                 </NavigationMenuTrigger>
                 <NavigationMenuContent style={{ zIndex: 9999 }}>
-                  <div className="p-4 w-[400px] lg:w-[550px] h-[60vh] overflow-y-auto">
+                  <div className="p-4 w-[400px] lg:w-[550px] h-[60vh] overflow-y-auto bg-white rounded-md">
                     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                       <TabsList className="mb-4 w-full flex gap-2">
                         {Object.entries(serviceCategories).map(

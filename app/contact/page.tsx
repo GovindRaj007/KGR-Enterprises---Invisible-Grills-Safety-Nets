@@ -188,7 +188,7 @@ export default function ContactPage() {
           <div className="lg:col-span-2">
             <Card>
               <CardContent className="p-4 md:p-8">
-                <h2 className="text-2xl font-bold mb-6">Send Us a Message</h2>
+                <h2 className="text-2xl font-bold mb-6 text-card-foreground">Send Us a Message</h2>
                 <ConsultationForm />
               </CardContent>
             </Card>
@@ -196,15 +196,15 @@ export default function ContactPage() {
             {/* Additional Information */}
             <Card className="mt-8">
               <CardContent className="p-8">
-                <h2 className="text-2xl font-bold mb-6">What to Expect</h2>
+                <h2 className="text-2xl font-bold mb-6 text-card-foreground">What to Expect</h2>
                 <div className="space-y-6">
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
-                      <span className="text-primary font-bold">1</span>
+                    <div className="w-8 h-8 rounded-full bg-safety/20 flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-safety font-bold">1</span>
                     </div>
                     <div>
-                      <h3 className="font-semibold mb-2">Quick Response</h3>
-                      <p className="text-sm text-muted-foreground">
+                      <h3 className="font-semibold mb-2 text-card-foreground">Quick Response</h3>
+                      <p className="text-sm text-card-foreground/75">
                         We will call you within 15 minutes to understand your
                         requirements
                       </p>
@@ -212,14 +212,14 @@ export default function ContactPage() {
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
-                      <span className="text-primary font-bold">2</span>
+                    <div className="w-8 h-8 rounded-full bg-safety/20 flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-safety font-bold">2</span>
                     </div>
                     <div>
-                      <h3 className="font-semibold mb-2">
+                      <h3 className="font-semibold mb-2 text-card-foreground">
                         Free Site Inspection
                       </h3>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-card-foreground/75">
                         Our expert team will visit your location for
                         measurements and assessment
                       </p>
@@ -227,28 +227,28 @@ export default function ContactPage() {
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
-                      <span className="text-primary font-bold">3</span>
+                    <div className="w-8 h-8 rounded-full bg-safety/20 flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-safety font-bold">3</span>
                     </div>
                     <div>
-                      <h3 className="font-semibold mb-2">
+                      <h3 className="font-semibold mb-2 text-card-foreground">
                         Transparent Quotation
                       </h3>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-card-foreground/75">
                         Receive a detailed quote with no hidden charges
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
-                      <span className="text-primary font-bold">4</span>
+                    <div className="w-8 h-8 rounded-full bg-safety/20 flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-safety font-bold">4</span>
                     </div>
                     <div>
-                      <h3 className="font-semibold mb-2">
+                      <h3 className="font-semibold mb-2 text-card-foreground">
                         Professional Installation
                       </h3>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-card-foreground/75">
                         Scheduled installation by our certified team with 5-year
                         warranty
                       </p>
@@ -267,26 +267,26 @@ export default function ContactPage() {
                 <Card key={index}>
                   <CardContent className="p-6">
                     <div className="flex items-center space-x-3 mb-4">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                        <IconComponent className="h-5 w-5 text-primary" />
+                      <div className="w-10 h-10 rounded-full bg-safety/20 flex items-center justify-center">
+                        <IconComponent className="h-5 w-5 text-safety" />
                       </div>
-                      <h3 className="font-semibold">{section.title}</h3>
+                      <h3 className="font-semibold text-card-foreground">{section.title}</h3>
                     </div>
                     <div className="space-y-3">
                       {section.details.map((detail, idx) => (
                         <div key={idx} className="space-y-1">
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-xs text-card-foreground/60">
                             {detail.label}
                           </p>
                           {detail.href ? (
                             <a
                               href={detail.href}
-                              className="text-sm font-medium hover:text-primary transition-colors block min-h-0"
+                              className="text-sm font-medium text-card-foreground hover:text-safety transition-colors block min-h-0"
                             >
                               {detail.value}
                             </a>
                           ) : (
-                            <p className="text-sm font-medium">
+                            <p className="text-sm font-medium text-card-foreground">
                               {detail.value}
                             </p>
                           )}
@@ -299,8 +299,8 @@ export default function ContactPage() {
             })}
 
             {/* Emergency Contact */}
-            <Card className="bg-gradient-to-br from-safety/10 to-primary/10 border-safety/20">
-              <CardContent className="p-6 text-center">
+            <Card className="bg-gradient-to-br from-safety/10 to-primary/10 border-safety/20 !backdrop-blur-none">
+              <CardContent className="p-6 text-center !text-foreground">
                 <Phone className="h-12 w-12 mx-auto mb-4 text-safety" />
                 <h3 className="text-lg font-semibold mb-2">
                   Emergency Services

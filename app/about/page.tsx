@@ -121,8 +121,8 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto space-y-6 md:space-y-8">
           <Card>
             <CardContent className="p-4 md:p-6 space-y-4">
-              <h2 className="text-xl md:text-2xl font-bold">Our Story</h2>
-              <p className="text-muted-foreground">
+              <h2 className="text-xl md:text-2xl font-bold text-card-foreground">Our Story</h2>
+              <p className="text-card-foreground/80">
                 Founded in 2008, KGR Enterprises has grown from a small local
                 business to become one of South India&apos;s most trusted safety
                 solutions providers. With over 15 years of experience, we have
@@ -134,8 +134,8 @@ export default function AboutPage() {
 
           <Card>
             <CardContent className="p-4 md:p-6 space-y-4">
-              <h2 className="text-xl md:text-2xl font-bold">Our Mission</h2>
-              <p className="text-muted-foreground">
+              <h2 className="text-xl md:text-2xl font-bold text-card-foreground">Our Mission</h2>
+              <p className="text-card-foreground/80">
                 To provide world-class safety solutions that protect families
                 and properties while maintaining aesthetic appeal. We believe
                 safety should never compromise on style.

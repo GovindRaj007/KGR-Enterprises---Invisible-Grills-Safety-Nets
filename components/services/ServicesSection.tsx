@@ -111,41 +111,41 @@ const ServicesSection = () => {
                 {getPaginatedServices(key).map((service) => (
                   <Card
                     key={service.id}
-                    className="group hover:shadow-strong transition-all duration-300 hover:-translate-y-1"
+                    className="group bg-card hover:bg-card-hover border-border shadow-medium hover:shadow-strong transition-all duration-300 hover:-translate-y-1"
                   >
                     <CardHeader className="p-0">
                       <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
                         <img src={service.image} alt={`${service.title} - Professional Installation Services in Hyderabad, Bangalore, Chennai & Vijayawada`} className="object-cover group-hover:scale-110 transition-transform duration-500 w-full h-full absolute inset-0" />
-                        <Badge className="absolute top-3 left-3 bg-primary/90">
+                        <Badge className="absolute top-3 left-3 bg-primary/90 text-primary-foreground">
                           {category.title}
                         </Badge>
                       </div>
                     </CardHeader>
                     <CardContent className="p-4 md:p-6 space-y-4">
-                      <CardTitle className="text-lg md:text-xl group-hover:text-primary transition-colors">
+                      <CardTitle className="text-lg md:text-xl text-card-foreground group-hover:text-card-foreground transition-colors">
                         {service.title}
                       </CardTitle>
                       
-                      <p className="text-xs md:text-sm text-muted-foreground line-clamp-3">
+                      <p className="text-xs md:text-sm text-card-foreground/75 line-clamp-3">
                         {service.description}
                       </p>
 
                       {/* Features Preview */}
                       <div className="space-y-2">
                         {service.features.slice(0, 3).map((feature, idx) => (
-                          <div key={idx} className="flex items-center space-x-2 text-xs md:text-sm">
-                            <div className="w-1.5 h-1.5 rounded-full bg-accent"></div>
+                          <div key={idx} className="flex items-center space-x-2 text-xs md:text-sm text-card-foreground/75">
+                            <div className="w-1.5 h-1.5 rounded-full bg-safety"></div>
                             <span className="line-clamp-1">{feature}</span>
                           </div>
                         ))}
                       </div>
 
                       {/* Action Buttons */}
-                      <div className="flex gap-2 pt-2 border-t">
+                      <div className="flex gap-2 pt-2 border-t border-border">
                         <Button
                           variant="outline"
                           size="sm"
-                          className="flex-1 gap-2 text-xs md:text-sm"
+                          className="flex-1 gap-2 text-xs md:text-sm border-border text-safety hover:bg-card-hover hover:text-safety"
                           asChild
                         >
                           <Link href={`/services/${service.id}`} aria-label={`Learn more about ${service.title}`}>
@@ -155,7 +155,7 @@ const ServicesSection = () => {
                         </Button>
                         <Button
                           size="sm"
-                          className="flex-1 gap-2 text-xs md:text-sm"
+                          className="flex-1 gap-2 text-xs md:text-sm bg-primary hover:bg-primary/90 text-primary-foreground"
                           asChild
                         >
                           <a href={PRIMARY.tel} aria-label={`Call now to inquire about ${service.title}`} rel="noopener">
@@ -215,20 +215,20 @@ const ServicesSection = () => {
 
         {/* CTA Section */}
         <div className="text-center mt-12 md:mt-16">
-          <Card className="max-w-2xl mx-auto bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
+          <Card className="max-w-2xl mx-auto bg-card border-border hover:bg-card-hover shadow-medium transition-all duration-300">
             <CardContent className="p-6 md:p-8 space-y-4">
-              <h3 className="text-xl md:text-2xl font-bold">Need Custom Safety Solution?</h3>
-              <p className="text-sm md:text-base text-muted-foreground">
+              <h3 className="text-xl md:text-2xl font-bold text-card-foreground">Need Custom Safety Solution?</h3>
+              <p className="text-sm md:text-base text-card-foreground/75">
                 Our experts provide personalized safety net solutions tailored to your specific requirements
               </p>
               <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center">
-                <Button size="lg" className="gap-2" asChild>
+                <Button size="lg" className="gap-2 bg-primary hover:bg-primary/90 text-primary-foreground" asChild>
                   <a href={PRIMARY.tel}>
                     <Phone className="h-4 w-4 md:h-5 md:w-5" />
                     Free Site Visit
                   </a>
                 </Button>
-                <Button variant="outline" size="lg" className="gap-2" asChild>
+                <Button variant="outline" size="lg" className="gap-2 border-border text-safety hover:bg-card-hover" asChild>
                   <Link href="/services">
                     View All Services
                     <ArrowRight className="h-4 w-4 md:h-5 md:w-5" />

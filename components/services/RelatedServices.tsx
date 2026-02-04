@@ -29,7 +29,7 @@ const RelatedServices = ({ currentService, location }: Props) => {
         {relatedServices.map((serviceId) => {
           const service = servicesData[serviceId as keyof typeof servicesData];
           return (
-            <Card key={serviceId} className="hover:shadow-lg transition-shadow">
+            <Card key={serviceId} className="bg-card border-border shadow-medium hover:bg-card-hover hover:shadow-strong transition-all">
               <CardContent className="p-6 space-y-4">
                 <div className="relative h-40 -mx-6 -mt-6 mb-6">
                   <img 
@@ -39,13 +39,13 @@ const RelatedServices = ({ currentService, location }: Props) => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="font-semibold text-lg">{service.title}</h3>
-                  <p className="text-sm text-muted-foreground line-clamp-2">
+                  <h3 className="font-semibold text-lg text-card-foreground">{service.title}</h3>
+                  <p className="text-sm text-card-foreground/75 line-clamp-2">
                     {service.description}
                   </p>
                 </div>
 
-                <Button variant="outline" size="sm" className="w-full gap-2" asChild>
+                <Button variant="outline" size="sm" className="w-full gap-2 border-border text-safety hover:bg-card-hover" asChild>
                   <Link href={`/services/${service.id}/${location.toLowerCase()}`}>
                     View Details
                     <ArrowRight className="h-4 w-4" />

@@ -66,13 +66,14 @@
   --background: 0 0% 100%;
   --foreground: 220 23% 15%;
 
-  /* Card */
-  --card: 0 0% 100%;
-  --card-foreground: 220 23% 15%;
+  /* Card - Premium Blue System */
+  --card: 213 29% 18%;
+  --card-foreground: 213 37% 90%;
+  --card-hover: 213 29% 25%;
 
   /* Popover */
-  --popover: 0 0% 100%;
-  --popover-foreground: 220 23% 15%;
+  --popover: 213 29% 18%;
+  --popover-foreground: 213 37% 90%;
 
   /* Primary */
   --primary: 224 76% 27%;
@@ -99,9 +100,18 @@
   --destructive-foreground: 210 40% 98%;
 
   /* Border & Input */
-  --border: 220 23% 85%;
-  --input: 220 23% 85%;
-  --ring: 224 76% 27%;
+  --border: 213 29% 25%;
+  --input: 213 29% 25%;
+  --ring: 190 100% 50%;
+  
+  /* Card Specific Colors */
+  --card-default: 213 29% 18%;
+  --card-hover-state: 213 29% 25%;
+  --card-text-primary: 213 37% 90%;
+  --card-text-secondary: 213 32% 60%;
+  --card-icon-primary: 190 100% 50%;
+  --card-icon-secondary: 174 100% 47%;
+  --card-accent: 190 100% 50%;
 
   /* Border Radius */
   --radius: 0.75rem;

@@ -333,30 +333,30 @@ export default async function ServiceDetailPage({ params }: Props) {
                     altPrefix={service.title}
                   />
 
-                  <div className="bg-gradient-to-br from-blue-400 via-indigo-500 to-purple-600 rounded-lg shadow-lg">
+                  <div className="bg-card rounded-lg shadow-lg hover:bg-card-hover transition-colors">
                     <div className="p-4 md:p-6 space-y-4">
                       <div className="flex items-center gap-3">
-                        <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl p-3 shadow-lg">
-                          <Zap className="h-6 w-6 text-white" />
+                        <div className="bg-safety/20 rounded-2xl p-3 shadow-lg">
+                          <Zap className="h-6 w-6 text-safety" />
                         </div>
-                        <h2 className="text-2xl md:text-3xl font-bold text-slate-900">
+                        <h2 className="text-2xl md:text-3xl font-bold text-card-foreground">
                           About This Service
                         </h2>
                       </div>
-                      <p className="text-sm md:text-base text-white/90 leading-relaxed">
+                      <p className="text-sm md:text-base text-card-foreground/85 leading-relaxed">
                         {service.detailedDescription}
                       </p>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                    <div className="bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-600 rounded-lg shadow-lg">
+                    <div className="bg-card rounded-lg shadow-lg hover:bg-card-hover transition-colors">
                       <div className="p-4 md:p-6 space-y-4">
                         <div className="flex items-center gap-3">
-                          <div className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl p-3 shadow-lg">
-                            <Shield className="h-6 w-6 text-white" />
+                          <div className="bg-safety/20 rounded-2xl p-3 shadow-lg">
+                            <Shield className="h-6 w-6 text-safety" />
                           </div>
-                          <h2 className="text-xl md:text-2xl font-bold text-slate-900">
+                          <h2 className="text-xl md:text-2xl font-bold text-card-foreground">
                             Key Features
                           </h2>
                         </div>
@@ -366,8 +366,8 @@ export default async function ServiceDetailPage({ params }: Props) {
                               key={index}
                               className="flex items-center space-x-2"
                             >
-                              <CheckCircle2 className="h-4 w-4 text-white flex-shrink-0" />
-                              <span className="text-sm md:text-base text-white/95">
+                              <CheckCircle2 className="h-4 w-4 text-safety flex-shrink-0" />
+                              <span className="text-sm md:text-base text-card-foreground/85">
                                 {feature}
                               </span>
                             </div>
@@ -376,13 +376,13 @@ export default async function ServiceDetailPage({ params }: Props) {
                       </div>
                     </div>
 
-                    <div className="bg-gradient-to-br from-amber-400 via-orange-500 to-red-600 rounded-lg shadow-lg">
+                    <div className="bg-card rounded-lg shadow-lg hover:bg-card-hover transition-colors">
                       <div className="p-4 md:p-6 space-y-4">
                         <div className="flex items-center gap-3">
-                          <div className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl p-3 shadow-lg">
-                            <Star className="h-6 w-6 text-white" />
+                          <div className="bg-safety/20 rounded-2xl p-3 shadow-lg">
+                            <Star className="h-6 w-6 text-safety" />
                           </div>
-                          <h2 className="text-xl md:text-2xl font-bold text-slate-900">
+                          <h2 className="text-xl md:text-2xl font-bold text-card-foreground">
                             Benefits
                           </h2>
                         </div>
@@ -392,8 +392,8 @@ export default async function ServiceDetailPage({ params }: Props) {
                               key={index}
                               className="flex items-center space-x-2"
                             >
-                              <CheckCircle2 className="h-4 w-4 text-white flex-shrink-0" />
-                              <span className="text-sm md:text-base text-white/95">
+                              <CheckCircle2 className="h-4 w-4 text-safety flex-shrink-0" />
+                              <span className="text-sm md:text-base text-card-foreground/85">
                                 {benefit}
                               </span>
                             </div>
@@ -403,13 +403,13 @@ export default async function ServiceDetailPage({ params }: Props) {
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-br from-violet-400 via-purple-500 to-fuchsia-600 rounded-lg shadow-lg">
+                  <div className="bg-card rounded-lg shadow-lg hover:bg-card-hover transition-colors">
                     <div className="p-4 md:p-6 space-y-4">
                       <div className="flex items-center gap-3">
-                        <div className="bg-gradient-to-br from-violet-500 to-purple-600 rounded-2xl p-3 shadow-lg">
-                          <Award className="h-6 w-6 text-white" />
+                        <div className="bg-safety/20 rounded-2xl p-3 shadow-lg">
+                          <Award className="h-6 w-6 text-safety" />
                         </div>
-                        <h2 className="text-xl md:text-2xl font-bold text-slate-900">
+                        <h2 className="text-xl md:text-2xl font-bold text-card-foreground">
                           Technical Specifications
                         </h2>
                       </div>
@@ -417,35 +417,35 @@ export default async function ServiceDetailPage({ params }: Props) {
                         {service.specifications.map((spec, index) => (
                           <div
                             key={index}
-                            className="flex justify-between items-center py-2 border-b border-white/20 last:border-0 text-sm md:text-base"
+                            className="flex justify-between items-center py-2 border-b border-border last:border-0 text-sm md:text-base"
                           >
-                            <span className="font-medium text-white">
+                            <span className="font-medium text-card-foreground">
                               {spec.label}
                             </span>
-                            <span className="text-white/90">{spec.value}</span>
+                            <span className="text-card-foreground/75">{spec.value}</span>
                           </div>
                         ))}
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-br from-rose-400 via-pink-500 to-red-600 rounded-lg shadow-lg">
+                  <div className="bg-card rounded-lg shadow-lg hover:bg-card-hover transition-colors">
                     <div className="p-6">
                       <div className="flex items-center space-x-3 mb-4">
-                        <div className="bg-gradient-to-br from-rose-500 to-pink-600 rounded-2xl p-4 shadow-lg">
-                          <MapPin className="h-6 w-6 text-white" />
+                        <div className="bg-safety/20 rounded-2xl p-4 shadow-lg">
+                          <MapPin className="h-6 w-6 text-safety" />
                         </div>
-                        <h2 className="text-xl md:text-2xl font-bold text-slate-900">
+                        <h2 className="text-xl md:text-2xl font-bold text-card-foreground">
                           Main Branches
                         </h2>
                       </div>
                       <div className="space-y-4">
                         {branches.details.map((detail, idx) => (
                           <div key={idx} className="space-y-1">
-                            <p className="text-sm text-white/80 font-medium">
+                            <p className="text-sm text-card-foreground/75 font-medium">
                               {detail.label}
                             </p>
-                            <p className="text-sm md:text-base text-white/95">
+                            <p className="text-sm md:text-base text-card-foreground/85">
                               {detail.value}
                             </p>
                           </div>
@@ -456,18 +456,18 @@ export default async function ServiceDetailPage({ params }: Props) {
 
                   <ServiceLocationsSlider variant="stats" slug={slug} />
 
-                  <Card>
+                  <Card className="bg-card border-border shadow-medium">
                     <CardContent className="p-4 md:p-6 space-y-4">
-                      <h2 className="text-lg md:text-xl font-bold">
+                      <h2 className="text-lg md:text-xl font-bold text-card-foreground">
                         Frequently Asked Questions
                       </h2>
                       <div className="space-y-4">
                         {faqs.map((faq, index) => (
                           <div key={index} className="space-y-2">
-                            <h3 className="font-semibold text-base md:text-lg">
+                            <h3 className="font-semibold text-base md:text-lg text-card-foreground">
                               {faq.question}
                             </h3>
-                            <p className="text-sm md:text-base text-muted-foreground">
+                            <p className="text-sm md:text-base text-card-foreground/75">
                               {faq.answer}
                             </p>
                           </div>
@@ -476,9 +476,9 @@ export default async function ServiceDetailPage({ params }: Props) {
                     </CardContent>
                   </Card>
 
-                  <Card>
+                  <Card className="bg-card border-border shadow-medium">
                     <CardContent className="p-4 md:p-6 space-y-4">
-                      <h2 className="text-lg md:text-xl font-bold">
+                      <h2 className="text-lg md:text-xl font-bold text-card-foreground">
                         You May Also Need
                       </h2>
                       <div className="grid sm:grid-cols-2 gap-3">
@@ -492,7 +492,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                             <Link
                               key={id}
                               href={`/services/${id}`}
-                              className="flex items-center space-x-3 p-3 rounded-lg border hover:border-primary transition-colors group"
+                              className="flex items-center space-x-3 p-3 rounded-lg border border-border hover:border-border hover:bg-card-hover transition-all duration-300 group"
                             >
                               <div className="relative h-16 w-16 flex-shrink-0 rounded overflow-hidden">
                                 <img
@@ -506,17 +506,17 @@ export default async function ServiceDetailPage({ params }: Props) {
                                 />
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium truncate group-hover:text-primary">
+                                <p className="text-sm font-medium truncate text-card-foreground group-hover:text-card-foreground transition-colors">
                                   {relatedService.title}
                                 </p>
-                                <p className="text-xs text-muted-foreground line-clamp-2">
+                                <p className="text-xs text-card-foreground/75 line-clamp-2">
                                   {relatedService.description}
                                 </p>
                               </div>
                             </Link>
                           ))}
                       </div>
-                      <Button variant="outline" className="w-full" asChild>
+                      <Button variant="outline" className="w-full border-border text-safety hover:bg-card-hover" asChild>
                         <Link href="/services">View All Services</Link>
                       </Button>
                     </CardContent>

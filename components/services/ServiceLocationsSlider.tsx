@@ -350,7 +350,7 @@ const ServiceLocationsSlider = ({ variant = 'stats',slug }) => {
                     )}
 
                     {/* Bottom Section */}
-                    <div className="space-y-4 mt-4">
+                    <div className="space-y-2 mt-2">
                       {/* Areas Served */}
                       <div className="bg-white/15 backdrop-blur-md border border-white/30 rounded-2xl p-4">
                         <p className="text-white/80 text-xs font-semibold mb-2">

@@ -376,23 +376,23 @@ export default async function ServiceLocationPage({ params }: Props) {
 
             {/* Service Areas */}
             <section>
-              <Card className="overflow-hidden">
+              <Card className="overflow-hidden bg-card border-border shadow-medium hover:bg-card-hover transition-all">
                 <CardContent className="p-6 md:p-8 space-y-6">
                   <div className="space-y-2">
-                    <h2 className="text-2xl md:text-3xl font-semibold">Areas We Serve in {locationFormatted}</h2>
-                    <p className="text-muted-foreground">
+                    <h2 className="text-2xl md:text-3xl font-semibold text-card-foreground">Areas We Serve in {locationFormatted}</h2>
+                    <p className="text-card-foreground/75">
                       We provide {service.title.toLowerCase()} services across all major areas in {locationFormatted}, including:
                     </p>
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {locationInfo.areas.map((area) => (
-                      <div key={area} className="flex items-center gap-2 p-2 rounded-lg hover:bg-muted/50 transition-colors">
-                        <MapPin className="h-4 w-4 text-primary flex-shrink-0" />
-                        <span className="text-sm font-medium">{area}</span>
+                      <div key={area} className="flex items-center gap-2 p-2 rounded-lg hover:bg-card-hover transition-colors">
+                        <MapPin className="h-4 w-4 text-safety flex-shrink-0" />
+                        <span className="text-sm font-medium text-card-foreground">{area}</span>
                       </div>
                     ))}
                   </div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-card-foreground/75">
                     And many more areas across {locationFormatted}. Contact us to confirm service availability in your locality.
                   </p>
                 </CardContent>
@@ -403,15 +403,15 @@ export default async function ServiceLocationPage({ params }: Props) {
             <section className="space-y-6">
               <h2 className="text-2xl md:text-3xl font-semibold">Why Choose KGR Enterprises in {locationFormatted}?</h2>
               <div className="grid md:grid-cols-2 gap-4 md:gap-6">
-                <Card className="group hover:shadow-lg transition-shadow">
+                <Card className="group bg-card border-border shadow-medium hover:bg-card-hover hover:shadow-strong transition-all">
                   <CardContent className="p-6 space-y-3">
                     <div className="flex items-start gap-4">
-                      <div className="p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                        <MapPin className="h-6 w-6 text-primary" />
+                      <div className="p-3 rounded-xl bg-safety/20 group-hover:bg-safety/30 transition-colors">
+                        <MapPin className="h-6 w-6 text-safety" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-semibold text-lg mb-2">Local Expertise</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
+                        <h3 className="font-semibold text-lg mb-2 text-card-foreground">Local Expertise</h3>
+                        <p className="text-sm text-card-foreground/75 leading-relaxed">
                           Quick response times with a dedicated team familiar with {locationFormatted}&apos;s 
                           building regulations and safety requirements
                         </p>
@@ -420,15 +420,15 @@ export default async function ServiceLocationPage({ params }: Props) {
                   </CardContent>
                 </Card>
 
-                <Card className="group hover:shadow-lg transition-shadow">
+                <Card className="group bg-card border-border shadow-medium hover:bg-card-hover hover:shadow-strong transition-all">
                   <CardContent className="p-6 space-y-3">
                     <div className="flex items-start gap-4">
-                      <div className="p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                        <Shield className="h-6 w-6 text-primary" />
+                      <div className="p-3 rounded-xl bg-safety/20 group-hover:bg-safety/30 transition-colors">
+                        <Shield className="h-6 w-6 text-safety" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-semibold text-lg mb-2">Quality Materials</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
+                        <h3 className="font-semibold text-lg mb-2 text-card-foreground">Quality Materials</h3>
+                        <p className="text-sm text-card-foreground/75 leading-relaxed">
                           High-grade materials designed to withstand local weather conditions with 
                           superior durability and longevity
                         </p>
@@ -437,15 +437,15 @@ export default async function ServiceLocationPage({ params }: Props) {
                   </CardContent>
                 </Card>
 
-                <Card className="group hover:shadow-lg transition-shadow">
+                <Card className="group bg-card border-border shadow-medium hover:bg-card-hover hover:shadow-strong transition-all">
                   <CardContent className="p-6 space-y-3">
                     <div className="flex items-start gap-4">
-                      <div className="p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                        <Award className="h-6 w-6 text-primary" />
+                      <div className="p-3 rounded-xl bg-safety/20 group-hover:bg-safety/30 transition-colors">
+                        <Award className="h-6 w-6 text-safety" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-semibold text-lg mb-2">Professional Installation</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
+                        <h3 className="font-semibold text-lg mb-2 text-card-foreground">Professional Installation</h3>
+                        <p className="text-sm text-card-foreground/75 leading-relaxed">
                           Certified installers trained in latest safety standards and installation 
                           techniques with years of experience
                         </p>
@@ -454,15 +454,15 @@ export default async function ServiceLocationPage({ params }: Props) {
                   </CardContent>
                 </Card>
 
-                <Card className="group hover:shadow-lg transition-shadow">
+                <Card className="group bg-card border-border shadow-medium hover:bg-card-hover hover:shadow-strong transition-all">
                   <CardContent className="p-6 space-y-3">
                     <div className="flex items-start gap-4">
-                      <div className="p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                        <Clock className="h-6 w-6 text-primary" />
+                      <div className="p-3 rounded-xl bg-safety/20 group-hover:bg-safety/30 transition-colors">
+                        <Clock className="h-6 w-6 text-safety" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-semibold text-lg mb-2">After-Installation Support</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
+                        <h3 className="font-semibold text-lg mb-2 text-card-foreground">After-Installation Support</h3>
+                        <p className="text-sm text-card-foreground/75 leading-relaxed">
                           Dedicated maintenance and support team in {locationFormatted} for ongoing 
                           service and emergency repairs
                         </p>
@@ -476,7 +476,7 @@ export default async function ServiceLocationPage({ params }: Props) {
             {/* Process Section */}
             <section className="space-y-6">
               <h2 className="text-2xl md:text-3xl font-semibold">Our Installation Process in {locationFormatted}</h2>
-              <Card>
+              <Card className="bg-card border-border shadow-medium">
                 <CardContent className="p-6 md:p-8">
                   <div className="space-y-6">
                     {[
@@ -501,15 +501,15 @@ export default async function ServiceLocationPage({ params }: Props) {
                         description: `Final inspection and ongoing maintenance support from our ${locationFormatted} team`
                       }
                     ].map((item, index) => (
-                      <div key={item.step} className={`flex gap-4 pb-6 ${index !== 3 ? 'border-b' : ''}`}>
+                      <div key={item.step} className={`flex gap-4 pb-6 ${index !== 3 ? 'border-b border-border' : ''}`}>
                         <div className="flex-shrink-0">
-                          <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-lg">
+                          <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-safety text-card hover:bg-safety/90 flex items-center justify-center font-bold text-lg">
                             {item.step}
                           </div>
                         </div>
                         <div className="flex-1 pt-1">
-                          <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
-                          <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+                          <h3 className="font-semibold text-lg mb-2 text-card-foreground">{item.title}</h3>
+                          <p className="text-sm md:text-base text-card-foreground/75 leading-relaxed">
                             {item.description}
                           </p>
                         </div>
@@ -524,30 +524,30 @@ export default async function ServiceLocationPage({ params }: Props) {
             <section className="space-y-6">
               <h2 className="text-2xl md:text-3xl font-semibold">Frequently Asked Questions</h2>
               <div className="space-y-4">
-                <Card className="hover:shadow-md transition-shadow">
+                <Card className="bg-card border-border shadow-medium hover:shadow-strong hover:bg-card-hover transition-all">
                   <CardContent className="p-6">
-                    <h3 className="font-semibold text-lg mb-3">How quickly can you install in {locationFormatted}?</h3>
-                    <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+                    <h3 className="font-semibold text-lg mb-3 text-card-foreground">How quickly can you install in {locationFormatted}?</h3>
+                    <p className="text-sm md:text-base text-card-foreground/75 leading-relaxed">
                       Most installations are completed within 1-2 days depending on the project size. 
                       We offer same-day site visits for urgent requirements in {locationFormatted}.
                     </p>
                   </CardContent>
                 </Card>
                 
-                <Card className="hover:shadow-md transition-shadow">
+                <Card className="bg-card border-border shadow-medium hover:shadow-strong hover:bg-card-hover transition-all">
                   <CardContent className="p-6">
-                    <h3 className="font-semibold text-lg mb-3">Do you provide warranty?</h3>
-                    <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+                    <h3 className="font-semibold text-lg mb-3 text-card-foreground">Do you provide warranty?</h3>
+                    <p className="text-sm md:text-base text-card-foreground/75 leading-relaxed">
                       Yes, we provide comprehensive warranty on both materials and installation work. 
                       Contact us for specific warranty details for your project.
                     </p>
                   </CardContent>
                 </Card>
                 
-                <Card className="hover:shadow-md transition-shadow">
+                <Card className="bg-card border-border shadow-medium hover:shadow-strong hover:bg-card-hover transition-all">
                   <CardContent className="p-6">
-                    <h3 className="font-semibold text-lg mb-3">What areas do you cover in {locationFormatted}?</h3>
-                    <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+                    <h3 className="font-semibold text-lg mb-3 text-card-foreground">What areas do you cover in {locationFormatted}?</h3>
+                    <p className="text-sm md:text-base text-card-foreground/75 leading-relaxed">
                       We serve all areas across {locationFormatted} including {locationInfo.areas.slice(0, 3).join(', ')}, 
                       and surrounding localities. Call us to confirm service in your area.
                     </p>
@@ -565,25 +565,25 @@ export default async function ServiceLocationPage({ params }: Props) {
 
             {/* CTA Section */}
             <section className="pt-8" aria-labelledby="cta-heading">
-              <Card className="bg-gradient-to-br from-primary/5 via-primary/10 to-accent/5 border-primary/20 shadow-lg">
+              <Card className="bg-card border-border shadow-strong hover:bg-card-hover transition-all">
                 <CardContent className="p-8 md:p-10 text-center space-y-6">
                   <div className="space-y-3">
-                    <h2 id="cta-heading" className="text-2xl md:text-3xl font-bold">
+                    <h2 id="cta-heading" className="text-2xl md:text-3xl font-bold text-card-foreground">
                       Ready to Get Started in {locationFormatted}?
                     </h2>
-                    <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                    <p className="text-card-foreground/75 max-w-2xl mx-auto leading-relaxed">
                       Schedule a free consultation with our experts. We&apos;ll visit your location, 
                       assess your needs, and provide a transparent quote with no hidden charges.
                     </p>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button size="lg" className="gap-2 text-base" asChild>
+                    <Button size="lg" className="gap-2 text-base bg-primary hover:bg-primary/90 text-primary-foreground" asChild>
                       <a href={PRIMARY.tel}>
                         <Phone className="h-5 w-5" />
                         Call Now for Free Visit
                       </a>
                     </Button>
-                    <Button variant="outline" size="lg" className="gap-2 text-base" asChild>
+                    <Button variant="outline" size="lg" className="gap-2 text-base border-border text-safety hover:bg-card-hover" asChild>
                       <Link href="/services">
                         View All Services
                         <ArrowRight className="h-5 w-5" />

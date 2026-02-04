@@ -9,7 +9,7 @@ import { generateLocationContent } from '@/lib/seo-metadata';
 
 export async function generateStaticParams() {
   return PRIMARY_LOCATIONS.map(loc => ({
-    location: loc.name.toLowerCase().replace(/[^a-z]/g, '')
+    location: loc.name.toLowerCase()
   }));
 }
 
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
   }
 
   const title = `Invisible Grills & Safety Nets in ${matched.name}`;
-  const canonicalPath = `/locations/${normalizedLocation}`;
+  const canonicalPath = `/locations/${matched.name.toLowerCase()}/`;
   const locationMeta = {
     areaServed: matched.areas.join(', '),
     state: matched.state,

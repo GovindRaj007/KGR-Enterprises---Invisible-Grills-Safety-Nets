@@ -280,28 +280,28 @@ const AboutSection = () => {
               </div>
 
               {/* Company Highlights */}
-              <Card className="bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
-                <CardContent className="p-4 md:p-6">
+              <Card className="!bg-white dark:!bg-white/10 !backdrop-blur-none border-border/30">
+                <CardContent className="p-4 md:p-6 !text-foreground">
                   <div className="space-y-4">
-                    <h3 className="text-lg md:text-xl font-semibold">
+                    <h3 className="text-lg md:text-xl font-semibold text-foreground">
                       Why Choose Us?
                     </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3 text-sm md:text-base">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3 text-sm md:text-base text-foreground">
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 rounded-full bg-primary"></div>
-                        <span>ISI Certified Materials</span>
+                        <span className="text-foreground">ISI Certified Materials</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 rounded-full bg-accent"></div>
-                        <span>Expert Installation Team</span>
+                        <div className="w-2 h-2 rounded-full bg-safety"></div>
+                        <span className="text-foreground">Expert Installation Team</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 rounded-full bg-primary"></div>
-                        <span>24/7 Customer Support</span>
+                        <span className="text-foreground">24/7 Customer Support</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 rounded-full bg-accent"></div>
-                        <span>Warranty-backed service</span>
+                        <div className="w-2 h-2 rounded-full bg-safety"></div>
+                        <span className="text-foreground">Warranty-backed service</span>
                       </div>
                     </div>
                   </div>

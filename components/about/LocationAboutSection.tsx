@@ -277,8 +277,8 @@ const LocationAboutSection = ({ location }: { location: string }) => {
               </div>
 
               {/* Company Highlights */}
-              <Card className="bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
-                <CardContent className="p-4 md:p-6">
+              <Card className="bg-gradient-to-r from-primary/5 to-accent/5 !backdrop-blur-none border-primary/20">
+                <CardContent className="p-4 md:p-6 !text-foreground">
                   <div className="space-y-4">
                     <h3 className="text-lg md:text-xl font-semibold">
                       Local Expertise in {location}
