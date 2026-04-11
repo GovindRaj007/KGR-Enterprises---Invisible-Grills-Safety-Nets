@@ -100,9 +100,7 @@ export const generateOrganizationSchema = () => ({
       }
     ]
   },
-  'sameAs': [
-    'https://x.com/Kgr_Grills_Nets?t=bVFltLBFrViXV15cgk_15Q&s=08'
-  ],
+  'sameAs': ['https://x.com/Kgr_Grills_Nets'],
   'foundingDate': '2008',
   'foundingLocation': {
     '@type': 'Place',

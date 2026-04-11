@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { Breadcrumbs } from '@/components/shared/Breadcrumbs';
+
 import GalleryClient from '@/components/gallery/GalleryClient';
 
 export const metadata: Metadata = {
@@ -12,35 +14,51 @@ export const metadata: Metadata = {
     'max-snippet': -1,
   },
   keywords: [
-       "invisible grills in Hyderabad",
-    "Kgr invisible grills",
-    "invisible grills near me",
-    "invisible grills in Bangalore",
-    "safety nets in Hyderabad",
-    "safety net installation near me",
-    "Kgr safety nets",
-    "invisible grill installation",
-    "best invisible grills in hyderabad",
-    "best invisible grills in bangalore",
-    "balcony safety nets in bangalore",
-    "pigeon nets in hyderabad",
-    "best invisible grills in chennai",
-    "safety nets in bangalore",
-    "balcony safety nets in hyderabad",
-    "invisible grills in chennai",
-    "safety nets in Chennai",
-    "balcony safety nets in Chennai",
-    "pigeon nets in chennai",
-    "invisible grills in vijayawada",
-    "safety nets in vijayawada",
-    "balcony safety nets in vijayawada",
-    "children safety nets in Hyderabad",
-    "children safety nets in Visakhapatnam",
-    "best invisible grills in visakhapatnam",
-    "bird nets",
-    "invisible grills",
-    "pigeon nets",
-    "duct area nets",
+    // Portfolio & Gallery Keywords
+    "installation portfolio",
+    "project showcase",
+    "successful installations",
+    "before and after",
+    "real installations",
+    "proven work",
+    // Social Proof Keywords
+    "5000+ projects completed",
+    "customer projects",
+    "completed installations",
+    "installation examples",
+    "gallery showcase",
+    // Quality Indicators
+    "professional work",
+    "quality installations",
+    "expert craftsmanship",
+    "precision fitting",
+    "finished work examples",
+    // Service Type Gallery Keywords
+    "invisible grills gallery",
+    "safety nets installations",
+    "bird protection projects",
+    "balcony solutions",
+    "terrace projects",
+    // Specific Service Showcases
+    "invisible grill examples",
+    "safety net projects",
+    "pigeon net installations",
+    "children safety projects",
+    "residential installations",
+    "commercial projects",
+    // Location-based Gallery
+    "Hyderabad installations",
+    "Bangalore projects",
+    "Chennai work samples",
+    "installation across South India",
+    // Inspiration & Discovery Keywords
+    "design inspiration",
+    "installation ideas",
+    "safety solutions showcase",
+    "see our work",
+    "view our projects",
+    "gallery of safety solutions",
+    "customer success stories visuals",
   ],
   openGraph: {
     title: "Installation Gallery - KGR Invisible Grills & Safety Nets",
@@ -58,32 +76,18 @@ export const metadata: Metadata = {
 };
 
 export default function GalleryPage() {
-  const breadcrumbSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    'itemListElement': [
-      {
-        '@type': 'ListItem',
-        'position': 1,
-        'name': 'Home',
-        'item': 'https://invisiblegrillsandsafetynets.in/'
-      },
-      {
-        '@type': 'ListItem',
-        'position': 2,
-        'name': 'Gallery',
-        'item': 'https://invisiblegrillsandsafetynets.in/gallery'
-      }
-    ]
-  };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
       <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-6">
+          <Breadcrumbs
+            items={[
+              { label: "Gallery" },
+            ]}
+            darkMode={false}
+          />
+        </div>
         <GalleryClient />
       </div>
     </>

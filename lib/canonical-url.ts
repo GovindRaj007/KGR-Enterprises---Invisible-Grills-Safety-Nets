@@ -3,10 +3,10 @@ export const BASE_URL = 'https://invisiblegrillsandsafetynets.in';
 export function getCanonicalUrl(path: string = ''): string {
   // Remove hash fragments and query parameters
   const pathWithoutFragments = path.split('#')[0].split('?')[0];
-  // Remove any trailing slashes
-  const cleanPath = pathWithoutFragments.replace(/\/+$/, '');
   // Ensure path starts with a slash if it's not empty
-  const normalizedPath = cleanPath ? (cleanPath.startsWith('/') ? cleanPath : `/${cleanPath}`) : '';
+  const normalizedPath = pathWithoutFragments ? (pathWithoutFragments.startsWith('/') ? pathWithoutFragments : `/${pathWithoutFragments}`) : '';
+  // Ensure trailing slash (matching trailingSlash: true in next.config.ts)
+  const pathWithTrailingSlash = normalizedPath ? (normalizedPath.endsWith('/') ? normalizedPath : `${normalizedPath}/`) : '';
   // Combine base URL with path
-  return `${BASE_URL}${normalizedPath}`;
+  return `${BASE_URL}${pathWithTrailingSlash}`;
 }

@@ -1,150 +1,223 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useState, useEffect, useCallback, useRef } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
+
+const showcaseImages = [
+  {
+    src: "/images/invisible-grill-1.jpg",
+    alt: "Invisible Grills Installation",
+    label: "Invisible Grills",
+  },
+  {
+    src: "/images/balcony-invisible-grill-1.jpg",
+    alt: "Balcony Invisible Grills",
+    label: "Balcony Invisible Grills",
+  },
+  {
+    src: "/images/balcony-net-1.jpg",
+    alt: "Balcony Safety Net",
+    label: "Balcony Safety Net",
+  },
+  {
+    src: "/images/children-protection-net-1.jpg",
+    alt: "Children Protection Nets",
+    label: "Children Protection Nets",
+  },
+  { src: "/images/pegion-net-1.jpg", alt: "Pigeon Nets", label: "Pigeon Nets" },
+  {
+    src: "/images/cloth-drying-pulley-1.jpg",
+    alt: "Ceiling Cloth Drying Hangers",
+    label: "Ceiling Cloth Hangers",
+  },
+  {
+    src: "/images/service-gallery-1.jpg",
+    alt: "Our Services - KGR Enterprises",
+    label: "Our Services",
+  },
+];
 
 const ImageCarousel = () => {
-  const images = [
-    {
-      src: "/images/service-gallery-3.jpg",
-      title: "Invisible Grills Installation",
-      description: "Modern security solutions for balconies and windows",
-      alt: "Invisible Grills for Balconies in Hyderabad"
-    },
-    {
-      src: "/images/service-gallery-1.jpg",
-      title: "Professional Safety Nets",
-      description: "Expert balcony safety net installation services",
-      alt: "Balcony Safety Nets in Bangalore"
-    },
-    {
-      src: "/images/service-gallery-2.jpg",
-      title: "Children Protection Nets",
-      description: "Child-safe nets for homes and apartments",
-      alt: "Children Protection Nets in Chennai"
-    },
-    {
-      src: "/images/service-gallery-4.jpg",
-      title: "Bird Protection Solutions",
-      description: "Eco-friendly bird control and pigeon nets",
-      alt: "Bird Protection Nets in Hyderabad"
-    }
-  ];
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const isMobile = useIsMobile();
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+  const total = showcaseImages.length;
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [touchStart, setTouchStart] = useState(0);
-  const [touchEnd, setTouchEnd] = useState(0);
+  const nextImage = useCallback(() => {
+    setActiveIndex((prev) => (prev + 1) % total);
+  }, [total]);
 
-  // Auto-play carousel
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentIndex((prevIndex) => 
-        prevIndex === images.length - 1 ? 0 : prevIndex + 1
-      );
-    }, 5000);
+    if (isPaused) {
+      if (timerRef.current) clearInterval(timerRef.current);
+      return;
+    }
+    timerRef.current = setInterval(nextImage, 3500);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [isPaused, nextImage]);
 
-    return () => clearInterval(timer);
-  }, [images.length]);
-
-  const goToPrevious = () => {
-    setCurrentIndex(currentIndex === 0 ? images.length - 1 : currentIndex - 1);
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    setIsPaused(true);
+    touchStartX.current = e.touches[0].clientX;
+    touchEndX.current = e.touches[0].clientX;
   };
 
-  const goToNext = () => {
-    setCurrentIndex(currentIndex === images.length - 1 ? 0 : currentIndex + 1);
-  };
-
-  // Touch handlers for mobile swipe
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchEndX.current = e.touches[0].clientX;
   };
 
   const handleTouchEnd = () => {
-    if (touchStart - touchEnd > 75) {
-      goToNext();
+    const swipe = touchStartX.current - touchEndX.current;
+    if (Math.abs(swipe) > 50) {
+      if (swipe > 0) {
+        setActiveIndex((prev) => (prev + 1) % total);
+      } else {
+        setActiveIndex((prev) => (prev - 1 + total) % total);
+      }
     }
-    if (touchStart - touchEnd < -75) {
-      goToPrevious();
-    }
+    setIsPaused(false);
+  };
+
+  const getPosition = (index: number) => {
+    const diff = (index - activeIndex + total) % total;
+    if (diff === 0) return "center";
+    if (diff === 1 || diff === -total + 1) return "right";
+    if (diff === total - 1 || diff === -1) return "left";
+    return "hidden";
+  };
+
+  const carouselHandlers = {
+    onMouseDown: () => setIsPaused(true),
+    onMouseUp: () => setIsPaused(false),
+    onMouseLeave: () => setIsPaused(false),
+    onTouchStart: handleTouchStart,
+    onTouchMove: handleTouchMove,
+    onTouchEnd: handleTouchEnd,
   };
 
   return (
-    <section 
-      className="relative h-[50vh] md:h-[60vh] lg:h-[70vh] overflow-hidden"
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-    >
-      {/* Images */}
-      <div className="relative h-full w-full">
-        {images.map((image, index) => (
-          <div
-            key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              index === currentIndex ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <img 
-              src={image.src} 
-              alt={image.alt} 
-              loading={index === 0 ? "eager" : "lazy"}
-              decoding="async"
-              className="object-cover w-full h-full absolute inset-0" 
-            />
-            <div className="absolute inset-0 bg-black/40" />
-          </div>
-        ))}
-      </div>
-
-      {/* Content Overlay - Mobile Optimized */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="text-center text-white space-y-2 md:space-y-4 max-w-xl md:max-w-2xl px-4">
-          <h2 className="text-xl md:text-3xl lg:text-5xl font-bold leading-tight">
-            {images[currentIndex].title}
+    <section className="section-bg-1 relative overflow-hidden pt-10 md:pt-14 pb-10 md:pb-16">
+      <div className="absolute inset-0 grid-pattern opacity-50" />
+      <div className="container relative z-10">
+        {/* Section Header */}
+        <div className="mx-auto mb-8 max-w-2xl text-center md:mb-10">
+          <span className="mb-3 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
+            Our Work
+          </span>
+          <h2 className="font-heading text-2xl font-bold text-foreground md:text-4xl">
+            Explore Our Services
           </h2>
-          <p className="text-sm md:text-base lg:text-xl opacity-90">
-            {images[currentIndex].description}
-          </p>
         </div>
-      </div>
 
-      {/* Navigation Buttons - Smaller on mobile */}
-      <Button
-        variant="ghost"
-        size="sm"
-        className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 text-white hover:bg-white/20 h-8 w-8 md:h-10 md:w-10 p-0"
-        onClick={goToPrevious}
-        aria-label="Previous image"
-      >
-        <ChevronLeft className="h-5 w-5 md:h-8 md:w-8" />
-      </Button>
+        {/* Desktop View - Full-width auto-sliding carousel */}
+        {!isMobile ? (
+          <div
+            className="relative mx-auto w-4/5 overflow-hidden rounded-2xl shadow-lg"
+            {...carouselHandlers}
+          >
+            <div className="relative w-full h-96 md:h-[500px] lg:h-[600px]">
+              {showcaseImages.map((image, index) => (
+                <div
+                  key={index}
+                  className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${
+                    index === activeIndex ? "opacity-100" : "opacity-0"
+                  }`}
+                >
+                  <img
+                    src={image.src}
+                    alt={image.alt}
+                    className={`h-full ${index === showcaseImages.length - 1 ? "w-[70%]" : "w-full"}`}
+                    loading="lazy"
+                  />
+                  {/* Label Overlay - Hide for promotional card */}
+                  {index !== showcaseImages.length - 1 && (
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[hsl(222,47%,11%,0.85)] to-transparent px-6 pb-6 pt-12">
+                      <p className="font-heading text-xl font-semibold text-white md:text-2xl lg:text-3xl">
+                        {image.label}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          /* Mobile View - 3D Carousel */
+          <div
+            className="relative mx-auto flex h-[400px] items-center justify-center sm:h-[460px]"
+            style={{ perspective: "1200px" }}
+            {...carouselHandlers}
+          >
+            {showcaseImages.map((image, index) => {
+              const position = getPosition(index);
+              const isCenter = position === "center";
+              const isLeft = position === "left";
+              const isRight = position === "right";
+              const isVisible = isCenter || isLeft || isRight;
 
-      <Button
-        variant="ghost"
-        size="sm"
-        className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 text-white hover:bg-white/20 h-8 w-8 md:h-10 md:w-10 p-0"
-        onClick={goToNext}
-        aria-label="Next image"
-      >
-        <ChevronRight className="h-5 w-5 md:h-8 md:w-8" />
-      </Button>
-
-      {/* Dots Indicator - Smaller on mobile */}
-      <div className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 flex items-center space-x-3">
-        {images.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentIndex(index)}
-            aria-label={`Go to slide ${index + 1}`}
-            aria-current={index === currentIndex ? 'true' : undefined}
-            className={`focus:outline-none transition-all duration-200 ease-in-out min-h-0 min-w-0 ${index === currentIndex ? 'bg-white w-8 md:w-12 h-2 rounded-full shadow-sm' : 'bg-white/60 w-3 h-3 rounded-full opacity-70'}`}
-          />
-        ))}
+              return (
+                <div
+                  key={index}
+                  className="absolute transition-all duration-700 ease-in-out"
+                  style={{
+                    width: isCenter ? "min(360px, 85vw)" : "min(180px, 40vw)",
+                    height: isCenter ? "min(420px, 90vw)" : "min(300px, 65vw)",
+                    maxHeight: isCenter ? "480px" : "340px",
+                    transform: isCenter
+                      ? "translateX(-50%) translateZ(60px) scale(1)"
+                      : isLeft
+                        ? "translateX(calc(-50% - min(150px, 35vw))) translateZ(-40px) rotateY(25deg) scale(0.85)"
+                        : isRight
+                          ? "translateX(calc(-50% + min(150px, 35vw))) translateZ(-40px) rotateY(-25deg) scale(0.85)"
+                          : "translateX(-50%) translateZ(-100px) scale(0.6)",
+                    left: "50%",
+                    opacity: isVisible ? 1 : 0,
+                    zIndex: isCenter ? 30 : isVisible ? 20 : 10,
+                    pointerEvents: isCenter ? "auto" : "none",
+                    filter: isCenter ? "none" : "blur(1.5px) brightness(0.7)",
+                  }}
+                >
+                  <div className="h-full w-full overflow-hidden rounded-2xl shadow-2xl">
+                    <img
+                      src={image.src}
+                      alt={image.alt}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  {/* Label - Hide for promotional card */}
+                  {isCenter && index !== showcaseImages.length - 1 && (
+                    <div className="absolute bottom-0 left-0 right-0 rounded-b-2xl bg-gradient-to-t from-[hsl(222,47%,11%,0.85)] to-transparent px-4 pb-4 pt-10">
+                      <p className="text-center font-heading text-base font-semibold text-white md:text-lg">
+                        {image.label}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+        {/* Dot Indicators */}
+        <div className="mt-4 flex justify-center gap-2 md:mt-6">
+          {showcaseImages.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setActiveIndex(index)}
+              className={`rounded-full transition-all duration-300 focus:outline-none min-h-0 min-w-0 flex-shrink-0 ${
+                index === activeIndex
+                  ? "h-2 md:h-3 w-7 md:w-9 bg-accent shadow-lg shadow-accent/50"
+                  : "h-2 md:h-3 w-2 md:w-3 bg-muted-foreground/30 hover:bg-muted-foreground/50 hover:scale-125"
+              }`}
+              aria-label={`View ${showcaseImages[index].label}`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

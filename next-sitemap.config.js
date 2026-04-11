@@ -14,17 +14,17 @@ module.exports = {
     // Exclude non-canonical URLs
     '/*?*',
     '*/amp',
-    '*/*/',  // Trailing slashes
   ],
   outDir: './out',
   additionalPaths: async (config) => {
     const result = [];
     
     // Add locations (high priority, just below homepage)
-    const locations = ['hyderabad', 'bangalore', 'chennai', 'vijayawada'];
+    // Using lowercase names matching the route parameters
+    const locations = ['hyderabad', 'bangalore', 'chennai', 'vijayawada', 'visakhapatnam'];
     for (const location of locations) {
       result.push({
-        loc: `/locations/${location}`,
+        loc: `/locations/${location}/`,
         changefreq: 'weekly',
         priority: 0.95,
         lastmod: new Date().toISOString(),
@@ -46,7 +46,7 @@ module.exports = {
     // Add main category services
     for (const service of mainCategoryServices) {
       result.push({
-        loc: `/services/${service}`,
+        loc: `/services/${service}/`,
         changefreq: 'weekly',
         priority: 0.9,
         lastmod: new Date().toISOString(),
@@ -63,11 +63,7 @@ module.exports = {
       'open-area',
       'staircase-safety',
       'construction-safety',
-      'shade-nets',
       'mosquito-nets',
-      'swimming-pool',
-      'monkey-safety',
-      'car-parking',
       'cloth-drying',
       'hdpe-nylon',
       'anti-bird-nets',
@@ -80,7 +76,7 @@ module.exports = {
     // Add other services
     for (const service of otherServices) {
       result.push({
-        loc: `/services/${service}`,
+        loc: `/services/${service}/`,
         changefreq: 'weekly',
         priority: 0.8,
         lastmod: new Date().toISOString(),

@@ -1,22 +1,24 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { servicesData, serviceSpecificLocationFAQs } from "@/data/servicesData";
+import { validLocations, locationData } from "@/constants/locations";
 import { getCanonicalUrl } from "@/lib/canonical-url";
 import {
   generateServiceMetadata,
-  generateBreadcrumbSchema,
   generateServiceFAQSchema,
   PRIMARY_LOCATIONS,
 } from "@/lib/seo-metadata";
 import { generateServiceSchema } from "@/lib/service-schema";
 import { PRIMARY } from "@/constants/contacts";
-import { Award, CheckCircle2, MapPin, Shield, Star, Zap } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { CheckCircle2, ArrowRight, Phone, Shield, Fence, Wind, Ruler, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import ServiceHero from "@/components/services/ServiceHero";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import HeroWithHeaderWrapper from "@/components/layout/HeroWithHeaderWrapper";
 import ServiceImageSlider from "@/components/services/ServiceImageSlider";
-import ServiceLocationsSlider from "@/components/services/ServiceLocationsSlider";
+import ServiceFAQ from "@/components/services/ServiceFAQ";
+import ServiceCTA from "@/components/services/ServiceCTA";
+import RelatedServices from "@/components/services/RelatedServices";
 
 type FAQ = { question: string; answer: string };
 
@@ -43,7 +45,7 @@ export async function generateStaticParams() {
   return Object.keys(servicesData).map((slug) => ({ slug }));
 }
 
-// Generate metadata for SEO with location keywords
+// Generate metadata for SEO
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const service = servicesData[slug as keyof typeof servicesData];
@@ -69,17 +71,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     image: service.image,
   });
 
-  // Generate ETag based on content
-  const etag = `W/"${slug}-${service.title
-    .replace(/\s+/g, "-")
-    .toLowerCase()}"`;
-
+  const etag = `W/"${slug}-${service.title.replace(/\s+/g, "-").toLowerCase()}"`;
   const canonicalUrl = getCanonicalUrl(`/services/${slug}`);
 
   return {
     ...baseMetadata,
     verification: {
       google: "P8HUVCb--rZ-IF-X_ZwXQX1FOPvjQI5M0MWRtAwVMfc",
+    },
+    robots: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
     },
     alternates: {
       canonical: canonicalUrl,
@@ -93,50 +98,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ServiceDetailPage({ params }: Props) {
   const { slug } = await params;
-  const service: ServiceData | undefined =
-    servicesData[slug as keyof typeof servicesData];
+  
+  // Redirect dealer page to dedicated dealer page
+  if (slug === "invisible-grills-dealer") {
+    redirect("/invisible-grills-dealer");
+  }
+  
+  const service: ServiceData | undefined = servicesData[slug as keyof typeof servicesData];
 
   if (!service) notFound();
 
-  const branches = {
-    icon: MapPin,
-    title: "Main Branches",
-    details: [
-      {
-        label: "Hyderabad",
-        value: "15-21-150/17, JK Heights, Balaji Nagar, Kukatpally - 500072",
-      },
-      {
-        label: "Bangalore",
-        value:
-          "367, 2nd A Main Road, Gokula Extension, Mathikera, Bangalore Division - 560054",
-      },
-      {
-        label: "Chennai",
-        value:
-          "25/9a, Sathya Moorthy Street, Kamaraj Nagar, Choolaimedu - 600094",
-      },
-      {
-        label: "Andhra Pradesh",
-        value: "3-12, Ayyappa Nagar, Benz Circle, Vijayawada - 520007",
-      },
-      {
-        label: "Andhra Pradesh",
-        value:
-          "21-3/4/3, Viman Nagar, Kakani Nagar, Visakhapatnam, Andhra Pradesh 530009",
-      },
-    ],
-  };
-
-  const mainLocationString = PRIMARY_LOCATIONS.slice(0, 4)
-    .map((l) => l.name)
-    .join(", ");
-
   const productName =
-    service.title.replace(/\b(dealer|supplier|vendor)\b/gi, "").trim() ||
-    service.title;
+    service.title.replace(/\b(dealer|supplier|vendor)\b/gi, "").trim() || service.title;
 
-  const faqs = [
+  // Build FAQ array
+  const faqs: FAQ[] = [
     {
       question: `What is the cost of ${productName}?`,
       answer: `Costs vary by area, size and specifications. Contact ${PRIMARY.display} for a free quote and site inspection.`,
@@ -151,10 +127,8 @@ export default async function ServiceDetailPage({ params }: Props) {
     },
   ];
 
-  const categoryFaqTemplates: Record<
-    string,
-    { question: string; answer: string }
-  > = {
+  // Add category-specific FAQ
+  const categoryFaqTemplates: Record<string, { question: string; answer: string }> = {
     "invisible-grills": {
       question: `Can ${productName} be customized to my balcony or window size?`,
       answer: `Yes — ${productName} systems are fully customizable. We measure on-site and offer mesh size and finish options to match your design and safety needs. Contact us for a free site survey.`,
@@ -183,6 +157,7 @@ export default async function ServiceDetailPage({ params }: Props) {
     });
   }
 
+  // Add location-specific FAQs
   try {
     const serviceFAQs = serviceSpecificLocationFAQs[slug];
     if (serviceFAQs) {
@@ -209,7 +184,7 @@ export default async function ServiceDetailPage({ params }: Props) {
     console.warn("Failed to merge service-specific FAQs", e);
   }
 
-  // Structured data schemas
+  // Generate structured data schemas
   const serviceSchema = generateServiceSchema({
     serviceName: service.title,
     description: service.detailedDescription,
@@ -219,25 +194,17 @@ export default async function ServiceDetailPage({ params }: Props) {
     specifications: service.specifications,
   });
 
-  const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: "Home", url: "/" },
-    { name: "Services", url: "/services" },
-    { name: service.title, url: `/services/${slug}` },
-  ]);
-
   const faqSchema = generateServiceFAQSchema(faqs);
 
-  // Combine all schemas
   const combinedSchema = {
     "@context": "https://schema.org",
     "@graph": [
       serviceSchema,
-      breadcrumbSchema,
       faqSchema,
       {
         "@type": "LocalBusiness",
         "@id": "https://invisiblegrillsandsafetynets.in#organization",
-        name: "KGR Invisible Grills & Safety Nets",
+        name: "KGR Enterprises",
         image: {
           "@type": "ImageObject",
           url: "https://invisiblegrillsandsafetynets.in/logo.png",
@@ -279,253 +246,183 @@ export default async function ServiceDetailPage({ params }: Props) {
 
   return (
     <>
-      {/* Structured Data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(combinedSchema) }}
       />
 
       <div className="min-h-screen bg-background">
-        <div className="bg-muted/30 pt-4 md:py-4 md:mt-[26px]">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <nav className="flex md:items-center gap-2 text-base md:text-lg text-muted-foreground overflow-x-auto">
-                <Link
-                  href="/"
-                  className="hover:text-primary whitespace-nowrap flex-shrink-0"
-                >
-                  Home
-                </Link>
-                <span className="flex-shrink-0">/</span>
-                <Link
-                  href="/services"
-                  className="hover:text-primary whitespace-nowrap flex-shrink-0"
-                >
-                  Services
-                </Link>
-                <span className="flex-shrink-0">/</span>
-                <span className="text-foreground truncate min-w-0">
-                  {service.title}
-                </span>
-              </nav>
+        {/* Hero Section */}
+        <HeroWithHeaderWrapper>
+          <section className="relative py-16 md:py-28 overflow-hidden" style={{ borderRadius: '1rem' }}>
+            <div className="absolute inset-0">
+              <img 
+                src={service.image} 
+                alt={service.title}
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[hsl(222,47%,8%,0.45)] via-[hsl(222,47%,10%,0.35)] to-[hsl(222,47%,10%,0.25)]" />
             </div>
-          </div>
-        </div>
+            <div className="absolute inset-0 grid-pattern-dark opacity-30" />
+            
+            <div className="container mt-[-2rem] relative z-10">
+              {/* Breadcrumbs */}
+              <Breadcrumbs
+                items={[
+                  { label: "Services", href: "/services" },
+                  { label: service.title },
+                ]}
+                darkMode={true}
+              />
 
-        <div className="container mx-auto pb-2 md:py-4">
-          <div className="max-w-4xl mx-auto space-y-8 md:space-y-12">
-            <div className="space-y-6 md:space-y-8">
-              <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-                <div className="max-w-6xl mx-auto space-y-6 md:space-y-8">
-                  {/* Hero Card - Title and Features */}
-                  <ServiceHero
-                    service={{ title: service.title, image: service.image }}
-                    mainLocationString={mainLocationString}
-                  />
-
-                  {/* Image Gallery (client) */}
-                  <ServiceImageSlider
-                    images={
-                      service.images && service.images.length
-                        ? service.images
-                        : [service.image]
-                    }
-                    altPrefix={service.title}
-                  />
-
-                  <div className="bg-card rounded-lg shadow-lg hover:bg-card-hover transition-colors">
-                    <div className="p-4 md:p-6 space-y-4">
-                      <div className="flex items-center gap-3">
-                        <div className="bg-safety/20 rounded-2xl p-3 shadow-lg">
-                          <Zap className="h-6 w-6 text-safety" />
-                        </div>
-                        <h2 className="text-2xl md:text-3xl font-bold text-card-foreground">
-                          About This Service
-                        </h2>
-                      </div>
-                      <p className="text-sm md:text-base text-card-foreground/85 leading-relaxed">
-                        {service.detailedDescription}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                    <div className="bg-card rounded-lg shadow-lg hover:bg-card-hover transition-colors">
-                      <div className="p-4 md:p-6 space-y-4">
-                        <div className="flex items-center gap-3">
-                          <div className="bg-safety/20 rounded-2xl p-3 shadow-lg">
-                            <Shield className="h-6 w-6 text-safety" />
-                          </div>
-                          <h2 className="text-xl md:text-2xl font-bold text-card-foreground">
-                            Key Features
-                          </h2>
-                        </div>
-                        <div className="space-y-2">
-                          {service.features.map((feature, index) => (
-                            <div
-                              key={index}
-                              className="flex items-center space-x-2"
-                            >
-                              <CheckCircle2 className="h-4 w-4 text-safety flex-shrink-0" />
-                              <span className="text-sm md:text-base text-card-foreground/85">
-                                {feature}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="bg-card rounded-lg shadow-lg hover:bg-card-hover transition-colors">
-                      <div className="p-4 md:p-6 space-y-4">
-                        <div className="flex items-center gap-3">
-                          <div className="bg-safety/20 rounded-2xl p-3 shadow-lg">
-                            <Star className="h-6 w-6 text-safety" />
-                          </div>
-                          <h2 className="text-xl md:text-2xl font-bold text-card-foreground">
-                            Benefits
-                          </h2>
-                        </div>
-                        <div className="space-y-2">
-                          {service.benefits.map((benefit, index) => (
-                            <div
-                              key={index}
-                              className="flex items-center space-x-2"
-                            >
-                              <CheckCircle2 className="h-4 w-4 text-safety flex-shrink-0" />
-                              <span className="text-sm md:text-base text-card-foreground/85">
-                                {benefit}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-card rounded-lg shadow-lg hover:bg-card-hover transition-colors">
-                    <div className="p-4 md:p-6 space-y-4">
-                      <div className="flex items-center gap-3">
-                        <div className="bg-safety/20 rounded-2xl p-3 shadow-lg">
-                          <Award className="h-6 w-6 text-safety" />
-                        </div>
-                        <h2 className="text-xl md:text-2xl font-bold text-card-foreground">
-                          Technical Specifications
-                        </h2>
-                      </div>
-                      <div className="space-y-2">
-                        {service.specifications.map((spec, index) => (
-                          <div
-                            key={index}
-                            className="flex justify-between items-center py-2 border-b border-border last:border-0 text-sm md:text-base"
-                          >
-                            <span className="font-medium text-card-foreground">
-                              {spec.label}
-                            </span>
-                            <span className="text-card-foreground/75">{spec.value}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-card rounded-lg shadow-lg hover:bg-card-hover transition-colors">
-                    <div className="p-6">
-                      <div className="flex items-center space-x-3 mb-4">
-                        <div className="bg-safety/20 rounded-2xl p-4 shadow-lg">
-                          <MapPin className="h-6 w-6 text-safety" />
-                        </div>
-                        <h2 className="text-xl md:text-2xl font-bold text-card-foreground">
-                          Main Branches
-                        </h2>
-                      </div>
-                      <div className="space-y-4">
-                        {branches.details.map((detail, idx) => (
-                          <div key={idx} className="space-y-1">
-                            <p className="text-sm text-card-foreground/75 font-medium">
-                              {detail.label}
-                            </p>
-                            <p className="text-sm md:text-base text-card-foreground/85">
-                              {detail.value}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  <ServiceLocationsSlider variant="stats" slug={slug} />
-
-                  <Card className="bg-card border-border shadow-medium">
-                    <CardContent className="p-4 md:p-6 space-y-4">
-                      <h2 className="text-lg md:text-xl font-bold text-card-foreground">
-                        Frequently Asked Questions
-                      </h2>
-                      <div className="space-y-4">
-                        {faqs.map((faq, index) => (
-                          <div key={index} className="space-y-2">
-                            <h3 className="font-semibold text-base md:text-lg text-card-foreground">
-                              {faq.question}
-                            </h3>
-                            <p className="text-sm md:text-base text-card-foreground/75">
-                              {faq.answer}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-card border-border shadow-medium">
-                    <CardContent className="p-4 md:p-6 space-y-4">
-                      <h2 className="text-lg md:text-xl font-bold text-card-foreground">
-                        You May Also Need
-                      </h2>
-                      <div className="grid sm:grid-cols-2 gap-3">
-                        {Object.entries(servicesData)
-                          .filter(
-                            ([id, s]) =>
-                              s.category === service.category && id !== slug
-                          )
-                          .slice(0, 4)
-                          .map(([id, relatedService]) => (
-                            <Link
-                              key={id}
-                              href={`/services/${id}`}
-                              className="flex items-center space-x-3 p-3 rounded-lg border border-border hover:border-border hover:bg-card-hover transition-all duration-300 group"
-                            >
-                              <div className="relative h-16 w-16 flex-shrink-0 rounded overflow-hidden">
-                                <img
-                                  src={relatedService.image}
-                                  alt={relatedService.title}
-                                  className="object-cover w-full h-full absolute inset-0"
-                                  loading="lazy"
-                                  decoding="async"
-                                  width="160"
-                                  height="160"
-                                />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium truncate text-card-foreground group-hover:text-card-foreground transition-colors">
-                                  {relatedService.title}
-                                </p>
-                                <p className="text-xs text-card-foreground/75 line-clamp-2">
-                                  {relatedService.description}
-                                </p>
-                              </div>
-                            </Link>
-                          ))}
-                      </div>
-                      <Button variant="outline" className="w-full border-border text-safety hover:bg-card-hover" asChild>
-                        <Link href="/services">View All Services</Link>
-                      </Button>
-                    </CardContent>
-                  </Card>
+              <div className="mx-auto max-w-4xl text-center">
+                {/* Service Category Badge */}
+                <span className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white">
+                  {service.category === 'invisible-grills' && <Fence className="h-4 w-4 text-accent" />}
+                  {service.category === 'safety-nets' && <Shield className="h-4 w-4 text-accent" />}
+                  {service.category === 'bird-protection' && <Wind className="h-4 w-4 text-accent" />}
+                  {service.category === 'sports' && <Sparkles className="h-4 w-4 text-accent" />}
+                  {!['invisible-grills', 'safety-nets', 'bird-protection', 'sports'].includes(service.category) && <Ruler className="h-4 w-4 text-accent" />}
+                  {service.title.includes('Specialist') ? service.category : `${service.title} Specialist`}
+                </span>
+                
+                <h1 className="mb-6 font-heading text-4xl font-bold text-white md:text-5xl lg:text-6xl">
+                  {service.title}
+                </h1>
+                <p className="mb-8 text-lg text-white/80 md:text-xl">
+                  {(service as any).heroDescription || service.description}
+                </p>
+                <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+                  <Button size="lg" className="cta-gradient" asChild>
+                    <Link href="/contact" className="flex items-center gap-2">
+                      Get Free Quote <ArrowRight className="h-5 w-5" />
+                    </Link>
+                  </Button>
+                  <Button size="lg" variant="outline" className="border-white/30 bg-white/10 text-white hover:bg-white/20" asChild>
+                    <a href={`tel:${PRIMARY.phone}`} className="flex items-center gap-2">
+                      <Phone className="h-5 w-5" /> Call Now
+                    </a>
+                  </Button>
                 </div>
               </div>
             </div>
+          </section>
+        </HeroWithHeaderWrapper>
+
+        {/* Image Slider */}
+        <ServiceImageSlider
+          images={
+            service.images && service.images.length
+              ? service.images
+              : [service.image]
+          }
+          altPrefix={service.title}
+        />
+
+        {/* Features Section */}
+        <section className="section-bg-1 relative py-16 md:py-24">
+          <div className="absolute inset-0 grid-pattern opacity-30" />
+          <div className="container relative z-10">
+            <h2 className="mb-12 text-center font-heading text-3xl font-bold text-foreground md:text-4xl">
+              Why Choose {service.title}?
+            </h2>
+            <div className="flex flex-col items-center justify-center">
+              {/* Features Card */}
+              <div className="rounded-2xl bg-gradient-to-br from-[hsl(222,47%,11%)] via-[hsl(217,33%,17%)] to-[hsl(215,25%,22%)] p-8 shadow-lg border border-white/10 w-full md:max-w-2xl">
+                <div className="flex items-center gap-3 mb-6">
+                  <Shield className="h-6 w-6 text-accent flex-shrink-0" />
+                  <h3 className="font-heading text-xl font-bold text-white">Key Features</h3>
+                </div>
+                <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {service.features.map((feature, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <CheckCircle2 className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
+                      <span className="text-white/90">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
+
+        {/* Applications Section - Light Background */}
+        <section className="relative py-16 md:py-24 bg-gray-50">
+          <div className="absolute inset-0 opacity-5" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23000000\" fill-opacity=\"0.05\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")'}} />
+          <div className="container relative z-10">
+            <div className="grid gap-12 md:grid-cols-2 lg:gap-16">
+              <div>
+                <h2 className="mb-6 font-heading text-3xl font-bold text-gray-900 md:text-4xl">
+                  Applications & Use Cases
+                </h2>
+                <p className="mb-8 text-gray-700">
+                  {service.description}
+                </p>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {service.benefits.map((benefit, index) => (
+                    <li key={index} className="flex items-start gap-2 text-gray-800">
+                      <CheckCircle2 className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
+                      <span className="text-sm md:text-base">{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="rounded-2xl bg-gradient-to-br from-[hsl(222,47%,11%)] via-[hsl(217,33%,17%)] to-[hsl(215,25%,22%)] p-8 border border-white/10">
+                <h3 className="mb-6 font-heading text-xl font-semibold text-white">Technical Specifications</h3>
+                <dl className="space-y-4">
+                  {service.specifications.map((spec, index) => (
+                    <div key={index} className="flex justify-between border-b border-white/10 pb-2">
+                      <dt className="text-white/60">{spec.label}</dt>
+                      <dd className="font-medium text-white">{spec.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Service Areas Links - Dark Background */}
+        <section className="section-bg-1 relative py-16 md:py-24">
+          <div className="absolute inset-0 grid-pattern opacity-30" />
+          <div className="container relative z-10">
+            <h2 className="mb-8 text-center font-heading text-3xl font-bold text-foreground">
+              {service.title} by Location
+            </h2>
+            <div className="mx-auto grid max-w-4xl gap-4 md:grid-cols-4">
+              {validLocations.map((loc) => {
+                const locData = locationData[loc];
+                return (
+                  <Link
+                    key={loc}
+                    href={`/services/${slug}/${loc}`}
+                    className="flex items-center justify-between rounded-xl bg-gradient-to-br from-[hsl(222,47%,11%)] via-[hsl(217,33%,17%)] to-[hsl(215,25%,22%)] p-4 transition-all hover:shadow-lg hover:-translate-y-1"
+                  >
+                    <span className="font-medium text-white">{locData.name}</span>
+                    <ArrowRight className="h-4 w-4 text-accent" />
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Section - White Background */}
+        <ServiceFAQ faqs={faqs} />
+
+        {/* CTA Section */}
+        <ServiceCTA />
+
+        {/* Related Services - Dark Background */}
+        <section className="section-bg-5 relative pb-16 md:pb-24">
+          <div className="absolute inset-0 grid-pattern opacity-30" />
+          <div className="container relative z-10">
+            <h2 className="mb-12 text-center font-heading text-3xl font-bold text-foreground md:text-4xl">
+              You May Also Need
+            </h2>
+            <RelatedServices currentService={slug} />
+          </div>
+        </section>
       </div>
     </>
   );

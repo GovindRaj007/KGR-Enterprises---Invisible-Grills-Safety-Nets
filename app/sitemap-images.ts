@@ -45,16 +45,12 @@ export default function imagesSitemap(): Array<ExtendedSitemapField> {
 
   // Process each service
   Object.entries(servicesData).forEach(([slug, service]) => {
-    // Base service page with images
+    // Base service page with images (with trailing slash)
     const servicePage: ExtendedSitemapField = {
-      url: `${baseUrl}/services/${slug}`,
+      url: `${baseUrl}/services/${slug}/`,
       lastModified: currentDate,
       changeFrequency: 'weekly',
       priority: 0.9,
-      alternateRefs: Object.keys(languages).map(lang => ({
-        href: `${baseUrl}/${lang}/services/${slug}`,
-        hreflang: lang
-      })),
       images: [
         cleanImageEntry({
           url: `${baseUrl}${service.image}`,
@@ -73,17 +69,13 @@ export default function imagesSitemap(): Array<ExtendedSitemapField> {
     };
     entries.push(servicePage);
 
-    // Location-specific pages with images and hreflang
+    // Location-specific pages with images and hreflang (with trailing slash)
     PRIMARY_LOCATIONS.forEach(location => {
       const locationPage: ExtendedSitemapField = {
-        url: `${baseUrl}/services/${slug}/${location.name.toLowerCase()}`,
+        url: `${baseUrl}/services/${slug}/${location.name.toLowerCase()}/`,
         lastModified: currentDate,
         changeFrequency: 'weekly',
         priority: 0.85,
-        alternateRefs: Object.keys(languages).map(lang => ({
-          href: `${baseUrl}/${lang}/services/${slug}/${location.name.toLowerCase()}`,
-          hreflang: lang
-        })),
         images: [
           cleanImageEntry({
             url: `${baseUrl}${service.image}`,

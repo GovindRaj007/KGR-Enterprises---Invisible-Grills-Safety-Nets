@@ -1,9 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { servicesData, serviceCategories } from '@/data/servicesData';
 
@@ -78,14 +75,16 @@ const GallerySection = () => {
   };
 
   return (
-    <section id="gallery" className="py-12 md:py-16 lg:py-24 bg-background">
+    <section id="gallery" className="py-12 md:py-16 lg:py-24" style={{
+      background: "linear-gradient(180deg, #121D2F 0%, #1E2A42 100%)"
+    }}>
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center space-y-4 mb-8 md:mb-12">
-          <h2 className="text-2xl md:text-3xl lg:text-5xl font-bold">
-            Our Work <span className="text-gradient">Gallery</span>
+          <h2 className="text-2xl md:text-3xl lg:text-5xl font-bold" style={{ color: "#F0F6FF" }}>
+            Our Work <span style={{ color: "#FF6B42" }}>Gallery</span>
           </h2>
-          <p className="text-sm md:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-sm md:text-base lg:text-lg max-w-2xl mx-auto" style={{ color: "#C8D8EE" }}>
             Explore our portfolio of safety installations across residential and commercial projects
           </p>
         </div>
@@ -98,14 +97,29 @@ const GallerySection = () => {
               : galleryImages.filter(img => img.category === category).length;
             
             return (
-              <Badge
+              <button
                 key={category}
-                variant={activeCategory === category ? "default" : "outline"}
-                className="cursor-pointer transition-all hover:scale-105 text-xs px-2 py-1 md:px-3 md:py-1.5"
+                className="cursor-pointer transition-all hover:scale-105 text-xs px-2 py-1 md:px-3 md:py-1.5 rounded-full font-semibold"
                 onClick={() => handleCategoryChange(category)}
+                style={{
+                  backgroundColor: activeCategory === category ? "rgba(75, 159, 255, 0.2)" : "transparent",
+                  color: activeCategory === category ? "#FF6B42" : "#C8D8EE",
+                  border: activeCategory === category ? "1px solid rgba(75, 159, 255, 0.5)" : "1px solid rgba(36, 61, 99, 0.5)",
+                  boxShadow: activeCategory === category ? "0 0 12px rgba(75, 159, 255, 0.2)" : "none"
+                }}
+                onMouseEnter={(e) => {
+                  if (activeCategory !== category) {
+                    e.currentTarget.style.backgroundColor = "rgba(75, 159, 255, 0.1)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (activeCategory !== category) {
+                    e.currentTarget.style.backgroundColor = "transparent";
+                  }
+                }}
               >
                 {category} ({categoryCount})
-              </Badge>
+              </button>
             );
           })}
         </div>
@@ -113,10 +127,23 @@ const GallerySection = () => {
         {/* Gallery Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6 mb-6 md:mb-8">
           {currentImages.map((image, index) => (
-            <Card
+            <div
               key={`${image.src}-${startIndex + index}`}
-              className="group cursor-pointer overflow-hidden border-border/50 hover:shadow-strong transition-all duration-300 hover:-translate-y-1"
+              className="group cursor-pointer overflow-hidden rounded-lg transition-all duration-300 hover:-translate-y-1"
               onClick={() => setSelectedImage(image.src)}
+              style={{
+                background: "linear-gradient(135deg, #1E2A42 0%, #121D2F 100%)",
+                border: "1px solid rgba(75, 159, 255, 0.2)",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)"
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = "0 8px 24px rgba(75, 159, 255, 0.2)";
+                e.currentTarget.style.borderColor = "rgba(75, 159, 255, 0.5)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.3)";
+                e.currentTarget.style.borderColor = "rgba(75, 159, 255, 0.2)";
+              }}
             >
               <div className="relative overflow-hidden aspect-square">
                 <img 
@@ -128,27 +155,42 @@ const GallerySection = () => {
                   className="object-cover group-hover:scale-110 transition-transform duration-500 w-full h-full absolute inset-0" 
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
-                <Badge className="absolute top-2 left-2 bg-primary/90 text-xs">
+                <div className="absolute top-2 left-2 text-xs font-semibold px-2 py-1 rounded-full" style={{
+                  color: "#F0F6FF",
+                  backgroundColor: "rgba(75, 159, 255, 0.2)",
+                  border: "1px solid rgba(75, 159, 255, 0.5)"
+                }}>
                   {image.category}
-                </Badge>
+                </div>
               </div>
-            </Card>
+            </div>
           ))}
         </div>
 
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex justify-center items-center gap-2 md:gap-4 mb-6 md:mb-8">
-            <Button
-              variant="outline"
-              size="sm"
+            <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className="text-xs md:text-sm"
+              className="text-xs md:text-sm px-3 py-2 rounded transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+              style={{
+                backgroundColor: "transparent",
+                color: "#FF6B42",
+                border: "1px solid rgba(255, 107, 66, 0.5)"
+              }}
+              onMouseEnter={(e) => {
+                if (!e.currentTarget.disabled) {
+                  e.currentTarget.style.backgroundColor = "rgba(255, 107, 66, 0.1)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "transparent";
+              }}
             >
-              <ChevronLeft className="w-3 h-3 md:w-4 md:h-4 mr-1" />
+              <ChevronLeft className="w-3 h-3 md:w-4 md:h-4" />
               <span className="hidden sm:inline">Previous</span>
-            </Button>
+            </button>
             
             <div className="flex gap-1 md:gap-2">
               {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
@@ -164,35 +206,59 @@ const GallerySection = () => {
                 }
                 
                 return (
-                  <Button
+                  <button
                     key={page}
-                    variant={currentPage === page ? "default" : "outline"}
-                    size="sm"
                     onClick={() => handlePageChange(page)}
-                    className="w-8 h-8 md:w-10 md:h-10 p-0 text-xs md:text-sm"
+                    className="w-8 h-8 md:w-10 md:h-10 p-0 text-xs md:text-sm rounded font-semibold transition-all"
+                    style={{
+                      backgroundColor: currentPage === page ? "#FF6B42" : "transparent",
+                      color: currentPage === page ? "#ffffff" : "#FF6B42",
+                      border: currentPage === page ? "1px solid #FF6B42" : "1px solid rgba(255, 107, 66, 0.5)"
+                    }}
+                    onMouseEnter={(e) => {
+                      if (currentPage !== page) {
+                        e.currentTarget.style.backgroundColor = "rgba(75, 159, 255, 0.1)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (currentPage !== page) {
+                        e.currentTarget.style.backgroundColor = "transparent";
+                      }
+                    }}
                   >
                     {page}
-                  </Button>
+                  </button>
                 );
               })}
             </div>
             
-            <Button
-              variant="outline"
-              size="sm"
+            <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="text-xs md:text-sm"
+              className="text-xs md:text-sm px-3 py-2 rounded transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+              style={{
+                backgroundColor: "transparent",
+                color: "#FF6B42",
+                border: "1px solid rgba(255, 107, 66, 0.5)"
+              }}
+              onMouseEnter={(e) => {
+                if (!e.currentTarget.disabled) {
+                  e.currentTarget.style.backgroundColor = "rgba(0, 212, 255, 0.1)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "transparent";
+              }}
             >
               <span className="hidden sm:inline">Next</span>
-              <ChevronRight className="w-3 h-3 md:w-4 md:h-4 ml-1" />
-            </Button>
+              <ChevronRight className="w-3 h-3 md:w-4 md:h-4" />
+            </button>
           </div>
         )}
 
         {/* Results Info */}
         <div className="text-center">
-          <p className="text-xs md:text-sm text-muted-foreground">
+          <p className="text-xs md:text-sm" style={{ color: "#C8D8EE" }}>
             Showing {startIndex + 1}-{Math.min(endIndex, filteredImages.length)} of {filteredImages.length} images
             {activeCategory !== "All" && ` in ${activeCategory}`}
           </p>
@@ -200,7 +266,11 @@ const GallerySection = () => {
 
         {/* Image Modal */}
         <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
-          <DialogContent className="max-w-5xl p-0">
+          <DialogContent className="max-w-5xl p-0" style={{
+            background: "linear-gradient(135deg, #1E2A42 0%, #121D2F 100%)",
+            borderColor: "rgba(75, 159, 255, 0.3)",
+            border: "1px solid rgba(75, 159, 255, 0.3)"
+          }}>
             <DialogTitle className="sr-only">Gallery Image Preview</DialogTitle>
             {selectedImage && (
               <div className="relative w-full h-[70vh] md:h-[80vh]">

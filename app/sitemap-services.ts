@@ -32,17 +32,17 @@ export default function servicesSitemap(): MetadataRoute.Sitemap {
 
   // Create sitemap entries for main category services with locations
   const mainServiceEntries = mainCategoryServices.flatMap(service => {
-    // Base service URL
+    // Base service URL (with trailing slash per next.config.ts)
     const baseEntry = {
-      url: `${baseUrl}/services/${service}`,
+      url: `${baseUrl}/services/${service}/`,
       lastModified: currentDate,
       changeFrequency: 'weekly' as const,
       priority: 0.9
     };
 
-    // Location-specific URLs with priority based on location data
+    // Location-specific URLs with priority based on location data (with trailing slash)
     const locationEntries = validLocations.map(location => ({
-      url: `${baseUrl}/services/${service}/${location}`,
+      url: `${baseUrl}/services/${service}/${location}/`,
       lastModified: currentDate,
       changeFrequency: 'weekly' as const,
       priority: 0.85 * locationData[location].priority
@@ -55,17 +55,17 @@ export default function servicesSitemap(): MetadataRoute.Sitemap {
   const otherServiceEntries = allServices
     .filter(service => !mainCategoryServices.includes(service))
     .flatMap(service => {
-      // Base service URL
+      // Base service URL (with trailing slash per next.config.ts)
       const baseEntry = {
-        url: `${baseUrl}/services/${service}`,
+        url: `${baseUrl}/services/${service}/`,
         lastModified: currentDate,
         changeFrequency: 'weekly' as const,
         priority: 0.8
       };
 
-      // Location-specific URLs with priority based on location data
+      // Location-specific URLs with priority based on location data (with trailing slash)
       const locationEntries = validLocations.map(location => ({
-        url: `${baseUrl}/services/${service}/${location}`,
+        url: `${baseUrl}/services/${service}/${location}/`,
         lastModified: currentDate,
         changeFrequency: 'weekly' as const,
         priority: 0.75 * locationData[location].priority
@@ -74,24 +74,17 @@ export default function servicesSitemap(): MetadataRoute.Sitemap {
       return [baseEntry, ...locationEntries];
     });
 
-  // Category pages
-  const categoryEntries = Object.keys(serviceCategories).map(category => ({
-    url: `${baseUrl}/services#${category}`,
-    lastModified: currentDate,
-    changeFrequency: 'weekly' as const,
-    priority: 0.85
-  }));
+  // Category pages (removed - fragment URLs cannot be in sitemap)
+  // Sitemaps don't support fragment URLs (#category), so we exclude these
 
   return [
-    // Main services page
+    // Main services page (with trailing slash)
     {
-      url: `${baseUrl}/services`,
+      url: `${baseUrl}/services/`,
       lastModified: currentDate,
       changeFrequency: 'daily' as const,
       priority: 0.95
     },
-    // Category pages
-    ...categoryEntries,
     // Main category services with their location variants
     ...mainServiceEntries,
     // Other services with their location variants

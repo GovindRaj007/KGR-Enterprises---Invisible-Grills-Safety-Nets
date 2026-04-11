@@ -1,9 +1,6 @@
 'use client';
 import { useState } from 'react';
 import { useFocusOrScrollEffect } from '@/hooks/useFocusOrScrollEffect';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, User, Phone, MapPin } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 
@@ -122,65 +119,123 @@ const ConsultationForm = ({ onSubmit, className }: ConsultationFormProps) => {
 
   const [cardRef, isActive] = useFocusOrScrollEffect({ threshold: 0.3 });
   return (
-    <Card
+    <div
       ref={cardRef as React.Ref<HTMLDivElement>}
-      className={`bg-background/95 backdrop-blur-sm border-2 border-primary/80 transition-all duration-700 relative
-        ${isActive ? 'ring-4 ring-primary/40 shadow-[0_0_32px_8px_rgba(59,130,246,0.25),0_4px_32px_0_rgba(59,130,246,0.10)] border-primary animate-[pulse-glow_1.5s_ease-in-out]' : 'ring-0 shadow border-border/80'}
-        ${className}`}
-      style={{ transitionProperty: 'box-shadow, border, ring', transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)' }}
+      className={`backdrop-blur-sm transition-all duration-700 relative rounded-lg p-6 ${className}`}
+      style={{
+        background: "linear-gradient(135deg, #1E2A42 0%, #121D2F 100%)",
+        border: `1px solid ${isActive ? 'rgba(75, 159, 255, 0.6)' : 'rgba(30, 42, 66, 0.5)'}`,
+        boxShadow: isActive ? '0 0 32px 8px rgba(75, 159, 255, 0.2), 0 4px 32px 0 rgba(75, 159, 255, 0.1)' : '0 4px 12px rgba(0, 0, 0, 0.3)',
+        transitionProperty: 'box-shadow, border',
+        transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)'
+      }}
     >
-      <CardHeader className="text-center pb-4">
-        <CardTitle className="text-lg font-semibold text-primary">
+      <div className="text-center pb-4">
+        <h3 className="text-lg font-semibold" style={{ color: "#FF6B42" }}>
           Get Free Consultation
-        </CardTitle>
-        <p className="text-sm text-muted-foreground">
+        </h3>
+        <p className="text-sm" style={{ color: "#C8D8EE" }}>
           Share your details for instant callback
         </p>
-      </CardHeader>
-      <CardContent>
+      </div>
+      <div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="relative">
-            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
-            <Input 
+            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 z-10 pointer-events-none" style={{ color: "#C8D8EE" }} />
+            <input 
               placeholder="Your Name" 
               value={formData.name}
               onChange={(e) => handleInputChange('name', e.target.value)}
-              className="pl-10 bg-background transition-colors duration-200 focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              className="pl-10 w-full py-2 rounded-lg border px-3 transition-colors duration-200"
+              style={{
+                background: "rgba(30, 42, 66, 0.5)",
+                borderColor: "rgba(75, 159, 255, 0.3)",
+                color: "#F0F6FF"
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = "rgba(75, 159, 255, 0.6)";
+                e.currentTarget.style.boxShadow = "0 0 12px rgba(75, 159, 255, 0.2)";
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = "rgba(75, 159, 255, 0.3)";
+                e.currentTarget.style.boxShadow = "none";
+              }}
               disabled={isSubmitting}
             />
           </div>
           
           <div className="relative">
-            <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
-            <Input 
-              placeholder="Phone Number" 
+            <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 z-10 pointer-events-none" style={{ color: "#C8D8EE" }} />
+            <input
+              placeholder="Phone Number"
               type="tel"
               value={formData.phone}
               onChange={(e) => handleInputChange('phone', e.target.value)}
-              className="pl-10 bg-background transition-colors duration-200 focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              className="pl-10 w-full py-2 rounded-lg border px-3 transition-colors duration-200"
+              style={{
+                background: "rgba(30, 42, 66, 0.5)",
+                borderColor: "rgba(75, 159, 255, 0.3)",
+                color: "#F0F6FF"
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = "rgba(75, 159, 255, 0.6)";
+                e.currentTarget.style.boxShadow = "0 0 12px rgba(75, 159, 255, 0.2)";
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = "rgba(75, 159, 255, 0.3)";
+                e.currentTarget.style.boxShadow = "none";
+              }}
               disabled={isSubmitting}
             />
           </div>
           
           <div className="relative">
-            <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
-            <Input 
-              placeholder="Your Location" 
+            <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 z-10 pointer-events-none" style={{ color: "#C8D8EE" }} />
+            <input
+              placeholder="Your Location"
               value={formData.location}
               onChange={(e) => handleInputChange('location', e.target.value)}
-              className="pl-10 bg-background transition-colors duration-200 focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              className="pl-10 w-full py-2 rounded-lg border px-3 transition-colors duration-200"
+              style={{
+                background: "rgba(30, 42, 66, 0.5)",
+                borderColor: "rgba(75, 159, 255, 0.3)",
+                color: "#F0F6FF"
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = "rgba(75, 159, 255, 0.6)";
+                e.currentTarget.style.boxShadow = "0 0 12px rgba(75, 159, 255, 0.2)";
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = "rgba(75, 159, 255, 0.3)";
+                e.currentTarget.style.boxShadow = "none";
+              }}
               disabled={isSubmitting}
             />
           </div>
           
-          <Button 
+          <button
             type="submit"
-            className="w-full gap-2 shadow-safety hover:scale-105 transition-all duration-300"
             disabled={isSubmitting || !isFormComplete}
+            className="w-full gap-2 py-2 rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+            style={{
+              background: "linear-gradient(135deg, #FF6B42 0%, #F25024 100%)",
+              color: "#ffffff",
+              boxShadow: "0 4px 12px rgba(255, 107, 66, 0.2)"
+            }}
+            onMouseEnter={(e) => {
+              if (!e.currentTarget.disabled) {
+                e.currentTarget.style.boxShadow = "0 6px 20px rgba(255, 107, 66, 0.4)";
+                e.currentTarget.style.transform = "translateY(-2px)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = "0 4px 12px rgba(255, 107, 66, 0.2)";
+              e.currentTarget.style.transform = "none";
+            }}
           >
             {isSubmitting ? (
               <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2" style={{ borderBottomColor: "#ffffff" }}></div>
                 Submitting...
               </>
             ) : (
@@ -189,14 +244,14 @@ const ConsultationForm = ({ onSubmit, className }: ConsultationFormProps) => {
                 <ArrowRight className="h-4 w-4" />
               </>
             )}
-          </Button>
+          </button>
           
-          <p className="text-xs text-center text-muted-foreground">
+          <p className="text-xs text-center" style={{ color: "#8FAAC8" }}>
             We will call you within 15 minutes
           </p>
         </form>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

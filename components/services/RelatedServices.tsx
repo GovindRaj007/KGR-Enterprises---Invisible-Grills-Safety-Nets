@@ -1,15 +1,15 @@
+"use client";
+
 import Link from 'next/link';
-import { Card, CardContent } from "@/components/ui/card";
 import { servicesData, serviceCategories } from '@/data/servicesData';
 import { ArrowRight } from 'lucide-react';
-import { Button } from "@/components/ui/button";
 
 type Props = {
   currentService: string;
   location: string;
 }
 
-const RelatedServices = ({ currentService, location }: Props) => {
+const RelatedServices = ({ currentService }: Omit<Props, 'location'>) => {
   // Find which category the current service belongs to
   const currentCategory = Object.entries(serviceCategories).find(([_, category]) =>
     category.services.includes(currentService)
@@ -20,43 +20,47 @@ const RelatedServices = ({ currentService, location }: Props) => {
   // Get other services from the same category
   const relatedServices = serviceCategories[currentCategory as keyof typeof serviceCategories].services
     .filter(serviceId => serviceId !== currentService)
-    .slice(0, 3);
+    .slice(0, 4);
 
   return (
-    <section className="space-y-6">
-      <h2 className="text-2xl md:text-3xl font-semibold">Related Services in {location}</h2>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {relatedServices.map((serviceId) => {
-          const service = servicesData[serviceId as keyof typeof servicesData];
-          return (
-            <Card key={serviceId} className="bg-card border-border shadow-medium hover:bg-card-hover hover:shadow-strong transition-all">
-              <CardContent className="p-6 space-y-4">
-                <div className="relative h-40 -mx-6 -mt-6 mb-6">
-                  <img 
-                    src={service.image} 
-                    alt={service.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <h3 className="font-semibold text-lg text-card-foreground">{service.title}</h3>
-                  <p className="text-sm text-card-foreground/75 line-clamp-2">
-                    {service.description}
-                  </p>
-                </div>
-
-                <Button variant="outline" size="sm" className="w-full gap-2 border-border text-safety hover:bg-card-hover" asChild>
-                  <Link href={`/services/${service.id}/${location.toLowerCase()}`}>
-                    View Details
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
-    </section>
+    <div className="flex flex-wrap gap-4">
+      {relatedServices.map((serviceId) => {
+        const service = servicesData[serviceId as keyof typeof servicesData];
+        return (
+          <Link
+            key={serviceId}
+            href={`/services/${service.id}`}
+            className="group flex gap-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-4 hover:border-blue-500/50 hover:bg-white/10 transition-all duration-300 w-full md:w-auto  lg:max-w-[479px]"
+          >
+            {/* Image */}
+            <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg bg-slate-800">
+              <img 
+                src={service.image} 
+                alt={service.title}
+                className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-300"
+              />
+            </div>
+            
+            {/* Content */}
+            <div className="flex flex-1 flex-col justify-between">
+              <div className="space-y-1">
+                <h3 className="font-semibold text-white group-hover:text-blue-300 transition-colors">
+                  {service.title}
+                </h3>
+                <p className="text-sm text-white/70 line-clamp-2">
+                  {service.description}
+                </p>
+              </div>
+              
+              <div className="flex items-center gap-1 text-blue-400 group-hover:translate-x-1 transition-transform">
+                <span className="text-xs font-medium">View Details</span>
+                <ArrowRight className="h-3 w-3" />
+              </div>
+            </div>
+          </Link>
+        );
+      })}
+    </div>
   );
 };
 

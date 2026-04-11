@@ -8,6 +8,14 @@ module.exports = {
 	],
 	prefix: "",
 	theme: {
+		screens: {
+			sm: '640px',
+			md: '768px',
+			lg: '1024px',
+			'1xl': '1205px',
+			xl: '1280px',
+			'2xl': '1400px'
+		},
 		container: {
 			center: true,
 			padding: {
@@ -22,12 +30,14 @@ module.exports = {
 				sm: '640px',
 				md: '768px',
 				lg: '1024px',
+				'1xl': '1205px',
 				xl: '1280px',
 				'2xl': '1400px'
 			}
 		},
 		extend: {
 			colors: {
+				/* ===== COMPATIBILITY - Legacy HSL Variables ===== */
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
@@ -81,7 +91,54 @@ module.exports = {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+
+				/* ===== NAVY DESIGN SYSTEM - BACKGROUNDS & SURFACES ===== */
+				'navy': {
+					'base': 'var(--color-bg-base)',
+					'card': 'var(--color-bg-card)',
+					'elevated': 'var(--color-bg-elevated)',
+					'hover': 'var(--color-bg-hover)',
+					'surface': 'var(--color-bg-surface)',
+				},
+
+				/* ===== ELECTRIC CYAN (Primary Accent) ===== */
+				'cyan': {
+					'DEFAULT': 'var(--color-cyan)',
+					'bright': 'var(--color-cyan-bright)',
+					'deep': 'var(--color-cyan-deep)',
+					'muted': 'var(--color-cyan-muted)',
+				},
+
+				/* ===== VIOLET (Secondary Accent) ===== */
+				'violet': {
+					'DEFAULT': 'var(--color-violet)',
+					'light': 'var(--color-violet-light)',
+					'glow': 'var(--color-violet-glow)',
+				},
+
+				/* ===== TEXT COLORS ===== */
+				'text': {
+					'primary': 'var(--color-text-primary)',
+					'secondary': 'var(--color-text-secondary)',
+					'muted': 'var(--color-text-muted)',
+				},
+
+				/* ===== CTA & ACTION COLORS ===== */
+				'cta': {
+					'DEFAULT': 'var(--color-cta)',
+					'hover': 'var(--color-cta-hover)',
+				},
+				'success': 'var(--color-success)',
+				'whatsapp': 'var(--color-whatsapp)',
+
+				/* ===== BORDER COLORS ===== */
+				'border-color': {
+					'DEFAULT': 'var(--color-border)',
+					'glow': 'var(--color-border-glow)',
+					'cyan': 'var(--color-border-cyan)',
+					'violet': 'var(--color-border-violet)',
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -89,10 +146,17 @@ module.exports = {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			boxShadow: {
+				/* ===== STANDARD SHADOWS ===== */
 				'soft': 'var(--shadow-soft)',
 				'medium': 'var(--shadow-medium)',
 				'strong': 'var(--shadow-strong)',
 				'safety': 'var(--shadow-medium)',
+
+				/* ===== GLOW EFFECTS ===== */
+				'glow-cyan': 'var(--shadow-glow-cyan)',
+				'glow-gold': 'var(--shadow-glow-gold)',
+				'glow-violet': 'var(--shadow-glow-violet)',
+				'lift-card': 'var(--shadow-lift-card)',
 			},
 			keyframes: {
 				'accordion-down': {
@@ -127,8 +191,6 @@ module.exports = {
 					'0%, 100%': { boxShadow: '0 0 20px hsl(var(--safety) / 0.3)' },
 					'50%': { boxShadow: '0 0 30px hsl(var(--safety) / 0.6)' }
 				},
-
-
 				'scroll': {
 					'0%': { transform: 'translateX(0)' },
 					'100%': { transform: 'translateX(-50%)' }
@@ -143,6 +205,23 @@ module.exports = {
 					'66%': { 
 						transform: 'translateY(5px) rotate(-1deg)' 
 					}
+				},
+				'rhombus-drift': {
+					'0%': {
+						backgroundPosition: '0 0, 24px 24px',
+						opacity: '0.9',
+						transform: 'translateZ(0) scale(1)'
+					},
+					'50%': {
+						backgroundPosition: '8px -8px, 32px 16px',
+						opacity: '1',
+						transform: 'translate3d(4px, -3px, 0) scale(1.01)'
+					},
+					'100%': {
+						backgroundPosition: '0 0, 24px 24px',
+						opacity: '0.9',
+						transform: 'translateZ(0) scale(1)'
+					}
 				}
 			},
 			animation: {
@@ -151,12 +230,37 @@ module.exports = {
 				'float': 'float 3s ease-in-out infinite',
 				'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
 				'scroll': 'scroll 30s linear infinite',
-				/* removed float-3d / rotate-3d / morph animations — using rhombus-drift in globals.css */
-				'net-float': 'net-float 20s ease-in-out infinite'
+				'net-float': 'net-float 20s ease-in-out infinite',
+				'rhombus-drift': 'rhombus-drift 18s ease-in-out infinite'
 			},
 			transitionTimingFunction: {
 				'smooth': 'cubic-bezier(0.4, 0, 0.2, 1)',
 				'spring': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+			},
+			backgroundImage: {
+				/* ===== SECTION BACKGROUNDS ===== */
+				'section-bg-1': 'var(--gradient-section-bg-1)',
+				'section-bg-2': 'var(--gradient-section-bg-2)',
+				'section-bg-3': 'var(--gradient-section-bg-3)',
+				'section-bg-4': 'var(--gradient-section-bg-4)',
+				'section-bg-5': 'var(--gradient-section-bg-5)',
+				'section-bg-6': 'var(--gradient-section-bg-6)',
+
+				/* ===== HERO & GRADIENTS ===== */
+				'gradient-hero': 'var(--gradient-hero)',
+				'gradient-cta-primary': 'var(--gradient-cta-primary)',
+				'gradient-cta-cyan': 'var(--gradient-cta-cyan)',
+				'gradient-accent-violet': 'var(--gradient-accent-violet)',
+
+				/* ===== CARD BACKGROUNDS ===== */
+				'card-default': 'var(--card-bg-default)',
+				'card-cyan': 'var(--card-bg-cyan)',
+				'card-violet': 'var(--card-bg-violet)',
+
+				/* ===== IMAGE OVERLAYS ===== */
+				'gradient-overlay-standard': 'var(--gradient-overlay-standard)',
+				'gradient-overlay-fade': 'var(--gradient-overlay-fade)',
+				'gradient-overlay-hero-slider': 'var(--gradient-overlay-hero-slider)',
 			}
 		}
 	},

@@ -6,10 +6,10 @@ import { servicesData } from '@/data/servicesData';
 import { getCanonicalUrl } from '@/lib/canonical-url';
 import { PRIMARY } from '@/constants/contacts';
 import { generateBreadcrumbSchema } from '@/lib/seo-metadata';
-import { Phone, ArrowRight, MapPin, Clock, Shield, Award } from 'lucide-react';
+import { Phone, ArrowRight, MapPin, Star, Building, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import OptimizedImage from '@/components/shared/OptimizedImage';
+import { Breadcrumbs } from '@/components/shared/Breadcrumbs';
+import HeroWithHeaderWrapper from '@/components/layout/HeroWithHeaderWrapper';
 import RelatedServices from '@/components/services/RelatedServices';
 
 import { locationData, validLocations } from '@/constants/locations';
@@ -56,7 +56,7 @@ export async function generateMetadata({
     openGraph: {
       title: `${service.title} in ${locationFormatted} | KGR Enterprises`,
       description: `Professional ${service.title.toLowerCase()} services in ${locationFormatted}. Expert installation and maintenance by KGR Enterprises.`,
-      url: `https://invisiblegrillsandsafetynets.in/services/${slug}/${normalizedLocation}`,
+      url: `https://invisiblegrillsandsafetynets.in/services/${slug}/${normalizedLocation}/`,
       siteName: 'KGR Invisible Grills & Safety Nets',
       images: [
         {
@@ -118,10 +118,10 @@ export default async function ServiceLocationPage({ params }: Props) {
   // Generate breadcrumb schema
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
-    { name: 'Services', url: '/services' },
-    { name: service.title, url: `/services/${slug}` },
-    { name: `${service.title} in ${locationFormatted}`, url: `/services/${slug}/${normalizedLocation}` }
-  ]);
+    { name: 'Services', url: '/services/' },
+    { name: service.title, url: `/services/${slug}/` },
+    { name: `${service.title} in ${locationFormatted}`, url: `/services/${slug}/${normalizedLocation}/` }
+  ], `/services/${slug}/${normalizedLocation}/`);
 
   // Import baseUrl
   const baseUrl = 'https://invisiblegrillsandsafetynets.in';
@@ -136,6 +136,20 @@ export default async function ServiceLocationPage({ params }: Props) {
         "@id": `${baseUrl}/services/${slug}/${normalizedLocation}#service`,
         "name": `${service.title} in ${locationFormatted}`,
         "description": service.description,
+        "image": {
+          "@type": "ImageObject",
+          "url": service.image,
+          "width": 1200,
+          "height": 675
+        },
+        "telephone": PRIMARY.phone,
+        "priceRange": "₹₹₹",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": locationFormatted,
+          "addressRegion": locationInfo.state,
+          "addressCountry": "IN"
+        },
         "mainEntityOfPage": {
           "@type": "WebPage",
           "@id": `${baseUrl}/services/${slug}/${normalizedLocation}`
@@ -290,312 +304,185 @@ export default async function ServiceLocationPage({ params }: Props) {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Structured Data */}
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(combinedSchema) }}
       />
-      {/* Breadcrumb Section - Full width background */}
-      <div className="bg-muted/30 pt-6">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <nav className="flex items-baseline gap-2 text-base md:text-lg text-muted-foreground overflow-hidden">
-              <Link href="/services" className="hover:text-primary shrink-0 leading-none">Services</Link>
-              <span className="shrink-0 leading-none">/</span>
-              <Link href={`/services/${slug}`} className="hover:text-primary overflow-hidden truncate leading-none">{service.title}</Link>
-              <span className="shrink-0 leading-none">/</span>
-              <span className="text-foreground shrink-0 leading-none">{locationFormatted}</span>
-            </nav>
-          </div>
-        </div>
-      </div>
 
-      {/* Main Content - Centered and constrained */}
-      <div className="container mx-auto px-4 pb-6 md:py-8">
-        <div className="max-w-4xl mx-auto">
-          <article className="space-y-8 md:space-y-12">
-            {/* Hero Section */}
-            <header className="space-y-6">
-              <div>
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+      <div className="min-h-screen bg-background">
+        {/* Hero Section */}
+        <HeroWithHeaderWrapper>
+          <section className="relative py-16 md:py-28 overflow-hidden" style={{ borderRadius: '1rem' }}>
+            <div className="absolute inset-0">
+              <img 
+                src={service.image} 
+                alt={`${service.title} in ${locationFormatted}`}
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[hsl(222,47%,8%,0.45)] via-[hsl(222,47%,10%,0.35)] to-[hsl(222,47%,10%,0.25)]" />
+            </div>
+            <div className="absolute inset-0 grid-pattern-dark opacity-30" />
+            
+            <div className="container mt-[-2rem] relative z-10">
+              {/* Breadcrumbs */}
+              <Breadcrumbs
+                items={[
+                  { label: "Services", href: "/services" },
+                  { label: service.title, href: `/services/${slug}` },
+                  { label: locationFormatted },
+                ]}
+                darkMode={true}
+              />
+
+              <div className="mx-auto max-w-4xl">
+                {/* Location Indicator */}
+                <div className="mb-4 flex items-center gap-2 text-white/80">
+                  <MapPin className="h-5 w-5" />
+                  <span>Serving {locationFormatted} & surrounding areas</span>
+                </div>
+
+                <h1 className="mb-6 font-heading text-4xl font-bold text-white md:text-5xl lg:text-6xl">
                   {service.title} in {locationFormatted}
                 </h1>
-                
-                <div className="flex flex-wrap gap-4 text-sm md:text-base">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <MapPin className="h-4 w-4 text-primary flex-shrink-0" />
-                    <span>{locationInfo.description}</span>
+                <p className="mb-8 text-lg text-white/80 md:text-xl">
+                  {service.description}
+                </p>
+
+                {/* CTAs */}
+                <div className="flex flex-col gap-4 sm:flex-row mb-8">
+                  <Button size="lg" className="cta-gradient" asChild>
+                    <Link href="/contact" className="flex items-center gap-2">
+                      Get Free Quote <ArrowRight className="h-5 w-5" />
+                    </Link>
+                  </Button>
+                  <Button size="lg" variant="outline" className="border-white/30 bg-white/10 text-white hover:bg-white/20" asChild>
+                    <a href={`tel:${PRIMARY.phone}`} className="flex items-center gap-2">
+                      <Phone className="h-5 w-5" /> Call Now
+                    </a>
+                  </Button>
+                </div>
+
+                {/* Trust Badges */}
+                <div className="flex flex-wrap gap-4">
+                  <div className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm text-white">
+                    <Star className="h-4 w-4 fill-accent text-accent" />
+                    4.9 Rating in {locationFormatted}
                   </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Clock className="h-4 w-4 text-primary flex-shrink-0" />
-                    <span>Same-day service available</span>
+                  <div className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm text-white">
+                    <Building className="h-4 w-4" />
+                    500+ Installations
                   </div>
                 </div>
               </div>
+            </div>
+          </section>
+        </HeroWithHeaderWrapper>
 
-              {/* Service Image */}
-              {service.image && (
-                <div className="relative w-full h-64 md:h-[400px] lg:h-[500px] rounded-xl overflow-hidden shadow-lg">
-                  <OptimizedImage
-                    src={service.image}
-                    alt={`${service.title} installation in ${locationFormatted}`}
-                    width={1200}
-                    height={675}
-                    priority={true}
-                    className="w-full h-full"
-                  />
+        {/* Why Choose Us Section */}
+        <section className="section-bg-1 relative py-16 md:py-24">
+          <div className="absolute inset-0 grid-pattern opacity-30" />
+          <div className="container relative z-10">
+            <div className="grid gap-12 md:grid-cols-2">
+              <div>
+                <h2 className="mb-6 font-heading text-3xl font-bold text-foreground md:text-4xl">
+                  Why Choose Us for {service.title} in {locationFormatted}?
+                </h2>
+                <p className="mb-8 text-foreground/90">
+                  As the leading provider of {service.title.toLowerCase()} in {locationFormatted}, we understand 
+                  the unique requirements of local residential and commercial properties. Our team 
+                  has extensive experience serving clients across {locationFormatted} and nearby areas.
+                </p>
+                <ul className="space-y-3">
+                  {service.benefits.map((benefit, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <CheckCircle2 className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
+                      <span className="text-foreground">{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Areas Covered */}
+              <div className="rounded-2xl bg-gradient-to-br from-[hsl(222,47%,11%)] via-[hsl(217,33%,17%)] to-[hsl(215,25%,22%)] p-8 shadow-lg border border-white/10">
+                <h3 className="mb-6 font-heading text-xl font-semibold text-white">
+                  Areas We Serve in {locationFormatted}
+                </h3>
+                <div className="grid grid-cols-2 gap-3">
+                  {locationInfo.areas.map((area, index) => (
+                    <div key={index} className="flex items-center gap-2 text-white/80">
+                      <MapPin className="h-4 w-4 text-accent flex-shrink-0" />
+                      <span className="text-sm">{area}</span>
+                    </div>
+                  ))}
                 </div>
-              )}
-
-              <div className="prose prose-lg max-w-none">
-                <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                  Looking for professional {service.title.toLowerCase()} services in {locationFormatted}? 
-                  KGR Enterprises is your trusted local provider with years of experience delivering 
-                  top-quality installations throughout {locationFormatted} and surrounding areas.
+                <p className="mt-6 text-sm text-white/60">
+                  Don't see your area? Contact us – we likely serve your location too!
                 </p>
               </div>
-            </header>
+            </div>
+          </div>
+        </section>
 
-            {/* Service Overview */}
-            <section className="space-y-4">
-              <h2 className="text-2xl md:text-3xl font-semibold">About Our {service.title} Service</h2>
-              <div className="space-y-4">
-                <p className="text-muted-foreground leading-relaxed">
-                  {service.description || `We specialize in ${service.title.toLowerCase()} installation and maintenance 
-                  for residential and commercial properties in ${locationFormatted}. Our expert team ensures 
-                  safety, quality, and durability in every installation.`}
-                </p>
-                <p className="text-muted-foreground leading-relaxed">
-                  Whether you need installation for a high-rise apartment, independent house, or commercial 
-                  building in {locationFormatted}, we provide customized solutions that meet your specific 
-                  requirements and safety standards.
-                </p>
+        {/* Map Section */}
+        <section className="section-bg-2 relative py-8 md:py-12">
+          <div className="absolute inset-0 grid-pattern-dark opacity-30" />
+          <div className="container relative z-10">
+            <h2 className="mb-8 text-center font-heading text-3xl font-bold text-white">
+              Our Service Area in {locationFormatted}
+            </h2>
+            <div className="mx-auto max-w-4xl overflow-hidden rounded-2xl shadow-lg">
+              <iframe
+                src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000!2d${locationInfo.longitude}!3d${locationInfo.latitude}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z${locationFormatted}!5e0!3m2!1sen!2sin!4v1706789012345`}
+                width="100%"
+                height="400"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title={`Service area map for ${locationFormatted}`}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Related Services Section */}
+        <section className="section-bg-3 relative py-16 md:py-24">
+          <div className="absolute inset-0 grid-pattern opacity-30" />
+          <div className="container relative z-10">
+            <h2 className="mb-12 text-center font-heading text-3xl font-bold text-foreground md:text-4xl">
+              Related Products & Services
+            </h2>
+            <RelatedServices currentService={slug} />
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="section-bg-6 relative py-16 md:py-24">
+          <div className="container">
+            <div className="mx-auto max-w-3xl text-center">
+              <h2 className="mb-4 font-heading text-3xl font-bold text-white md:text-4xl">
+                Ready to Get Started in {locationFormatted}?
+              </h2>
+              <p className="mb-8 text-lg text-white/80">
+                Schedule a free consultation with our experts. We'll assess your needs and provide a transparent quote with no hidden charges.
+              </p>
+              <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+                <Button size="lg" className="cta-gradient" asChild>
+                  <Link href="/contact" className="flex items-center gap-2">
+                    Book Consultation <ArrowRight className="h-5 w-5" />
+                  </Link>
+                </Button>
+                <Button size="lg" variant="outline" className="border-white/30 bg-white/10 text-white hover:bg-white/20" asChild>
+                  <a href={`tel:${PRIMARY.phone}`} className="flex items-center gap-2">
+                    <Phone className="h-5 w-5" /> Call Now
+                  </a>
+                </Button>
               </div>
-            </section>
-
-            {/* Service Areas */}
-            <section>
-              <Card className="overflow-hidden bg-card border-border shadow-medium hover:bg-card-hover transition-all">
-                <CardContent className="p-6 md:p-8 space-y-6">
-                  <div className="space-y-2">
-                    <h2 className="text-2xl md:text-3xl font-semibold text-card-foreground">Areas We Serve in {locationFormatted}</h2>
-                    <p className="text-card-foreground/75">
-                      We provide {service.title.toLowerCase()} services across all major areas in {locationFormatted}, including:
-                    </p>
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {locationInfo.areas.map((area) => (
-                      <div key={area} className="flex items-center gap-2 p-2 rounded-lg hover:bg-card-hover transition-colors">
-                        <MapPin className="h-4 w-4 text-safety flex-shrink-0" />
-                        <span className="text-sm font-medium text-card-foreground">{area}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <p className="text-sm text-card-foreground/75">
-                    And many more areas across {locationFormatted}. Contact us to confirm service availability in your locality.
-                  </p>
-                </CardContent>
-              </Card>
-            </section>
-
-            {/* Why Choose Us */}
-            <section className="space-y-6">
-              <h2 className="text-2xl md:text-3xl font-semibold">Why Choose KGR Enterprises in {locationFormatted}?</h2>
-              <div className="grid md:grid-cols-2 gap-4 md:gap-6">
-                <Card className="group bg-card border-border shadow-medium hover:bg-card-hover hover:shadow-strong transition-all">
-                  <CardContent className="p-6 space-y-3">
-                    <div className="flex items-start gap-4">
-                      <div className="p-3 rounded-xl bg-safety/20 group-hover:bg-safety/30 transition-colors">
-                        <MapPin className="h-6 w-6 text-safety" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-lg mb-2 text-card-foreground">Local Expertise</h3>
-                        <p className="text-sm text-card-foreground/75 leading-relaxed">
-                          Quick response times with a dedicated team familiar with {locationFormatted}&apos;s 
-                          building regulations and safety requirements
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="group bg-card border-border shadow-medium hover:bg-card-hover hover:shadow-strong transition-all">
-                  <CardContent className="p-6 space-y-3">
-                    <div className="flex items-start gap-4">
-                      <div className="p-3 rounded-xl bg-safety/20 group-hover:bg-safety/30 transition-colors">
-                        <Shield className="h-6 w-6 text-safety" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-lg mb-2 text-card-foreground">Quality Materials</h3>
-                        <p className="text-sm text-card-foreground/75 leading-relaxed">
-                          High-grade materials designed to withstand local weather conditions with 
-                          superior durability and longevity
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="group bg-card border-border shadow-medium hover:bg-card-hover hover:shadow-strong transition-all">
-                  <CardContent className="p-6 space-y-3">
-                    <div className="flex items-start gap-4">
-                      <div className="p-3 rounded-xl bg-safety/20 group-hover:bg-safety/30 transition-colors">
-                        <Award className="h-6 w-6 text-safety" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-lg mb-2 text-card-foreground">Professional Installation</h3>
-                        <p className="text-sm text-card-foreground/75 leading-relaxed">
-                          Certified installers trained in latest safety standards and installation 
-                          techniques with years of experience
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="group bg-card border-border shadow-medium hover:bg-card-hover hover:shadow-strong transition-all">
-                  <CardContent className="p-6 space-y-3">
-                    <div className="flex items-start gap-4">
-                      <div className="p-3 rounded-xl bg-safety/20 group-hover:bg-safety/30 transition-colors">
-                        <Clock className="h-6 w-6 text-safety" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-lg mb-2 text-card-foreground">After-Installation Support</h3>
-                        <p className="text-sm text-card-foreground/75 leading-relaxed">
-                          Dedicated maintenance and support team in {locationFormatted} for ongoing 
-                          service and emergency repairs
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </section>
-
-            {/* Process Section */}
-            <section className="space-y-6">
-              <h2 className="text-2xl md:text-3xl font-semibold">Our Installation Process in {locationFormatted}</h2>
-              <Card className="bg-card border-border shadow-medium">
-                <CardContent className="p-6 md:p-8">
-                  <div className="space-y-6">
-                    {[
-                      {
-                        step: 1,
-                        title: "Free Consultation & Site Visit",
-                        description: `Our experts visit your location in ${locationFormatted} to assess requirements and provide accurate quotation`
-                      },
-                      {
-                        step: 2,
-                        title: "Custom Solution Design",
-                        description: "We design a tailored solution based on your specific needs and property requirements"
-                      },
-                      {
-                        step: 3,
-                        title: "Professional Installation",
-                        description: "Our certified team completes installation efficiently with minimal disruption to your routine"
-                      },
-                      {
-                        step: 4,
-                        title: "Quality Check & Support",
-                        description: `Final inspection and ongoing maintenance support from our ${locationFormatted} team`
-                      }
-                    ].map((item, index) => (
-                      <div key={item.step} className={`flex gap-4 pb-6 ${index !== 3 ? 'border-b border-border' : ''}`}>
-                        <div className="flex-shrink-0">
-                          <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-safety text-card hover:bg-safety/90 flex items-center justify-center font-bold text-lg">
-                            {item.step}
-                          </div>
-                        </div>
-                        <div className="flex-1 pt-1">
-                          <h3 className="font-semibold text-lg mb-2 text-card-foreground">{item.title}</h3>
-                          <p className="text-sm md:text-base text-card-foreground/75 leading-relaxed">
-                            {item.description}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </section>
-
-            {/* FAQ Section */}
-            <section className="space-y-6">
-              <h2 className="text-2xl md:text-3xl font-semibold">Frequently Asked Questions</h2>
-              <div className="space-y-4">
-                <Card className="bg-card border-border shadow-medium hover:shadow-strong hover:bg-card-hover transition-all">
-                  <CardContent className="p-6">
-                    <h3 className="font-semibold text-lg mb-3 text-card-foreground">How quickly can you install in {locationFormatted}?</h3>
-                    <p className="text-sm md:text-base text-card-foreground/75 leading-relaxed">
-                      Most installations are completed within 1-2 days depending on the project size. 
-                      We offer same-day site visits for urgent requirements in {locationFormatted}.
-                    </p>
-                  </CardContent>
-                </Card>
-                
-                <Card className="bg-card border-border shadow-medium hover:shadow-strong hover:bg-card-hover transition-all">
-                  <CardContent className="p-6">
-                    <h3 className="font-semibold text-lg mb-3 text-card-foreground">Do you provide warranty?</h3>
-                    <p className="text-sm md:text-base text-card-foreground/75 leading-relaxed">
-                      Yes, we provide comprehensive warranty on both materials and installation work. 
-                      Contact us for specific warranty details for your project.
-                    </p>
-                  </CardContent>
-                </Card>
-                
-                <Card className="bg-card border-border shadow-medium hover:shadow-strong hover:bg-card-hover transition-all">
-                  <CardContent className="p-6">
-                    <h3 className="font-semibold text-lg mb-3 text-card-foreground">What areas do you cover in {locationFormatted}?</h3>
-                    <p className="text-sm md:text-base text-card-foreground/75 leading-relaxed">
-                      We serve all areas across {locationFormatted} including {locationInfo.areas.slice(0, 3).join(', ')}, 
-                      and surrounding localities. Call us to confirm service in your area.
-                    </p>
-                  </CardContent>
-                </Card>
-              </div>
-            </section>
-
-            {/* Related Services */}
-            <section className="pt-4 space-y-8">
-              <div className="grid gap-6">
-                <RelatedServices currentService={slug} location={locationFormatted} />
-              </div>
-            </section>
-
-            {/* CTA Section */}
-            <section className="pt-8" aria-labelledby="cta-heading">
-              <Card className="bg-card border-border shadow-strong hover:bg-card-hover transition-all">
-                <CardContent className="p-8 md:p-10 text-center space-y-6">
-                  <div className="space-y-3">
-                    <h2 id="cta-heading" className="text-2xl md:text-3xl font-bold text-card-foreground">
-                      Ready to Get Started in {locationFormatted}?
-                    </h2>
-                    <p className="text-card-foreground/75 max-w-2xl mx-auto leading-relaxed">
-                      Schedule a free consultation with our experts. We&apos;ll visit your location, 
-                      assess your needs, and provide a transparent quote with no hidden charges.
-                    </p>
-                  </div>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button size="lg" className="gap-2 text-base bg-primary hover:bg-primary/90 text-primary-foreground" asChild>
-                      <a href={PRIMARY.tel}>
-                        <Phone className="h-5 w-5" />
-                        Call Now for Free Visit
-                      </a>
-                    </Button>
-                    <Button variant="outline" size="lg" className="gap-2 text-base border-border text-safety hover:bg-card-hover" asChild>
-                      <Link href="/services">
-                        View All Services
-                        <ArrowRight className="h-5 w-5" />
-                      </Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </section>
-          </article>
-        </div>
+            </div>
+          </div>
+        </section>
       </div>
-    </div>
+    </>
   );
 }

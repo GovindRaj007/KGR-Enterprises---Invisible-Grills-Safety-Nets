@@ -242,13 +242,20 @@ export function generateServiceMetadata(params: {
     title,
     description,
     keywords,
+    robots: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
     alternates: {
-      canonical: `https://invisiblegrillsandsafetynets.in/services/${serviceSlug}`,
+      canonical: `https://invisiblegrillsandsafetynets.in/services/${serviceSlug}/`,
     },
     openGraph: {
       title,
       description,
-      url: `https://invisiblegrillsandsafetynets.in/services/${serviceSlug}`,
+      url: `https://invisiblegrillsandsafetynets.in/services/${serviceSlug}/`,
       siteName: 'KGR Invisible Grills & Safety Nets',
       images: [
         {
@@ -409,14 +416,14 @@ export function generateServiceSchema(params: {
       productSchema,
       {
         '@type': 'WebPage',
-        '@id': `https://invisiblegrillsandsafetynets.in/services/${slug}#webpage`,
-        'url': `https://invisiblegrillsandsafetynets.in/services/${slug}`,
+        '@id': `https://invisiblegrillsandsafetynets.in/services/${slug}/#webpage`,
+        'url': `https://invisiblegrillsandsafetynets.in/services/${slug}/`,
         'name': `${serviceName} in ${PRIMARY_LOCATIONS.map(loc => loc.name).join(', ')}`,
         'isPartOf': {
           '@id': 'https://invisiblegrillsandsafetynets.in/#website'
         },
         'primaryImageOfPage': {
-          '@id': `https://invisiblegrillsandsafetynets.in/services/${slug}#primaryimage`
+          '@id': `https://invisiblegrillsandsafetynets.in/services/${slug}/#primaryimage`
         },
         'dateModified': new Date().toISOString(),
         'description': description,
@@ -424,7 +431,7 @@ export function generateServiceSchema(params: {
       },
       {
         '@type': 'ImageObject',
-        '@id': `https://invisiblegrillsandsafetynets.in/services/${slug}#primaryimage`,
+        '@id': `https://invisiblegrillsandsafetynets.in/services/${slug}/#primaryimage`,
         'url': `https://invisiblegrillsandsafetynets.in${image}`,
         'contentUrl': `https://invisiblegrillsandsafetynets.in${image}`,
         'caption': `${serviceName} Installation Services`
@@ -457,7 +464,7 @@ export function generateServiceSchema(params: {
           'logo': '/images/logo.png',
           'description': 'Leading provider of invisible grills and safety nets installation services across South India',
           'foundingDate': '2010',
-          'sameAs': 'https://x.com/Kgr_Grills_Nets?t=bVFltLBFrViXV15cgk_15Q&s=08',
+          'sameAs': ['https://x.com/Kgr_Grills_Nets'],
           'hasOfferCatalog': {
             '@type': 'OfferCatalog',
             'name': 'Invisible Grills and Safety Nets Services',
@@ -567,17 +574,17 @@ export function generateServiceSchema(params: {
             'provider': {
               '@type': 'Organization',
               'name': 'KGR Enterprises',
-              'url': 'https://invisiblegrillsandsafetynets.in'
+              'url': 'https://invisiblegrillsandsafetynets.in/'
             }
           }
         },
-        'url': `https://invisiblegrillsandsafetynets.in/services/${slug}`,
+        'url': `https://invisiblegrillsandsafetynets.in/services/${slug}/`,
         'potentialAction': [
           {
             '@type': 'ContactAction',
             'target': {
               '@type': 'EntryPoint',
-              'urlTemplate': 'https://invisiblegrillsandsafetynets.in/contact',
+              'urlTemplate': 'https://invisiblegrillsandsafetynets.in/contact/',
               'actionPlatform': [
                 'http://schema.org/DesktopWebPlatform',
                 'http://schema.org/MobileWebPlatform'
@@ -590,7 +597,7 @@ export function generateServiceSchema(params: {
             '@type': 'ViewAction',
             'target': {
               '@type': 'EntryPoint',
-              'urlTemplate': `https://invisiblegrillsandsafetynets.in/services/${slug}`,
+              'urlTemplate': `https://invisiblegrillsandsafetynets.in/services/${slug}/`,
               'inLanguage': 'en-IN'
             },
             'name': 'View Service Details'
@@ -598,19 +605,31 @@ export function generateServiceSchema(params: {
         ],
         'mainEntityOfPage': {
           '@type': 'WebPage',
-          '@id': `https://invisiblegrillsandsafetynets.in/services/${slug}#webpage`
+          '@id': `https://invisiblegrillsandsafetynets.in/services/${slug}/#webpage`
         }
       }
     ]
   };
 }
 
-// Generate breadcrumb schema
-export function generateBreadcrumbSchema(items: Array<{ name: string; url: string }>) {
+// Generate breadcrumb schema with proper structure and @id
+export function generateBreadcrumbSchema(items: Array<{ name: string; url: string }>, pageUrl?: string) {
+  // Ensure items have trailing slashes for consistency with next.config.ts (trailingSlash: true)
+  const normalizedItems = items.map(item => ({
+    ...item,
+    url: item.url.endsWith('/') ? item.url : `${item.url}/`
+  }));
+
+  // Generate a proper @id for the breadcrumb based on the page URL
+  const breadcrumbId = pageUrl 
+    ? `https://invisiblegrillsandsafetynets.in${pageUrl}#breadcrumb`
+    : 'https://invisiblegrillsandsafetynets.in/#breadcrumb';
+
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
-    'itemListElement': items.map((item, index) => ({
+    '@id': breadcrumbId,
+    'itemListElement': normalizedItems.map((item, index) => ({
       '@type': 'ListItem',
       'position': index + 1,
       'name': item.name,
@@ -651,7 +670,7 @@ export function generateServiceFAQSchema(faqs: Array<{ question: string; answer:
     'mainEntity': faqEntities,
     'isPartOf': {
       '@type': 'WebPage',
-      'url': `https://invisiblegrillsandsafetynets.in/services${serviceName ? `/${serviceName}` : ''}`
+      'url': `https://invisiblegrillsandsafetynets.in/services${serviceName ? `/${serviceName}` : ''}/`
     },
     'about': {
       '@type': 'Service',

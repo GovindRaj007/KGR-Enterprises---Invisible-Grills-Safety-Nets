@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import HeroSection from "@/components/home/HeroSection";
+import { HeroSlider } from "@/components/home/HeroSlider";
+import HeroWithHeaderWrapper from "@/components/layout/HeroWithHeaderWrapper";
 import ServicesSection from "@/components/services/ServicesSection";
 import ImageCarouselClient from "@/components/home/ImageCarouselClient";
 import AboutClient from "@/components/about/AboutClient";
@@ -13,37 +14,47 @@ export const metadata: Metadata = {
   description:
     "Premium invisible grills and safety nets installation across Hyderabad, Bangalore, Chennai. Marine-grade stainless steel, superior protection, 15-year warranty. Best quality, trusted service since 2008",
   keywords: [
-    "invisible grills in Hyderabad",
-    "Kgr invisible grills",
-    "invisible grills near me",
-    "invisible grills in Bangalore",
-    "safety nets in Hyderabad",
-    "safety net installation near me",
-    "Kgr safety nets",
-    "invisible grill installation",
-    "best invisible grills in hyderabad",
-    "best invisible grills in bangalore",
-    "balcony safety nets in bangalore",
-    "pigeon nets in hyderabad",
-    "best invisible grills in chennai",
-    "safety nets in bangalore",
-    "balcony safety nets in hyderabad",
-    "invisible grills in chennai",
-    "safety nets in Chennai",
-    "balcony safety nets in Chennai",
-    "pigeon nets in chennai",
-    "invisible grills in vijayawada",
-    "safety nets in vijayawada",
-    "balcony safety nets in vijayawada",
-    "children safety nets in Hyderabad",
-    "children safety nets in Visakhapatnam",
-    "bird nets",
+    // Brand & Company Keywords
+    "KGR Enterprises",
+    "KGR safety solutions",
+    "trusted safety net provider",
+    "certified installation services",
+    // Main Service Keywords
     "invisible grills",
+    "safety nets",
+    "marine-grade invisible grills",
+    "cable mesh grills",
+    "bird protection nets",
     "pigeon nets",
-    "duct area nets",
-    "Chennai",
-    "Vijayawada",
-    "Visakhapatnam",
+    "child-safe balcony",
+    "rust-proof safety solutions",
+    // Generic Service Terms
+    "safety net installation",
+    "invisible grill installation",
+    "balcony protection",
+    "child safety solutions",
+    "bird-proof solutions",
+    "terrace safety nets",
+    // Geographic - Primary Cities
+    "invisible grills in Hyderabad",
+    "safety nets in Bangalore",
+    "invisible grills in Chennai",
+    "safety nets in Vijayawada",
+    "invisible grills in Visakhapatnam",
+    // Quality & Trust Indicators
+    "best invisible grills",
+    "premium safety nets",
+    "professional installation",
+    "15-year warranty",
+    "family-owned business",
+    "expert installation team",
+    // Long-tail & Voice Search
+    "affordable invisible grills near me",
+    "best safety net company",
+    "how to install invisible grills",
+    "balcony safety net solutions",
+    "professional grills installation service",
+    "certified safety net dealers",
   ],
   openGraph: {
     locale: "en_IN",
@@ -78,16 +89,16 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <>
-      <HeroSection />
+      <HeroWithHeaderWrapper>
+        <div style={{ borderRadius: '1rem' }}>
+          <HeroSlider />
+        </div>
+      </HeroWithHeaderWrapper>
       <ImageCarouselClient />
       <ServicesSection />
-      <section className="pb-12 md:pb-16">
-        <div className="container mx-auto px-4">
-          <ServiceLocationsSlider variant="services" slug="" />
-        </div>
-      </section>
       <AboutClient />
       <GalleryClient />
+      <ServiceLocationsSlider />
       <TestimonialsClient />
     </>
   );

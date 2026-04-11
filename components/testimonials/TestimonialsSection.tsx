@@ -1,8 +1,6 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Star } from 'lucide-react';
 
 const TestimonialsSection = () => {
@@ -52,7 +50,7 @@ const TestimonialsSection = () => {
     },
     {
       name: "Anita Reddy",
-      service: "Balcony Safety Nets",
+      service: "Balcony Safety Net",
       rating: 5,
       review: "Very satisfied with the balcony safety net installation. Quality materials and professional service. Highly recommended for safety needs.",
       initials: "AR",
@@ -64,14 +62,16 @@ const TestimonialsSection = () => {
   const handleTouchEnd = () => setIsPaused(false);
 
   return (
-    <section id="testimonials" className="py-12 md:py-16 lg:py-12 bg-muted/30">
+    <section id="testimonials" className="py-12 md:py-16 lg:py-12" style={{
+      background: "linear-gradient(180deg, #1E2A42 0%, #121D2F 100%)"
+    }}>
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center space-y-4 mb-8 md:mb-12">
-          <h2 className="text-2xl md:text-3xl lg:text-5xl font-bold">
-            What Our <span className="text-gradient">Customers Say</span>
+          <h2 className="text-2xl md:text-3xl lg:text-5xl font-bold" style={{ color: "#F0F6FF" }}>
+            What Our <span style={{ color: "#FF6B42" }}>Customers Say</span>
           </h2>
-          <p className="text-sm md:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-sm md:text-base lg:text-lg max-w-2xl mx-auto" style={{ color: "#C8D8EE" }}>
             Real feedback from satisfied customers who trust us for their safety needs
           </p>
         </div>
@@ -91,67 +91,82 @@ const TestimonialsSection = () => {
           >
             {/* First set */}
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="flex-shrink-0 w-72 md:w-80 bg-background hover:shadow-strong transition-all">
-                <CardContent className="p-4 md:p-6 space-y-4">
-                  {/* Rating */}
-                  <div className="flex items-center space-x-1">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-3 w-3 md:h-4 md:w-4 fill-yellow-400 text-yellow-400" />
-                    ))}
+              <div 
+                key={index} 
+                className="flex-shrink-0 w-72 md:w-80 rounded-lg transition-all hover:shadow-lg p-4 md:p-6 space-y-4"
+                style={{
+                  background: "linear-gradient(135deg, #121D2F 0%, #121D2F 100%)",
+                  border: "1px solid rgba(36, 61, 99, 0.5)",
+                  borderTop: "2px solid #FF6B42",
+                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)"
+                }}
+              >
+                {/* Rating */}
+                <div className="flex items-center space-x-1">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="h-3 w-3 md:h-4 md:w-4 fill-current" style={{ color: "#FF6B42" }} />
+                  ))}
+                </div>
+                
+                {/* Review */}
+                <p className="text-xs md:text-sm italic leading-relaxed" style={{ color: "#C8D8EE" }}>
+                  &ldquo;{testimonial.review}&rdquo;
+                </p>
+                
+                {/* Author */}
+                <div className="flex items-center space-x-3">
+                  <div className="h-8 w-8 md:h-10 md:w-10 rounded-full flex items-center justify-center text-xs md:text-sm font-semibold" style={{
+                    background: "linear-gradient(135deg, #FF6B42, #F25024)",
+                    color: "#ffffff"
+                  }}>
+                    {testimonial.initials}
                   </div>
-                  
-                  {/* Review */}
-                  <p className="text-xs md:text-sm text-muted-foreground italic leading-relaxed">
-                    &ldquo;{testimonial.review}&rdquo;
-                  </p>
-                  
-                  {/* Author */}
-                  <div className="flex items-center space-x-3">
-                    <Avatar className="h-8 w-8 md:h-10 md:w-10">
-                      <AvatarFallback className="bg-primary text-primary-foreground text-xs md:text-sm">
-                        {testimonial.initials}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <div className="font-semibold text-sm md:text-base">{testimonial.name}</div>
-                      <div className="text-xs text-muted-foreground">
-                        {testimonial.service} • {testimonial.location}
-                      </div>
+                  <div>
+                    <div className="font-semibold text-sm md:text-base" style={{ color: "#F0F6FF" }}>{testimonial.name}</div>
+                    <div className="text-xs" style={{ color: "#8FAAC8" }}>
+                      {testimonial.service} • {testimonial.location}
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
             
             {/* Duplicate set for seamless loop */}
             {testimonials.map((testimonial, index) => (
-              <Card key={`duplicate-${index}`} className="flex-shrink-0 w-72 md:w-80 bg-background hover:shadow-strong transition-all">
-                <CardContent className="p-4 md:p-6 space-y-4">
-                  <div className="flex items-center space-x-1">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-3 w-3 md:h-4 md:w-4 fill-yellow-400 text-yellow-400" />
-                    ))}
+              <div 
+                key={`duplicate-${index}`} 
+                className="flex-shrink-0 w-72 md:w-80 rounded-lg transition-all hover:shadow-lg p-4 md:p-6 space-y-4"
+                style={{
+                  background: "linear-gradient(135deg, #1E2A42 0%, #121D2F 100%)",
+                  border: "1px solid rgba(36, 61, 99, 0.5)",
+                  borderTop: "2px solid #FF6B42",
+                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)"
+                }}
+              >
+                <div className="flex items-center space-x-1">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="h-3 w-3 md:h-4 md:w-4 fill-current" style={{ color: "#FF6B42" }} />
+                  ))}
+                </div>
+                <p className="text-xs md:text-sm italic leading-relaxed" style={{ color: "#C8D8EE" }}>
+                  &ldquo;{testimonial.review}&rdquo;
+                </p>
+                
+                <div className="flex items-center space-x-3">
+                  <div className="h-8 w-8 md:h-10 md:w-10 rounded-full flex items-center justify-center text-xs md:text-sm font-semibold" style={{
+                    background: "linear-gradient(135deg, #FF6B42, #F25024)",
+                    color: "#ffffff"
+                  }}>
+                    {testimonial.initials}
                   </div>
-                  
-                  <p className="text-xs md:text-sm text-muted-foreground italic leading-relaxed">
-                    &ldquo;{testimonial.review}&rdquo;
-                  </p>
-                  
-                  <div className="flex items-center space-x-3">
-                    <Avatar className="h-8 w-8 md:h-10 md:w-10">
-                      <AvatarFallback className="bg-primary text-primary-foreground text-xs md:text-sm">
-                        {testimonial.initials}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <div className="font-semibold text-sm md:text-base">{testimonial.name}</div>
-                      <div className="text-xs text-muted-foreground">
-                        {testimonial.service} • {testimonial.location}
-                      </div>
+                  <div>
+                    <div className="font-semibold text-sm md:text-base" style={{ color: "#F0F6FF" }}>{testimonial.name}</div>
+                    <div className="text-xs" style={{ color: "#8FAAC8" }}>
+                      {testimonial.service} • {testimonial.location}
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -159,16 +174,16 @@ const TestimonialsSection = () => {
         {/* Trust Indicators */}
         <div className="mt-8 md:mt-12 flex flex-wrap justify-center gap-6 md:gap-12 text-center">
           <div>
-            <div className="text-2xl md:text-3xl font-bold text-primary">5000+</div>
-            <div className="text-xs md:text-sm text-muted-foreground">Happy Customers</div>
+            <div className="text-2xl md:text-3xl font-bold" style={{ color: "#FF6B42" }}>5000+</div>
+            <div className="text-xs md:text-sm" style={{ color: "#C8D8EE" }}>Happy Customers</div>
           </div>
           <div>
-            <div className="text-2xl md:text-3xl font-bold text-safety">4.9/5</div>
-            <div className="text-xs md:text-sm text-muted-foreground">Average Rating</div>
+            <div className="text-2xl md:text-3xl font-bold" style={{ color: "#FF6B42" }}>4.9/5</div>
+            <div className="text-xs md:text-sm" style={{ color: "#C8D8EE" }}>Average Rating</div>
           </div>
           <div>
-            <div className="text-2xl md:text-3xl font-bold text-accent">15+</div>
-            <div className="text-xs md:text-sm text-muted-foreground">Years Experience</div>
+            <div className="text-2xl md:text-3xl font-bold" style={{ color: "#2E7FD9" }}>15+</div>
+            <div className="text-xs md:text-sm" style={{ color: "#C8D8EE" }}>Years Experience</div>
           </div>
         </div>
       </div>

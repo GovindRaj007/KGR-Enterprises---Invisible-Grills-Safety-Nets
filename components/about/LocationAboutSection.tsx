@@ -2,15 +2,12 @@
 
 import { useState, useRef } from "react";
 import Link from "next/link";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import {
   Award,
   Users,
@@ -182,25 +179,25 @@ const LocationAboutSection = ({ location }: { location: string }) => {
 
   return (
     <>
-      <section id="about" className=" bg-background">
+      <section id="about" className="py-8 md:py-16" style={{ background: "linear-gradient(180deg, #1E2A42 0%, #121D2F 100%)" }}>
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             {/* Left Content */}
             <div className="space-y-4 md:space-y-6 lg:space-y-8">
               <div className="space-y-3 md:space-y-4">
-                <div className="flex items-center space-x-2 text-safety">
+                <div className="flex items-center space-x-2" style={{ color: "#FF6B42" }}>
                   <Shield className="h-4 w-4 md:h-5 md:w-5" />
                   <span className="text-sm md:text-base font-semibold uppercase tracking-wide">
                     KGR Enterprises in {location}
                   </span>
                 </div>
 
-                <h2 className="text-2xl md:text-3xl lg:text-5xl font-bold leading-tight">
+                <h2 className="text-2xl md:text-3xl lg:text-5xl font-bold leading-tight" style={{ color: "#F0F6FF" }}>
                   Your Trusted Partner for
-                  <span className="text-gradient block">Safety Solutions</span>
+                  <span style={{ color: "#FF6B42" }} className="block">Safety Solutions</span>
                 </h2>
 
-                <p className="text-base md:text-lg lg:text-lg text-muted-foreground">
+                <p className="text-base md:text-lg lg:text-lg" style={{ color: "#C8D8EE" }}>
                   KGR Enterprises is your local expert in {location}, delivering premium 
                   safety solutions for homes, apartments, and commercial properties. We 
                   ensure top-quality service with professional installation and dedicated 
@@ -214,8 +211,8 @@ const LocationAboutSection = ({ location }: { location: string }) => {
                     key={index}
                     className="flex items-center space-x-3"
                   >
-                    <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-accent flex-shrink-0" />
-                    <span className="text-sm md:text-base lg:text-base">
+                    <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 flex-shrink-0" style={{ color: "#FF6B42" }} />
+                    <span className="text-sm md:text-base lg:text-base" style={{ color: "#C8D8EE" }}>
                       {feature}
                     </span>
                   </div>
@@ -223,26 +220,49 @@ const LocationAboutSection = ({ location }: { location: string }) => {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
-                <Button
-                  size="lg"
-                  className="gap-2 shadow-safety hover:scale-105 transition-all duration-300"
+                <button
+                  className="gap-2 py-2 px-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center"
+                  style={{
+                    background: "linear-gradient(135deg, #FF6B42 0%, #F25024 100%)",
+                    color: "#ffffff",
+                    boxShadow: "0 4px 12px rgba(255, 107, 66, 0.2)"
+                  }}
                   onClick={handleConsultationClick}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.boxShadow = "0 6px 20px rgba(255, 107, 66, 0.4)";
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow = "0 4px 12px rgba(255, 107, 66, 0.2)";
+                    e.currentTarget.style.transform = "none";
+                  }}
                 >
                   Get Free Consultation
                   <ArrowRight className="h-4 w-4" />
-                </Button>
+                </button>
 
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="gap-2 hover:shadow-medium transition-all duration-300"
-                  asChild
-                >
-                  <Link href="/services">
+                <Link href="/services">
+                  <button
+                    className="gap-2 py-2 px-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center"
+                    style={{
+                      backgroundColor: "transparent",
+                      color: "#FF6B42",
+                      border: "1px solid rgba(255, 107, 66, 0.5)",
+                      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)"
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = "rgba(75, 159, 255, 0.1)";
+                      e.currentTarget.style.boxShadow = "0 0 12px rgba(75, 159, 255, 0.2)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "transparent";
+                      e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.3)";
+                    }}
+                  >
                     <BadgeCheck className="h-4 w-4" />
                     View All Services
-                  </Link>
-                </Button>
+                  </button>
+                </Link>
               </div>
             </div>
 
@@ -252,58 +272,74 @@ const LocationAboutSection = ({ location }: { location: string }) => {
                 {stats.map((stat, index) => {
                   const IconComponent = stat.icon;
                   return (
-                    <Card
+                    <div
                       key={index}
-                      className="group hover:shadow-medium transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-background to-muted/30 border-border/50"
+                      className="rounded-lg p-4 md:p-6 text-center space-y-2 md:space-y-3 transition-all duration-300 hover:-translate-y-1"
+                      style={{
+                        background: "linear-gradient(135deg, #121D2F 0%, #1E2A42 100%)",
+                        border: "1px solid rgba(75, 159, 255, 0.3)",
+                        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)"
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.boxShadow = "0 8px 24px rgba(75, 159, 255, 0.2)";
+                        e.currentTarget.style.borderColor = "rgba(75, 159, 255, 0.6)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.3)";
+                        e.currentTarget.style.borderColor = "rgba(75, 159, 255, 0.3)";
+                      }}
                     >
-                      <CardContent className="p-4 md:p-6 text-center space-y-2 md:space-y-3">
-                        <div
-                          className={`w-10 h-10 md:w-12 md:h-12 mx-auto rounded-full bg-gradient-to-br from-background to-muted flex items-center justify-center ${stat.color} group-hover:scale-110 transition-transform`}
-                        >
-                          <IconComponent className="h-5 w-5 md:h-6 md:w-6" />
+                      <div
+                        className="w-10 h-10 md:w-12 md:h-12 mx-auto rounded-full flex items-center justify-center transition-transform hover:scale-110"
+                        style={{
+                          background: "rgba(75, 159, 255, 0.1)",
+                          color: "#FF6B42"
+                        }}
+                      >
+                        <IconComponent className="h-5 w-5 md:h-6 md:w-6" />
+                      </div>
+                      <div className="space-y-1">
+                        <div className="text-xl md:text-2xl lg:text-3xl font-bold" style={{ color: "#FF6B42" }}>
+                          {stat.value}
                         </div>
-                        <div className="space-y-1">
-                          <div className="text-xl md:text-2xl lg:text-3xl font-bold text-primary">
-                            {stat.value}
-                          </div>
-                          <div className="text-xs md:text-sm text-muted-foreground">
-                            {stat.label}
-                          </div>
+                        <div className="text-xs md:text-sm" style={{ color: "#C8D8EE" }}>
+                          {stat.label}
                         </div>
-                      </CardContent>
-                    </Card>
+                      </div>
+                    </div>
                   );
                 })}
               </div>
 
               {/* Company Highlights */}
-              <Card className="bg-gradient-to-r from-primary/5 to-accent/5 !backdrop-blur-none border-primary/20">
-                <CardContent className="p-4 md:p-6 !text-foreground">
-                  <div className="space-y-4">
-                    <h3 className="text-lg md:text-xl font-semibold">
-                      Local Expertise in {location}
-                    </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3 text-sm md:text-base">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 rounded-full bg-primary"></div>
-                        <span>ISI Certified Materials</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 rounded-full bg-accent"></div>
-                        <span>Local Installation Team</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 rounded-full bg-primary"></div>
-                        <span>Quick Response Time</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 rounded-full bg-accent"></div>
+              <div className="rounded-lg p-4 md:p-6" style={{
+                background: "linear-gradient(135deg, rgba(75, 159, 255, 0.05) 0%, rgba(46, 127, 217, 0.05) 100%)",
+                border: "1px solid rgba(75, 159, 255, 0.2)"
+              }}>
+                <div className="space-y-4">
+                  <h3 className="text-lg md:text-xl font-semibold" style={{ color: "#F0F6FF" }}>
+                    Local Expertise in {location}
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3 text-sm md:text-base">
+                    <div className="flex items-center space-x-2" style={{ color: "#C8D8EE" }}>
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: "#FF6B42" }}></div>
+                      <span>ISI Certified Materials</span>
+                    </div>
+                    <div className="flex items-center space-x-2" style={{ color: "#C8D8EE" }}>
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: "#FF6B42" }}></div>
+                      <span>Local Installation Team</span>
+                    </div>
+                    <div className="flex items-center space-x-2" style={{ color: "#C8D8EE" }}>
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: "#FF6B42" }}></div>
+                      <span>Quick Response Time</span>
+                    </div>
+                    <div className="flex items-center space-x-2" style={{ color: "#C8D8EE" }}>
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: "#2E7FD9" }}></div>
                         <span>15-Year Warranty</span>
                       </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
             </div>
           </div>
         </div>
@@ -311,68 +347,121 @@ const LocationAboutSection = ({ location }: { location: string }) => {
 
       {/* Consultation Modal */}
       <Dialog open={isModalOpen} onOpenChange={handleModalClose}>
-        {/* Reduce transparency and add rounded corners on mobile */}
-        <DialogContent className="sm:max-w-md bg-gradient-to-br from-background to-muted/60 border-primary/20 rounded-lg sm:rounded-xl">
+        <DialogContent className="sm:max-w-md rounded-lg sm:rounded-xl" style={{
+          background: "linear-gradient(135deg, #1E2A42 0%, #121D2F 100%)",
+          border: "1px solid rgba(75, 159, 255, 0.3)"
+        }}>
           <DialogHeader className="text-center pb-4">
-            <DialogTitle className="text-xl md:text-2xl font-bold text-primary">
+            <DialogTitle className="text-xl md:text-2xl font-bold" style={{ color: "#FF6B42" }}>
               Get Free Consultation
             </DialogTitle>
-            <p className="text-xs md:text-sm text-muted-foreground mt-2">
-              Share your details for instant callback
-            </p>
+            <p className="text-xs md:text-sm" style={{ color: "#C8D8EE" }}>Share your details for instant callback</p>
           </DialogHeader>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="relative">
-              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
-              <Input
+              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 z-10 pointer-events-none" style={{ color: "#C8D8EE" }} />
+              <input
                 placeholder="Your Name"
                 value={formData.name}
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
-                className="pl-10 bg-background"
+                className="pl-10 w-full py-2 rounded-lg border px-3 transition-colors duration-200"
+                style={{
+                  background: "rgba(30, 42, 66, 0.5)",
+                  borderColor: "rgba(75, 159, 255, 0.3)",
+                  color: "#F0F6FF"
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(75, 159, 255, 0.6)";
+                  e.currentTarget.style.boxShadow = "0 0 12px rgba(75, 159, 255, 0.2)";
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(75, 159, 255, 0.3)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
                 disabled={isSubmitting}
               />
             </div>
 
             <div className="relative">
-              <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
-              <Input
+              <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 z-10 pointer-events-none" style={{ color: "#C8D8EE" }} />
+              <input
                 placeholder="Phone Number"
                 type="tel"
                 value={formData.phone}
                 onChange={handlePhoneChange}
                 ref={phoneRef}
-                className="pl-10 bg-background"
+                className="pl-10 w-full py-2 rounded-lg border px-3 transition-colors duration-200"
+                style={{
+                  background: "rgba(30, 42, 66, 0.5)",
+                  borderColor: "rgba(75, 159, 255, 0.3)",
+                  color: "#F0F6FF"
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(75, 159, 255, 0.6)";
+                  e.currentTarget.style.boxShadow = "0 0 12px rgba(75, 159, 255, 0.2)";
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(75, 159, 255, 0.3)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
                 disabled={isSubmitting}
               />
             </div>
 
             <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
-              <Input
+              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 z-10 pointer-events-none" style={{ color: "#C8D8EE" }} />
+              <input
                 id="consult-location"
                 placeholder="Your Location"
                 value={formData.location}
                 onChange={(e) =>
                   setFormData({ ...formData, location: e.target.value })
                 }
-                className="pl-10 bg-background"
+                className="pl-10 w-full py-2 rounded-lg border px-3 transition-colors duration-200"
+                style={{
+                  background: "rgba(30, 42, 66, 0.5)",
+                  borderColor: "rgba(75, 159, 255, 0.3)",
+                  color: "#F0F6FF"
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(75, 159, 255, 0.6)";
+                  e.currentTarget.style.boxShadow = "0 0 12px rgba(75, 159, 255, 0.2)";
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(75, 159, 255, 0.3)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
                 disabled={isSubmitting}
                 ref={locationRef}
               />
             </div>
 
-            <Button
+            <button
               type="submit"
-              className="w-full gap-2 shadow-safety hover:scale-105 transition-all duration-300"
               disabled={isSubmitting}
-              size="lg"
+              className="w-full gap-2 py-2 rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              style={{
+                background: "linear-gradient(135deg, #FF6B42 0%, #F25024 100%)",
+                color: "#ffffff",
+                boxShadow: "0 4px 12px rgba(255, 107, 66, 0.2)"
+              }}
+              onMouseEnter={(e) => {
+                if (!e.currentTarget.disabled) {
+                  e.currentTarget.style.boxShadow = "0 6px 20px rgba(255, 107, 66, 0.4)";
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = "0 4px 12px rgba(255, 107, 66, 0.2)";
+                e.currentTarget.style.transform = "none";
+              }}
             >
               {isSubmitting ? (
                 <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2" style={{ borderBottomColor: "#ffffff" }}></div>
                   Submitting...
                 </>
               ) : (
@@ -381,9 +470,9 @@ const LocationAboutSection = ({ location }: { location: string }) => {
                   <ArrowRight className="h-4 w-4" />
                 </>
               )}
-            </Button>
+            </button>
 
-            <p className="text-xs text-center text-muted-foreground">
+            <p className="text-xs text-center" style={{ color: "#C8D8EE" }}>
               We&apos;ll call you within 15 minutes
             </p>
           </form>

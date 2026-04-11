@@ -18,13 +18,15 @@ const FEATURED_SERVICES = [
 
 const FeaturedLocations = () => {
   return (
-    <section className="py-12 md:py-16 bg-muted/30">
+    <section className="py-12 md:py-16" style={{
+      background: "linear-gradient(180deg, #0F1729 0%, #0A111A 100%)"
+    }}>
       <div className="container mx-auto px-4">
         <div className="text-center space-y-4 mb-8 md:mb-12">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold" style={{ color: "#F0F6FF" }}>
             Our Service Locations
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="max-w-2xl mx-auto" style={{ color: "#C8D8EE" }}>
             Professional installation services available across major cities in South India
           </p>
         </div>
@@ -38,17 +40,31 @@ const FeaturedLocations = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <Card className="h-full hover:shadow-lg transition-shadow">
-                <CardContent className="p-6 space-y-4">
+              <div className="h-full rounded-lg transition-all" style={{
+                background: "linear-gradient(135deg, #1E2A42 0%, #121D2F 100%)",
+                border: "1px solid rgba(30, 42, 66, 0.5)",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                padding: "1.5rem"
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = "0 8px 24px rgba(75, 159, 255, 0.2)";
+                e.currentTarget.style.borderColor = "rgba(75, 159, 255, 0.5)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.3)";
+                e.currentTarget.style.borderColor = "rgba(30, 42, 66, 0.5)";
+              }}
+              >
+                <div className="space-y-4">
                   <div className="flex items-start gap-3">
-                    <div className="p-2 rounded-lg bg-primary/10">
-                      <MapPin className="h-5 w-5 text-primary" />
+                  <div className="p-2 rounded-lg" style={{ backgroundColor: "rgba(75, 159, 255, 0.1)" }}>
+                    <MapPin className="h-5 w-5" style={{ color: "#FF6B42" }} />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-lg">
+                      <h3 className="font-semibold text-lg" style={{ color: "#F0F6FF" }}>
                         {location.name || key.charAt(0).toUpperCase() + key.slice(1)}
                       </h3>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm" style={{ color: "#C8D8EE" }}>
                         {location.state}
                       </p>
                     </div>
@@ -63,7 +79,8 @@ const FeaturedLocations = () => {
                           <Link
                             key={serviceId}
                             href={`/services/${serviceId}/${key}`}
-                            className="block text-sm hover:text-primary transition-colors"
+                            className="block text-sm transition-colors"
+                            style={{ color: "#C8D8EE" }}
                           >
                             • {service.title} in {location.name}
                           </Link>
@@ -76,7 +93,12 @@ const FeaturedLocations = () => {
                       {location.areas.slice(0, 3).map((area) => (
                         <span
                           key={area}
-                          className="text-xs bg-muted px-2 py-1 rounded-md text-muted-foreground"
+                          className="text-xs px-2 py-1 rounded-md"
+                          style={{
+                            background: "rgba(46, 127, 217, 0.15)",
+                            color: "#C8D8EE",
+                            border: "1px solid rgba(46, 127, 217, 0.3)"
+                          }}
                         >
                           {area}
                         </span>
@@ -85,12 +107,25 @@ const FeaturedLocations = () => {
                   </div>
 
                   {/* View All Services Link */}
-                  <Button variant="outline" size="sm" className="w-full gap-2" asChild>
-                    <Link href={`/locations/${key}`}>
+                  <button className="w-full gap-2 text-sm py-2 rounded-lg transition-all" style={{
+                    backgroundColor: "transparent",
+                    color: "#FF6B42",
+                    border: "1px solid rgba(75, 159, 255, 0.5)"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "rgba(75, 159, 255, 0.1)";
+                    e.currentTarget.style.boxShadow = "0 0 12px rgba(75, 159, 255, 0.2)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "transparent";
+                    e.currentTarget.style.boxShadow = "none";
+                  }}
+                  >
+                    <Link href={`/locations/${key}/`} className="flex items-center justify-center gap-2">
                       View Details
                       <ArrowRight className="h-4 w-4" />
                     </Link>
-                  </Button>
+                  </button>
                 </CardContent>
               </Card>
             </motion.div>

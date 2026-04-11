@@ -19,29 +19,29 @@ const LOCATIONS = ['hyderabad', 'bangalore', 'chennai', 'vijayawada', 'visakhapa
 
 function generateSitemap() {
   const mainPages = [
-    { url: '', priority: '1.0', changefreq: 'daily' },
-    { url: '/about', priority: '0.8', changefreq: 'monthly' },
-    { url: '/contact', priority: '0.8', changefreq: 'monthly' },
-    { url: '/gallery', priority: '0.9', changefreq: 'weekly' },
-    { url: '/services', priority: '0.9', changefreq: 'daily' }
+    { url: '/', priority: '1.0', changefreq: 'daily' },
+    { url: '/about/', priority: '0.8', changefreq: 'monthly' },
+    { url: '/contact/', priority: '0.8', changefreq: 'monthly' },
+    { url: '/gallery/', priority: '0.9', changefreq: 'weekly' },
+    { url: '/services/', priority: '0.9', changefreq: 'daily' }
   ];
 
   const locationPages = LOCATIONS.map(loc => ({
-    url: `/locations/${loc}`,
-    priority: '0.8',
+    url: `/locations/${loc}/`,
+    priority: '0.95',
     changefreq: 'weekly'
   }));
 
   const servicePages = Object.keys(servicesData).map(slug => ({
-    url: `/services/${slug}`,
+    url: `/services/${slug}/`,
     priority: '0.9',
     changefreq: 'weekly'
   }));
 
   const serviceLocationPages = Object.keys(servicesData).flatMap(slug => 
     LOCATIONS.map(loc => ({
-      url: `/services/${slug}/${loc}`,
-      priority: '0.8',
+      url: `/services/${slug}/${loc}/`,
+      priority: '0.85',
       changefreq: 'weekly'
     }))
   );

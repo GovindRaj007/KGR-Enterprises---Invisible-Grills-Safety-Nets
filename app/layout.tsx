@@ -5,9 +5,7 @@ import "./globals.css";
 import { getCanonicalUrl } from "@/lib/canonical-url";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/FooterClient";
-import FloatingContact from "@/components/layout/FloatingContact";
+import MainLayout from "@/components/layout/MainLayout";
 import { PRIMARY } from '@/constants/contacts';
 
 const inter = Inter({ subsets: ["latin"] });
@@ -185,7 +183,7 @@ export default function RootLayout({
         "department": [
           {
             "@type": "LocalBusiness",
-            "@id": "https://invisiblegrillsandsafetynets.in/locations/hyderabad#localbusiness",
+            "@id": "https://invisiblegrillsandsafetynets.in/locations/hyderabad/#localbusiness",
             "name": "Invisible Grills & Safety Nets in Hyderabad",
             "image": "https://invisiblegrillsandsafetynets.in/images/hero-image.jpg",
             "address": {
@@ -204,12 +202,13 @@ export default function RootLayout({
             "areaServed": "Hyderabad",
             "priceRange": "₹₹",
             "telephone": phoneNumber,
-            "url": "https://invisiblegrillsandsafetynets.in/locations/hyderabad"
+            "url": "https://invisiblegrillsandsafetynets.in/locations/hyderabad/"
           },
           {
             "@type": "LocalBusiness",
-            "@id": "https://invisiblegrillsandsafetynets.in/locations/bangalore#localbusiness",
+            "@id": "https://invisiblegrillsandsafetynets.in/locations/bangalore/#localbusiness",
             "name": "Invisible Grills & Safety Nets in Bangalore",
+            "image": "https://invisiblegrillsandsafetynets.in/images/hero-image.jpg",
             "address": {
               "@type": "PostalAddress",
               "streetAddress": "367, 2nd A Main Road, Gokula Extension, Mathikera, Bangalore Division",
@@ -226,12 +225,13 @@ export default function RootLayout({
             "areaServed": "Bangalore",
             "priceRange": "₹₹",
             "telephone": phoneNumber,
-            "url": "https://invisiblegrillsandsafetynets.in/locations/bangalore"
+            "url": "https://invisiblegrillsandsafetynets.in/locations/bangalore/"
           },
           {
             "@type": "LocalBusiness",
-            "@id": "https://invisiblegrillsandsafetynets.in/locations/chennai#localbusiness",
+            "@id": "https://invisiblegrillsandsafetynets.in/locations/chennai/#localbusiness",
             "name": "Invisible Grills & Safety Nets in Chennai",
+            "image": "https://invisiblegrillsandsafetynets.in/images/hero-image.jpg",
             "address": {
               "@type": "PostalAddress",
               "streetAddress": "25/9a, Sathya Moorthy Street, Kamaraj Nagar, Choolaimedu",
@@ -248,12 +248,13 @@ export default function RootLayout({
             "areaServed": "Chennai",
             "priceRange": "₹₹",
             "telephone": phoneNumber,
-            "url": "https://invisiblegrillsandsafetynets.in/locations/chennai"
+            "url": "https://invisiblegrillsandsafetynets.in/locations/chennai/"
           },
           {
             "@type": "LocalBusiness",
-            "@id": "https://invisiblegrillsandsafetynets.in/locations/vijayawada#localbusiness",
+            "@id": "https://invisiblegrillsandsafetynets.in/locations/vijayawada/#localbusiness",
             "name": "Invisible Grills & Safety Nets in Vijayawada",
+            "image": "https://invisiblegrillsandsafetynets.in/images/hero-image.jpg",
             "address": {
               "@type": "PostalAddress",
               "streetAddress": "3-12, Ayyappa Nagar, Benz Circle",
@@ -270,12 +271,13 @@ export default function RootLayout({
             "areaServed": "Vijayawada",
             "priceRange": "₹₹",
             "telephone": phoneNumber,
-            "url": "https://invisiblegrillsandsafetynets.in/locations/vijayawada"
+            "url": "https://invisiblegrillsandsafetynets.in/locations/vijayawada/"
           },
           {
             "@type": "LocalBusiness",
-            "@id": "https://invisiblegrillsandsafetynets.in/locations/visakhapatnam#localbusiness",
+            "@id": "https://invisiblegrillsandsafetynets.in/locations/visakhapatnam/#localbusiness",
             "name": "Invisible Grills & Safety Nets in Visakhapatnam",
+            "image": "https://invisiblegrillsandsafetynets.in/images/hero-image.jpg",
             "address": {
               "@type": "PostalAddress",
               "streetAddress": "21-3/4/3, Viman Nagar, Kakani Nagar",
@@ -292,7 +294,7 @@ export default function RootLayout({
             "areaServed": "Visakhapatnam",
             "priceRange": "₹₹",
             "telephone": phoneNumber,
-            "url": "https://invisiblegrillsandsafetynets.in/locations/visakhapatnam"
+            "url": "https://invisiblegrillsandsafetynets.in/locations/visakhapatnam/"
           }
         ],
         "aggregateRating": {
@@ -332,9 +334,9 @@ export default function RootLayout({
             __html: JSON.stringify(schemaData),
           }}
         />
-        {/* Google Analytics 4 - with performance optimization */}
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-339PTXCP6X" strategy="afterInteractive" />
-        <Script id="google-analytics" strategy="afterInteractive">
+        {/* Google Analytics 4 - with lazy loading strategy */}
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-339PTXCP6X" strategy="lazyOnload" />
+        <Script id="google-analytics" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -345,15 +347,14 @@ export default function RootLayout({
             });
           `}
         </Script>
+        {/* Fuse.js for client-side search */}
+        <Script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js" strategy="beforeInteractive" />
       </head>
       <body className={inter.className}>
         <TooltipProvider>
-          <div className="min-h-screen bg-background relative overflow-x-hidden">
-            <Header />
-            <main className="w-full">{children}</main>
-            <Footer />
-            <FloatingContact />
-          </div>
+          <MainLayout>
+            {children}
+          </MainLayout>
           <Toaster />
         </TooltipProvider>
       </body>

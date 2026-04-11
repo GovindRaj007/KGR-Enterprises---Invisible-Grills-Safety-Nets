@@ -10,14 +10,14 @@ const FloatingContact = () => {
       icon: FaPhoneAlt,
       label: "Call",
        action: PRIMARY.tel,
-      bg: "bg-primary hover:bg-primary/90",
+      bg: "bg-cyan-400",
       delay: "0ms"
     },
     {
       icon: FaWhatsapp,
       label: "WhatsApp",
        action: `${PRIMARY.wa}?text=Hi%2C%20I%20need%20a%20quote%20for%20invisible%20grills%20and%20safety%20nets`,
-      bg: "bg-green-500 hover:bg-green-600",
+      bg: "bg-whatsapp",
       delay: "100ms"
     }
   ];
@@ -31,8 +31,13 @@ const FloatingContact = () => {
             key={index}
             asChild
             size="lg"
-            className={`w-12 h-12 md:w-14 md:h-14 rounded-full shadow-strong ${option.bg} text-white border-2 border-white/20 hover:scale-110 transition-all duration-300 animate-fade-in backdrop-blur-sm p-0`}
-            style={{ animationDelay: option.delay }}
+            className={`w-12 h-12 md:w-14 md:h-14 rounded-full ${option.bg} text-white border-2 border-white/20 hover:scale-110 transition-all duration-300 animate-fade-in backdrop-blur-sm p-0`}
+            style={{ 
+              animationDelay: option.delay,
+              boxShadow: option.label === "WhatsApp" 
+                ? "0 4px 20px rgba(37, 211, 102, 0.50), 0 0 40px rgba(37, 211, 102, 0.20)"
+                : "0 4px 20px rgba(0, 212, 255, 0.40), 0 0 40px rgba(0, 212, 255, 0.15)"
+            }}
           >
             <a 
               href={option.action}

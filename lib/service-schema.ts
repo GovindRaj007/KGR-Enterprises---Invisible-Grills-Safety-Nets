@@ -1,4 +1,5 @@
 import { baseUrl, generateOrganizationSchema } from './organization-schema';
+import { PRIMARY } from '@/constants/contacts';
 
 export function generateServiceSchema(params: {
   serviceName: string;
@@ -111,8 +112,12 @@ export function generateServiceSchema(params: {
   const serviceSchema = {
     '@type': ['Service', 'HomeAndConstructionBusiness'],
     'name': `${serviceName} Installation Service`,
-    'serviceType': ['Installation Service', 'Home Safety', serviceName],
     'description': `Professional installation of ${serviceName}`,
+    'image': `${baseUrl}${image}`,
+    'telephone': PRIMARY.phone,
+    'priceRange': '₹₹₹',
+    'address': organizationSchema.address,
+    'serviceType': ['Installation Service', 'Home Safety', serviceName],
     'provider': organizationSchema,
     'category': 'Home Safety & Security Equipment',
     'areaServed': [

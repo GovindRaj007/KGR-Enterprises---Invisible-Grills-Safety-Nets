@@ -3,6 +3,8 @@ import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import dynamic from 'next/dynamic';
 import { PRIMARY, SECONDARY, } from '@/constants/contacts';
 import { Card, CardContent } from "@/components/ui/card";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import HeroWithHeaderWrapper from "@/components/layout/HeroWithHeaderWrapper";
 const ConsultationForm = dynamic(() => import('@/components/shared/ConsultationFormClient'), { loading: () => <div className="p-4">Loading...</div> });
 
 export const metadata: Metadata = {
@@ -17,35 +19,53 @@ export const metadata: Metadata = {
     'max-snippet': -1,
   },
   keywords: [
-         "invisible grills in Hyderabad",
-    "Kgr invisible grills",
-    "invisible grills near me",
-    "invisible grills in Bangalore",
-    "safety nets in Hyderabad",
-    "safety net installation near me",
-    "Kgr safety nets",
-    "invisible grill installation",
-    "best invisible grills in hyderabad",
-    "best invisible grills in bangalore",
-    "balcony safety nets in bangalore",
-    "pigeon nets in hyderabad",
-    "best invisible grills in chennai",
-    "safety nets in bangalore",
-    "balcony safety nets in hyderabad",
-    "invisible grills in chennai",
-    "safety nets in Chennai",
-    "balcony safety nets in Chennai",
-    "pigeon nets in chennai",
-    "invisible grills in vijayawada",
-    "safety nets in vijayawada",
-    "balcony safety nets in vijayawada",
-    "children safety nets in Hyderabad",
-    "children safety nets in Visakhapatnam",
-    "best invisible grills in visakhapatnam",
-    "bird nets",
-    "invisible grills",
-    "pigeon nets",
-    "duct area nets",
+    // Contact & Action Keywords
+    "contact KGR Enterprises",
+    "get in touch",
+    "contact us",
+    "reach out",
+    "schedule consultation",
+    // Service Request Keywords
+    "free consultation",
+    "free quote",
+    "free site inspection",
+    "installation estimate",
+    "consultation with experts",
+    "talk to specialist",
+    // Urgency & Quick Action Keywords
+    "call now",
+    "urgent service",
+    "same-day appointment",
+    "quick response",
+    "fast service",
+    "immediate assistance",
+    // Contact Method Keywords
+    "phone support",
+    "email support",
+    "contact form",
+    "office location",
+    "business hours",
+    "customer service",
+    // Local Contact Keywords
+    "Hyderabad office",
+    "Bangalore location",
+    "Chennai contact",
+    "service center",
+    "nearest office",
+    "local support",
+    // Sales & Lead Keywords
+    "get started",
+    "book appointment",
+    "reserve slot",
+    "inquiry form",
+    "business inquiry",
+    // Long-tail Contact Keywords
+    "how to contact KGR",
+    "customer support phone",
+    "contact safety experts",
+    "reach installation team",
+    "schedule free inspection",
+    "24/7 customer support",
   ],
   openGraph: {
     title: "Contact KGR Invisible Grills & Safety Nets - Free Consultation",
@@ -88,8 +108,8 @@ export default function ContactPage() {
       details: [
         {
           label: "Business Inquiries",
-          value: "kgr.invisiblegrills.nets@gmail.com",
-          href: "mailto:kgr.invisiblegrills.nets@gmail.com",
+          value: "kgr@invisiblegrillsandsafetynets.in",
+          href: "mailto:kgr@invisiblegrillsandsafetynets.in",
         },
       ],
     },
@@ -132,55 +152,40 @@ export default function ContactPage() {
     },
   ];
 
-  const breadcrumbSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    'itemListElement': [
-      {
-        '@type': 'ListItem',
-        'position': 1,
-        'name': 'Home',
-        'item': 'https://invisiblegrillsandsafetynets.in/'
-      },
-      {
-        '@type': 'ListItem',
-        'position': 2,
-        'name': 'Contact',
-        'item': 'https://invisiblegrillsandsafetynets.in/contact'
-      }
-    ]
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      <section className="relative overflow-hidden mb-6">
-        <img 
-          src="/images/hero-image.jpg" 
-          alt="Contact KGR Enterprises" 
-          className="object-cover w-full h-full absolute inset-0"
-          loading="eager"
-          decoding="async"
-          width="1920"
-          height="1080"
-          fetchPriority="high"
-        />
-        <div className="absolute inset-0 bg-black/45" />
-        <div className="relative container mx-auto px-4 py-20 md:py-28 lg:py-36 text-center">
-          <div className="max-w-3xl mx-auto">
-            <h1 className="text-4xl lg:text-6xl font-bold mb-6 text-white">
-              Get In <span className="text-gradient">Touch</span>
-            </h1>
-            <p className="text-xl text-white/90">
-              Have questions? We are here to help. Contact us for a free
-              consultation and site inspection.
-            </p>
+      <HeroWithHeaderWrapper>
+        <section className="relative overflow-hidden" style={{ borderRadius: '1rem' }}>
+          <img 
+            src="/images/hero-image.jpg" 
+            alt="Contact KGR Enterprises" 
+            className="object-cover w-full h-full absolute inset-0"
+            loading="eager"
+            decoding="async"
+            width="1920"
+            height="1080"
+            fetchPriority="high"
+          />
+          <div className="absolute inset-0 bg-black/20" />
+          <div className="relative container mx-auto px-4 py-20 md:py-28 lg:py-36 text-center">
+            <div className="max-w-3xl mx-auto">
+              <Breadcrumbs
+                items={[
+                  { label: "Contact" },
+                ]}
+                darkMode={true}
+              />
+              <h1 className="text-4xl lg:text-6xl font-bold mb-6 text-white">
+                Get In <span className="text-gradient">Touch</span>
+              </h1>
+              <p className="text-xl text-white/90">
+                Have questions? We are here to help. Contact us for a free
+                consultation and site inspection.
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </HeroWithHeaderWrapper>
 
       <div className="container mx-auto px-4 mb-4">
         <div className="grid lg:grid-cols-3 gap-12">
