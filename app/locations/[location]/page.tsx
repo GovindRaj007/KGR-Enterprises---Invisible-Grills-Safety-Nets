@@ -61,7 +61,23 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
       description: `Leading provider of invisible grills and safety nets in ${matched.name}. Professional installation, marine-grade materials, and lifetime support.`,
       url: `https://invisiblegrillsandsafetynets.in/locations/${locName.toLowerCase()}/`,
       siteName: 'KGR Enterprises',
-      type: 'website'
+      type: 'website',
+      images: [
+        {
+          url: '/images/invisible-grill-1.jpg',
+          width: 1200,
+          height: 630,
+          alt: `Professional Invisible Grills & Safety Nets Installation in ${matched.name}`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `KGR Enterprises - Invisible Grills & Safety Nets in ${matched.name}`,
+      description: `Professional invisible grills and safety nets installation in ${matched.name}. Free site inspection and 15-year warranty.`,
+      images: ['/images/invisible-grill-1.jpg'],
+      site: '@Kgr_Grills_Nets',
+      creator: '@Kgr_Grills_Nets',
     },
     keywords: [
          "invisible grills in Hyderabad",

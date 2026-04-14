@@ -47,7 +47,7 @@ const slides = [
       "Comprehensive safety nets for balcony, windows, and outdoor areas. Premium quality, weather-resistant, and certified for maximum protection for your family.",
     image: "/images/balcony-net-1.jpg",
     keywords: ["Child Safety", "Pet Protection", "Weather Resistant"],
-    href: "/services/balcony-safety-nets",
+    href: "/services/balcony-safety",
     cta: "Explore Safety Nets",
   },
   {
@@ -59,7 +59,7 @@ const slides = [
       "Maximize your space with our premium ceiling-mounted cloth drying systems. Pulley-operated, rust-proof, and designed for the modern Indian home.",
     image: "/images/cloth-drying-pulley-1.jpg",
     keywords: ["Pulley System", "Space Saving", "Rust-Proof"],
-    href: "/services/ceiling-cloth-hanger",
+    href: "/services/cloth-drying",
     cta: "Explore Hangers",
   },
   {
@@ -71,7 +71,7 @@ const slides = [
       "High-quality sports nets for cricket, badminton, and other sports. Durable, weather-resistant, and perfect for recreational and professional use.",
     image: "/images/all-sports-net-1.jpg",
     keywords: ["Professional Grade", "Durable", "Weather Resistant"],
-    href: "/services/sports-nets",
+    href: "/services/all-sports-practice",
     cta: "Explore Sports Nets",
   },
 ];

@@ -350,16 +350,6 @@ body {
   animation: net-float 20s ease-in-out infinite;
 }
 
-.floating-contact {
-  position: fixed;
-  right: 1rem;
-  bottom: 1rem;
-  z-index: 50;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
 .language-selector {
   position: relative;
   z-index: 40;
@@ -532,32 +522,6 @@ body {
   color: var(--color-text-muted);
 }
 
-/* Cyan Accent Utilities */
-.text-cyan {
-  color: var(--color-cyan);
-}
-
-.text-cyan-bright {
-  color: var(--color-cyan-bright);
-}
-
-.bg-cyan-tint {
-  background-color: rgba(0, 212, 255, 0.08);
-}
-
-/* Violet Accent Utilities */
-.text-violet-navy {
-  color: var(--color-violet);
-}
-
-.text-violet-light-navy {
-  color: var(--color-violet-light);
-}
-
-.bg-violet-tint {
-  background-color: rgba(124, 58, 237, 0.08);
-}
-
 /* CTA Button Utilities */
 .btn-cta-primary {
   background: var(--gradient-cta-primary);
@@ -570,17 +534,6 @@ body {
   transform: translateY(-2px);
 }
 
-.btn-cta-cyan {
-  background: var(--gradient-cta-cyan);
-  color: var(--color-bg-base);
-  font-weight: 700;
-}
-
-.btn-cta-cyan:hover {
-  box-shadow: var(--shadow-glow-cyan);
-  transform: translateY(-2px);
-}
-
 /* Card Utilities */
 .card-default {
   background: var(--card-bg-default);
@@ -589,88 +542,12 @@ body {
   box-shadow: var(--card-shadow-default);
 }
 
-.card-cyan {
-  background: var(--card-bg-cyan);
-  border: var(--card-border-cyan);
-  border-radius: 12px;
-  box-shadow: var(--card-shadow-cyan);
-}
-
-.card-violet {
-  background: var(--card-bg-violet);
-  border: var(--card-border-violet);
-  border-radius: 12px;
-  box-shadow: var(--card-shadow-violet);
-}
-
 .card-glass {
   background: var(--card-bg-glass);
   border: var(--card-border-glass);
   backdrop-filter: var(--card-backdrop-glass);
   -webkit-backdrop-filter: var(--card-backdrop-glass);
   border-radius: 12px;
-}
-
-/* Card Hover Effects */
-.card-hover {
-  box-shadow: var(--shadow-lift-card);
-  transform: translateY(-4px);
-  transition: all 0.2s ease;
-}
-
-/* Glow Effects */
-.glow-cyan {
-  box-shadow: var(--shadow-glow-cyan);
-}
-
-.glow-gold {
-  box-shadow: var(--shadow-glow-gold);
-}
-
-.glow-violet {
-  box-shadow: var(--shadow-glow-violet);
-}
-
-/* Image Overlays */
-.overlay-standard {
-  background: var(--gradient-overlay-standard);
-}
-
-.overlay-fade {
-  background: var(--gradient-overlay-fade);
-}
-
-.overlay-hero-slider {
-  background: var(--gradient-overlay-hero-slider);
-}
-
-/* Border Utilities */
-.border-navy-default {
-  border-color: var(--color-border);
-}
-
-.border-cyan-accent {
-  border-color: var(--color-border-cyan);
-}
-
-.border-violet-accent {
-  border-color: var(--color-border-violet);
-}
-
-/* Input & Form Utilities */
-.input-navy {
-  background-color: var(--color-bg-card);
-  border-color: var(--color-border);
-  color: var(--color-text-primary);
-}
-
-.input-navy::placeholder {
-  color: var(--color-text-muted);
-}
-
-.input-navy:focus {
-  border-color: var(--color-cyan);
-  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
 }
 
 /* Success & Action States */

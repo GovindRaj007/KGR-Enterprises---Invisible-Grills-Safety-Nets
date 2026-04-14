@@ -6,13 +6,14 @@ import { Home, Menu, Search, Wrench, MessageCircle, Phone } from 'lucide-react';
 
 interface BottomCTAProps {
   onMenuClick?: () => void;
+  onSearchClick?: () => void;
 }
 
-const BottomCTA: React.FC<BottomCTAProps> = ({ onMenuClick }) => {
+const BottomCTA: React.FC<BottomCTAProps> = ({ onMenuClick, onSearchClick }) => {
   const navItems = [
     { icon: Home, label: 'Home', href: '/', action: undefined },
     { icon: Menu, label: 'Menu', href: '#menu', action: onMenuClick },
-    { icon: Search, label: 'Search', href: '#search', action: undefined },
+    { icon: Search, label: 'Search', href: '#search', action: onSearchClick },
     { icon: Wrench, label: 'Services', href: '/services', action: undefined },
     { icon: MessageCircle, label: 'WhatsApp', href: 'https://wa.me/1234567890', external: true, action: undefined },
     { icon: Phone, label: 'Call', href: 'tel:+1234567890', external: true, action: undefined },

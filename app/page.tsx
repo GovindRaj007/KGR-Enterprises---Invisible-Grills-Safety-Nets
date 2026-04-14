@@ -67,6 +67,13 @@ export const metadata: Metadata = {
     siteName: "KGR Enterprises",
     images: [
       {
+        url: "/images/invisible-grill-1.jpg",
+        width: 1200,
+        height: 630,
+        alt: "KGR Enterprises - Premium Invisible Grills & Safety Nets",
+        type: "image/jpeg",
+      },
+      {
         url: "/logo.png",
         width: 300,
         height: 300,
@@ -76,6 +83,11 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    title: "KGR Enterprises - Premium Invisible Grills & Safety Nets",
+    description: "Premium invisible grills and safety nets installation across Hyderabad, Bangalore, Chennai. 15-year warranty, marine-grade materials, expert installation.",
+    images: ["/images/invisible-grill-1.jpg"],
+    site: "@Kgr_Grills_Nets",
+    creator: "@Kgr_Grills_Nets",
   },
   robots: {
     index: true,

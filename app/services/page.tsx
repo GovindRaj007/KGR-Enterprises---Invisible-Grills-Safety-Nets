@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
-import ServicesSection from "@/components/services/ServicesSection";
 import { servicesData } from "@/data/servicesData";
-import ServiceLocationsSlider from "@/components/services/ServiceLocationsSlider";
+import { ServicesSectionClient, ServiceLocationsSliderClient } from "@/components/services/ServicesClientWrapper";
 
 export const metadata: Metadata = {
   title: "Our Services - Invisible Grills, Safety Nets & Bird Protection",
@@ -127,8 +126,8 @@ export default function ServicesPage() {
           darkMode={false}
         />
       </div>
-      <ServicesSection />
-      <ServiceLocationsSlider />
+      <ServicesSectionClient />
+      <ServiceLocationsSliderClient />
     </>
   );
 }

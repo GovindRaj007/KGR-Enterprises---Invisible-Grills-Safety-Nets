@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, Phone, MessageCircle, Search, MapPin } from "lucide-react";
@@ -15,8 +15,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { servicesData, serviceCategories } from "@/data/servicesData";
 import { PRIMARY } from '@/constants/contacts';
 import { PRIMARY_LOCATIONS } from '@/lib/seo-metadata';
-import MobileSearchDrawer from "./../../components/search/MobileSearchDrawer";
-import DesktopSearchPanel from "./../../components/search/DesktopSearchPanel";
+import { normalizeInternalLink } from "@/lib/url-utils";
 
 const CONTACTS = [
   {
@@ -35,8 +34,6 @@ const CONTACTS = [
   },
 ];
 
-import { normalizeInternalLink } from "@/lib/url-utils";
-
 const menuItems = [
   { label: "Home", href: normalizeInternalLink("/") },
   { label: "About", href: normalizeInternalLink("/about") },
@@ -47,44 +44,14 @@ const menuItems = [
 ];
 
 interface HeaderProps {
-  menuOpen: boolean;
+  menuOpen?: boolean;
   onMenuToggle: () => void;
+  onSearchOpen?: () => void; // optional - lifted up — search state now lives in MainLayout
 }
 
-const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
+const Header: React.FC<HeaderProps> = ({ onMenuToggle, onSearchOpen = () => {} }) => {
   const [activeTab, setActiveTab] = useState("invisible-grills");
-  const [searchOpen, setSearchOpen] = useState(false);
   const pathname = usePathname();
-
-  // Handle keyboard shortcuts for search
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      // Cmd+K or Ctrl+K to open search
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        setSearchOpen(true);
-        document.body.style.overflow = "hidden";
-      }
-      // ESC to close search
-      if (e.key === "Escape" && searchOpen) {
-        setSearchOpen(false);
-        document.body.style.overflow = "auto";
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [searchOpen]);
-
-  const openSearch = () => {
-    setSearchOpen(true);
-    document.body.style.overflow = "hidden";
-  };
-
-  const closeSearch = () => {
-    setSearchOpen(false);
-    document.body.style.overflow = "auto";
-  }
 
   const closeDropdown = () => {
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
@@ -102,9 +69,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
             href={`/services/${serviceId}`}
             onClick={closeDropdown}
             className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-all duration-300 bg-transparent hover:bg-cyan-tint border-l-2 border-transparent hover:border-l-2 hover:border-cyan-400"
-            style={{
-              color: "#C8D8EE"
-            }}
+            style={{ color: "#C8D8EE" }}
             onMouseEnter={(e) => {
               e.currentTarget.style.color = "#FF6B42";
               e.currentTarget.style.borderLeftColor = "#FF6B42";
@@ -146,12 +111,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
                 background: "linear-gradient(135deg, #FF6B42 0%, #F25024 100%)",
                 color: "#ffffff",
                 fontWeight: "700",
-                boxShadow: "0 4px 20px rgba(255, 107, 66, 0.40)"
+                boxShadow: "0 4px 20px rgba(255, 107, 66, 0.40)",
               }
-            : {
-                color: "#2d3748",
-                border: "none"
-              }
+            : { color: "#2d3748", border: "none" }
         }
         onMouseEnter={(e: any) => {
           if (!isButton) {
@@ -184,30 +146,28 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
       const isHome = item.label === 'Home';
       const normalizedPathname = pathname === '/' ? '/' : (pathname?.replace(/\/$/, '') || '');
       const normalizedHref = isHome ? '/' : item.href;
-      const isActive = item.isServices ? pathname?.startsWith('/services') : item.isLocations ? pathname?.startsWith('/locations') : normalizedPathname === normalizedHref;
-      
+      const isActive = item.isServices
+        ? pathname?.startsWith('/services')
+        : item.isLocations
+        ? pathname?.startsWith('/locations')
+        : normalizedPathname === normalizedHref;
+
       if (item.isServices) {
         return (
           <NavigationMenuItem key="services" value="services">
-            <NavigationMenuTrigger 
+            <NavigationMenuTrigger
               className="py-2 px-2.5 text-sm lg:text-base xl:text-lg font-medium rounded transition-colors"
-              style={{ 
+              style={{
                 color: isActive ? '#FF6B42' : '#2d3748',
                 textDecoration: isActive ? 'underline' : 'none',
                 backgroundColor: 'transparent',
-                border: 'none'
+                border: 'none',
               }}
               onMouseEnter={(e: any) => {
-                if (!isActive) {
-                  e.currentTarget.style.color = '#FF6B42';
-                  e.currentTarget.style.textDecoration = 'underline';
-                }
+                if (!isActive) { e.currentTarget.style.color = '#FF6B42'; e.currentTarget.style.textDecoration = 'underline'; }
               }}
               onMouseLeave={(e: any) => {
-                if (!isActive) {
-                  e.currentTarget.style.color = '#2d3748';
-                  e.currentTarget.style.textDecoration = 'none';
-                }
+                if (!isActive) { e.currentTarget.style.color = '#2d3748'; e.currentTarget.style.textDecoration = 'none'; }
               }}
             >
               Services
@@ -216,35 +176,23 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
               <div className="p-4 w-[400px] lg:w-[550px] h-[60vh] overflow-y-auto rounded-md" style={{
                 background: "linear-gradient(135deg, #121D2F 0%, #1E2A42 50%, #121D2F 100%)",
                 border: "1px solid #1E2A42",
-                backdropFilter: "blur(16px)"
+                backdropFilter: "blur(16px)",
               }}>
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                   <TabsList className="mb-4 w-full flex gap-2" style={{ backgroundColor: "transparent" }}>
-                    {Object.entries(serviceCategories).map(
-                      ([categoryKey, category]) => (
-                        <TabsTrigger
-                          key={categoryKey}
-                          value={categoryKey}
-                          style={{
-                            borderRadius: "8px",
-                            padding: "8px 14px",
-                            fontSize: "14px",
-                            fontWeight: "500",
-                            transition: "all 0.2s ease"
-                          }}
-                          className="bg-transparent text-[#C8D8EE] border border-transparent hover:border-white data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:border-white"
-                        >
-                          {category.title}
-                        </TabsTrigger>
-                      )
-                    )}
+                    {Object.entries(serviceCategories).map(([categoryKey, category]) => (
+                      <TabsTrigger
+                        key={categoryKey}
+                        value={categoryKey}
+                        style={{ borderRadius: "8px", padding: "8px 14px", fontSize: "14px", fontWeight: "500", transition: "all 0.2s ease" }}
+                        className="bg-transparent text-[#C8D8EE] border border-transparent hover:border-white data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:border-white"
+                      >
+                        {category.title}
+                      </TabsTrigger>
+                    ))}
                   </TabsList>
                   {Object.entries(serviceCategories).map(([key, cat]) => (
-                    <TabsContent
-                      key={key}
-                      value={key}
-                      className="space-y-2"
-                    >
+                    <TabsContent key={key} value={key} className="space-y-2">
                       {renderServiceLinks(cat)}
                     </TabsContent>
                   ))}
@@ -258,25 +206,19 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
       if (item.isLocations) {
         return (
           <NavigationMenuItem key="locations" value="locations">
-            <NavigationMenuTrigger 
+            <NavigationMenuTrigger
               className="py-2 px-2.5 text-sm lg:text-base xl:text-lg font-medium rounded transition-colors"
-              style={{ 
+              style={{
                 color: isActive ? '#FF6B42' : '#2d3748',
                 textDecoration: isActive ? 'underline' : 'none',
                 backgroundColor: 'transparent',
-                border: 'none'
+                border: 'none',
               }}
               onMouseEnter={(e: any) => {
-                if (!isActive) {
-                  e.currentTarget.style.color = '#FF6B42';
-                  e.currentTarget.style.textDecoration = 'underline';
-                }
+                if (!isActive) { e.currentTarget.style.color = '#FF6B42'; e.currentTarget.style.textDecoration = 'underline'; }
               }}
               onMouseLeave={(e: any) => {
-                if (!isActive) {
-                  e.currentTarget.style.color = '#2d3748';
-                  e.currentTarget.style.textDecoration = 'none';
-                }
+                if (!isActive) { e.currentTarget.style.color = '#2d3748'; e.currentTarget.style.textDecoration = 'none'; }
               }}
             >
               Locations
@@ -285,7 +227,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
               <div className="p-6 w-[300px] rounded-md" style={{
                 background: "linear-gradient(135deg, #121D2F 0%, #1E2A42 50%, #121D2F 100%)",
                 border: "1px solid #1E2A42",
-                backdropFilter: "blur(16px)"
+                backdropFilter: "blur(16px)",
               }}>
                 <div className="space-y-2">
                   {PRIMARY_LOCATIONS.map((location) => (
@@ -294,9 +236,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
                       href={`/locations/${location.name.toLowerCase()}/`}
                       onClick={closeDropdown}
                       className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-all duration-300 bg-transparent hover:bg-cyan-tint border-l-2 border-transparent hover:border-l-2 hover:border-cyan-400"
-                      style={{
-                        color: "#C8D8EE"
-                      }}
+                      style={{ color: "#C8D8EE" }}
                       onMouseEnter={(e: any) => {
                         e.currentTarget.style.color = "#FF6B42";
                         e.currentTarget.style.borderLeftColor = "#FF6B42";
@@ -328,23 +268,17 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
         <Link
           key={item.label}
           href={item.href}
-          className={`block py-2 px-2.5 text-sm lg:text-base xl:text-lg font-medium rounded transition-colors`}
+          className="block py-2 px-2.5 text-sm lg:text-base xl:text-lg font-medium rounded transition-colors"
           style={{
             color: isActive ? '#FF6B42' : '#2d3748',
-            textDecoration: isActive ? 'underline' : 'none'
+            textDecoration: isActive ? 'underline' : 'none',
           }}
           onMouseEnter={(e) => {
-            if (!isActive) {
-              e.currentTarget.style.color = '#FF6B42';
-              e.currentTarget.style.textDecoration = 'underline';
-            }
+            if (!isActive) { e.currentTarget.style.color = '#FF6B42'; e.currentTarget.style.textDecoration = 'underline'; }
             if (item.label === 'Gallery') import('@/components/gallery/preloadGallery');
           }}
           onMouseLeave={(e) => {
-            if (!isActive) {
-              e.currentTarget.style.color = '#2d3748';
-              e.currentTarget.style.textDecoration = 'none';
-            }
+            if (!isActive) { e.currentTarget.style.color = '#2d3748'; e.currentTarget.style.textDecoration = 'none'; }
           }}
           onFocus={() => {
             if (item.label === 'Gallery') import('@/components/gallery/preloadGallery');
@@ -356,10 +290,17 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
     });
 
   return (
-    <header className="w-full relative z-40 " style={{ background: '#ffffff',borderTopLeftRadius: '1rem', borderTopRightRadius: '1rem' }}>
+    <header
+      className="w-full relative z-40"
+      style={{ 
+        background: '#ffffff', 
+        borderTopLeftRadius: 'clamp(1rem, 2vw, 2rem)',
+        borderTopRightRadius: 'clamp(1rem, 2vw, 2rem)'
+      }}
+    >
       <div className="px-3 md:px-6 py-3 md:py-4">
         <div className="flex items-center justify-between gap-4 h-auto">
-          
+
           {/* Mobile: Menu Button */}
           <button
             onClick={onMenuToggle}
@@ -369,24 +310,24 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
             <Menu className="h-6 w-6" style={{ color: '#000000' }} />
           </button>
 
-          {/* Logo: Centered on Mobile, Left on Desktop */}
+          {/* Logo */}
           <Link href="/" className="flex items-center flex-1 lg:flex-none justify-center lg:justify-start">
-            <img 
-              src="/logo.png" 
-              alt="KGR Enterprises" 
+            <img
+              src="/logo.png"
+              alt="KGR Enterprises"
               className="h-[4.5rem] md:h-[5rem] w-auto object-contain"
             />
           </Link>
 
-          {/* Desktop Navigation: Hidden on Mobile */}
+          {/* Desktop Navigation */}
           <NavigationMenu className="hidden lg:flex flex-1 justify-center">
             <NavigationMenuList className="flex gap-0">{renderMenuItems()}</NavigationMenuList>
           </NavigationMenu>
 
-          {/* Search Icon + Desktop Contacts: Right Side */}
+          {/* Search Icon + Desktop Contacts */}
           <div className="flex items-center gap-1 flex-shrink-0">
             <button
-              onClick={openSearch}
+              onClick={onSearchOpen}
               aria-label="Search (⌘K)"
               className="h-10 w-10 rounded-lg flex items-center justify-center hover:bg-gray-100 transition-colors flex-shrink-0"
               title="Search (Ctrl+K)"
@@ -394,19 +335,12 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
               <Search className="h-5 w-5" style={{ color: '#000000' }} />
             </button>
 
-            {/* Desktop: Show Contact Buttons */}
             <div className="hidden lg:flex items-center gap-1">
               {renderContacts()}
             </div>
           </div>
         </div>
       </div>
-
-      {/* Mobile Search Drawer */}
-      <MobileSearchDrawer isOpen={searchOpen} onClose={closeSearch} />
-
-      {/* Desktop Search Panel */}
-      <DesktopSearchPanel isOpen={searchOpen} onClose={closeSearch} />
     </header>
   );
 };

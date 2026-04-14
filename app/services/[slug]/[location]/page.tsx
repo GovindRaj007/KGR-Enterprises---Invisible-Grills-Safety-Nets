@@ -10,9 +10,9 @@ import { Phone, ArrowRight, MapPin, Star, Building, CheckCircle2 } from 'lucide-
 import { Button } from '@/components/ui/button';
 import { Breadcrumbs } from '@/components/shared/Breadcrumbs';
 import HeroWithHeaderWrapper from '@/components/layout/HeroWithHeaderWrapper';
-import RelatedServices from '@/components/services/RelatedServices';
 
 import { locationData, validLocations } from '@/constants/locations';
+import { RelatedServicesClient } from '@/components/services/ServiceDetailSectionsClient';
 
 export async function generateMetadata({
   params,
@@ -453,7 +453,7 @@ export default async function ServiceLocationPage({ params }: Props) {
             <h2 className="mb-12 text-center font-heading text-3xl font-bold text-foreground md:text-4xl">
               Related Products & Services
             </h2>
-            <RelatedServices currentService={slug} />
+            <RelatedServicesClient currentService={slug} />
           </div>
         </section>
 

@@ -101,15 +101,15 @@ const ImageCarousel = () => {
   };
 
   return (
-    <section className="section-bg-1 relative overflow-hidden pt-10 md:pt-14 pb-10 md:pb-16">
-      <div className="absolute inset-0 grid-pattern opacity-50" />
+    <section className="relative overflow-hidden pt-10 md:pt-14 pb-10 md:pb-16 bg-white">
+      <div className="absolute inset-0 grid-pattern opacity-30" />
       <div className="container relative z-10">
         {/* Section Header */}
         <div className="mx-auto mb-8 max-w-2xl text-center md:mb-10">
-          <span className="mb-3 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
+          <span className="mb-3 inline-block rounded-full bg-blue-100 px-4 py-1.5 text-sm font-medium text-blue-700">
             Our Work
           </span>
-          <h2 className="font-heading text-2xl font-bold text-foreground md:text-4xl">
+          <h2 className="font-heading text-2xl font-bold text-gray-900 md:text-4xl">
             Explore Our Services
           </h2>
         </div>

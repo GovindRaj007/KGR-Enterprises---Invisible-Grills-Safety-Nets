@@ -6,7 +6,9 @@ import TopAnnouncementBar from './TopAnnouncementBar';
 import BottomCTA from './BottomCTA';
 import MenuDrawer from './MenuDrawer';
 import Footer from './FooterClient';
-import FloatingContact from './FloatingContact';
+
+import MobileSearchDrawer from '@/components/search/MobileSearchDrawer';
+import DesktopSearchPanel from '@/components/search/DesktopSearchPanel';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -17,6 +19,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const [headerHidden, setHeaderHidden] = useState(false);
   const [ctaVisible, setCtaVisible] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const announcementRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
@@ -26,7 +29,32 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const isMobileRef = useRef(false);
   const announcementHeight = 40;
   const headerHeight = 70;
-  const ctaHeight = 90;
+
+  // Search open/close handlers with body scroll lock
+  const openSearch = () => {
+    setSearchOpen(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeSearch = () => {
+    setSearchOpen(false);
+    document.body.style.overflow = 'auto';
+  };
+
+  // Global keyboard shortcuts for search
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && searchOpen) {
+        closeSearch();
+      }
+    };
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [searchOpen]);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -106,12 +134,12 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       {/* Header - Fixed and moves in sync with announcement bar - Full Width */}
       <div
         ref={headerRef}
-        className="fixed left-0 right-0 z-[998]"
+        className="fixed left-0 right-0 z-[998] overflow-hidden"
         style={{
           top: `${headerTop}px`,
           width: '100%',
-          background: '#ffffff',
-          boxShadow: 'none',
+          borderTopLeftRadius: 'clamp(1rem, 2vw, 2rem)',
+          borderTopRightRadius: 'clamp(1rem, 2vw, 2rem)',
           opacity: headerHidden ? 0 : 1,
           transform: headerHidden ? 'translateY(-100%)' : 'translateY(0)',
           pointerEvents: headerHidden ? 'none' : 'auto',
@@ -119,7 +147,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           transition: 'top 100ms ease-out, opacity 300ms ease-out, transform 300ms ease-out',
         }}
       >
-        <Header menuOpen={menuOpen} onMenuToggle={() => setMenuOpen(!menuOpen)} />
+        <Header menuOpen={menuOpen} onMenuToggle={() => setMenuOpen(!menuOpen)} onSearchOpen={openSearch} />
       </div>
 
       {/* Bottom CTA - Always in DOM, slides up when header hides, slides down when header shows */}
@@ -138,7 +166,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           willChange: 'transform, opacity',
         }}
       >
-        <BottomCTA onMenuClick={() => setMenuOpen(true)} />
+        <BottomCTA onMenuClick={() => setMenuOpen(true)} onSearchClick={openSearch} />
       </div>
 
       {/* Main Content - Dark Background with Hero Section Wrapper */}
@@ -156,14 +184,15 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       {/* Footer */}
       <Footer />
 
-      {/* Floating Contact */}
-      <FloatingContact />
-
       {/* Menu Drawer */}
       <MenuDrawer
         isOpen={menuOpen}
         onClose={() => setMenuOpen(false)}
       />
+
+      {/* Search Drawers — rendered at root level, outside any transformed parent */}
+      <MobileSearchDrawer isOpen={searchOpen} onClose={closeSearch} />
+      <DesktopSearchPanel isOpen={searchOpen} onClose={closeSearch} />
     </div>
   );
 };

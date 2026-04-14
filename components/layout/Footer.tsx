@@ -1,21 +1,10 @@
 "use client";
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ChevronUp, Phone, Mail, MapPin, Clock, ArrowRight, Shield } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, ArrowRight, Shield } from 'lucide-react';
 import { PRIMARY, SECONDARY, } from '@/constants/contacts';
 import { PRIMARY_LOCATIONS } from '@/lib/seo-metadata';
 
 const Footer = () => {
-  const [showScrollTop, setShowScrollTop] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setShowScrollTop(window.scrollY > 300);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
-
   const services = [
     { name: 'Invisible Grills', href: '/services/invisible-grills' },
     { name: 'Balcony Safety Net', href: '/services/balcony-safety' },
@@ -27,23 +16,7 @@ const Footer = () => {
   const locations = PRIMARY_LOCATIONS.map(loc => ({ name: loc.name, slug: loc.name.toLowerCase() }));
 
   return (
-    <>
-      {/* Floating Scroll to Top Button */}
-      {showScrollTop && (
-        <button
-          onClick={scrollToTop}
-          className="fixed left-4 bottom-20 md:bottom-6 z-50 w-11 h-11 rounded-full text-white transition-all duration-300 flex items-center justify-center animate-float"
-          style={{
-            background: "#FF6B42",
-            boxShadow: "0 4px 20px rgba(75, 159, 255, 0.30), 0 0 40px rgba(75, 159, 255, 0.10)"
-          }}
-          aria-label="Scroll to top"
-        >
-          <ChevronUp className="h-6 w-6" />
-        </button>
-      )}
-
-      <footer className="text-white relative" style={{
+    <footer className="text-white relative" style={{
         background: "linear-gradient(180deg, #0F1729 0%, #070A10 100%)",
         borderTop: "1px solid #1E2A42"
       }}>
@@ -209,7 +182,6 @@ const Footer = () => {
           </div>
         </div>
       </footer>
-    </>
   );
 };
 

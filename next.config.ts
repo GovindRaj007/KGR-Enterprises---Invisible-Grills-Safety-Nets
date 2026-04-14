@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   output: 'export',
+  outputFileTracingRoot: process.cwd(),
   images: {
     unoptimized: true,
     loader: 'custom',

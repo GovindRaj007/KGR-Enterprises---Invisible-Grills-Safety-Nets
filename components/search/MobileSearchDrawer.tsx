@@ -2,13 +2,20 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { Search, ChevronRight } from "lucide-react";
-import { SEARCH_DATA, FUSE_OPTIONS, type SearchDataItem } from "@/lib/searchData";
-
-interface FuseResult {
-  item: SearchDataItem;
-  score?: number;
-}
+import { Search, X } from "lucide-react";
+import {
+  SEARCH_DATA,
+  FUSE_OPTIONS,
+  extractLocationFromQuery,
+  removeLocationFromQuery,
+  buildSearchResultUrl,
+  buildDisplayName,
+  determineQueryType,
+  getServicesByLocation,
+  getServicesByCategoryAndLocation,
+  getStatesFromLocations,
+  type SearchDataItem,
+} from "@/lib/searchData";
 
 interface MobileSearchDrawerProps {
   isOpen: boolean;
@@ -36,6 +43,10 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
   const [displayedPlaceholder, setDisplayedPlaceholder] = useState("");
   const [isTyping, setIsTyping] = useState(true);
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
+  const [detectedLocation, setDetectedLocation] = useState<string | null>(null);
+  const [queryType, setQueryType] = useState<
+    "location-only" | "service-only" | "service+location"
+  >("service-only");
 
   const searchInputRef = useRef<HTMLInputElement>(null);
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -102,27 +113,84 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
     };
   }, [displayedPlaceholder, query, currentCategoryIndex, isOpen, isTyping]);
 
-  // Search function
+  // Enhanced search function with location and category context
   const runSearch = useCallback((searchQuery: string) => {
     if (!fuseInstanceRef.current) return;
 
     if (searchQuery.length < 2) {
       setResults([]);
       setShowResults(false);
+      setDetectedLocation(null);
+      setQueryType("service-only");
       return;
     }
 
-    const searchResults = fuseInstanceRef.current.search(searchQuery).slice(0, 6);
-    setResults(searchResults.map((r: FuseResult) => r.item));
+    // Extract location from query if present
+    const location = extractLocationFromQuery(searchQuery);
+    setDetectedLocation(location);
+
+    // Determine query type
+    const type = determineQueryType(searchQuery, location);
+    setQueryType(type);
+
+    // CASE 1: Location-only search (e.g., "hyderabad", "bangalore")
+    if (type === "location-only" && location) {
+      const locationServices = getServicesByLocation(location).slice(0, 12);
+      setResults(locationServices);
+      setShowResults(true);
+      return;
+    }
+
+    // CASE 2: Service + Location search (e.g., "safety nets bangalore")
+    if (type === "service+location" && location) {
+      const cleanQuery = removeLocationFromQuery(searchQuery).trim();
+
+      // First, try to find by category
+      let resultsData: SearchDataItem[] = [];
+
+      // Search for category matches in that location
+      const categoryMatches = getServicesByCategoryAndLocation(
+        cleanQuery,
+        location
+      );
+
+      if (categoryMatches.length > 0) {
+        resultsData = categoryMatches;
+      } else {
+        // Fallback to fuzzy search in that location
+        const allLocationServices = getServicesByLocation(location);
+        const fuzzyResults = fuseInstanceRef.current
+          .search(cleanQuery)
+          .map((r: any) => r.item)
+          .filter((item: SearchDataItem) =>
+            allLocationServices.some((s) => s.id === item.id)
+          );
+
+        resultsData = fuzzyResults;
+      }
+
+      setResults(resultsData.slice(0, 12));
+      setShowResults(true);
+      return;
+    }
+
+    // CASE 3: Service-only search (e.g., "invisible grills")
+    const cleanQuery = removeLocationFromQuery(searchQuery) || searchQuery;
+    const searchResults = fuseInstanceRef.current
+      .search(cleanQuery)
+      .slice(0, 12);
+
+    const resultsData = searchResults.map((r: any) => r.item);
+    setResults(resultsData);
     setShowResults(true);
   }, []);
 
   // Debounced input handler
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trim();
+    const value = e.target.value;
     setQuery(value);
     if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
-    debounceTimerRef.current = setTimeout(() => runSearch(value), 200);
+    debounceTimerRef.current = setTimeout(() => runSearch(value.trim()), 200);
   };
 
   // Keyboard handler
@@ -140,25 +208,26 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
 
   return (
     <div className="md:hidden">
-      {/* Backdrop */}
-      <div
-        onClick={handleClose}
-        role="button"
-        aria-label="Close search"
-        style={{
-          position: "fixed",
-          inset: 0,
-          backgroundColor: "rgba(0, 0, 0, 0.6)",
-          zIndex: 999,
-          opacity: isOpen ? 1 : 0,
-          visibility: isOpen ? "visible" : "hidden",
-          pointerEvents: isOpen ? "auto" : "none",
-          transition: "opacity 300ms cubic-bezier(0.4, 0, 0.2, 1)",
-        }}
-      />
+      {/* Backdrop - only renders when open */}
+      {isOpen && (
+        <div
+          onClick={onClose}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.6)",
+            zIndex: 999,
+            pointerEvents: "auto",
+          }}
+        />
+      )}
 
-      {/* Drawer */}
+      {/* Drawer - with stopPropagation to prevent backdrop from receiving clicks */}
       <div
+        onClick={(e) => e.stopPropagation()}
         style={{
           position: "fixed",
           bottom: 0,
@@ -174,10 +243,10 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
           overflowX: "hidden",
           display: "flex",
           flexDirection: "column",
-          touchAction: "pan-y",
           transform: isOpen ? "translateY(0)" : "translateY(100%)",
           visibility: isOpen || hasOpenedRef.current ? "visible" : "hidden",
           transition: "transform 300ms cubic-bezier(0.4, 0, 0.2, 1)",
+          pointerEvents: isOpen ? "auto" : "none",
         }}
       >
         {/* Only mount contents after first intentional open */}
@@ -249,8 +318,7 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
                     onClick={() => {
                       setQuery("");
                       setShowResults(false);
-                      setResults([]);
-                    }}
+                      setResults([]);                      searchInputRef.current?.focus();                    }}
                     aria-label="Clear search"
                     style={{
                       background: "none",
@@ -258,12 +326,14 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
                       cursor: "pointer",
                       color: "#9ca3af",
                       padding: "4px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
                     }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "#111827")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "#9ca3af")}
                   >
-                    <ChevronRight
-                      className="w-5 h-5"
-                      style={{ transform: "rotate(90deg)" }}
-                    />
+                    <X className="w-5 h-5" />
                   </button>
                 )}
               </div>
@@ -275,7 +345,7 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
                 results.length === 0 ? (
                   <div style={{ textAlign: "center", color: "#6b7280", paddingTop: "32px" }}>
                     <p>No services found.</p>
-                    <p style={{ fontSize: "14px" }}>Try "balcony nets" or "pigeon".</p>
+                    <p style={{ fontSize: "14px" }}>Try "pigeon nets", "invisible grills bangalore", or a city name.</p>
                   </div>
                 ) : (
                   <div
@@ -286,7 +356,7 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
                     {results.map((item) => (
                       <Link
                         key={item.id}
-                        href={item.url}
+                        href={buildSearchResultUrl(item, queryType, detectedLocation || undefined)}
                         onClick={handleClose}
                         role="option"
                         style={{
@@ -310,7 +380,7 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
                             {item.category}
                           </span>
                           <span style={{ fontSize: "14px", fontWeight: "500", color: "#111827" }}>
-                            {item.name}
+                            {buildDisplayName(item, queryType, detectedLocation || undefined)}
                           </span>
                           <span
                             style={{
@@ -324,6 +394,32 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
                           >
                             {item.description.slice(0, 80)}...
                           </span>
+                          {/* Show locations for service-only searches */}
+                          {queryType === "service-only" && (
+                            <div
+                              style={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: "6px",
+                                marginTop: "6px",
+                              }}
+                            >
+                              {getStatesFromLocations(item.locations).map((state) => (
+                                <span
+                                  key={state}
+                                  style={{
+                                    fontSize: "11px",
+                                    backgroundColor: "#e0f2fe",
+                                    color: "#0369a1",
+                                    padding: "3px 6px",
+                                    borderRadius: "3px",
+                                  }}
+                                >
+                                  {state}
+                                </span>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       </Link>
                     ))}
@@ -332,6 +428,9 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
               ) : (
                 <div style={{ textAlign: "center", color: "#6b7280", paddingTop: "32px" }}>
                   <p style={{ fontSize: "14px" }}>Start typing to search our services</p>
+                  <p style={{ fontSize: "12px", marginTop: "8px", color: "#9ca3af" }}>
+                    Try: "invisible grills", "safety nets hyderabad", or just "bangalore"
+                  </p>
                 </div>
               )}
             </div>

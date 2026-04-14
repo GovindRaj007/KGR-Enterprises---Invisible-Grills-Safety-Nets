@@ -21,7 +21,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
     { label: 'Home', href: '/', icon: Home },
     { label: 'About', href: '/about', icon: Info },
     { label: 'Services', href: '/services', icon: Briefcase, hasSubmenu: true },
-    { label: 'Locations', href: '/locations', icon: MapPin, hasSubmenu: true },
+    { label: 'Locations', href: '/locations', icon: MapPin, hasSubmenu: true }, 
     { label: 'Gallery', href: '/gallery', icon: ImageIcon },
     { label: 'Contact', href: '/contact', icon: Mail },
   ];
@@ -84,7 +84,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
         {/* Menu Content */}
         <div className="flex-1 overflow-y-auto">
           {/* Menu Header - Drag Handle - Sticky */}
-          <div className="sticky top-0 bg-white flex justify-center py-2 z-10">
+          <div className="sticky top-0 bg-white flex justify-center py-2 z-10"> 
             <div className="w-12 h-1 bg-gray-300 rounded-full" />
           </div>
 
@@ -104,12 +104,12 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
                     >
                       <div className="flex items-center gap-4">
                         <Icon size={24} className="text-gray-800 flex-shrink-0" />
-                        <span className="text-lg font-semibold text-gray-900">
+                        <span className="text-lg font-semibold text-gray-900">  
                           {item.label}
                         </span>
                       </div>
-                      <ChevronRight 
-                        size={24} 
+                      <ChevronRight
+                        size={24}
                         className={`text-gray-600 transition-transform ${isExpanded ? 'rotate-90' : ''}`}
                       />
                     </button>
@@ -123,13 +123,13 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
                               <TabsTrigger
                                 key={key}
                                 value={key}
-                                className="text-xs py-2 w-full text-center whitespace-nowrap data-[state=inactive]:bg-gray-100 data-[state=inactive]:text-gray-700 data-[state=active]:bg-gray-900 data-[state=active]:text-white rounded"
+                                className="text-xs py-2 w-full text-center whitespace-nowrap data-[state=inactive]:bg-gray-100 data-[state=inactive]:text-gray-700 data-[state=active]:bg-gray-900 data-[state=active]:text-white rounded"      
                               >
                                 {cat.title}
                               </TabsTrigger>
                             ))}
                           </TabsList>
-                          
+
                           {Object.entries(serviceCategories).map(([key, cat]) => (
                             <TabsContent
                               key={key}
@@ -142,7 +142,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
                                   <Link
                                     key={id}
                                     href={`/services/${id}`}
-                                    className="flex items-start gap-3 p-2 rounded-md transition-colors bg-white hover:bg-gray-100 border border-gray-200"
+                                    className="flex items-start gap-3 p-2 rounded-md transition-colors bg-white hover:bg-gray-100 border border-gray-200"       
                                     onClick={handleClose}
                                   >
                                     <div className="flex-1">
@@ -175,12 +175,12 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
                     >
                       <div className="flex items-center gap-4">
                         <Icon size={24} className="text-gray-800 flex-shrink-0" />
-                        <span className="text-lg font-semibold text-gray-900">
+                        <span className="text-lg font-semibold text-gray-900">  
                           {item.label}
                         </span>
                       </div>
-                      <ChevronRight 
-                        size={24} 
+                      <ChevronRight
+                        size={24}
                         className={`text-gray-600 transition-transform ${isExpanded ? 'rotate-90' : ''}`}
                       />
                     </button>
@@ -191,7 +191,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
                         {PRIMARY_LOCATIONS.map((location) => (
                           <Link
                             key={location.name.toLowerCase()}
-                            href={`/locations/${location.name.toLowerCase()}/`}
+                            href={`/locations/${location.name.toLowerCase()}/`} 
                             className="flex items-start gap-3 p-2 rounded-md transition-colors bg-white hover:bg-gray-100 border border-gray-200"
                             onClick={handleClose}
                           >
@@ -219,8 +219,8 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
                   onClick={handleClose}
                   className="flex items-center gap-4 py-4 px-4 rounded-lg hover:bg-gray-50 transition-colors duration-200"
                 >
-                  <Icon size={24} className="text-gray-800 flex-shrink-0" />
-                  <span className="text-lg font-semibold text-gray-900">
+                  <Icon size={24} className="text-gray-800 flex-shrink-0" />    
+                  <span className="text-lg font-semibold text-gray-900">        
                     {item.label}
                   </span>
                 </Link>
@@ -229,7 +229,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
           </div>
 
           {/* Bottom Section with Contacts */}
-          <div className="space-y-3 p-6 bg-white flex flex-col items-center">
+          <div className="space-y-3 p-6 bg-white flex flex-col items-center">   
             {/* Phone */}
             <a
               href={PRIMARY.tel}
