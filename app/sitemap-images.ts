@@ -3,10 +3,6 @@ import { PRIMARY_LOCATIONS } from '@/lib/seo-metadata';
 
 export const dynamic = 'force-static';
 
-// Supported languages
-const languages = {
-  'en-IN': 'English'
-};
 
 type ImageEntry = {
   url: string;
