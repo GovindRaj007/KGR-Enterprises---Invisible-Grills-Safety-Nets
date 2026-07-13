@@ -10,6 +10,13 @@
     RewriteBase /
     
     # ========================================================================
+    # CANONICAL DOMAIN: Redirect www to non-www (preserve path/query)
+    # Ensures a single preferred host for SEO (https://invisiblegrillsandsafetynets.in)
+    # ========================================================================
+    RewriteCond %{HTTP_HOST} ^www\.invisiblegrillsandsafetynets\.in$ [NC]
+    RewriteRule ^ https://invisiblegrillsandsafetynets.in%{REQUEST_URI} [L,R=301]
+    
+    # ========================================================================
     # 1. FORCE HTTPS (Critical for SEO)
     # ========================================================================
     RewriteCond %{HTTPS} off
