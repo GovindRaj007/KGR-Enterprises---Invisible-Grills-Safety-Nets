@@ -193,8 +193,12 @@ export function HeroSlider() {
             fetchPriority={index === 0 ? 'high' : 'auto'}
             sizes="(max-width: 768px) 100vw, 75vw"
           />
-          {/* Subtle dark overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/30 to-black/20" />
+          {/* Subtle dark overlay - reduced for Dealer and Safety Nets slides to show more background */}
+          { (s.id === 2 || s.id === 3) ? (
+            <div className="absolute inset-0 bg-gradient-to-r from-[hsl(222,47%,8%,0.6)] via-[hsl(222,47%,10%,0.45)] to-[hsl(222,47%,10%,0.32)]" />
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/30 to-black/20" />
+          ) }
         </div>
       ))}
 

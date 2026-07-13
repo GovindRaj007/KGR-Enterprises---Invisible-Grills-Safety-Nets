@@ -238,7 +238,7 @@ export default function ContactPage() {
         </section>
       </HeroWithHeaderWrapper>
 
-      <div className="container mx-auto px-4 mb-4">
+      <div className="container mx-auto px-4 my-4">
         <div className="grid lg:grid-cols-3 gap-12">
           {/* Contact Form */}
           <div className="lg:col-span-2">
