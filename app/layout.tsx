@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+export const dynamic = 'force-static';
 import { Inter } from "next/font/google";
 import Script from 'next/script';
 import "./globals.css";
@@ -6,12 +7,13 @@ import { getCanonicalUrl } from "@/lib/canonical-url";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import MainLayout from "@/components/layout/MainLayout";
+// GoogleAnalytics is disabled — GTM will manage GA4 (removed from layout)
 import { PRIMARY } from '@/constants/contacts';
 
 const inter = Inter({ subsets: ["latin"] });
 
-// Get current date for metadata
-const currentDate = new Date().toISOString();
+// Build-time snapshot for static metadata
+const buildDate = new Date().toISOString();
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://invisiblegrillsandsafetynets.in"),
@@ -22,7 +24,7 @@ export const metadata: Metadata = {
     google: "P8HUVCb--rZ-IF-X_ZwXQX1FOPvjQI5M0MWRtAwVMfc",
   },
   title: "KGR Enterprises – Premium Invisible Grills & Safety Nets Manufacturer in India",
-  description: "Premium invisible grills and safety nets installation across Hyderabad, Bangalore, Chennai. Marine-grade stainless steel, superior protection, 15-year warranty. Best quality, trusted service since 2008",
+  description: "Premium invisible grills and safety nets installation across Chennai, Hyderabad, Bangalore. Marine-grade stainless steel, superior protection, includes Warranty . Best quality, trusted service since 2008",
   applicationName: "KGR Enterprises",
   keywords: [
     "invisible grills in Hyderabad",
@@ -46,7 +48,7 @@ export const metadata: Metadata = {
     "balcony safety nets in Chennai",
     "pigeon nets in chennai",
     "children safety nets",
-    "bird nets"
+    "pigeon nets"
   ],
   authors: [{ name: "KGR Enterprises" }],
   creator: "KGR Enterprises",
@@ -60,10 +62,10 @@ export const metadata: Metadata = {
     "og:locale": "en-IN",
     "og:type": "website",
     "og:title": "KGR Enterprises – Premium Invisible Grills & Safety Nets Manufacturer in India",
-    "og:description": "Premium invisible grills and safety nets installation across Hyderabad, Bangalore, Chennai. Marine-grade stainless steel, superior protection, 15-year warranty. Best quality, trusted service since 2008",
+    "og:description": "Premium invisible grills and safety nets installation across Chennai, Hyderabad, Bangalore. Marine-grade stainless steel, superior protection, includes Warranty. Best quality, trusted service since 2008",
     "og:url": "https://invisiblegrillsandsafetynets.in/",
     "og:site_name": "KGR Enterprises",
-    "article:modified_time": currentDate
+    "article:modified_time": buildDate
   },
   openGraph: {
     images: [{
@@ -78,7 +80,7 @@ export const metadata: Metadata = {
     site: "@Kgr_Grills_Nets",
 
     title: "KGR Enterprises – Premium Invisible Grills & Safety Nets Manufacturer in India",
-    description: "Premium invisible grills and safety nets installation across Hyderabad, Bangalore, Chennai. Marine-grade stainless steel, superior protection, 15-year warranty.",
+    description: "Premium invisible grills and safety nets installation across Chennai, Hyderabad, Bangalore. Marine-grade stainless steel, superior protection, includes Warranty.",
     images: ["/logo.png"],
     creator: "@Kgr_Grills_Nets"
   },
@@ -96,8 +98,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const phoneNumber = PRIMARY.phone || '+919618568669';
-  const currentDate = new Date().toISOString();
+  const phoneNumber = PRIMARY.phone || '+919337353030';
   const schemaData = {
     "@context": "https://schema.org",
     "@graph": [
@@ -118,8 +119,8 @@ export default function RootLayout({
         },
         "thumbnailUrl": "https://invisiblegrillsandsafetynets.in/logo.png",
         "datePublished": "2008-01-01T00:00:00+00:00",
-        "dateModified": currentDate,
-        "description": "Premium invisible grills and safety nets installation across Hyderabad, Bangalore, Chennai. Marine-grade stainless steel, superior protection, 15-year warranty. Best quality, trusted service since 2008",
+        "dateModified": buildDate,
+        "description": "Premium invisible grills and safety nets installation across Chennai, Hyderabad, Bangalore. Marine-grade stainless steel, superior protection, includes Warranty. Best quality, trusted service since 2008",
 
         "inLanguage": "en-IN",
         "potentialAction": [{
@@ -142,7 +143,7 @@ export default function RootLayout({
         "@id": "https://invisiblegrillsandsafetynets.in/#website",
         "url": "https://invisiblegrillsandsafetynets.in/",
         "name": "KGR Enterprises",
-        "description": "Premium invisible grills and safety nets installation across Hyderabad, Bangalore, Chennai. Marine-grade stainless steel, superior protection, 15-year warranty.",
+        "description": "Premium invisible grills and safety nets installation across Chennai, Hyderabad, Bangalore. Marine-grade stainless steel, superior protection, includes Warranty.",
         "publisher": {
           "@id": "https://invisiblegrillsandsafetynets.in/#organization"
         },
@@ -211,7 +212,7 @@ export default function RootLayout({
             "image": "https://invisiblegrillsandsafetynets.in/images/hero-image.jpg",
             "address": {
               "@type": "PostalAddress",
-              "streetAddress": "367, 2nd A Main Road, Gokula Extension, Mathikera, Bangalore Division",
+              "streetAddress": "367, 2nd A Main Rd, Sharadamba Nagar, Muthyala Nagar, Gokula Extension, Mathikere, Bengaluru - 560054, Karnataka",
               "addressLocality": "Bangalore",
               "addressRegion": "Karnataka",
               "postalCode": "560054",
@@ -219,8 +220,8 @@ export default function RootLayout({
             },
             "geo": {
               "@type": "GeoCoordinates",
-              "latitude": "13.04237",
-              "longitude": "77.55302"
+              "latitude": "13.04266073172332",
+              "longitude": "77.55298708465743"
             },
             "areaServed": "Bangalore",
             "priceRange": "₹₹",
@@ -234,7 +235,7 @@ export default function RootLayout({
             "image": "https://invisiblegrillsandsafetynets.in/images/hero-image.jpg",
             "address": {
               "@type": "PostalAddress",
-              "streetAddress": "25/9a, Sathya Moorthy Street, Kamaraj Nagar, Choolaimedu",
+              "streetAddress": "25, Sathya Moorthy Street, Kamaraj Nagar,NGO Colony, Choolaimedu, Greater Chennai - 600094, Tamil Nadu",
               "addressLocality": "Chennai",
               "addressRegion": "Tamil Nadu",
               "postalCode": "600094",
@@ -242,8 +243,8 @@ export default function RootLayout({
             },
             "geo": {
               "@type": "GeoCoordinates",
-              "latitude": "13.06523",
-              "longitude": "80.22148"
+              "latitude": "13.065460796383261",
+              "longitude": "80.2214640558218"
             },
             "areaServed": "Chennai",
             "priceRange": "₹₹",
@@ -257,16 +258,16 @@ export default function RootLayout({
             "image": "https://invisiblegrillsandsafetynets.in/images/hero-image.jpg",
             "address": {
               "@type": "PostalAddress",
-              "streetAddress": "3-12, Ayyappa Nagar, Benz Circle",
+              "streetAddress": "3-12, Ayyappa Nagar, Benz Circle, Vijayawada - 521134, Andhra Pradesh",
               "addressLocality": "Vijayawada",
               "addressRegion": "Andhra Pradesh",
-              "postalCode": "520007",
+              "postalCode": "521134",
               "addressCountry": "IN"
             },
             "geo": {
               "@type": "GeoCoordinates",
-              "latitude": "16.48304",
-              "longitude": "80.66898"
+              "latitude": "16.483198690558233",
+              "longitude": "80.66901608208298"
             },
             "areaServed": "Vijayawada",
             "priceRange": "₹₹",
@@ -280,16 +281,16 @@ export default function RootLayout({
             "image": "https://invisiblegrillsandsafetynets.in/images/hero-image.jpg",
             "address": {
               "@type": "PostalAddress",
-              "streetAddress": "21-3/4/3, Viman Nagar, Kakani Nagar",
+              "streetAddress": "50-79-31/1, Ganesh Nagar, Seetamma Peta, Dwaraka Nagar, Visakhapatnam - 530016, Andhra Pradesh",
               "addressLocality": "Visakhapatnam",
               "addressRegion": "Andhra Pradesh",
-              "postalCode": "530009",
+              "postalCode": "530016",
               "addressCountry": "IN"
             },
             "geo": {
               "@type": "GeoCoordinates",
-              "latitude": "17.7347",
-              "longitude": "83.3123"
+              "latitude": "17.73464614605787",
+              "longitude": "83.31177354232871"
             },
             "areaServed": "Visakhapatnam",
             "priceRange": "₹₹",
@@ -300,7 +301,8 @@ export default function RootLayout({
         "aggregateRating": {
           "@type": "AggregateRating",
           "ratingValue": "4.9",
-          "reviewCount": "230"
+          "ratingCount": "1126",
+          "reviewCount": "1126"
         }
       }
     ]
@@ -319,38 +321,32 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         
-        {/* Preload Critical Assets */}
-        <link 
-          rel="preload" 
-          as="image" 
-          href="/images/hero-image.jpg"
-          imageSrcSet="/images/hero-image.jpg 1x, /images/hero-image@2x.jpg 2x"
-          fetchPriority="high"
-        />
-        
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(schemaData),
           }}
         />
-        {/* Google Analytics 4 - with lazy loading strategy */}
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-339PTXCP6X" strategy="lazyOnload" />
-        <Script id="google-analytics" strategy="lazyOnload">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-339PTXCP6X', { 
-              'send_page_view': false,
-              'cookie_flags': 'max-age=7200;secure;samesite=none'
-            });
-          `}
+        {/* Google Tag Manager - head snippet (placed high in head) */}
+        <Script id="gtm-head" strategy="beforeInteractive">
+          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-W8H6PR53');`}
         </Script>
-        {/* Fuse.js for client-side search */}
+        {/* Preload optimized images manifest so OptimizedImage can avoid an extra fetch */}
+        <Script id="optimized-manifest" strategy="beforeInteractive">
+          {`(function(){try{fetch('/optimized-images.json').then(function(r){if(r.ok){return r.json()}return {}}).then(function(m){window.__OPTIMIZED_IMAGES__=m}).catch(function(){window.__OPTIMIZED_IMAGES__={}})}catch(e){window.__OPTIMIZED_IMAGES__={}}})();`}
+        </Script>
+        {/* Fuse.js for client-side search - Load early to avoid timing issues */}
         <Script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js" strategy="beforeInteractive" />
       </head>
       <body className={inter.className}>
+        {/* Google Tag Manager (noscript) - immediately after opening <body> */}
+        <noscript>
+          <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W8H6PR53" height="0" width="0" style={{display:'none',visibility:'hidden'}} />
+        </noscript>
         <TooltipProvider>
           <MainLayout>
             {children}

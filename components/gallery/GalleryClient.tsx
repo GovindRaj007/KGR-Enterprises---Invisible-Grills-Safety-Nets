@@ -7,10 +7,14 @@ const GallerySection = dynamic(() => import('./GallerySection'), { ssr: false, l
 
 import LazyMount from '@/components/ui/LazyMount';
 
-export default function GalleryClient() {
+interface GalleryClientProps {
+  showBreadcrumbs?: boolean;
+}
+
+export default function GalleryClient({ showBreadcrumbs = false }: GalleryClientProps) {
   return (
     <LazyMount>
-      <GallerySection />
+      <GallerySection showBreadcrumbs={showBreadcrumbs} />
     </LazyMount>
   );
 }

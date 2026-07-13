@@ -15,6 +15,7 @@ interface MainLayoutProps {
 }
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+  const [isMounted, setIsMounted] = useState(false);
   const [announcementTranslateY, setAnnouncementTranslateY] = useState(0);
   const [headerHidden, setHeaderHidden] = useState(false);
   const [ctaVisible, setCtaVisible] = useState(false);
@@ -27,8 +28,16 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const lastScrollY = useRef(0);
   const isScrollingDown = useRef(true);
   const isMobileRef = useRef(false);
+  const lastAnnouncementTranslateY = useRef(0);
+  const lastHeaderHidden = useRef(false);
+  const lastCtaVisible = useRef(false);
   const announcementHeight = 40;
   const headerHeight = 70;
+
+  // Ensure hydration is complete before running client-only code
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Search open/close handlers with body scroll lock
   const openSearch = () => {
@@ -71,26 +80,62 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
       // Calculate announcement bar movement
       const announcementTransform = Math.min(currentScrollY, announcementHeight);
-      setAnnouncementTranslateY(-announcementTransform);
+      const newAnnouncementValue = -announcementTransform;
+      if (newAnnouncementValue !== lastAnnouncementTranslateY.current) {
+        setAnnouncementTranslateY(newAnnouncementValue);
+        lastAnnouncementTranslateY.current = newAnnouncementValue;
+      }
+
+      // Check if user is at the bottom of the page (within 100px threshold)
+      const documentHeight = document.documentElement.scrollHeight;
+      const viewportHeight = window.innerHeight;
+      const bottomThreshold = 100;
+      const isAtBottom = currentScrollY + viewportHeight >= documentHeight - bottomThreshold;
 
       // Mobile: Hide header and show CTA based on scroll direction and viewport threshold
       if (isMobileRef.current) {
-        const viewportHeight = window.innerHeight;
         const scrollThreshold = viewportHeight / 2;
 
         // Hide header when scrolling down past half viewport
-        if (currentScrollY > scrollThreshold && isScrollingDown.current) {
-          setHeaderHidden(true);
-          setCtaVisible(true);
+        let newHeaderHidden = false;
+        let newCtaVisible = false;
+        
+        if (currentScrollY > scrollThreshold && isScrollingDown.current && !isAtBottom) {
+          newHeaderHidden = true;
+          newCtaVisible = true;
         } else if (!isScrollingDown.current) {
           // Show header and hide CTA immediately when scrolling up
-          setHeaderHidden(false);
-          setCtaVisible(false);
+          newHeaderHidden = false;
+          newCtaVisible = false;
+        } else if (isAtBottom) {
+          // Hide CTA when at bottom of page
+          newHeaderHidden = lastHeaderHidden.current;
+          newCtaVisible = false;
+        } else {
+          // Maintain previous state when scrolling down but under threshold
+          newHeaderHidden = lastHeaderHidden.current;
+          newCtaVisible = lastCtaVisible.current;
+        }
+
+        // Only update if values have changed
+        if (newHeaderHidden !== lastHeaderHidden.current) {
+          setHeaderHidden(newHeaderHidden);
+          lastHeaderHidden.current = newHeaderHidden;
+        }
+        if (newCtaVisible !== lastCtaVisible.current) {
+          setCtaVisible(newCtaVisible);
+          lastCtaVisible.current = newCtaVisible;
         }
       } else {
         // Desktop: Never hide header, never show CTA
-        setHeaderHidden(false);
-        setCtaVisible(false);
+        if (lastHeaderHidden.current !== false) {
+          setHeaderHidden(false);
+          lastHeaderHidden.current = false;
+        }
+        if (lastCtaVisible.current !== false) {
+          setCtaVisible(false);
+          lastCtaVisible.current = false;
+        }
       }
 
       lastScrollY.current = currentScrollY;
@@ -112,17 +157,25 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       window.removeEventListener('scroll', throttledScroll);
       window.removeEventListener('resize', checkMobile);
     };
-  }, []);
+  }, [isMounted]);
 
   // Header top position: starts at announcementHeight, moves up with announcement
   const headerTop = announcementHeight + announcementTranslateY;
+  const dropdownTop = headerTop + headerHeight;
 
   return (
-    <div className="min-h-screen bg-background relative overflow-x-hidden">
+    <div 
+      className="min-h-screen bg-background relative overflow-x-hidden" 
+      suppressHydrationWarning
+      style={{
+        '--header-top': `${headerTop}px`,
+        '--dropdown-top': `${dropdownTop}px`,
+      } as React.CSSProperties}
+    >
       {/* Top Announcement Bar */}
       <div
         ref={announcementRef}
-        className="fixed top-0 left-0 right-0 z-[999]"
+        className="fixed top-0 left-0 right-0 z-40"
         style={{
           transform: `translateY(${announcementTranslateY}px)`,
           willChange: 'transform',
@@ -134,7 +187,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       {/* Header - Fixed and moves in sync with announcement bar - Full Width */}
       <div
         ref={headerRef}
-        className="fixed left-0 right-0 z-[998] overflow-hidden"
+        className="fixed left-0 right-0 z-40"
         style={{
           top: `${headerTop}px`,
           width: '100%',

@@ -1,3 +1,5 @@
+import { getServiceRoute } from '@/data/servicesData';
+
 export interface SearchDataItem {
   id: string;
   name: string;
@@ -36,7 +38,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
   },
   {
     id: "invisible-grills-dealer",
-    name: "Invisible Grills Dealership",
+    name: "Invisible Grills Dealer",
     category: "Invisible Grills",
     description:
       "Authorized dealership with wholesale pricing, territory rights, training and support.",
@@ -44,7 +46,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "dealer wholesale bulk orders territory rights training support invisible grills",
     useCase: "Business partnership hardware stores contractors",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh Vijayawada",
-    url: "/services/invisible-grills-dealer",
+    url: getServiceRoute("invisible-grills-dealer"),
   },
   {
     id: "balcony-safety",
@@ -174,13 +176,13 @@ export const SEARCH_DATA: SearchDataItem[] = [
   {
     id: "cloth-drying",
     name: "Ceiling Cloth Drying Hangers",
-    category: "Safety Nets",
+    category: "Cloth Hangers",
     description: "Space-saving ceiling-mounted pulley clothesline for apartments.",
     keywords:
-      "cloth drying hangers ceiling mounted space-saving pulley system rust-proof",
+      "cloth drying hangers ceiling mounted space-saving pulley system rust-proof hanger hangers balcony cloth hangers ceiling hanger",
     useCase: "Apartments homes indoor drying",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
-    url: "/services/cloth-drying-hangers",
+    url: "/services/cloth-drying",
   },
   {
     id: "hdpe-nylon",
@@ -270,8 +272,8 @@ export const SEARCH_DATA: SearchDataItem[] = [
     category: "Sports Nets",
     description: "Professional cricket training nets for batting and bowling practice.",
     keywords:
-      "cricket practice nets cricket coaching ball practice bowling training batting practice",
-    useCase: "Cricket academies practice grounds",
+      "cricket nets cricket practice nets cricket net installation best cricket nets coaching ball practice bowling training batting practice",
+    useCase: "Cricket nets cricket academies practice grounds schools",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
     url: "/services/cricket-practice",
   },
@@ -282,8 +284,8 @@ export const SEARCH_DATA: SearchDataItem[] = [
     description:
       "Rooftop and compact space cricket nets. Portable and custom-fitted for terrace cricket.",
     keywords:
-      "terrace cricket nets box cricket nets rooftop cricket portable custom cricket nets",
-    useCase: "Rooftops apartments terrace cricket",
+      "terrace cricket nets box cricket nets cricket turf installation cricket turf construction rooftop cricket portable custom cricket nets turf cricket turf nets box cricket construction",
+    useCase: "Rooftops apartments terrace cricket turf cricket cricket turf installation construction",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
     url: "/services/terrace-cricket",
   },
@@ -302,6 +304,29 @@ export const FUSE_OPTIONS = {
     { name: "locations", weight: 0.5 }, // Locations (lower priority in fuzzy)
     { name: "description", weight: 0.3 }, // Lowest priority
   ],
+};
+
+// Expand common query synonyms so short terms like "turf" or "cricket turf" resolve reliably.
+export const normalizeSearchQuery = (query: string): string => {
+  const normalized = query.toLowerCase().trim();
+  if (!normalized) return normalized;
+
+  // "cricket turf installation/construction/nets" → terrace cricket
+  if (/cricket.*(turf|construction|installation)|turf.*(cricket|nets?)/.test(normalized)) {
+    return `${normalized} terrace cricket box cricket`;
+  }
+
+  // bare "turf" → terrace cricket
+  if (/\bturf\b/.test(normalized)) {
+    return `${normalized} terrace cricket box cricket`;
+  }
+
+  // "cricket nets" without "practice" or "terrace" → cricket practice nets
+  if (/\bcricket\s+nets?\b/.test(normalized) && !/practice|terrace|box|turf/.test(normalized)) {
+    return `${normalized} cricket practice`;
+  }
+
+  return normalized;
 };
 
 // Location names (only source of truth for location matching)
@@ -449,6 +474,43 @@ const locationMatches = (serviceLocations: string, targetLocation: string): bool
 // Helper: Get all services available in a location
 export const getServicesByLocation = (location: string): SearchDataItem[] => {
   return SEARCH_DATA.filter(item => locationMatches(item.locations.toLowerCase(), location));
+};
+
+// Helper: Resolve high-intent query aliases that should map to a specific existing service.
+export const getSpecialSearchResults = (
+  query: string,
+  location?: string
+): SearchDataItem[] => {
+  const normalized = query.toLowerCase().trim();
+
+  // "cricket turf installation/construction" and bare "turf" → terrace cricket
+  if (
+    /\bturf\b/.test(normalized) ||
+    /cricket.*(turf|construction|installation)|turf.*(cricket|nets?)/.test(normalized)
+  ) {
+    const terraceCricketService = SEARCH_DATA.find((item) => item.id === "terrace-cricket");
+    if (!terraceCricketService) return [];
+    if (location && !locationMatches(terraceCricketService.locations.toLowerCase(), location)) return [];
+    return [terraceCricketService];
+  }
+
+  // "cricket nets" (without practice/terrace/box/turf) → cricket-practice
+  if (/\bcricket\s+nets?\b/.test(normalized) && !/practice|terrace|box|turf/.test(normalized)) {
+    const cricketPracticeService = SEARCH_DATA.find((item) => item.id === "cricket-practice");
+    if (!cricketPracticeService) return [];
+    if (location && !locationMatches(cricketPracticeService.locations.toLowerCase(), location)) return [];
+    return [cricketPracticeService];
+  }
+
+  // "hanger" / "hangers" queries should map to cloth-drying service
+  if (/\bhang(?:er|ers)\b/.test(normalized) || /cloth\s*hang(?:er|ers)/.test(normalized) || /balcony\s*hang(?:er|ers)/.test(normalized)) {
+    const clothService = SEARCH_DATA.find((item) => item.id === "cloth-drying");
+    if (!clothService) return [];
+    if (location && !locationMatches(clothService.locations.toLowerCase(), location)) return [];
+    return [clothService];
+  }
+
+  return [];
 };
 
 // Helper: Get all services by category in a location

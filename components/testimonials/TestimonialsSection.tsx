@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, memo } from 'react';
 import { Star } from 'lucide-react';
 
 const TestimonialsSection = () => {
@@ -50,7 +50,7 @@ const TestimonialsSection = () => {
     },
     {
       name: "Anita Reddy",
-      service: "Balcony Safety Net",
+      service: "Balcony Safety Nets",
       rating: 5,
       review: "Very satisfied with the balcony safety net installation. Quality materials and professional service. Highly recommended for safety needs.",
       initials: "AR",
@@ -191,4 +191,4 @@ const TestimonialsSection = () => {
   );
 };
 
-export default TestimonialsSection;
+export default memo(TestimonialsSection);

@@ -2,9 +2,10 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ChevronRight, MapPin, Phone, MessageCircle, Home, Info, Briefcase, Image as ImageIcon, Mail } from 'lucide-react';
+import { ChevronRight, MapPin, Phone, Home, Info, Briefcase, Image as ImageIcon, Mail, Pointer } from 'lucide-react';
+import { WhatsAppIcon } from '@/components/shared/Icons';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { servicesData, serviceCategories } from '@/data/servicesData';
+import { servicesData, serviceCategories, getServiceRoute } from '@/data/servicesData';
 import { PRIMARY } from '@/constants/contacts';
 import { PRIMARY_LOCATIONS } from '@/lib/seo-metadata';
 
@@ -116,14 +117,18 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
 
                     {/* Services Submenu */}
                     {isExpanded && (
-                      <div className="space-y-3 pl-4 pr-4 pb-4 bg-gray-50 rounded-lg mx-4">
+                      <div className="space-y-3 bg-white rounded-3xl shadow-sm mx-4 p-4">
+                        <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700">
+                          <Pointer className="h-4 w-4 transform rotate-180" />
+                          Select the category
+                        </div>
                         <Tabs value={activeServiceTab} onValueChange={setActiveServiceTab}>
-                          <TabsList className="w-full grid grid-cols-2 gap-2 h-auto bg-transparent">
+                          <TabsList className="w-full grid grid-cols-2 gap-2 h-auto bg-gray-100 rounded-2xl p-1">
                             {Object.entries(serviceCategories).map(([key, cat]) => (
                               <TabsTrigger
                                 key={key}
                                 value={key}
-                                className="text-xs py-2 w-full text-center whitespace-nowrap data-[state=inactive]:bg-gray-100 data-[state=inactive]:text-gray-700 data-[state=active]:bg-gray-900 data-[state=active]:text-white rounded"      
+                                className="text-xs py-2 w-full text-center whitespace-nowrap rounded-xl shadow-sm transition-all duration-200 data-[state=inactive]:bg-white data-[state=inactive]:text-gray-700 data-[state=inactive]:hover:bg-gray-50 data-[state=active]:bg-gray-900 data-[state=active]:text-white"
                               >
                                 {cat.title}
                               </TabsTrigger>
@@ -141,13 +146,20 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
                                 return (
                                   <Link
                                     key={id}
-                                    href={`/services/${id}`}
+                                    href={getServiceRoute(id)}
                                     className="flex items-start gap-3 p-2 rounded-md transition-colors bg-white hover:bg-gray-100 border border-gray-200"       
                                     onClick={handleClose}
                                   >
                                     <div className="flex-1">
-                                      <div className="font-medium text-sm text-gray-900">
-                                        {service.title}
+                                      <div className="flex flex-wrap items-center gap-2">
+                                        <span className="font-medium text-sm text-gray-900">
+                                          {service.title}
+                                        </span>
+                                        {service.id === 'cloth-drying' && (
+                                          <span className="inline-flex items-center rounded-full bg-orange-100 text-orange-700 text-[10px] font-semibold px-2 py-1">
+                                            Cloth Hangers
+                                          </span>
+                                        )}
                                       </div>
                                       <p className="text-xs line-clamp-2 mt-1 text-gray-600">
                                         {service.description}
@@ -246,7 +258,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-4 py-4 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-semibold w-full"
             >
-              <MessageCircle size={24} />
+              <WhatsAppIcon className="h-6 w-6 text-white" />
               Get Quote
             </a>
           </div>

@@ -17,6 +17,13 @@ const servicesData = eval('(' + servicesDataMatch[1] + ')');
 const BASE_URL = 'https://invisiblegrillsandsafetynets.in';
 const LOCATIONS = ['hyderabad', 'bangalore', 'chennai', 'vijayawada', 'visakhapatnam'];
 
+function escapeXml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
 function generateSitemap() {
   const mainPages = [
     { url: '/', priority: '1.0', changefreq: 'daily' },
@@ -90,8 +97,8 @@ ${entries.map(entry => `  <url>
     <loc>${entry.url}</loc>
 ${entry.images.map(img => `    <image:image>
       <image:loc>${img.loc}</image:loc>
-      <image:title>${img.title}</image:title>
-      ${img.caption ? `<image:caption>${img.caption}</image:caption>` : ''}
+      <image:title>${escapeXml(img.title)}</image:title>
+      ${img.caption ? `<image:caption>${escapeXml(img.caption)}</image:caption>` : ''}
     </image:image>`).join('\n')}
   </url>`).join('\n')}
 </urlset>`;

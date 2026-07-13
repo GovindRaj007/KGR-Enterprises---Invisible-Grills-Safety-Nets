@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+export const dynamic = 'force-static';
 import Link from "next/link";
 import { Store, Award, TrendingUp, Users, Truck, Package, ArrowRight, Phone, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import OptimizedImage from "@/components/shared/OptimizedImage";
 import HeroWithHeaderWrapper from "@/components/layout/HeroWithHeaderWrapper";
 import ServiceImageSlider from "@/components/services/ServiceImageSlider";
 import ServiceFAQ from "@/components/services/ServiceFAQ";
@@ -18,7 +20,7 @@ import { generateServiceSchema } from "@/lib/service-schema";
 
 export async function generateMetadata(): Promise<Metadata> {
   const baseMetadata = generateServiceMetadata({
-    serviceName: "Invisible Grills Dealership & Wholesale Program",
+    serviceName: "Invisible Grills Dealer & Wholesale Program",
     serviceSlug: "invisible-grills-dealer",
     shortDescription: "Become an authorized invisible grills dealer with exclusive territory rights and bulk order benefits.",
     longDescription: "Partner with KGR Enterprises for authorized invisible grills dealership. Access wholesale pricing, professional training, marketing support, and bulk order benefits. Perfect for hardware stores, contractors, and distributors across South India.",
@@ -156,11 +158,7 @@ const dealerFAQs = [
   },
 ];
 
-const dealerImages = [
-  "/images/invisible-grill-1.jpg",
-  "/images/invisible-grill-2.jpg",
-  "/images/balcony-invisible-grill-1.jpg",
-];
+const dealerImages = ["/images/invisible-grills-dealer-1.jpg", "/images/invisible-grills-dealer-2.jpg", "/images/invisible-grills-dealer-3.jpg"];
 
 export default function InvisibleGrillsDealerPage() {
   // Generate structured data schemas
@@ -173,7 +171,7 @@ export default function InvisibleGrillsDealerPage() {
   ];
 
   const serviceSchema = generateServiceSchema({
-    serviceName: "Invisible Grills Dealership & Wholesale",
+    serviceName: "Invisible Grills Dealer & Wholesale",
     description: "Authorized dealer partnership program for invisible grills with exclusive territory rights, wholesale pricing, and comprehensive training.",
     image: "/images/invisible-grill-1.jpg",
     slug: "invisible-grills-dealer",
@@ -241,12 +239,15 @@ export default function InvisibleGrillsDealerPage() {
         <HeroWithHeaderWrapper>
           <section className="relative py-16 md:py-28 overflow-hidden" style={{ borderRadius: '1rem' }}>
             <div className="absolute inset-0">
-              <img
-                src="/images/invisible-grill-1.jpg"
-                alt="Invisible Grills Dealership"
+              <OptimizedImage
+                src="/images/invisible-grill-dealer.jpg"
+                alt="Invisible Grills Dealer"
                 className="h-full w-full object-cover"
+                loading="eager"
+                priority
+                fetchPriority="high"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-[hsl(222,47%,8%,0.45)] via-[hsl(222,47%,10%,0.35)] to-[hsl(222,47%,10%,0.25)]" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[hsl(222,47%,8%,0.95)] via-[hsl(222,47%,10%,0.88)] to-[hsl(222,47%,10%,0.75)]" />
             </div>
             <div className="absolute inset-0 grid-pattern-dark opacity-30" />
 
@@ -267,7 +268,7 @@ export default function InvisibleGrillsDealerPage() {
                 </span>
 
                 <h1 className="mb-6 font-heading text-4xl font-bold text-white md:text-5xl">
-                  Invisible Grills Dealership & Wholesale
+                  Invisible Grills Dealer & Wholesale
                 </h1>
                 <p className="mb-8 text-lg text-white/80 md:text-xl">
                   Partner with KGR Enterprises for authorized dealership. Access wholesale pricing, training, and exclusive territory rights.
@@ -295,7 +296,7 @@ export default function InvisibleGrillsDealerPage() {
         </HeroWithHeaderWrapper>
 
         {/* Image Slider */}
-        <ServiceImageSlider images={dealerImages} altPrefix="Dealership" />
+        <ServiceImageSlider images={dealerImages} altPrefix="Dealership" useContainer />
 
         {/* Benefits Section */}
         <section className="section-bg-2 relative py-16 md:py-20">
@@ -306,7 +307,7 @@ export default function InvisibleGrillsDealerPage() {
                   Dealer Benefits
                 </span>
                 <h2 className="mb-6 font-heading text-3xl font-bold text-white md:text-4xl">
-                  Why Partner With KGR Enterprises?
+                  Why Partner With <span className="text-accent">KGR Enterprises</span>?
                 </h2>
                 <p className="mb-8 text-lg text-white/80">
                   Join our growing network of successful dealers across South India.
@@ -406,16 +407,17 @@ export default function InvisibleGrillsDealerPage() {
 
         {/* CTA Section */}
         <section className="section-bg-6 relative py-16 md:py-20">
-          <div className="container">
-            <div className="mx-auto max-w-3xl text-center">
+          <div className="absolute inset-0 grid-pattern opacity-30" />
+          <div className="container relative z-10">
+            <div className="mx-auto max-w-3xl rounded-3xl border border-blue-600/30 bg-gradient-to-br from-blue-600/20 via-blue-600/10 to-transparent backdrop-blur-sm p-8 md:p-12 text-center">
               <h2 className="mb-4 font-heading text-3xl font-bold text-white md:text-4xl">
                 Ready to Become a Dealer?
               </h2>
               <p className="mb-8 text-lg text-white/80">
                 Contact us today to discuss dealership opportunities.
               </p>
-              <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <Button size="lg" className="cta-gradient text-white" asChild>
+              <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <Button size="lg" className="w-full sm:w-auto cta-gradient text-white hover:opacity-90" asChild>
                   <Link href="/contact" className="flex items-center gap-2">
                     Apply Now <ArrowRight className="h-5 w-5" />
                   </Link>
@@ -423,7 +425,7 @@ export default function InvisibleGrillsDealerPage() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-white/30 bg-white/10 text-white hover:bg-white/20"
+                  className="w-full sm:w-auto border-white/30 bg-white/10 text-white hover:bg-white/20"
                   asChild
                 >
                   <a href={`tel:${PRIMARY.phone}`} className="flex items-center gap-2">

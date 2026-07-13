@@ -3,7 +3,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, Phone, MessageCircle, Search, MapPin } from "lucide-react";
+import { Phone, MapPin } from "lucide-react";
+import { WhatsAppIcon } from "@/components/shared/Icons";
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -12,10 +13,25 @@ import {
   NavigationMenuContent,
 } from "@/components/ui/navigation-menu";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { servicesData, serviceCategories } from "@/data/servicesData";
+import { servicesData, serviceCategories, getServiceRoute } from "@/data/servicesData";
 import { PRIMARY } from '@/constants/contacts';
 import { PRIMARY_LOCATIONS } from '@/lib/seo-metadata';
 import { normalizeInternalLink } from "@/lib/url-utils";
+import OptimizedImage from '@/components/shared/OptimizedImage';
+
+// Menu Icon
+const MenuIcon = ({ className = "h-7 w-7" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#000000" className={className}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h16.5" />
+  </svg>
+);
+
+// Search Icon
+const SearchIcon = ({ className = "h-6 w-6" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#000000" className={className}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.5 5.5a7.5 7.5 0 0 0 10.5 10.5Z" />
+  </svg>
+);
 
 const CONTACTS = [
   {
@@ -29,7 +45,7 @@ const CONTACTS = [
     type: "whatsapp",
     href: `${PRIMARY.wa}?text=Hi%2C%20I%20need%20a%20quote`,
     label: "Get Quote",
-    icon: <MessageCircle className="h-4 w-4" />,
+    icon: <WhatsAppIcon className="h-4 w-4" />,
     isButton: true,
   },
 ];
@@ -66,7 +82,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, onSearchOpen = () => {} }
         return (
           <Link
             key={serviceId}
-            href={`/services/${serviceId}`}
+            href={getServiceRoute(serviceId)}
             onClick={closeDropdown}
             className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-all duration-300 bg-transparent hover:bg-cyan-tint border-l-2 border-transparent hover:border-l-2 hover:border-cyan-400"
             style={{ color: "#C8D8EE" }}
@@ -83,6 +99,11 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, onSearchOpen = () => {} }
           >
             <div className="text-sm md:text-base font-semibold leading-snug transition-colors" style={{ color: "inherit" }}>
               {service.title}
+              {service.id === 'cloth-drying' && (
+                <span className="block text-[10px] font-semibold text-[#FF6B42] mt-1">
+                  & Cloth Hangers
+                </span>
+              )}
             </div>
             <p className="line-clamp-2 text-xs md:text-sm leading-normal" style={{ color: "#8FAAC8" }}>
               {service.description}
@@ -173,21 +194,28 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, onSearchOpen = () => {} }
               Services
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <div className="p-4 w-[400px] lg:w-[550px] h-[60vh] overflow-y-auto rounded-md" style={{
+              <div className="p-5 w-[400px] lg:w-[550px] h-[60vh] overflow-y-auto rounded-md" style={{
                 background: "linear-gradient(135deg, #121D2F 0%, #1E2A42 50%, #121D2F 100%)",
                 border: "1px solid #1E2A42",
                 backdropFilter: "blur(16px)",
               }}>
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                  <TabsList className="mb-4 w-full flex gap-2" style={{ backgroundColor: "transparent" }}>
+                  <TabsList className="mb-4 w-full flex gap-2 rounded-2xl border border-white/10 bg-white/10 p-4 shadow-sm">
                     {Object.entries(serviceCategories).map(([categoryKey, category]) => (
                       <TabsTrigger
                         key={categoryKey}
                         value={categoryKey}
-                        style={{ borderRadius: "8px", padding: "8px 14px", fontSize: "14px", fontWeight: "500", transition: "all 0.2s ease" }}
-                        className="bg-transparent text-[#C8D8EE] border border-transparent hover:border-white data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:border-white"
+                        className="rounded-xl border border-transparent bg-white/10 px-4 py-2 text-sm font-medium text-[#C8D8EE] transition-all duration-200 hover:bg-white/20 hover:border-white/30 data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:border-white data-[state=active]:shadow-md"
+                        style={{ minWidth: 'fit-content' }}
                       >
-                        {category.title}
+                        {categoryKey === 'invisible-grills' ? (
+                          <div className="flex flex-col items-center gap-[2px] whitespace-normal">
+                            <span>{category.title}</span>
+                            <span className="text-[10px] font-semibold text-[#FF6B42]">& Cloth Hangers</span>
+                          </div>
+                        ) : (
+                          category.title
+                        )}
                       </TabsTrigger>
                     ))}
                   </TabsList>
@@ -307,16 +335,21 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, onSearchOpen = () => {} }
             className="lg:hidden flex-shrink-0 h-10 w-10 p-0 flex items-center justify-center rounded-md hover:bg-gray-100 transition-colors"
             aria-label="Toggle menu"
           >
-            <Menu className="h-6 w-6" style={{ color: '#000000' }} />
+            <MenuIcon className="h-7 w-7" />
           </button>
 
           {/* Logo */}
           <Link href="/" className="flex items-center flex-1 lg:flex-none justify-center lg:justify-start">
-            <img
-              src="/logo.png"
-              alt="KGR Enterprises"
-              className="h-[4.5rem] md:h-[5rem] w-auto object-contain"
-            />
+            <div>
+              <OptimizedImage
+                src="/logo.png"
+                alt="KGR Enterprises"
+                className="h-[4.5rem] md:h-[5rem] w-auto object-contain"
+                loading="eager"
+                priority
+                fetchPriority="high"
+              />
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -332,7 +365,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, onSearchOpen = () => {} }
               className="h-10 w-10 rounded-lg flex items-center justify-center hover:bg-gray-100 transition-colors flex-shrink-0"
               title="Search (Ctrl+K)"
             >
-              <Search className="h-5 w-5" style={{ color: '#000000' }} />
+              <SearchIcon className="h-6 w-6" />
             </button>
 
             <div className="hidden lg:flex items-center gap-1">

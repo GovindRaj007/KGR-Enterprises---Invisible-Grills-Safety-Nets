@@ -28,7 +28,7 @@ export default function NotFound() {
           </Button>
           <Button variant="outline" asChild>
             <Link href="/services">
-              View Our Services
+              Explore Invisible Grills & Safety Nets
             </Link>
           </Button>
         </div>

@@ -8,7 +8,7 @@ export const generateOrganizationSchema = () => ({
   '@id': `${baseUrl}#organization`,
   'name': 'KGR Enterprises',
   'alternateName': 'KGR Invisible Grills & Safety Nets',
-  'description': 'Professional installation services for invisible grills, safety nets, bird protection solutions, and sports nets across South India.',
+  'description': 'Professional installation services for invisible grills, safety nets, pigeon nets, and sports nets across South India.',
   'url': baseUrl,
   'logo': {
     '@type': 'ImageObject',
@@ -55,7 +55,7 @@ export const generateOrganizationSchema = () => ({
     },
     {
       '@type': 'PostalAddress',
-      'streetAddress': '367, 2nd A Main Road, Gokula Extension, Mathikera',
+      'streetAddress': '367, 2nd A Main Rd, Sharadamba Nagar, Muthyala Nagar, Gokula Extension, Mathikere, Bengaluru - 560054, Karnataka',
       'addressLocality': 'Bangalore',
       'addressRegion': 'Karnataka',
       'postalCode': '560054',

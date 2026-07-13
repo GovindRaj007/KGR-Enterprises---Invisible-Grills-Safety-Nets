@@ -100,8 +100,8 @@ export function generateServiceSchema(params: {
       'ratingValue': '4.9',
       'bestRating': '5',
       'worstRating': '1',
-      'ratingCount': '1000',
-      'reviewCount': '1000'
+      'ratingCount': '1126',
+      'reviewCount': '1126'
     }
   };
 
@@ -183,7 +183,7 @@ export function generateServiceSchema(params: {
           'itemOffered': {
             '@type': 'Service',
             'name': `Standard ${serviceName} Installation`,
-            'description': `Professional installation with quality materials and 15-year warranty`
+            'description': `Professional installation with quality materials and backed by warranty`
           },
           'priceSpecification': {
             '@type': 'PriceSpecification',
@@ -195,7 +195,7 @@ export function generateServiceSchema(params: {
           },
           'warranty': {
             '@type': 'WarrantyPromise',
-            'durationOfWarranty': 'P15Y',
+            'durationOfWarranty': 'P10Y',
             'warrantyScope': 'Labor and Materials'
           }
         },
@@ -216,7 +216,7 @@ export function generateServiceSchema(params: {
           },
           'warranty': {
             '@type': 'WarrantyPromise',
-            'durationOfWarranty': 'P20Y',
+            'durationOfWarranty': 'P10Y',
             'warrantyScope': 'Labor and Materials'
           }
         }
@@ -225,7 +225,7 @@ export function generateServiceSchema(params: {
     'aggregateRating': {
       '@type': 'AggregateRating',
       'ratingValue': '4.9',
-      'ratingCount': '1000',
+      'ratingCount': '1126',
       'bestRating': '5',
       'worstRating': '1',
       'reviewCount': '1000'

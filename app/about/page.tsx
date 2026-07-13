@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
+import OptimizedImage from "@/components/shared/OptimizedImage";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import HeroWithHeaderWrapper from "@/components/layout/HeroWithHeaderWrapper";
 import AboutSection from "@/components/about/AboutSection";
 import TestimonialsSection from "@/components/testimonials/TestimonialsSection";
 import { Card, CardContent } from "@/components/ui/card";
 
+export const dynamic = 'force-static';
+
 export const metadata: Metadata = {
   title: "About Us - 15+ Years Experience in Safety Solutions",
-  description: "KGR Enterprises has 15+ years of experience in invisible grills and safety nets installation. Certified team, 5000+ happy customers across Hyderabad, Bangalore, Chennai.",
+  description: "KGR Enterprises has 15+ years of experience in invisible grills and safety nets installation. Certified team, 5000+ happy customers across Chennai,Hyderabad, Bangalore.",
   alternates: {
     canonical: 'https://invisiblegrillsandsafetynets.in/about',
   },
@@ -82,21 +85,52 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    'name': 'KGR Enterprises',
+    'alternateName': 'KGR Invisible Grills & Safety Nets',
+    'url': 'https://invisiblegrillsandsafetynets.in',
+    'logo': 'https://invisiblegrillsandsafetynets.in/logo.png',
+    'description': 'Professional installation services for invisible grills, safety nets, pigeon nets, and sports nets across South India. 15+ years of experience with 5000+ satisfied customers.',
+    'foundingDate': '2008',
+    'address': {
+      '@type': 'PostalAddress',
+      'streetAddress': '15-21-150/17, JK Heights, Balaji Nagar, Kukatpally',
+      'addressLocality': 'Hyderabad',
+      'addressRegion': 'Telangana',
+      'postalCode': '500072',
+      'addressCountry': 'IN'
+    },
+    'contactPoint': {
+      '@type': 'ContactPoint',
+      'telephone': '+91-9337353030',
+      'contactType': 'Customer Support'
+    },
+    'aggregateRating': {
+      '@type': 'AggregateRating',
+      'ratingValue': '4.9',
+      'bestRating': '5',
+      'worstRating': '1',
+      'ratingCount': '1126',
+      'reviewCount': '1126'
+    }
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
       <HeroWithHeaderWrapper>
         {/* Full-bleed background hero for About page (using next/image for optimization) */}
         <section className="relative overflow-hidden" style={{ borderRadius: '1rem' }}>
-          <img 
+          <OptimizedImage
             src="/images/hero-image.jpg" 
-            alt="About KGR Enterprises" 
+            alt="KGR Enterprises for invisible grills, balcony safety nets and child protection solutions" 
             className="object-cover w-full h-full absolute inset-0"
             loading="eager"
-            decoding="async"
-            width="1920"
-            height="1080"
-            fetchPriority="high"
           />
           <div className="absolute inset-0 bg-black/20" />
           <div className="relative container mx-auto px-4 py-20 md:py-28 lg:py-36 text-center">
@@ -130,8 +164,8 @@ export default function AboutPage() {
                 Founded in 2008, KGR Enterprises has grown from a small local
                 business to become one of South India&apos;s most trusted safety
                 solutions providers. With over 15 years of experience, we have
-                successfully completed 5000+ installations across Hyderabad,
-                Bangalore, Chennai, and Andhra Pradesh.
+                successfully completed 5000+ installations across Chennai,
+                Hyderabad, Bangalore, and Andhra Pradesh.
               </p>
             </CardContent>
           </Card>

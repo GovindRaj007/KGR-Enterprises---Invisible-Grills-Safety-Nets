@@ -8,11 +8,12 @@ const TopAnnouncementBar = () => {
 
   const announcements = [
     "• Free site inspection & consultation available",
-    "• 15-year warranty on all installations",
+    "• Warranty based installations",
     "• Marine-grade stainless steel materials",
+    "• Safety Nets for Balconies-Pigeon Control & more",
     "• Professional team with 15+ years experience",
     "• Same-day installation appointments",
-    "• Serving Hyderabad, Bangalore, Chennai & more",
+    "• Serving Chennai, Hyderabad, Bangalore & more",
   ];
 
   useEffect(() => {

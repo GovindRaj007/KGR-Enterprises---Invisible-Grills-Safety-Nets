@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { X, Search } from "lucide-react";
 import { SEARCH_DATA, FUSE_OPTIONS, type SearchDataItem } from "@/lib/searchData";
+import { normalizeSearchQuery } from "@/lib/searchData";
+import { getSpecialSearchResults } from "@/lib/searchData";
 
 interface FuseResult {
   item: SearchDataItem;
@@ -32,7 +34,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     "invisible grills",
     "balcony nets",
     "pigeon control",
-    "bird protection",
+    "pigeon nets",
     "cricket nets",
     "sports nets",
     "safety nets",
@@ -91,14 +93,23 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const runSearch = useCallback((searchQuery: string) => {
     if (!fuseInstanceRef.current) return;
 
-    if (searchQuery.length < 2) {
+    const normalizedQuery = normalizeSearchQuery(searchQuery);
+
+    if (normalizedQuery.length < 2) {
       setResults([]);
       setShowResults(false);
       return;
     }
 
+    const specialResults = getSpecialSearchResults(normalizedQuery);
+    if (specialResults.length > 0) {
+      setResults(specialResults.slice(0, 6));
+      setShowResults(true);
+      return;
+    }
+
     const searchResults = fuseInstanceRef.current
-      .search(searchQuery)
+      .search(normalizedQuery)
       .slice(0, 6);
 
     const resultsData = searchResults.map((result: FuseResult) => result.item);
@@ -106,7 +117,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     setShowResults(true);
   }, []);
 
-  // Debounced search handler
+  // Debounced search handler (300ms for optimal performance)
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
     setQuery(value);
@@ -114,7 +125,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     clearTimeout(debounceTimerRef.current);
     debounceTimerRef.current = setTimeout(() => {
       runSearch(value);
-    }, 200);
+    }, 300);
   };
 
   // Keyboard event handler
@@ -173,7 +184,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         {/* Search Results Dropdown */}
         {showResults && (
           <div
-            className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50 max-h-96 overflow-y-auto"
+            className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50 max-h-96 overflow-y-auto max-w-sm"
             role="listbox"
             aria-live="polite"
           >

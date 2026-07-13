@@ -1,10 +1,16 @@
 'use client';
-import { useState } from 'react';
+import { useState, memo } from 'react';
+import OptimizedImage from '@/components/shared/OptimizedImage';
+import { Breadcrumbs } from '@/components/shared/Breadcrumbs';
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Pointer } from 'lucide-react';
 import { servicesData, serviceCategories } from '@/data/servicesData';
 
-const GallerySection = () => {
+interface GallerySectionProps {
+  showBreadcrumbs?: boolean;
+}
+
+const GallerySection = ({ showBreadcrumbs = false }: GallerySectionProps) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [activeCategory, setActiveCategory] = useState("All");
@@ -13,6 +19,36 @@ const GallerySection = () => {
   const generateGalleryImages = () => {
     const images: Array<{ src: string; category: string; alt: string }> = [];
 
+    const getServiceAltText = (service: (typeof servicesData)[keyof typeof servicesData]) => {
+      const title = service.title.toLowerCase();
+
+      if (title.includes('invisible grill')) {
+        return 'Invisible Grills installation for balcony and window safety in Chennai, Hyderabad, Bangalore and Andhra Pradesh';
+      }
+
+      if (title.includes('pigeon')) {
+        return 'Pigeon nets installation for bird protection and balcony safety';
+      }
+
+      if (title.includes('balcony') || title.includes('safety net')) {
+        return 'Balcony safety nets installation for child and pet protection';
+      }
+
+      if (title.includes('duct')) {
+        return 'Duct area nets installation for construction and utility safety';
+      }
+
+      if (title.includes('cloth') || title.includes('hanger')) {
+        return 'Ceiling cloth hanger installation for space-saving laundry drying';
+      }
+
+      if (title.includes('cricket')) {
+        return 'Artificial cricket turf installation and cricket practice nets for sports safety';
+      }
+
+      return `${service.title} installation by KGR Enterprises for homes, apartments and commercial spaces`;
+    };
+
     Object.values(servicesData).forEach((service) => {
       const categoryTitle = serviceCategories[service.category as keyof typeof serviceCategories]?.title || service.category;
       
@@ -20,7 +56,7 @@ const GallerySection = () => {
       images.push({
         src: service.image,
         category: categoryTitle,
-        alt: `${service.title} installation`
+        alt: getServiceAltText(service)
       });
 
       // Add additional images
@@ -30,7 +66,7 @@ const GallerySection = () => {
             images.push({
               src: img,
               category: categoryTitle,
-              alt: `${service.title} - Image ${idx + 1}`
+              alt: `${getServiceAltText(service)} - image ${idx + 1}`
             });
           }
         });
@@ -46,13 +82,18 @@ const GallerySection = () => {
   };
 
   const galleryImages = generateGalleryImages();
-  const categories = ["All", ...Object.values(serviceCategories).map(cat => cat.title)];
+  const categories = ["All", "Cloth Hangers", ...Object.values(serviceCategories).map(cat => cat.title)];
   
   const IMAGES_PER_PAGE = 12;
 
+  const isClothHangerImage = (image: { src: string; category: string; alt: string }) =>
+    image.src.includes('/cloth-drying') || image.alt.toLowerCase().includes('cloth');
+
   // Filter images
-  const filteredImages = activeCategory === "All" 
-    ? galleryImages 
+  const filteredImages = activeCategory === "All"
+    ? galleryImages
+    : activeCategory === "Cloth Hangers"
+    ? galleryImages.filter(isClothHangerImage)
     : galleryImages.filter(img => img.category === activeCategory);
 
   // Pagination
@@ -79,6 +120,7 @@ const GallerySection = () => {
       background: "linear-gradient(180deg, #121D2F 0%, #1E2A42 100%)"
     }}>
       <div className="container mx-auto px-4">
+        {showBreadcrumbs && <Breadcrumbs items={[{ label: 'Gallery' }]} darkMode={true} />}
         {/* Header */}
         <div className="text-center space-y-4 mb-8 md:mb-12">
           <h2 className="text-2xl md:text-3xl lg:text-5xl font-bold" style={{ color: "#F0F6FF" }}>
@@ -94,6 +136,8 @@ const GallerySection = () => {
           {categories.map((category) => {
             const categoryCount = category === "All" 
               ? galleryImages.length 
+              : category === "Cloth Hangers"
+              ? galleryImages.filter(isClothHangerImage).length
               : galleryImages.filter(img => img.category === category).length;
             
             return (
@@ -124,6 +168,15 @@ const GallerySection = () => {
           })}
         </div>
 
+        <div className="max-w-4xl mx-auto mb-6 px-4">
+          <div className="flex justify-center">
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-transparent text-white/90 text-sm md:text-base font-semibold">
+              <Pointer className="h-4 w-4 md:h-5 md:w-5 text-[#FF6B42] transform rotate-180" />
+              Click to view full image
+            </span>
+          </div>
+        </div>
+
         {/* Gallery Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6 mb-6 md:mb-8">
           {currentImages.map((image, index) => (
@@ -146,21 +199,19 @@ const GallerySection = () => {
               }}
             >
               <div className="relative overflow-hidden aspect-square">
-                <img 
+                <OptimizedImage
                   src={image.src} 
                   alt={image.alt} 
                   loading="lazy"
-                  decoding="async"
-                  fetchPriority={startIndex + index < 4 ? "high" : "low"}
                   className="object-cover group-hover:scale-110 transition-transform duration-500 w-full h-full absolute inset-0" 
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
                 <div className="absolute top-2 left-2 text-xs font-semibold px-2 py-1 rounded-full" style={{
                   color: "#F0F6FF",
-                  backgroundColor: "rgba(75, 159, 255, 0.2)",
-                  border: "1px solid rgba(75, 159, 255, 0.5)"
+                  backgroundColor: "#034d5c",
+                  border: "1px solid #034d5c"
                 }}>
-                  {image.category}
+                  {isClothHangerImage(image) ? 'Cloth Hangers' : image.category}
                 </div>
               </div>
             </div>
@@ -274,11 +325,10 @@ const GallerySection = () => {
             <DialogTitle className="sr-only">Gallery Image Preview</DialogTitle>
             {selectedImage && (
               <div className="relative w-full h-[70vh] md:h-[80vh]">
-                <img 
+                <OptimizedImage
                   src={selectedImage} 
                   alt="Gallery Image Preview" 
-                  loading="lazy"
-                  decoding="async"
+                  loading="eager"
                   className="object-contain w-full h-full absolute inset-0" 
                 />
               </div>
@@ -290,4 +340,4 @@ const GallerySection = () => {
   );
 };
 
-export default GallerySection;
+export default memo(GallerySection);

@@ -2,37 +2,38 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import OptimizedImage from "@/components/shared/OptimizedImage";
 
 const showcaseImages = [
   {
     src: "/images/invisible-grill-1.jpg",
-    alt: "Invisible Grills Installation",
+    alt: "Invisible Grills installation for balcony and window safety in Chennai",
     label: "Invisible Grills",
   },
   {
     src: "/images/balcony-invisible-grill-1.jpg",
-    alt: "Balcony Invisible Grills",
+    alt: "Balcony Invisible Grills for premium safety and clear views",
     label: "Balcony Invisible Grills",
   },
   {
     src: "/images/balcony-net-1.jpg",
-    alt: "Balcony Safety Net",
-    label: "Balcony Safety Net",
+    alt: "Balcony safety nets installation for child and pet protection",
+    label: "Balcony Safety Nets",
   },
   {
     src: "/images/children-protection-net-1.jpg",
-    alt: "Children Protection Nets",
+    alt: "Children protection nets for safe balconies and windows",
     label: "Children Protection Nets",
   },
-  { src: "/images/pegion-net-1.jpg", alt: "Pigeon Nets", label: "Pigeon Nets" },
+  { src: "/images/pegion-net-1.jpg", alt: "Pigeon nets installation for bird protection and balcony safety", label: "Pigeon Nets" },
   {
     src: "/images/cloth-drying-pulley-1.jpg",
-    alt: "Ceiling Cloth Drying Hangers",
+    alt: "Ceiling cloth hanger installation for space-saving laundry drying",
     label: "Ceiling Cloth Hangers",
   },
   {
     src: "/images/service-gallery-1.jpg",
-    alt: "Our Services - KGR Enterprises",
+    alt: "KGR Enterprises safety solutions including invisible grills, safety nets and sports nets",
     label: "Our Services",
   },
 ];
@@ -124,14 +125,14 @@ const ImageCarousel = () => {
               {showcaseImages.map((image, index) => (
                 <div
                   key={index}
-                  className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${
+                  className={`absolute inset-0 transition-opacity duration-500 ${
                     index === activeIndex ? "opacity-100" : "opacity-0"
                   }`}
                 >
-                  <img
+                  <OptimizedImage
                     src={image.src}
                     alt={image.alt}
-                    className={`h-full ${index === showcaseImages.length - 1 ? "w-[70%]" : "w-full"}`}
+                    className="w-full h-full object-cover"
                     loading="lazy"
                   />
                   {/* Label Overlay - Hide for promotional card */}
@@ -183,7 +184,7 @@ const ImageCarousel = () => {
                   }}
                 >
                   <div className="h-full w-full overflow-hidden rounded-2xl shadow-2xl">
-                    <img
+                    <OptimizedImage
                       src={image.src}
                       alt={image.alt}
                       className="h-full w-full object-cover"
@@ -211,7 +212,7 @@ const ImageCarousel = () => {
               onClick={() => setActiveIndex(index)}
               className={`rounded-full transition-all duration-300 focus:outline-none min-h-0 min-w-0 flex-shrink-0 ${
                 index === activeIndex
-                  ? "h-2 md:h-3 w-7 md:w-9 bg-accent shadow-lg shadow-accent/50"
+                  ? "h-2 md:h-3 w-7 md:w-9 bg-slate-900 shadow-lg shadow-slate-900/30"
                   : "h-2 md:h-3 w-2 md:w-3 bg-muted-foreground/30 hover:bg-muted-foreground/50 hover:scale-125"
               }`}
               aria-label={`View ${showcaseImages[index].label}`}

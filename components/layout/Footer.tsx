@@ -3,13 +3,14 @@ import Link from 'next/link';
 import { Phone, Mail, MapPin, Clock, ArrowRight, Shield } from 'lucide-react';
 import { PRIMARY, SECONDARY, } from '@/constants/contacts';
 import { PRIMARY_LOCATIONS } from '@/lib/seo-metadata';
+import OptimizedImage from '@/components/shared/OptimizedImage';
 
 const Footer = () => {
   const services = [
     { name: 'Invisible Grills', href: '/services/invisible-grills' },
-    { name: 'Balcony Safety Net', href: '/services/balcony-safety' },
+    { name: 'Balcony Safety Nets', href: '/services/balcony-safety' },
     { name: 'Children Protection Nets', href: '/services/children-protection' },
-    { name: 'Bird Protection Nets', href: '/services/pigeon-nets' },
+    { name: 'Pigeon Nets', href: '/services/pigeon-nets' },
     { name: 'All Sports Nets', href: '/services/all-sports-practice' },
   ];
 
@@ -21,16 +22,22 @@ const Footer = () => {
         borderTop: "1px solid #1E2A42"
       }}>
         {/* Main Footer Content */}
-        <div className="container mx-auto px-4 py-2 md:py-6 lg:py-10">
+        <div className="container mx-auto px-4 py-4 md:py-6 lg:py-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
 
             {/* Company Info */}
             <div className="space-y-2 md:space-y-3">
               <div className="space-y-4">
-                <img src="/logo.png" alt="KGR Enterprises - Professional Invisible Grills and Safety Nets Installation Services" className="h-[4rem] w-auto object-cover -ml-[1rem] -mt-[5px] md:-mt-[10px]" />
+                <div className="inline-flex items-center justify-center rounded-2xl bg-white/10 p-3 shadow-sm ring-1 ring-white/10 w-fit">
+                  <OptimizedImage
+                    src="/logo.png"
+                    alt="KGR Enterprises - Professional Invisible Grills and Safety Nets Installation Services"
+                    className="h-[4rem] w-auto object-contain"
+                  />
+                </div>
                 <p className="text-sm md:text-base leading-relaxed mt-0" style={{ color: "#8FAAC8" }}>
                   KGR Enterprises delivers best quality invisible grills and safety nets across
-                  Hyderabad, Bangalore, Chennai, and Andhra Pradesh. Protecting families with
+                  Chennai, Hyderabad, Bangalore, and Andhra Pradesh. Protecting families with
                   premium safety solutions.
                 </p>
               </div>
@@ -146,39 +153,25 @@ const Footer = () => {
               <div className="text-xs md:text-sm text-center md:text-left" style={{ color: "#8FAAC8" }}>© 2025 KGR Enterprises. All rights reserved.</div>
 
               <div className="flex flex-wrap justify-center md:justify-end gap-4 md:gap-6 text-xs md:text-sm">
-                <Link href="/about" className="transition-colors min-h-0" style={{ color: "#C8D8EE" }}
+                <Link href="/privacy-policy" className="transition-colors min-h-0" style={{ color: "#C8D8EE" }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.color = "#F0F6FF";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.color = "#C8D8EE";
                   }}
-                >About Us</Link>
-                <Link href="/services" className="transition-colors min-h-0" style={{ color: "#C8D8EE" }}
+                >Privacy Policy</Link>
+                <Link href="/terms-of-service" className="transition-colors min-h-0" style={{ color: "#C8D8EE" }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.color = "#F0F6FF";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.color = "#C8D8EE";
                   }}
-                >Services</Link>
-                <Link href="/contact" className="transition-colors min-h-0" style={{ color: "#C8D8EE" }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.color = "#F0F6FF";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.color = "#C8D8EE";
-                  }}
-                >Contact</Link>
+                >Terms of Service</Link>
               </div>
             </div>
-
-            {/* SEO Keywords Footer */}
-            <div className="text-center mt-4 pt-4" style={{ borderTop: "1px solid #1E2A42" }}>
-              <p className="text-xs leading-relaxed" style={{ color: "#546B8F" }}>
-                Best invisible grills services in Hyderabad, Bangalore, Chennai, Andhra Pradesh | Quality invisible grill for balcony | Best safety nets | Balcony Safety Net | Children Protection Nets | Bird Nets | Pigeon Nets | Professional safety net installation
-              </p>
-            </div>
+            
           </div>
         </div>
       </footer>

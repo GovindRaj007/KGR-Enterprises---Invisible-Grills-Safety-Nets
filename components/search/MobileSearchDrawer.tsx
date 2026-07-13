@@ -6,6 +6,8 @@ import { Search, X } from "lucide-react";
 import {
   SEARCH_DATA,
   FUSE_OPTIONS,
+  normalizeSearchQuery,
+  getSpecialSearchResults,
   extractLocationFromQuery,
   removeLocationFromQuery,
   buildSearchResultUrl,
@@ -26,7 +28,7 @@ const CATEGORIES = [
   "invisible grills",
   "balcony nets",
   "pigeon control",
-  "bird protection",
+  "pigeon nets",
   "cricket nets",
   "sports nets",
   "safety nets",
@@ -117,7 +119,9 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
   const runSearch = useCallback((searchQuery: string) => {
     if (!fuseInstanceRef.current) return;
 
-    if (searchQuery.length < 2) {
+    const normalizedQuery = normalizeSearchQuery(searchQuery);
+
+    if (normalizedQuery.length < 2) {
       setResults([]);
       setShowResults(false);
       setDetectedLocation(null);
@@ -126,12 +130,22 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
     }
 
     // Extract location from query if present
-    const location = extractLocationFromQuery(searchQuery);
+    const location = extractLocationFromQuery(normalizedQuery);
     setDetectedLocation(location);
 
     // Determine query type
-    const type = determineQueryType(searchQuery, location);
+    const type = determineQueryType(normalizedQuery, location);
     setQueryType(type);
+
+    const specialResults = getSpecialSearchResults(
+      normalizedQuery,
+      location ?? undefined
+    );
+    if (specialResults.length > 0) {
+      setResults(specialResults);
+      setShowResults(true);
+      return;
+    }
 
     // CASE 1: Location-only search (e.g., "hyderabad", "bangalore")
     if (type === "location-only" && location) {
@@ -143,7 +157,7 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
 
     // CASE 2: Service + Location search (e.g., "safety nets bangalore")
     if (type === "service+location" && location) {
-      const cleanQuery = removeLocationFromQuery(searchQuery).trim();
+      const cleanQuery = removeLocationFromQuery(normalizedQuery).trim();
 
       // First, try to find by category
       let resultsData: SearchDataItem[] = [];
@@ -175,7 +189,7 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
     }
 
     // CASE 3: Service-only search (e.g., "invisible grills")
-    const cleanQuery = removeLocationFromQuery(searchQuery) || searchQuery;
+    const cleanQuery = removeLocationFromQuery(normalizedQuery) || normalizedQuery;
     const searchResults = fuseInstanceRef.current
       .search(cleanQuery)
       .slice(0, 12);
@@ -318,7 +332,9 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
                     onClick={() => {
                       setQuery("");
                       setShowResults(false);
-                      setResults([]);                      searchInputRef.current?.focus();                    }}
+                      setResults([]);
+                      searchInputRef.current?.focus();
+                    }}
                     aria-label="Clear search"
                     style={{
                       background: "none",
@@ -429,7 +445,7 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
                 <div style={{ textAlign: "center", color: "#6b7280", paddingTop: "32px" }}>
                   <p style={{ fontSize: "14px" }}>Start typing to search our services</p>
                   <p style={{ fontSize: "12px", marginTop: "8px", color: "#9ca3af" }}>
-                    Try: "invisible grills", "safety nets hyderabad", or just "bangalore"
+                    Try: "invisible grills", "safety nets chennai", or just "bangalore"
                   </p>
                 </div>
               )}

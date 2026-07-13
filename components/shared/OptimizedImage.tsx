@@ -1,40 +1,114 @@
+'use client';
+
 import Image from 'next/image';
+import { useEffect, useMemo, useState } from 'react';
 
 type OptimizedImageProps = {
   src: string;
   alt: string;
+  className?: string;
+  loading?: 'eager' | 'lazy';
+  style?: React.CSSProperties;
   width?: number;
   height?: number;
-  className?: string;
   priority?: boolean;
+  fetchPriority?: 'high' | 'low' | 'auto';
   sizes?: string;
+  fill?: boolean;
+  [key: string]: unknown;
 };
+
+const manifestUrl = '/optimized-images.json';
+let manifestCache: Record<string, string[]> | null = null;
+let manifestPromise: Promise<Record<string, string[]>> | null = null;
+
+async function getManifest() {
+  if (manifestCache) return manifestCache;
+
+  // If the optimized manifest was preloaded before hydration, use it and avoid a fetch
+  if (typeof window !== 'undefined' && (window as any).__OPTIMIZED_IMAGES__) {
+    manifestCache = (window as any).__OPTIMIZED_IMAGES__ as Record<string, string[]>;
+    return manifestCache;
+  }
+
+  if (!manifestPromise) {
+    manifestPromise = fetch(manifestUrl)
+      .then(async (response) => {
+        if (!response.ok) return {};
+        return (await response.json()) as Record<string, string[]>;
+      })
+      .catch(() => ({}));
+  }
+  manifestCache = await manifestPromise;
+  return manifestCache;
+}
 
 const OptimizedImage = ({
   src,
   alt,
-  width = 800,
-  height = 600,
   className = '',
+  loading = 'lazy',
+  style = {},
+  width = 1200,
+  height = 800,
   priority = false,
-  sizes = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 800px'
+  fetchPriority,
+  sizes,
+  fill = false,
+  ...props
 }: OptimizedImageProps) => {
-  // Convert relative URLs to absolute URLs
-  const imageUrl = src.startsWith('http') ? src : `https://invisiblegrillsandsafetynets.in${src}`;
-  
+  const [optimizedSrc, setOptimizedSrc] = useState(src);
+  const [isFallback, setIsFallback] = useState(false);
+
+  const fallbackSrc = useMemo(() => src, [src]);
+
+  useEffect(() => {
+    if (src.startsWith('http') || src.startsWith('/images/optimized/')) {
+      setOptimizedSrc(src);
+      setIsFallback(false);
+      return;
+    }
+
+    setOptimizedSrc(src);
+    setIsFallback(false);
+
+    let isMounted = true;
+
+    getManifest().then((manifest) => {
+      if (!isMounted) return;
+      const basename = src.split('/').pop()?.split('.')[0];
+      if (basename && manifest[basename]?.length) {
+        setOptimizedSrc(manifest[basename][0]);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [src]);
+
+  const imageSrc = isFallback ? fallbackSrc : optimizedSrc;
+
   return (
     <Image
-      src={imageUrl}
+      src={imageSrc}
       alt={alt}
-      width={width}
-      height={height}
-      className={className || "object-cover"}
+      className={className}
+      loading={priority ? 'eager' : loading}
       priority={priority}
-      sizes={sizes}
-      loading={priority ? 'eager' : 'lazy'}
-      quality={85}
-      placeholder="blur"
-      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRsdHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/2wBDAR0XFx8eHx4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+      fetchPriority={priority ? 'high' : fetchPriority}
+      unoptimized
+      sizes={sizes ?? '(max-width: 768px) 100vw, 50vw'}
+      style={style}
+      width={fill ? undefined : width}
+      height={fill ? undefined : height}
+      fill={fill}
+      onError={() => {
+        if (!isFallback) {
+          setIsFallback(true);
+        }
+      }}
+      {...props}
     />
   );
 };

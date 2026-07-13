@@ -6,6 +6,8 @@ import { Search, X } from "lucide-react";
 import {
   SEARCH_DATA,
   FUSE_OPTIONS,
+  normalizeSearchQuery,
+  getSpecialSearchResults,
   extractLocationFromQuery,
   removeLocationFromQuery,
   buildSearchResultUrl,
@@ -46,7 +48,7 @@ const DesktopSearchPanel: React.FC<DesktopSearchPanelProps> = ({
     "invisible grills",
     "balcony nets",
     "pigeon control",
-    "bird protection",
+    "pigeon nets",
     "cricket nets",
     "sports nets",
     "safety nets",
@@ -109,7 +111,9 @@ const DesktopSearchPanel: React.FC<DesktopSearchPanelProps> = ({
   const runSearch = useCallback((searchQuery: string) => {
     if (!fuseInstanceRef.current) return;
 
-    if (searchQuery.length < 2) {
+    const normalizedQuery = normalizeSearchQuery(searchQuery);
+
+    if (normalizedQuery.length < 2) {
       setResults([]);
       setShowResults(false);
       setDetectedLocation(null);
@@ -118,12 +122,22 @@ const DesktopSearchPanel: React.FC<DesktopSearchPanelProps> = ({
     }
 
     // Extract location from query if present
-    const location = extractLocationFromQuery(searchQuery);
+    const location = extractLocationFromQuery(normalizedQuery);
     setDetectedLocation(location);
 
     // Determine query type
-    const type = determineQueryType(searchQuery, location);
+    const type = determineQueryType(normalizedQuery, location);
     setQueryType(type);
+
+    const specialResults = getSpecialSearchResults(
+      normalizedQuery,
+      location ?? undefined
+    );
+    if (specialResults.length > 0) {
+      setResults(specialResults);
+      setShowResults(true);
+      return;
+    }
 
     // CASE 1: Location-only search (e.g., "hyderabad", "bangalore")
     if (type === "location-only" && location) {
@@ -135,7 +149,7 @@ const DesktopSearchPanel: React.FC<DesktopSearchPanelProps> = ({
 
     // CASE 2: Service + Location search (e.g., "safety nets bangalore")
     if (type === "service+location" && location) {
-      const cleanQuery = removeLocationFromQuery(searchQuery).trim();
+      const cleanQuery = removeLocationFromQuery(normalizedQuery).trim();
 
       // First, try to find by category
       let resultsData: SearchDataItem[] = [];
@@ -167,7 +181,7 @@ const DesktopSearchPanel: React.FC<DesktopSearchPanelProps> = ({
     }
 
     // CASE 3: Service-only search (e.g., "invisible grills")
-    const cleanQuery = removeLocationFromQuery(searchQuery) || searchQuery;
+    const cleanQuery = removeLocationFromQuery(normalizedQuery) || normalizedQuery;
     const searchResults = fuseInstanceRef.current
       .search(cleanQuery)
       .slice(0, 12);
@@ -491,7 +505,7 @@ const DesktopSearchPanel: React.FC<DesktopSearchPanelProps> = ({
               color: "#9ca3af",
             }}
           >
-            <p>Available in Hyderabad, Bangalore, Chennai & more</p>
+            <p>Available in Chennai, Hyderabad, Bangalore & more</p>
           </div>
         </div>
       </div>

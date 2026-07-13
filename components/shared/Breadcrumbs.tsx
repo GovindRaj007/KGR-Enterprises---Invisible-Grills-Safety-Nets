@@ -44,14 +44,14 @@ export function Breadcrumbs({ items, darkMode = true }: BreadcrumbsProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
       />
       <nav aria-label="Breadcrumb" className="py-4">
-        <ol className="flex flex-wrap items-center gap-2 text-xs md:text-sm lg:text-base xl:text-lg">
+        <ol className="flex flex-wrap md:items-center gap-2 text-xs md:text-sm lg:text-base xl:text-lg">
           {allItems.map((item, index) => (
-            <li key={index} className="flex items-center whitespace-nowrap">
+            <li key={index} className="flex  md:items-center gap-1 md:gap-2 whitespace-nowrap">
               {index > 0 && (
-                <ChevronRight className={`mx-2 h-3 w-3 md:h-4 md:w-4 lg:h-5 lg:w-5 flex-shrink-0 ${iconColor}`} />
+                <ChevronRight className={`h-4 w-4 md:h-5 md:w-5 flex-shrink-0 ${iconColor}`} />
               )}
               {index === 0 && (
-                <Home className={`mr-2 h-3 w-3 md:h-4 md:w-4 lg:h-5 lg:w-5 flex-shrink-0 ${textColor}`} />
+                <Home className={`h-4 w-4 md:h-5 md:w-5 flex-shrink-0 ${textColor}`} />
               )}
               {item.href && index !== allItems.length - 1 ? (
                 <Link

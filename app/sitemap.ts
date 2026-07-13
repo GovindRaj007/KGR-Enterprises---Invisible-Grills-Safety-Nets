@@ -51,6 +51,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'pigeon-nets',
     'bird-spikes',
     'all-sports-practice',
+    'cricket-practice',
+    'terrace-cricket',
   ];
 
   // Other services (lower priority)
@@ -69,8 +71,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'anti-bird-nets',
     'pigeon-balcony',
     'anti-seagull',
-    'cricket-practice',
-    'terrace-cricket',
   ];
 
   // Main category service pages (higher priority)

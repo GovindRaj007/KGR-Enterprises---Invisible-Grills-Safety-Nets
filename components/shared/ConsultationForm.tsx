@@ -239,15 +239,15 @@ const ConsultationForm = ({ onSubmit, className }: ConsultationFormProps) => {
                 Submitting...
               </>
             ) : (
-              <>
-                Submit Request
-                <ArrowRight className="h-4 w-4" />
-              </>
+              <span className="inline-flex items-center gap-2">
+                <span>Submit Request</span>
+                <ArrowRight className="h-4 w-5" style={{ display: 'inline-block' }} />
+              </span>
             )}
           </button>
           
           <p className="text-xs text-center" style={{ color: "#8FAAC8" }}>
-            We will call you within 15 minutes
+            We will call you within 30 minutes
           </p>
         </form>
       </div>

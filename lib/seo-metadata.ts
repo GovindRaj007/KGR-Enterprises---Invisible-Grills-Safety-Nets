@@ -16,167 +16,40 @@ export const PRIMARY_LOCATIONS = [
     name: 'Bangalore',
     state: 'Karnataka',
     areas: ['Whitefield', 'Electronic City', 'Marathahalli', 'HSR Layout', 'Koramangala'],
-    streetAddress: '367, 2nd A Main Road, Gokula Extension, Mathikera, Bangalore Division',
+    streetAddress: '367, 2nd A Main Rd, Sharadamba Nagar, Muthyala Nagar, Gokula Extension, Mathikere, Bengaluru - 560054, Karnataka',
     postalCode: '560054',
-    latitude: 13.04237,
-    longitude: 77.55302,
+    latitude: 13.04266073172332,
+    longitude: 77.55298708465743,
   },
   {
     name: 'Chennai',
     state: 'Tamil Nadu',
     areas: ['Anna Nagar', 'T Nagar', 'Velachery', 'Adyar', 'Porur'],
-    streetAddress: '25/9a, Sathya Moorthy Street, Kamaraj Nagar, Choolaimedu',
+    streetAddress: '25, Sathya Moorthy Street, Kamaraj Nagar,NGO Colony, Choolaimedu, Greater Chennai - 600094, Tamil Nadu',
     postalCode: '600094',
-    latitude: 13.06523,
-    longitude: 80.22148,
+    latitude: 13.065460796383261,
+    longitude: 80.2214640558218,
   },
   {
     name: 'Vijayawada',
     state: 'Andhra Pradesh',
     areas: ['Benz Circle', 'Governorpet', 'Patamata', 'Auto Nagar'],
-    streetAddress: '3-12, Ayyappa Nagar, Benz Circle',
-    postalCode: '520007',
-    latitude: 16.48304,
-    longitude: 80.66898,
+    streetAddress: '3-12, Ayyappa Nagar, Benz Circle, Vijayawada - 521134, Andhra Pradesh',
+    postalCode: '521134',
+    latitude: 16.483198690558233,
+    longitude: 80.66901608208298,
   },
    {
     name: 'Visakhapatnam',
     state: 'Andhra Pradesh',
     areas: ['MVP Colony', 'Dwaraka Nagar', 'Gajuwaka', 'Madhurawada', 'Seethammadhara', 'Beach Road'],
-    streetAddress: '48-5-6, Dwaraka Nagar Main Road',
+    streetAddress: '50-79-31/1, Ganesh Nagar, Seetamma Peta, Dwaraka Nagar, Visakhapatnam - 530016, Andhra Pradesh',
     postalCode: '530016',
-    latitude: 17.686815,
-    longitude: 83.218482,
+    latitude: 17.73464614605787,
+    longitude: 83.31177354232871,
   },
 ];
 
-// Generate location-specific keywords with enhanced semantic variations
-export function generateLocationKeywords(serviceName: string): string[] {
-  const keywords: string[] = [];
-  // Enhanced service variations with more specific terms
-  // Generic service variations for non-location queries
-  const genericVariations = [
-    serviceName,
-    `${serviceName} installation`,
-    `${serviceName} services`,
-    `${serviceName} fitting`,
-    `${serviceName} price`,
-    `${serviceName} cost`,
-    `best ${serviceName}`,
-    `professional ${serviceName}`,
-    `${serviceName} company`,
-    `${serviceName} near me`,
-    `top ${serviceName} company`,
-    `best ${serviceName} installation`,
-    `${serviceName} reviews`,
-    `affordable ${serviceName}`,
-    `premium ${serviceName}`,
-    `${serviceName} warranty`,
-    `${serviceName} installation cost`,
-    `${serviceName} service provider`,
-    `${serviceName} maintenance`,
-    `${serviceName} repair`
-  ];
-
-  // Business-specific variations
-  const businessVariations = [
-    `${serviceName} dealers`,
-    `${serviceName} suppliers`,
-    `${serviceName} contractors`,
-    `${serviceName} experts`,
-    `authorized ${serviceName} dealer`,
-    `certified ${serviceName} installation`,
-    `${serviceName} company reviews`,
-    `trusted ${serviceName} service`,
-    `experienced ${serviceName} installers`,
-    `${serviceName} consultation`
-  ];
-
-  // Quality and service related variations
-  const qualityVariations = [
-    `high quality ${serviceName}`,
-    `premium ${serviceName} installation`,
-    `trusted ${serviceName} services`,
-    `reliable ${serviceName} dealers`,
-    `24x7 ${serviceName} services`,
-    `emergency ${serviceName} installation`,
-    `same day ${serviceName} installation`,
-    `${serviceName} with warranty`,
-    `${serviceName} maintenance services`,
-    `${serviceName} repair services`
-  ];
-
-  const serviceVariations = [...genericVariations, ...businessVariations, ...qualityVariations];
-  
-  PRIMARY_LOCATIONS.forEach(location => {
-    const locationName = location.name;
-    const locationState = location.state;
-
-    // Generate combinations for each service variation
-    serviceVariations.forEach(variation => {
-      keywords.push(
-        `${variation} in ${locationName}`,
-        `${variation} ${locationName}`,
-        `best ${variation} ${locationName}`,
-        `top ${variation} ${locationName}`,
-        `${variation} near me ${locationName}`,
-        `${variation} cost in ${locationName}`,
-        `${variation} price in ${locationName}`,
-        `affordable ${variation} ${locationName}`,
-        `local ${variation} ${locationName}`,
-        `${variation} companies in ${locationName}`
-      );
-
-      // Add state-specific variations
-      if (locationState) {
-        keywords.push(
-          `${variation} in ${locationState}`,
-          `best ${variation} in ${locationState}`,
-          `${variation} services ${locationState}`
-        );
-      }
-    });
-    
-    // Add area-specific keywords with enhanced variations
-    if (location.areas) {
-      location.areas.forEach(area => {
-        keywords.push(
-          `${serviceName} in ${area} ${locationName}`,
-          `${serviceName} installation ${area} ${locationName}`,
-          `${serviceName} services near ${area}`,
-          `best ${serviceName} in ${area}`,
-          `${serviceName} dealers in ${area}`,
-          `${serviceName} contractors ${area}`,
-          `${serviceName} cost in ${area}`
-        );
-      });
-    }
-
-    // Add proximity-based searches
-    keywords.push(
-      `${serviceName} near me`,
-      `${serviceName} installation near me`,
-      `${serviceName} services nearby`,
-      `local ${serviceName} installers`,
-      `nearest ${serviceName} dealer`,
-      `${serviceName} shop near me`
-    );
-
-    // Add commercial/residential specific keywords
-    keywords.push(
-      `residential ${serviceName} in ${locationName}`,
-      `commercial ${serviceName} in ${locationName}`,
-      `apartment ${serviceName} ${locationName}`,
-      `villa ${serviceName} ${locationName}`,
-      `office ${serviceName} ${locationName}`,
-      `industrial ${serviceName} ${locationName}`
-    );
-  });
-  
-  // No need to add these again as they're already included in qualityVariations
-  
-  return [...new Set(keywords)]; // Remove duplicates
-}
 
 // Generate service-specific metadata with location targeting
 // Google Analytics 4 configuration
@@ -199,7 +72,7 @@ export function generateServiceMetadata(params: {
 
   const locationSuffix = primaryLocation
     ? ` in ${primaryLocation}`
-    : ' in Hyderabad, Bangalore, Chennai, and Andhra Pradesh';
+    : ' in Chennai, Hyderabad, Bangalore, and Andhra Pradesh';
 
   const areas = locationInfo 
     ? `Serving ${locationInfo.areas.join(', ')} and surrounding areas`
@@ -210,38 +83,11 @@ export function generateServiceMetadata(params: {
     : `${serviceName} Installation Services${locationSuffix} | KGR Enterprises`;
 
   // Enhanced description with location-specific details and value propositions
-  const description = `${shortDescription}${locationSuffix}. ${areas}. ${longDescription} Professional installation with 15-year warranty, quality materials, and free site inspection. Call ${PRIMARY.display} for expert service.`;
-  
-  // Generate enhanced keywords combining location and industry terms
-  const locationKeywords = generateLocationKeywords(serviceName);
-  const serviceTypeKeywords = [
-    'residential installation',
-    'commercial installation',
-    'apartment fitting',
-    'villa installation',
-    'office installation'
-  ];
-  const qualityKeywords = [
-    'professional installation',
-    'certified installers',
-    'expert fitting',
-    'quality materials',
-    'warranty service'
-  ];
-  const serviceKeywords = [
-    'authorized dealer',
-    'free inspection',
-    'same day service',
-    '24x7 support',
-    'emergency service'
-  ];
+  const description = `${shortDescription}${locationSuffix}. ${areas}. ${longDescription} Professional installation backed by warranty, quality materials, and free site inspection. Call ${PRIMARY.display} for expert service.`;
 
-  const keywords = [...new Set([...locationKeywords, ...serviceTypeKeywords, ...qualityKeywords, ...serviceKeywords])].join(', ');
-  
   return {
     title,
     description,
-    keywords,
     robots: {
       index: true,
       follow: true,
@@ -262,7 +108,7 @@ export function generateServiceMetadata(params: {
           url: image,
           width: 1200,
           height: 630,
-          alt: `${serviceName} - Professional Installation Services in Hyderabad, Bangalore, Chennai`,
+          alt: `${serviceName} - Professional Installation Services in Chennai, Hyderabad, Bangalore, and Andhra Pradesh`,
         },
       ],
       type: 'article',
@@ -331,7 +177,7 @@ export function generateServiceSchema(params: {
       'priceValidUntil': new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString(),
       'availability': 'https://schema.org/InStock',
       'itemCondition': 'https://schema.org/NewCondition',
-      'warranty': '15-year manufacturer warranty',
+      'warranty': '10-year manufacturer warranty',
       'seller': {
         '@type': 'Organization',
         'name': 'KGR Enterprises',
@@ -400,8 +246,8 @@ export function generateServiceSchema(params: {
       '@type': 'AggregateRating',
       'ratingValue': 4.9,
       'bestRating': 5,
-      'ratingCount': 1000,
-      'reviewCount': 1000,
+      'ratingCount': 1126,
+      'reviewCount': 1126,
       'author': {
         '@type': 'Organization',
         'name': 'KGR Enterprises',
@@ -454,8 +300,7 @@ export function generateServiceSchema(params: {
         'description': description,
         'image': `https://invisiblegrillsandsafetynets.in${image}`,
         'category': 'Home Improvement Services',
-        'keywords': generateLocationKeywords(serviceName).join(', '),
-        'provider': {
+'provider': {
           '@type': 'LocalBusiness',
           'name': 'KGR Invisible Grills & Safety Nets',
           'telephone': PRIMARY.phone,
@@ -471,7 +316,7 @@ export function generateServiceSchema(params: {
             'itemListElement': [
               { '@type': 'Offer', 'itemOffered': { '@type': 'Service', 'name': 'Invisible Grills Installation' } },
               { '@type': 'Offer', 'itemOffered': { '@type': 'Service', 'name': 'Safety Nets Installation' } },
-              { '@type': 'Offer', 'itemOffered': { '@type': 'Service', 'name': 'Bird Protection Solutions' } },
+              { '@type': 'Offer', 'itemOffered': { '@type': 'Service', 'name': 'Pigeon Nets' } },
               { '@type': 'Offer', 'itemOffered': { '@type': 'Service', 'name': 'Sports Nets Installation' } }
             ]
           },
@@ -486,7 +331,7 @@ export function generateServiceSchema(params: {
             },
             {
               '@type': 'PostalAddress',
-              'streetAddress': '367, 2nd A Main Road, Gokula Extension, Mathikera',
+              'streetAddress': '367, 2nd A Main Rd, Sharadamba Nagar, Muthyala Nagar, Gokula Extension, Mathikere, Bengaluru - 560054, Karnataka',
               'addressLocality': 'Bangalore',
               'addressRegion': 'Karnataka',
               'postalCode': '560054',
@@ -563,10 +408,10 @@ export function generateServiceSchema(params: {
         'aggregateRating': {
           '@type': 'AggregateRating',
           'ratingValue': '4.9',
-          'ratingCount': '1000',
+          'ratingCount': '1126',
           'bestRating': '5',
           'worstRating': '1',
-          'reviewCount': '1000',
+          'reviewCount': '1126',
           'itemReviewed': {
             '@type': 'Service',
             'name': serviceName,
@@ -754,7 +599,7 @@ export function generateLocationContent(serviceName: string, location: string): 
       serviceHighlights: {
         'invisible-grills': 'Marine-grade invisible grills for Chennai\'s coastal homes',
         'safety-nets': 'Salt-resistant safety nets for Chennai\'s apartments',
-        'bird-protection': 'Durable bird protection for Chennai\'s coastal buildings',
+        'bird-protection': 'Durable pigeon nets for Chennai\'s coastal buildings',
         'sports': 'Weather-resistant sports nets for Chennai\'s facilities'
       }
     },
@@ -780,7 +625,7 @@ export function generateLocationContent(serviceName: string, location: string): 
       serviceHighlights: {
         'invisible-grills': 'Corrosion-resistant invisible grills for coastal homes',
         'safety-nets': 'Industrial-grade safety nets for Vizag buildings',
-        'bird-protection': 'Durable bird protection for coastal properties',
+        'bird-protection': 'Durable pigeon nets for coastal properties',
         'sports': 'Weather-resistant sports solutions for Visakhapatnam'
       }
     },
@@ -806,7 +651,7 @@ export function generateLocationContent(serviceName: string, location: string): 
       serviceHighlights: {
         'invisible-grills': 'Heat-resistant invisible grills for Andhra Pradesh homes',
         'safety-nets': 'All-weather safety nets for Vijayawada buildings',
-        'bird-protection': 'Durable bird protection for local climate',
+        'bird-protection': 'Durable pigeon nets for local climate',
         'sports': 'Custom sports solutions for Andhra Pradesh facilities'
       }
     },
@@ -826,7 +671,7 @@ export function generateLocationContent(serviceName: string, location: string): 
       `Free same-day site inspection in ${location}`,
       `${loc.specialFeature}`,
       `Expert team with local experience`,
-      `15-year warranty with service support`,
+      `Includes warranty with service support`,
       `24/7 customer support in ${location}`,
       `Customized solutions for ${location} climate`,
       `Best-in-class materials and installation`,

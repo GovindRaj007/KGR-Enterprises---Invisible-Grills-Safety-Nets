@@ -1,4 +1,5 @@
 import React from 'react';
+export const dynamic = 'force-static';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { MapPin } from 'lucide-react';
@@ -52,7 +53,7 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
       'max-video-preview': -1,
       'max-snippet': -1,
     },
-    description: `Professional invisible grills and safety nets installation in ${matched.name}. Serving ${locationMeta.areaServed}. Free site inspection, 15-year warranty, and expert installation guaranteed. Contact us for quality safety solutions.`,
+    description: `Professional invisible grills and safety nets installation in ${matched.name}. Serving ${locationMeta.areaServed}. Free site inspection, includes Warranty, and expert installation guaranteed. Contact us for quality safety solutions.`,
     alternates: {
       canonical: `https://invisiblegrillsandsafetynets.in${canonicalPath}`
     },
@@ -74,42 +75,11 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
     twitter: {
       card: 'summary_large_image',
       title: `KGR Enterprises - Invisible Grills & Safety Nets in ${matched.name}`,
-      description: `Professional invisible grills and safety nets installation in ${matched.name}. Free site inspection and 15-year warranty.`,
+      description: `Professional invisible grills and safety nets installation in ${matched.name}. Free site inspection and includes Warranty.`,
       images: ['/images/invisible-grill-1.jpg'],
       site: '@Kgr_Grills_Nets',
       creator: '@Kgr_Grills_Nets',
     },
-    keywords: [
-         "invisible grills in Hyderabad",
-    "Kgr invisible grills",
-    "invisible grills near me",
-    "invisible grills in Bangalore",
-    "safety nets in Hyderabad",
-    "safety net installation near me",
-    "Kgr safety nets",
-    "invisible grill installation",
-    "best invisible grills in hyderabad",
-    "best invisible grills in bangalore",
-    "balcony safety nets in bangalore",
-    "pigeon nets in hyderabad",
-    "best invisible grills in chennai",
-    "safety nets in bangalore",
-    "balcony safety nets in hyderabad",
-    "invisible grills in chennai",
-    "safety nets in Chennai",
-    "balcony safety nets in Chennai",
-    "pigeon nets in chennai",
-    "invisible grills in vijayawada",
-    "safety nets in vijayawada",
-    "balcony safety nets in vijayawada",
-    "children safety nets in Hyderabad",
-    "children safety nets in Visakhapatnam",
-    "best invisible grills in visakhapatnam",
-    "bird nets",
-    "invisible grills",
-    "pigeon nets",
-    "duct area nets",
-  ],
   };
 }
 
@@ -123,8 +93,9 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
   }
   
   // Validate against locationData (app location pages)
-  const normalizedLocation = locName.toLowerCase() as keyof typeof locationData;
-  if (!validLocations.includes(normalizedLocation as any)) {
+  type LocationKey = (typeof validLocations)[number];
+  const normalizedLocation = locName.toLowerCase() as LocationKey;
+  if (!validLocations.includes(normalizedLocation)) {
     notFound();
   }
   
@@ -172,9 +143,10 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
         'aggregateRating': {
           '@type': 'AggregateRating',
           'ratingValue': '4.9',
-          'reviewCount': '1000',
+          'reviewCount': '1126',
           'bestRating': '5',
-          'worstRating': '1'
+          'worstRating': '1',
+          'ratingCount': '1126'
         },
         'review': [
           {
@@ -214,8 +186,8 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
             '@type': 'Offer',
             'itemOffered': {
               '@type': 'Service',
-              'name': 'Bird Protection Solutions',
-              'description': 'Humane bird control nets and spikes for residential and commercial spaces',
+              'name': 'Pigeon Nets',
+              'description': 'Humane pigeon net solutions for residential and commercial spaces',
               'areaServed': matched.areas
             }
           }
@@ -304,7 +276,7 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
                     ))}
                   </div>
                   <p className="text-xs md:text-sm text-white/60 border-t border-white/10 pt-4">
-                    Don't see your area? Contact us – we likely serve your location too!
+                    Don&apos;t see your area? Contact us – we likely serve your location too!
                   </p>
                 </div>
               </div>

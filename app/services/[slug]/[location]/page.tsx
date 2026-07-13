@@ -1,18 +1,30 @@
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+export const dynamic = 'force-static';
+import OptimizedImage from '@/components/shared/OptimizedImage';
+import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 
-import { servicesData } from '@/data/servicesData';
+import {
+  servicesData,
+  resolveServiceSlug,
+  isCanonicalServiceSlug,
+  serviceSpecificLocationFAQs,
+} from '@/data/servicesData';
 import { getCanonicalUrl } from '@/lib/canonical-url';
 import { PRIMARY } from '@/constants/contacts';
-import { generateBreadcrumbSchema } from '@/lib/seo-metadata';
-import { Phone, ArrowRight, MapPin, Star, Building, CheckCircle2 } from 'lucide-react';
+import {
+  generateBreadcrumbSchema,
+  generateLocationContent,
+  generateServiceFAQSchema,
+} from '@/lib/seo-metadata';
+import { Phone, ArrowRight, MapPin, Star, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Breadcrumbs } from '@/components/shared/Breadcrumbs';
 import HeroWithHeaderWrapper from '@/components/layout/HeroWithHeaderWrapper';
-
 import { locationData, validLocations } from '@/constants/locations';
-import { RelatedServicesClient } from '@/components/services/ServiceDetailSectionsClient';
+import { dealerBenefits, dealerFaqs, dealerHeroDescription, dealerPageDescription } from '@/constants/dealer-content';
+import ServiceFAQ from '@/components/services/ServiceFAQ';
+
 
 export async function generateMetadata({
   params,
@@ -20,7 +32,8 @@ export async function generateMetadata({
   params: Promise<{ slug: string; location: string }>
 }): Promise<Metadata> {
   const { slug, location } = await params;
-  const service = servicesData[slug];
+  const canonicalSlug = resolveServiceSlug(slug);
+  const service = servicesData[canonicalSlug];
   const normalizedLocation = location.toLowerCase() as keyof typeof locationData;
 
   if (!service || !validLocations.includes(normalizedLocation)) {
@@ -28,35 +41,33 @@ export async function generateMetadata({
   }
 
   const locationFormatted = normalizedLocation.charAt(0).toUpperCase() + normalizedLocation.slice(1);
+  const locationContent = generateLocationContent(service.title, locationFormatted);
+  const isDealerLocationPage = canonicalSlug === 'invisible-grills-dealer';
   
   // Generate location-specific keywords and description
   const locationInfo = locationData[normalizedLocation];
   const areas = locationInfo.areas.join(', ');
-  const locationKeywords = [
-    `${service.title} in ${locationFormatted}`,
-    `${service.title} installation ${locationFormatted}`,
-    `${service.title} services ${locationFormatted}`,
-    `best ${service.title} in ${locationFormatted}`,
-    `professional ${service.title} ${locationFormatted}`,
-    ...locationInfo.areas.map(area => `${service.title} in ${area}`),
-    ...service.features.map(feature => `${feature} in ${locationFormatted}`),
-  ];
 
-  const enhancedDescription = `Professional ${service.title.toLowerCase()} services in ${locationFormatted}. 
-    Serving ${areas}. Expert installation with 15-year warranty, quality materials, and free site visit. 
-    ${service.detailedDescription} Call now for best service in ${locationFormatted}.`;
+  const enhancedDescription = isDealerLocationPage
+    ? dealerPageDescription(locationFormatted)
+    : `Professional ${service.title.toLowerCase()} services in ${locationFormatted}. ${locationContent.description} Serving ${areas}. Free site visit, expert installation, and long-term warranty support from KGR Enterprises.`;
 
   return {
-    title: `${service.title} in ${locationFormatted} | Best Installation Services | KGR Enterprises`,
+    title: isDealerLocationPage
+      ? `Invisible Grill Dealer in ${locationFormatted} | Authorized Dealer | KGR Enterprises`
+      : `${service.title} in ${locationFormatted} | Best Installation Services | KGR Enterprises`,
     description: enhancedDescription,
-    keywords: locationKeywords.join(', '),
     alternates: {
-      canonical: getCanonicalUrl(`/services/${slug}/${normalizedLocation}`),
+      canonical: getCanonicalUrl(`/services/${canonicalSlug}/${normalizedLocation}`),
     },
     openGraph: {
-      title: `${service.title} in ${locationFormatted} | KGR Enterprises`,
-      description: `Professional ${service.title.toLowerCase()} services in ${locationFormatted}. Expert installation and maintenance by KGR Enterprises.`,
-      url: `https://invisiblegrillsandsafetynets.in/services/${slug}/${normalizedLocation}/`,
+      title: isDealerLocationPage
+        ? `Invisible Grill Dealer in ${locationFormatted} | KGR Enterprises`
+        : `${service.title} in ${locationFormatted} | KGR Enterprises`,
+      description: isDealerLocationPage
+        ? dealerPageDescription(locationFormatted)
+        : `Professional ${service.title.toLowerCase()} services in ${locationFormatted}. Expert installation and maintenance by KGR Enterprises.`,
+      url: `https://invisiblegrillsandsafetynets.in/services/${canonicalSlug}/${normalizedLocation}/`,
       siteName: 'KGR Invisible Grills & Safety Nets',
       images: [
         {
@@ -88,7 +99,9 @@ export async function generateMetadata({
 }
 
 export function generateStaticParams(): { slug: string; location: string }[] {
-  return Object.keys(servicesData).flatMap(slug =>
+  return Object.keys(servicesData)
+    .filter(isCanonicalServiceSlug)
+    .flatMap(slug =>
     validLocations.map(location => ({
       slug,
       location: location.toLowerCase()
@@ -105,7 +118,12 @@ type Props = {
 
 export default async function ServiceLocationPage({ params }: Props) {
   const { slug, location } = await params;
-  const service = servicesData[slug];
+  const canonicalSlug = resolveServiceSlug(slug);
+  if (!isCanonicalServiceSlug(slug)) {
+    redirect(`/services/${canonicalSlug}/${location.toLowerCase()}`);
+  }
+
+  const service = servicesData[canonicalSlug];
   const normalizedLocation = location.toLowerCase() as keyof typeof locationData;
 
   if (!service || !validLocations.includes(normalizedLocation)) {
@@ -114,14 +132,78 @@ export default async function ServiceLocationPage({ params }: Props) {
 
   const locationFormatted = normalizedLocation.charAt(0).toUpperCase() + normalizedLocation.slice(1);
   const locationInfo = locationData[normalizedLocation as keyof typeof locationData];
+  const locationContent = generateLocationContent(service.title, locationFormatted);
+  const isDealerLocationPage = canonicalSlug === 'invisible-grills-dealer';
+  const heroHeading = isDealerLocationPage
+    ? `Invisible Grill Dealer in ${locationFormatted}`
+    : `${service.title} in ${locationFormatted}`;
+  const heroDescription = isDealerLocationPage
+    ? dealerHeroDescription(locationFormatted)
+    : `${service.title} installation in ${locationFormatted} with expert fitment, durable materials, and reliable aftercare.`;
+  const whyChooseHeading = isDealerLocationPage
+    ? `Why Choose Us as Your Invisible Grill Dealer in ${locationFormatted}?`
+    : `Why Choose Us for ${service.title} in ${locationFormatted}?`;
+  const whyChooseDescription = isDealerLocationPage
+    ? dealerPageDescription(locationFormatted)
+    : locationContent.description;
+  const whyChooseFeatures = isDealerLocationPage ? dealerBenefits : locationContent.features;
+
+  const locationFAQs: Array<{ question: string; answer: string }> = [
+    {
+      question: `Do you provide ${service.title.toLowerCase()} in all areas of ${locationFormatted}?`,
+      answer: `Yes, we provide ${service.title.toLowerCase()} across ${locationFormatted}, including ${locationInfo.areas.slice(0, 4).join(', ')} and surrounding areas.`,
+    },
+    {
+      question: `How long does ${service.title.toLowerCase()} installation take in ${locationFormatted}?`,
+      answer: `Most installations are completed within 4-6 hours depending on site conditions and scope. Call ${PRIMARY.display} for a site assessment in ${locationFormatted}.`,
+    },
+    {
+      question: `What is the price for ${service.title.toLowerCase()} in ${locationFormatted}?`,
+      answer: `Pricing depends on area, configuration, and material specifications. We provide a free inspection and transparent quote for ${locationFormatted} projects.`,
+    },
+    {
+      question: `Are your ${service.title.toLowerCase()} materials suitable for ${locationFormatted} climate?`,
+      answer: `Yes. Our installations are planned for local weather exposure and long-term durability, including UV resistance and corrosion resistance where required.`,
+    },
+  ];
+
+  if (isDealerLocationPage) {
+    locationFAQs.splice(0, locationFAQs.length, ...dealerFaqs.map((faq) => ({
+      question: faq.question,
+      answer: faq.answer,
+    })));
+  }
+
+  const serviceFaqKey = canonicalSlug;
+  const serviceFaqByLocation = serviceSpecificLocationFAQs[serviceFaqKey];
+  if (serviceFaqByLocation && !isDealerLocationPage) {
+    const locationKeyCandidates = [
+      normalizedLocation,
+      locationFormatted.toLowerCase().replace(/\s+/g, '-'),
+    ];
+
+    if (normalizedLocation === 'vijayawada' || normalizedLocation === 'visakhapatnam') {
+      locationKeyCandidates.push('andhra-pradesh');
+    }
+
+    const matchedKey = locationKeyCandidates.find((key) => serviceFaqByLocation[key]);
+    if (matchedKey && Array.isArray(serviceFaqByLocation[matchedKey])) {
+      locationFAQs.push(...serviceFaqByLocation[matchedKey]);
+    }
+  }
+
+  const faqSchema = generateServiceFAQSchema(
+    locationFAQs,
+    isDealerLocationPage ? `Invisible Grill Dealer in ${locationFormatted}` : `${service.title} in ${locationFormatted}`
+  );
 
   // Generate breadcrumb schema
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
     { name: 'Services', url: '/services/' },
-    { name: service.title, url: `/services/${slug}/` },
-    { name: `${service.title} in ${locationFormatted}`, url: `/services/${slug}/${normalizedLocation}/` }
-  ], `/services/${slug}/${normalizedLocation}/`);
+    { name: service.title, url: `/services/${canonicalSlug}/` },
+    { name: isDealerLocationPage ? `Invisible Grill Dealer in ${locationFormatted}` : `${service.title} in ${locationFormatted}`, url: `/services/${canonicalSlug}/${normalizedLocation}/` }
+  ], `/services/${canonicalSlug}/${normalizedLocation}/`);
 
   // Import baseUrl
   const baseUrl = 'https://invisiblegrillsandsafetynets.in';
@@ -133,9 +215,9 @@ export default async function ServiceLocationPage({ params }: Props) {
     "@graph": [
       {
         "@type": ["Service", "HomeAndConstructionBusiness"],
-        "@id": `${baseUrl}/services/${slug}/${normalizedLocation}#service`,
-        "name": `${service.title} in ${locationFormatted}`,
-        "description": service.description,
+        "@id": `${baseUrl}/services/${canonicalSlug}/${normalizedLocation}#service`,
+        "name": isDealerLocationPage ? `Invisible Grill Dealer in ${locationFormatted}` : `${service.title} in ${locationFormatted}`,
+        "description": isDealerLocationPage ? dealerPageDescription(locationFormatted) : service.description,
         "image": {
           "@type": "ImageObject",
           "url": service.image,
@@ -152,7 +234,7 @@ export default async function ServiceLocationPage({ params }: Props) {
         },
         "mainEntityOfPage": {
           "@type": "WebPage",
-          "@id": `${baseUrl}/services/${slug}/${normalizedLocation}`
+          "@id": `${baseUrl}/services/${canonicalSlug}/${normalizedLocation}`
         },
         "serviceType": ["Installation Service", "Home Safety", service.title],
         "category": "Home Safety & Security Equipment",
@@ -220,7 +302,7 @@ export default async function ServiceLocationPage({ params }: Props) {
               "itemOffered": {
                 "@type": "Service",
                 "name": `Standard ${service.title} Installation`,
-                "description": `Professional installation with quality materials and 15-year warranty`
+                "description": `Professional installation with quality materials and includes Warranty`
               },
               "areaServed": locationInfo.areas,
               "priceSpecification": {
@@ -233,7 +315,7 @@ export default async function ServiceLocationPage({ params }: Props) {
               },
               "warranty": {
                 "@type": "WarrantyPromise",
-                "durationOfWarranty": "P15Y",
+                "durationOfWarranty": "P10Y",
                 "warrantyScope": "Labor and Materials"
               }
             },
@@ -255,7 +337,7 @@ export default async function ServiceLocationPage({ params }: Props) {
               },
               "warranty": {
                 "@type": "WarrantyPromise",
-                "durationOfWarranty": "P20Y",
+                "durationOfWarranty": "P10Y",
                 "warrantyScope": "Labor and Materials"
               }
             }
@@ -264,7 +346,7 @@ export default async function ServiceLocationPage({ params }: Props) {
         "aggregateRating": {
           "@type": "AggregateRating",
           "ratingValue": "4.9",
-          "ratingCount": "1000",
+          "ratingCount": "1126",
           "bestRating": "5",
           "worstRating": "1"
         },
@@ -309,18 +391,22 @@ export default async function ServiceLocationPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(combinedSchema) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
 
       <div className="min-h-screen bg-background">
         {/* Hero Section */}
         <HeroWithHeaderWrapper>
           <section className="relative py-16 md:py-28 overflow-hidden" style={{ borderRadius: '1rem' }}>
             <div className="absolute inset-0">
-              <img 
+              <OptimizedImage
                 src={service.image} 
-                alt={`${service.title} in ${locationFormatted}`}
-                className="h-full w-full object-cover"
+                alt={isDealerLocationPage ? `Invisible grill dealer in ${locationFormatted}` : `${service.title} installation in ${locationFormatted} for balcony, window and child safety`}
+                className="h-full w-full"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-[hsl(222,47%,8%,0.45)] via-[hsl(222,47%,10%,0.35)] to-[hsl(222,47%,10%,0.25)]" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[hsl(222,47%,8%,0.95)] via-[hsl(222,47%,10%,0.88)] to-[hsl(222,47%,10%,0.75)]" />
             </div>
             <div className="absolute inset-0 grid-pattern-dark opacity-30" />
             
@@ -329,7 +415,7 @@ export default async function ServiceLocationPage({ params }: Props) {
               <Breadcrumbs
                 items={[
                   { label: "Services", href: "/services" },
-                  { label: service.title, href: `/services/${slug}` },
+                  { label: service.title, href: `/services/${canonicalSlug}` },
                   { label: locationFormatted },
                 ]}
                 darkMode={true}
@@ -343,10 +429,10 @@ export default async function ServiceLocationPage({ params }: Props) {
                 </div>
 
                 <h1 className="mb-6 font-heading text-4xl font-bold text-white md:text-5xl lg:text-6xl">
-                  {service.title} in {locationFormatted}
+                  {heroHeading}
                 </h1>
                 <p className="mb-8 text-lg text-white/80 md:text-xl">
-                  {service.description}
+                  {heroDescription}
                 </p>
 
                 {/* CTAs */}
@@ -369,10 +455,6 @@ export default async function ServiceLocationPage({ params }: Props) {
                     <Star className="h-4 w-4 fill-accent text-accent" />
                     4.9 Rating in {locationFormatted}
                   </div>
-                  <div className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm text-white">
-                    <Building className="h-4 w-4" />
-                    500+ Installations
-                  </div>
                 </div>
               </div>
             </div>
@@ -386,15 +468,13 @@ export default async function ServiceLocationPage({ params }: Props) {
             <div className="grid gap-12 md:grid-cols-2">
               <div>
                 <h2 className="mb-6 font-heading text-3xl font-bold text-foreground md:text-4xl">
-                  Why Choose Us for {service.title} in {locationFormatted}?
+                  {whyChooseHeading}
                 </h2>
                 <p className="mb-8 text-foreground/90">
-                  As the leading provider of {service.title.toLowerCase()} in {locationFormatted}, we understand 
-                  the unique requirements of local residential and commercial properties. Our team 
-                  has extensive experience serving clients across {locationFormatted} and nearby areas.
+                  {whyChooseDescription}
                 </p>
                 <ul className="space-y-3">
-                  {service.benefits.map((benefit, index) => (
+                  {whyChooseFeatures.map((benefit, index) => (
                     <li key={index} className="flex items-start gap-3">
                       <CheckCircle2 className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
                       <span className="text-foreground">{benefit}</span>
@@ -404,7 +484,7 @@ export default async function ServiceLocationPage({ params }: Props) {
               </div>
 
               {/* Areas Covered */}
-              <div className="rounded-2xl bg-gradient-to-br from-[hsl(222,47%,11%)] via-[hsl(217,33%,17%)] to-[hsl(215,25%,22%)] p-8 shadow-lg border border-white/10">
+              <div className="w-full rounded-2xl bg-gradient-to-br from-[hsl(222,47%,11%)] via-[hsl(217,33%,17%)] to-[hsl(215,25%,22%)] p-6 shadow-lg border border-white/10 md:w-fit md:max-w-full md:self-start md:p-8">
                 <h3 className="mb-6 font-heading text-xl font-semibold text-white">
                   Areas We Serve in {locationFormatted}
                 </h3>
@@ -417,7 +497,7 @@ export default async function ServiceLocationPage({ params }: Props) {
                   ))}
                 </div>
                 <p className="mt-6 text-sm text-white/60">
-                  Don't see your area? Contact us – we likely serve your location too!
+                  Don&apos;t see your area? Contact us – we likely serve your location too!
                 </p>
               </div>
             </div>
@@ -446,26 +526,20 @@ export default async function ServiceLocationPage({ params }: Props) {
           </div>
         </section>
 
-        {/* Related Services Section */}
-        <section className="section-bg-3 relative py-16 md:py-24">
-          <div className="absolute inset-0 grid-pattern opacity-30" />
-          <div className="container relative z-10">
-            <h2 className="mb-12 text-center font-heading text-3xl font-bold text-foreground md:text-4xl">
-              Related Products & Services
-            </h2>
-            <RelatedServicesClient currentService={slug} />
-          </div>
-        </section>
+        {/* FAQ Section */}
+        <ServiceFAQ faqs={locationFAQs} />
 
         {/* CTA Section */}
         <section className="section-bg-6 relative py-16 md:py-24">
           <div className="container">
-            <div className="mx-auto max-w-3xl text-center">
+            <div className="mx-auto max-w-3xl rounded-3xl border border-blue-600/30 bg-gradient-to-br from-blue-600/20 via-blue-600/10 to-transparent backdrop-blur-sm p-8 md:p-12 text-center">
               <h2 className="mb-4 font-heading text-3xl font-bold text-white md:text-4xl">
-                Ready to Get Started in {locationFormatted}?
+                {isDealerLocationPage ? `Become an Invisible Grill Dealer in ${locationFormatted}` : `Ready to Get Started in ${locationFormatted}?`}
               </h2>
               <p className="mb-8 text-lg text-white/80">
-                Schedule a free consultation with our experts. We'll assess your needs and provide a transparent quote with no hidden charges.
+                {isDealerLocationPage
+                  ? `Partner with KGR Enterprises in ${locationFormatted} for wholesale pricing, dealer support, and exclusive territory opportunities.`
+                  : 'Schedule a free consultation with our experts. We will assess your needs and provide a transparent quote with no hidden charges.'}
               </p>
               <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Button size="lg" className="cta-gradient" asChild>

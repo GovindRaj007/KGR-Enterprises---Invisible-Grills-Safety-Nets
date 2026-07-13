@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, memo } from "react";
 import Link from "next/link";
 import {
   Dialog,
@@ -260,7 +260,7 @@ const LocationAboutSection = ({ location }: { location: string }) => {
                     }}
                   >
                     <BadgeCheck className="h-4 w-4" />
-                    View All Services
+                    {`Explore Safety Solutions in ${location}`}
                   </button>
                 </Link>
               </div>
@@ -335,7 +335,7 @@ const LocationAboutSection = ({ location }: { location: string }) => {
                     </div>
                     <div className="flex items-center space-x-2" style={{ color: "#C8D8EE" }}>
                       <div className="w-2 h-2 rounded-full" style={{ backgroundColor: "#2E7FD9" }}></div>
-                        <span>15-Year Warranty</span>
+                        <span>Backed by Warranty</span>
                       </div>
                     </div>
                   </div>
@@ -482,4 +482,4 @@ const LocationAboutSection = ({ location }: { location: string }) => {
   );
 };
 
-export default LocationAboutSection;
+export default memo(LocationAboutSection);

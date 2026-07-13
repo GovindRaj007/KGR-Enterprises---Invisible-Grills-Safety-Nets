@@ -1,5 +1,6 @@
 
 import { Breadcrumbs } from '@/components/shared/Breadcrumbs';
+import OptimizedImage from '@/components/shared/OptimizedImage';
 
 type BreadcrumbItem = {
   label: string;
@@ -14,7 +15,7 @@ type Props = {
 export default function LocationHero({ location, breadcrumbItems }: Props) {
   return (
     <section className="relative overflow-hidden mb-0">
-      <img src="/images/hero-image.jpg" alt={`Invisible Grills in ${location}`} className="object-cover w-full h-full absolute inset-0" />
+      <OptimizedImage src="/images/hero-image.jpg" alt={`Invisible Grills and safety nets installation in ${location} for balcony, window and child safety`} className=" w-full h-full absolute inset-0" />
       <div className="absolute inset-0" style={{
         background: "linear-gradient(135deg, rgba(5, 13, 31, 0.4) 0%, rgba(15, 32, 64, 0.3) 100%)"
       }} />

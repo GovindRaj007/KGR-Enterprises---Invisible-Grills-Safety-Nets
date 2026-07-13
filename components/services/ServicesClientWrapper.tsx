@@ -19,8 +19,12 @@ const ServiceLocationsSlider = dynamic(
   }
 );
 
-export function ServicesSectionClient() {
-  return <ServicesSection />;
+interface ServicesSectionClientProps {
+  showBreadcrumbs?: boolean;
+}
+
+export function ServicesSectionClient({ showBreadcrumbs = false }: ServicesSectionClientProps) {
+  return <ServicesSection showBreadcrumbs={showBreadcrumbs} />;
 }
 
 export function ServiceLocationsSliderClient() {

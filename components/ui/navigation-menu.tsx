@@ -85,10 +85,13 @@ const NavigationMenuViewport = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <NavigationMenuPrimitive.Viewport
     className={cn(
-      "fixed left-1/2 top-[110px] -translate-x-1/2 z-[9999] origin-top h-[var(--radix-navigation-menu-viewport-height)] w-[var(--radix-navigation-menu-viewport-width)] overflow-visible rounded-md border bg-popover text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90",
+      "fixed left-1/2 -translate-x-1/2 z-50 origin-top h-[var(--radix-navigation-menu-viewport-height)] w-[var(--radix-navigation-menu-viewport-width)] overflow-visible rounded-md border bg-popover text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90",
       className
     )}
     ref={ref}
+    style={{
+      top: 'var(--dropdown-top, 110px)',
+    }}
     {...props}
   />
 ))

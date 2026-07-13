@@ -2,7 +2,9 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
+import OptimizedImage from "@/components/shared/OptimizedImage";
 import { Button } from "@/components/ui/button";
+import { getServiceRoute } from '@/data/servicesData';
 import {
   Phone,
   ArrowRight,
@@ -20,9 +22,10 @@ const slides = [
     title: "Invisible Grills",
     subtitle: "Premium Stainless Steel Protection",
     description:
-      "Experience unobstructed views with our marine-grade SS316 invisible grills. Child-safe, rust-proof, and aesthetically superior protection for your balcony and windows.",
+      "Expert invisible grill installation in Chennai, Bangalore, Hyderabad and Andhra Pradesh. Our marine-grade SS316 invisible grills deliver child-safe, rust-proof protection for balconies and windows while preserving your view.",
     image: "/images/invisible-grill-1.jpg",
-    keywords: ["Child Safety", "Rust-Proof", "10-Year Warranty"],
+    alt: "Invisible Grills in Chennai for balcony and window safety",
+    keywords: ["Child Safety", "Rust-Proof", "Backed by Warranty"],
     href: "/services/invisible-grills",
     cta: "Explore Invisible Grills",
   },
@@ -33,9 +36,10 @@ const slides = [
     subtitle: "Authorized Dealership & Wholesale",
     description:
       "Partner with us for wholesale invisible grills. Access dealer pricing, installation training, and exclusive territory rights to grow your business.",
-    image: "/images/invisible-grill-2.jpg",
+    image: "/images/invisible-grill-dealer.jpg",
+    alt: "Invisible Grills dealer and wholesale installation services in Chennai",
     keywords: ["Wholesale Pricing", "Dealer Training", "Territory Rights"],
-    href: "/services/invisible-grills-dealer",
+    href: getServiceRoute("invisible-grills-dealer"),
     cta: "Become a Dealer",
   },
   {
@@ -46,6 +50,7 @@ const slides = [
     description:
       "Comprehensive safety nets for balcony, windows, and outdoor areas. Premium quality, weather-resistant, and certified for maximum protection for your family.",
     image: "/images/balcony-net-1.jpg",
+    alt: "Safety Net Installation for Balcony with child and pet protection",
     keywords: ["Child Safety", "Pet Protection", "Weather Resistant"],
     href: "/services/balcony-safety",
     cta: "Explore Safety Nets",
@@ -58,6 +63,7 @@ const slides = [
     description:
       "Maximize your space with our premium ceiling-mounted cloth drying systems. Pulley-operated, rust-proof, and designed for the modern Indian home.",
     image: "/images/cloth-drying-pulley-1.jpg",
+    alt: "Ceiling Cloth Hanger Installation for space-saving laundry drying",
     keywords: ["Pulley System", "Space Saving", "Rust-Proof"],
     href: "/services/cloth-drying",
     cta: "Explore Hangers",
@@ -70,6 +76,7 @@ const slides = [
     description:
       "High-quality sports nets for cricket, badminton, and other sports. Durable, weather-resistant, and perfect for recreational and professional use.",
     image: "/images/all-sports-net-1.jpg",
+    alt: "Artificial Cricket Turf Installation and cricket practice nets",
     keywords: ["Professional Grade", "Durable", "Weather Resistant"],
     href: "/services/all-sports-practice",
     cta: "Explore Sports Nets",
@@ -177,10 +184,14 @@ export function HeroSlider() {
               : "opacity-0"
           }`}
         >
-          <img
+          <OptimizedImage
             src={s.image}
-            alt={s.title}
-            className="h-full w-full object-cover"
+            alt={s.alt || s.title}
+            className="h-full w-full"
+            loading={index === 0 ? 'eager' : 'lazy'}
+            priority={index === 0}
+            fetchPriority={index === 0 ? 'high' : 'auto'}
+            sizes="(max-width: 768px) 100vw, 75vw"
           />
           {/* Subtle dark overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/30 to-black/20" />
@@ -278,9 +289,9 @@ export function HeroSlider() {
               }}
               asChild
             >
-              <a href="tel:+917339306098" data-track="call">
+              <a href="tel:+919337353030" data-track="call">
                 <Phone className="h-3 w-3 md:h-4 md:w-4" />
-                <span className="hidden sm:inline">+91 7339306098</span>
+                <span className="hidden sm:inline">+91 9337353030</span>
                 <span className="sm:hidden">Call Now</span>
               </a>
             </Button>

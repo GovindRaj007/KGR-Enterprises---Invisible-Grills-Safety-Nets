@@ -2,11 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export default function LazyMount({ children, rootMargin = "200px" }: { children: React.ReactNode; rootMargin?: string }) {
+export default function LazyMount({ children, rootMargin: initialRootMargin }: { children: React.ReactNode; rootMargin?: string }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    // Detect mobile and set appropriate rootMargin
+    const isMobile = window.innerWidth < 768;
+
     if (!ref.current) return;
     if (typeof IntersectionObserver === "undefined") {
       // Server or older browsers - mount immediately
@@ -23,13 +26,13 @@ export default function LazyMount({ children, rootMargin = "200px" }: { children
           }
         });
       },
-      { root: null, rootMargin }
+      { root: null, rootMargin: initialRootMargin || (isMobile ? "50px" : "100px") }
     );
 
     observer.observe(ref.current);
 
     return () => observer.disconnect();
-  }, [rootMargin]);
+  }, [initialRootMargin]);
 
-  return <div ref={ref}>{isMounted ? children : null}</div>;
+  return <div ref={ref} suppressHydrationWarning>{isMounted ? children : null}</div>;
 }

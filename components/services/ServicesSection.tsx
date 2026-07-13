@@ -1,13 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import Link from 'next/link';
+import OptimizedImage from '@/components/shared/OptimizedImage';
+import { Breadcrumbs } from '@/components/shared/Breadcrumbs';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Phone, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Phone, ArrowRight, ChevronLeft, ChevronRight, Pointer } from 'lucide-react';
 import { PRIMARY } from '@/constants/contacts';
-import { servicesData, serviceCategories } from '@/data/servicesData';
+import { servicesData, serviceCategories, getServiceRoute } from '@/data/servicesData';
 
-const ServicesSection = () => {
+interface ServicesSectionProps {
+  showBreadcrumbs?: boolean;
+}
+
+const ServicesSection = ({ showBreadcrumbs = false }: ServicesSectionProps) => {
   const [activeCategory, setActiveCategory] = useState('invisible-grills');
   const [currentPages, setCurrentPages] = useState<{ [key: string]: number }>({
     'safety-nets': 1,
@@ -81,6 +87,7 @@ const ServicesSection = () => {
       </svg> */}
 
       <div className="container mx-auto px-4">
+        {showBreadcrumbs && <Breadcrumbs items={[{ label: 'Services' }]} darkMode={true} />}
         {/* Header */}
         <div className="text-center space-y-4 mb-8 md:mb-12">
           <h2 className="text-2xl md:text-3xl lg:text-5xl font-bold" style={{ color: "#F0F6FF" }}>
@@ -89,6 +96,15 @@ const ServicesSection = () => {
           <p className="text-sm md:text-base lg:text-xl max-w-2xl mx-auto" style={{ color: "#C8D8EE" }}>
             Comprehensive range of safety nets and protection systems for homes, offices, and commercial spaces
           </p>
+        </div>
+
+        <div className="max-w-4xl mx-auto mb-6 px-4">
+          <div className="flex justify-center">
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-white/5 backdrop-blur-sm text-white text-sm md:text-base font-semibold shadow-sm ring-1 ring-white/10 border border-white/10">
+              <Pointer className="h-4 w-4 md:h-5 md:w-5 transform rotate-180" />
+              Choose Your Service Category
+            </span>
+          </div>
         </div>
 
         <Tabs 
@@ -129,7 +145,16 @@ const ServicesSection = () => {
                   }
                 }}
               >
-                <span className="font-semibold leading-tight">{category.title}</span>
+                <span className="font-semibold leading-tight">
+                  {key === 'invisible-grills' ? (
+                    <span className="flex flex-col items-center gap-1 whitespace-normal">
+                      <span>{category.title}</span>
+                      <span className="text-[10px] font-semibold text-[#FF6B42]">& Cloth Hangers</span>
+                    </span>
+                  ) : (
+                    category.title
+                  )}
+                </span>
                 <span className="text-xs opacity-75 mt-1 hidden sm:block">
                   {getServicesForCategory(key).length} services
                 </span>
@@ -153,7 +178,7 @@ const ServicesSection = () => {
                 {getPaginatedServices(key).map((service) => (
                   <Link
                     key={service.id}
-                    href={`/services/${service.id}`}
+                    href={getServiceRoute(service.id)}
                     className="group rounded-lg overflow-hidden transition-all duration-300 hover:-translate-y-1"
                     style={{
                       background: "linear-gradient(135deg, #1E2A42 0%, #121D2F 100%)",
@@ -170,14 +195,14 @@ const ServicesSection = () => {
                     }}
                   >
                     <div className="relative h-48 w-full overflow-hidden">
-                      <img src={service.image} alt={`${service.title} - Professional Installation Services in Hyderabad, Bangalore, Chennai & Vijayawada`} className="object-cover group-hover:scale-110 transition-transform duration-500 w-full h-full absolute inset-0" />
+                      <OptimizedImage src={service.image} alt={`${service.title} installation by KGR Enterprises for balcony, window and child safety in Hyderabad, Bangalore, Chennai and Vijayawada`} className="object-cover group-hover:scale-110 transition-transform duration-500 w-full h-full absolute inset-0" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                       <div className="absolute top-3 left-3 px-2 md:px-3 py-1 md:py-1.5 rounded-full text-xs md:text-sm font-semibold" style={{
                         color: "#F0F6FF",
-                        backgroundColor: "rgba(0, 212, 255, 0.2)",
-                        border: "1px solid rgba(0, 212, 255, 0.5)"
+                        backgroundColor: "#034d5c",
+                        border: "1px solid #034d5c"
                       }}>
-                        {category.title}
+                        {service.id === 'cloth-drying' ? 'Cloth Hangers' : category.title}
                       </div>
                     </div>
                     <div className="p-4 md:p-6 space-y-4">
@@ -250,7 +275,7 @@ const ServicesSection = () => {
 
                       {/* Link */}
                 <span className="inline-flex items-center gap-1 text-sm font-medium text-accent transition-colors group-hover:text-accent mt-auto">
-                  Learn More
+                  {`Explore ${service.title}`}
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </span>
                     </div>
@@ -373,7 +398,7 @@ const ServicesSection = () => {
                 
               >
                 <Link href="/services" className="flex items-center gap-2">
-                  View All Services
+                  Explore All Safety Solutions
                   <ArrowRight className="h-4 w-4 md:h-5 md:w-5" />
                 </Link>
               </button>
@@ -385,4 +410,4 @@ const ServicesSection = () => {
   );
 };
 
-export default ServicesSection;
+export default memo(ServicesSection);

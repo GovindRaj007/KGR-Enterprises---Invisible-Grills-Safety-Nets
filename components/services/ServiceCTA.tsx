@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { PRIMARY } from "@/constants/contacts";
 import { Button } from "@/components/ui/button";
-import { Phone, ArrowRight, MessageCircle } from "lucide-react";
+import { Phone, ArrowRight } from "lucide-react";
+import { WhatsAppIcon } from "@/components/shared/Icons";
 
 export default function ServiceCTA() {
   return (
@@ -24,10 +26,10 @@ export default function ServiceCTA() {
               className="w-full sm:w-auto cta-gradient text-white hover:opacity-90"
               asChild
             >
-              <a href="/contact" className="flex items-center gap-2">
+              <Link href="/contact" className="flex items-center gap-2">
                 Get Free Quote
                 <ArrowRight className="h-5 w-5" />
-              </a>
+              </Link>
             </Button>
             
             <Button
@@ -53,7 +55,7 @@ export default function ServiceCTA() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-2"
               >
-                <MessageCircle className="h-5 w-5" />
+                <WhatsAppIcon className="h-5 w-5 text-white" />
                 WhatsApp
               </a>
             </Button>

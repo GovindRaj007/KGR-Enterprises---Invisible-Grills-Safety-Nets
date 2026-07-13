@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
+export const dynamic = 'force-static';
+import OptimizedImage from "@/components/shared/OptimizedImage";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
-import dynamic from 'next/dynamic';
+import nextDynamic from 'next/dynamic';
 import { PRIMARY, SECONDARY, } from '@/constants/contacts';
 import { Card, CardContent } from "@/components/ui/card";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import HeroWithHeaderWrapper from "@/components/layout/HeroWithHeaderWrapper";
-const ConsultationForm = dynamic(() => import('@/components/shared/ConsultationFormClient'), { loading: () => <div className="p-4">Loading...</div> });
+const ConsultationForm = nextDynamic(() => import('@/components/shared/ConsultationFormClient'), { loading: () => <div className="p-4">Loading...</div> });
 
 export const metadata: Metadata = {
   title: "Contact Us - KGR Invisible Grills & Safety Nets",
@@ -119,26 +121,26 @@ export default function ContactPage() {
       details: [
         {
           label: "Hyderabad",
-          value: "15-21-150/17, JK Heights, Balaji Nagar, Kukatpally - 500072",
+          value: "15-21-150/17, JK Heights, Balaji Nagar, Kukatpally, Hyderabad - 500072, Telangana",
         },
         {
           label: "Bangalore",
           value:
-            "367, 2nd A Main Road, Gokula Extension, Mathikera, Bangalore Division - 560054",
+            "367, 2nd A Main Rd, Sharadamba Nagar, Muthyala Nagar, Gokula Extension, Mathikere, Bengaluru - 560054, Karnataka",
         },
         {
           label: "Chennai",
           value:
-            "25/9a, Sathya Moorthy Street, Kamaraj Nagar, Choolaimedu - 600094",
+            "25, Sathya Moorthy Street, Kamaraj Nagar,NGO Colony, Choolaimedu, Greater Chennai - 600094, Tamil Nadu",
         },
         {
-          label: "Andhra Pradesh",
-          value: "3-12, Ayyappa Nagar, Benz Circle, Vijayawada - 520007",
+          label: "Vijayawada",
+          value: "3-12, Ayyappa Nagar, Benz Circle, Vijayawada - 521134, Andhra Pradesh",
         },
         {
-          label: "Andhra Pradesh",
+          label: "Visakhapatnam",
           value:
-            "21-3/4/3, Viman Nagar, Kakani Nagar, Visakhapatnam, Andhra Pradesh 530009",
+            "50-79-31/1, Ganesh Nagar, Seetamma Peta, Dwaraka Nagar, Visakhapatnam - 530016, Andhra Pradesh",
         },
       ],
     },
@@ -147,24 +149,73 @@ export default function ContactPage() {
       title: "Business Hours",
       details: [
         { label: "Monday - Saturday", value: "8:00 AM - 8:00 PM" },
-        { label: "Sunday", value: "9:00 AM - 6:00 PM" },
+        { label: "Sunday", value: "8:00 AM - 6:00 PM" },
       ],
     },
   ];
 
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    'name': 'KGR Enterprises',
+    'alternateName': 'KGR Invisible Grills & Safety Nets',
+    'url': 'https://invisiblegrillsandsafetynets.in',
+    'telephone': PRIMARY.phone,
+    'email': 'kgr@invisiblegrillsandsafetynets.in',
+    'logo': 'https://invisiblegrillsandsafetynets.in/logo.png',
+    'description': 'Contact KGR Enterprises for professional invisible grills, safety nets, and pigeon nets across South India. Free consultation and site inspection available.',
+    'address': [
+      {
+        '@type': 'PostalAddress',
+        'streetAddress': '15-21-150/17, JK Heights, Balaji Nagar, Kukatpally',
+        'addressLocality': 'Hyderabad',
+        'addressRegion': 'Telangana',
+        'postalCode': '500072',
+        'addressCountry': 'IN'
+      },
+      {
+        '@type': 'PostalAddress',
+        'streetAddress': '367, 2nd A Main Rd, Sharadamba Nagar, Muthyala Nagar, Gokula Extension, Mathikere, Bengaluru - 560054, Karnataka',
+        'addressLocality': 'Bangalore',
+        'addressRegion': 'Karnataka',
+        'postalCode': '560054',
+        'addressCountry': 'IN'
+      }
+    ],
+    'contactPoint': {
+      '@type': 'ContactPoint',
+      'telephone': PRIMARY.phone,
+      'contactType': 'Customer Support',
+      'hoursAvailable': {
+        '@type': 'OpeningHoursSpecification',
+        'dayOfWeek': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        'opens': '08:00',
+        'closes': '20:00'
+      }
+    },
+    'aggregateRating': {
+      '@type': 'AggregateRating',
+      'ratingValue': '4.9',
+      'bestRating': '5',
+      'worstRating': '1',
+      'ratingCount': '1126',
+      'reviewCount': '1126'
+    }
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
       <HeroWithHeaderWrapper>
         <section className="relative overflow-hidden" style={{ borderRadius: '1rem' }}>
-          <img 
+          <OptimizedImage
             src="/images/hero-image.jpg" 
-            alt="Contact KGR Enterprises" 
-            className="object-cover w-full h-full absolute inset-0"
+            alt="Contact KGR Enterprises for invisible grills, safety nets and custom safety solutions" 
+            className=" w-full h-full absolute inset-0"
             loading="eager"
-            decoding="async"
-            width="1920"
-            height="1080"
-            fetchPriority="high"
           />
           <div className="absolute inset-0 bg-black/20" />
           <div className="relative container mx-auto px-4 py-20 md:py-28 lg:py-36 text-center">
@@ -254,8 +305,7 @@ export default function ContactPage() {
                         Professional Installation
                       </h3>
                       <p className="text-sm text-card-foreground/75">
-                        Scheduled installation by our certified team with 5-year
-                        warranty
+                        Scheduled installation by our certified team with warranty
                       </p>
                     </div>
                   </div>

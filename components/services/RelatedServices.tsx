@@ -1,7 +1,8 @@
 "use client";
 
 import Link from 'next/link';
-import { servicesData, serviceCategories } from '@/data/servicesData';
+import OptimizedImage from '@/components/shared/OptimizedImage';
+import { servicesData, serviceCategories, getServiceRoute } from '@/data/servicesData';
 import { ArrowRight } from 'lucide-react';
 
 type Props = {
@@ -29,14 +30,14 @@ const RelatedServices = ({ currentService }: Omit<Props, 'location'>) => {
         return (
           <Link
             key={serviceId}
-            href={`/services/${service.id}`}
+            href={getServiceRoute(service.id)}
             className="group flex gap-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-4 hover:border-blue-500/50 hover:bg-white/10 transition-all duration-300 w-full md:w-auto  lg:max-w-[479px]"
           >
             {/* Image */}
             <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg bg-slate-800">
-              <img 
+              <OptimizedImage
                 src={service.image} 
-                alt={service.title}
+                alt={`${service.title} installation by KGR Enterprises for residential and commercial safety solutions`}
                 className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-300"
               />
             </div>

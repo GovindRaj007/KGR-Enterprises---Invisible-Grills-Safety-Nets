@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
-import { Breadcrumbs } from '@/components/shared/Breadcrumbs';
 
 import GalleryClient from '@/components/gallery/GalleryClient';
 
+export const dynamic = 'force-static';
+
 export const metadata: Metadata = {
   title: "Gallery - Our Safety Installations | KGR Invisible Grills & Safety Nets",
-  description: "View our portfolio of invisible grills, safety nets, and bird protection installations across Hyderabad, Bangalore, Chennai. 5000+ successful projects completed.",
+  description: "View our portfolio of invisible grills, safety nets, and pigeon net installations across Chennai, Hyderabad, Bangalore, and Andhra Pradesh. 5000+ successful projects completed.",
   robots: {
     index: true,
     follow: true,
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
     // Service Type Gallery Keywords
     "invisible grills gallery",
     "safety nets installations",
-    "bird protection projects",
+    "pigeon net projects",
     "balcony solutions",
     "terrace projects",
     // Specific Service Showcases
@@ -76,19 +77,31 @@ export const metadata: Metadata = {
 };
 
 export default function GalleryPage() {
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    'name': 'KGR Enterprises',
+    'url': 'https://invisiblegrillsandsafetynets.in',
+    'logo': 'https://invisiblegrillsandsafetynets.in/logo.png',
+    'description': 'Portfolio and gallery of professional invisible grills and safety nets installations across Chennai, Hyderabad, Bangalore, and Andhra Pradesh. 5000+ completed projects.',
+    'aggregateRating': {
+      '@type': 'AggregateRating',
+      'ratingValue': '4.9',
+      'bestRating': '5',
+      'worstRating': '1',
+      'ratingCount': '1126',
+      'reviewCount': '1126'
+    }
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
       <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-6">
-          <Breadcrumbs
-            items={[
-              { label: "Gallery" },
-            ]}
-            darkMode={false}
-          />
-        </div>
-        <GalleryClient />
+        <GalleryClient showBreadcrumbs />
       </div>
     </>
   );

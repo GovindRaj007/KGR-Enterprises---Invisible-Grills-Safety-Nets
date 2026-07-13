@@ -1,18 +1,21 @@
 "use client";
 
 import React, { useEffect, useState, useRef, TouchEvent } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import OptimizedImage from "@/components/shared/OptimizedImage";
+import { ChevronRight } from "lucide-react";
 
 type Props = {
   images: string[];
   altPrefix?: string;
   interval?: number;
+  useContainer?: boolean;
 };
 
 export default function ServiceImageSlider({
   images,
   altPrefix = "",
   interval = 4000,
+  useContainer = false,
 }: Props) {
   const [current, setCurrent] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -35,7 +38,6 @@ export default function ServiceImageSlider({
     };
   }, [isPaused, images, interval]);
 
-  const prev = () => setCurrent((c) => (c - 1 + images.length) % images.length);
   const next = () => setCurrent((c) => (c + 1) % images.length);
 
   const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
@@ -57,12 +59,8 @@ export default function ServiceImageSlider({
   const handleTouchEnd = () => {
     dragOffset.current = 0;
     const swipeDistance = touchStartX.current - touchEndX.current;
-    if (Math.abs(swipeDistance) > 50) {
-      if (swipeDistance > 0) {
-        next();
-      } else {
-        prev();
-      }
+    if (swipeDistance > 50) {
+      next();
     }
     setIsPaused(false);
   };
@@ -71,7 +69,7 @@ export default function ServiceImageSlider({
 
   return (
     <section className="relative py-4 md:py-8 bg-white">
-      <div className="container relative z-10">
+      <div className={useContainer ? "container relative z-10" : "relative z-10"}>
         <div className="mx-auto max-w-4xl">
           <div
             ref={containerRef}
@@ -87,49 +85,30 @@ export default function ServiceImageSlider({
             }}
           >
             <div className="relative aspect-[5/4] sm:aspect-[4/3] md:aspect-[16/9] overflow-hidden">
-              {images.map((img, i) => (
+              {images.map((img, i) => {
+                const nextImageIndex = (current + 1) % images.length;
+                return (
                 <div
                   key={i}
                   className={`absolute inset-0 transition-all duration-700 ease-in-out ${
                     i === current
                       ? "opacity-100 translate-x-0"
-                      : i < current
-                      ? "opacity-0 -translate-x-full"
-                      : "opacity-0 translate-x-full"
+                      : i === nextImageIndex
+                      ? "opacity-0 translate-x-full"
+                      : "opacity-0 -translate-x-full"
                   }`}
                 >
-                  <img
+                  <OptimizedImage
                     src={img}
-                    alt={`${altPrefix} - Image ${i + 1}`}
+                    alt={`${altPrefix} installation view ${i + 1}`}
                     className="w-full h-full object-cover"
                     loading={i === 0 ? "eager" : "lazy"}
                   />
                 </div>
-              ))}
+                );
+              })}
 
-              {/* Arrows hidden on small screens */}
-              <button
-                onClick={prev}
-                className="hidden md:block absolute left-4 top-1/2 -translate-y-1/2 rounded-full p-2 md:p-3 shadow-lg transition-all duration-200 hover:scale-110 z-10"
-                style={{
-                  backgroundColor: "rgba(255, 107, 66, 0.1)",
-                  border: "1px solid rgba(255, 107, 66, 0.5)",
-                  color: "#FF6B42",
-                  boxShadow: "0 0 12px rgba(255, 107, 66, 0.2)"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = "0 0 20px rgba(75, 159, 255, 0.5)";
-                  e.currentTarget.style.backgroundColor = "rgba(75, 159, 255, 0.2)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = "0 0 12px rgba(75, 159, 255, 0.2)";
-                  e.currentTarget.style.backgroundColor = "rgba(75, 159, 255, 0.1)";
-                }}
-                aria-label="Previous image"
-              >
-                <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" />
-              </button>
-
+              {/* Arrow hidden on small screens */}
               <button
                 onClick={next}
                 className="hidden md:block absolute right-4 top-1/2 -translate-y-1/2 rounded-full p-2 md:p-3 shadow-lg transition-all duration-200 hover:scale-110 z-10"
@@ -164,8 +143,8 @@ export default function ServiceImageSlider({
                         : "w-3 h-3"
                     }`}
                     style={{
-                      backgroundColor: idx === current ? "#FF6B42" : "rgba(255, 107, 66, 0.4)",
-                      boxShadow: idx === current ? "0 0 12px rgba(75, 159, 255, 0.6)" : "none"
+                      backgroundColor: idx === current ? "#111827" : "rgba(17, 24, 39, 0.5)",
+                      boxShadow: idx === current ? "0 0 12px rgba(17, 24, 39, 0.35)" : "none"
                     }}
                     aria-label={`Go to image ${idx + 1}`}
                   />

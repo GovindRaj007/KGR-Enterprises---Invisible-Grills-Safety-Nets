@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+export const dynamic = 'force-static';
 import { HeroSlider } from "@/components/home/HeroSlider";
 import HeroWithHeaderWrapper from "@/components/layout/HeroWithHeaderWrapper";
 import ServicesSection from "@/components/services/ServicesSection";
@@ -9,60 +10,15 @@ import TestimonialsClient from "@/components/testimonials/TestimonialsClient";
 import ServiceLocationsSlider from "@/components/services/ServiceLocationsSlider";
 
 export const metadata: Metadata = {
-  title:
-    "KGR Enterprises - Best Invisible Grills & Safety Nets Manufacturer in South India | call 7339306098, 9618568669",
+  title: "Invisible Grills Chennai — KGR Enterprises | Premium Invisible Grills & Safety Nets",
   description:
-    "Premium invisible grills and safety nets installation across Hyderabad, Bangalore, Chennai. Marine-grade stainless steel, superior protection, 15-year warranty. Best quality, trusted service since 2008",
-  keywords: [
-    // Brand & Company Keywords
-    "KGR Enterprises",
-    "KGR safety solutions",
-    "trusted safety net provider",
-    "certified installation services",
-    // Main Service Keywords
-    "invisible grills",
-    "safety nets",
-    "marine-grade invisible grills",
-    "cable mesh grills",
-    "bird protection nets",
-    "pigeon nets",
-    "child-safe balcony",
-    "rust-proof safety solutions",
-    // Generic Service Terms
-    "safety net installation",
-    "invisible grill installation",
-    "balcony protection",
-    "child safety solutions",
-    "bird-proof solutions",
-    "terrace safety nets",
-    // Geographic - Primary Cities
-    "invisible grills in Hyderabad",
-    "safety nets in Bangalore",
-    "invisible grills in Chennai",
-    "safety nets in Vijayawada",
-    "invisible grills in Visakhapatnam",
-    // Quality & Trust Indicators
-    "best invisible grills",
-    "premium safety nets",
-    "professional installation",
-    "15-year warranty",
-    "family-owned business",
-    "expert installation team",
-    // Long-tail & Voice Search
-    "affordable invisible grills near me",
-    "best safety net company",
-    "how to install invisible grills",
-    "balcony safety net solutions",
-    "professional grills installation service",
-    "certified safety net dealers",
-  ],
+    "Invisible Grills Chennai: professional invisible grill installation and safety nets across Chennai, Bangalore, Hyderabad, Visakhapatnam, Rajahmundry, and Vijayawada. Marine-grade stainless steel grills, pigeon net solutions, and child-safe balcony protection from experienced installers.",
   openGraph: {
     locale: "en_IN",
     type: "website",
-    title:
-      "KGR Enterprises - Best Invisible Grills & Safety Nets Manufacturer in South India | call 7339306098, 9618568669",
+    title: "Invisible Grills Chennai — KGR Enterprises",
     description:
-      "Premium invisible grills and safety nets installation across Hyderabad, Bangalore, Chennai. Marine-grade stainless steel, superior protection, 15-year warranty. Best quality, trusted service since 2008",
+      "Professional invisible grill installation and safety nets in Chennai and neighbouring cities. Marine-grade stainless steel grills, pigeon nets, and child-safe balcony protection.",
     url: "https://invisiblegrillsandsafetynets.in/",
     siteName: "KGR Enterprises",
     images: [
@@ -70,7 +26,7 @@ export const metadata: Metadata = {
         url: "/images/invisible-grill-1.jpg",
         width: 1200,
         height: 630,
-        alt: "KGR Enterprises - Premium Invisible Grills & Safety Nets",
+        alt: "Invisible Grills Chennai - KGR Enterprises",
         type: "image/jpeg",
       },
       {
@@ -83,8 +39,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "KGR Enterprises - Premium Invisible Grills & Safety Nets",
-    description: "Premium invisible grills and safety nets installation across Hyderabad, Bangalore, Chennai. 15-year warranty, marine-grade materials, expert installation.",
+    title: "Invisible Grills Chennai — KGR Enterprises",
+    description: "Invisible grill installation and safety nets in Chennai, Bangalore, Hyderabad and nearby cities. SS316 grills and pigeon net solutions.",
     images: ["/images/invisible-grill-1.jpg"],
     site: "@Kgr_Grills_Nets",
     creator: "@Kgr_Grills_Nets",
@@ -111,6 +67,45 @@ export default function HomePage() {
       <AboutClient />
       <GalleryClient />
       <ServiceLocationsSlider />
+      <section id="faq" className="container mx-auto px-4 py-12">
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">Invisible Grills Chennai — FAQ</h2>
+        <div className="space-y-3">
+          <details className="bg-white/5 p-4 rounded">
+            <summary className="font-semibold">What are Invisible Grills?</summary>
+            <p className="mt-2 text-sm text-muted-foreground">Invisible grills are high-tensile stainless steel cable systems that provide discreet protection for balconies and windows while preserving views. Our Chennai installations use marine-grade SS316 cables for long-lasting performance.</p>
+          </details>
+
+          <details className="bg-white/5 p-4 rounded">
+            <summary className="font-semibold">Are Invisible Grills Safe?</summary>
+            <p className="mt-2 text-sm text-muted-foreground">Yes — when professionally installed they offer child safety, pet safety, and effective pigeon prevention without obstructing airflow or visibility.</p>
+          </details>
+
+          <details className="bg-white/5 p-4 rounded">
+            <summary className="font-semibold">How Much Do Invisible Grills Cost?</summary>
+            <p className="mt-2 text-sm text-muted-foreground">Costs depend on size, material (SS316 or SS304), and location. We provide free site visits and transparent quotes for Chennai, Bangalore, Hyderabad, Visakhapatnam, Rajahmundry and Vijayawada.</p>
+          </details>
+
+          <details className="bg-white/5 p-4 rounded">
+            <summary className="font-semibold">Why Choose Invisible Grills?</summary>
+            <p className="mt-2 text-sm text-muted-foreground">They combine strength and aesthetics — our teams are trained installers with warranty-backed work, making us a trusted invisible grill company serving Chennai and nearby cities.</p>
+          </details>
+
+          <details className="bg-white/5 p-4 rounded">
+            <summary className="font-semibold">Do Invisible Grills Prevent Pigeons?</summary>
+            <p className="mt-2 text-sm text-muted-foreground">Yes. Coupled with pigeon nets and humane bird control, invisible grills are effective at preventing pigeons from nesting on balconies and ledges.</p>
+          </details>
+
+          <details className="bg-white/5 p-4 rounded">
+            <summary className="font-semibold">Can Invisible Grills Protect Children?</summary>
+            <p className="mt-2 text-sm text-muted-foreground">Absolutely — our installations prioritize child safety and meet robust strength and mounting standards to prevent falls and accidents.</p>
+          </details>
+
+          <details className="bg-white/5 p-4 rounded">
+            <summary className="font-semibold">What Cities Do You Serve?</summary>
+            <p className="mt-2 text-sm text-muted-foreground">We serve Chennai, Bangalore, Hyderabad, Visakhapatnam, Rajahmundry and Vijayawada with professional invisible grill installation and safety net services.</p>
+          </details>
+        </div>
+      </section>
       <TestimonialsClient />
     </>
   );

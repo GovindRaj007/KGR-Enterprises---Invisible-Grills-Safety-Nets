@@ -24,13 +24,20 @@ type ExtendedSitemapField = {
   images?: Array<ImageEntry>;
 };
 
+function escapeXml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
 // Helper to clean empty image fields
 function cleanImageEntry(img: ImageEntry): ImageEntry {
   const cleaned: ImageEntry = { url: img.url };
-  if (img.title && img.title.trim()) cleaned.title = img.title.trim();
-  if (img.caption && img.caption.trim()) cleaned.caption = img.caption.trim();
-  if (img.geoLocation && img.geoLocation.trim()) cleaned.geoLocation = img.geoLocation.trim();
-  if (img.license && img.license.trim()) cleaned.license = img.license.trim();
+  if (img.title && img.title.trim()) cleaned.title = escapeXml(img.title.trim());
+  if (img.caption && img.caption.trim()) cleaned.caption = escapeXml(img.caption.trim());
+  if (img.geoLocation && img.geoLocation.trim()) cleaned.geoLocation = escapeXml(img.geoLocation.trim());
+  if (img.license && img.license.trim()) cleaned.license = escapeXml(img.license.trim());
   return cleaned;
 }
 

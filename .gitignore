@@ -20,6 +20,11 @@
 # production
 /build
 
+# generated image optimization artifacts
+/public/optimized-images.json
+/public/images/optimized/
+/public/images/.original-backup/
+
 # misc
 .DS_Store
 *.pem

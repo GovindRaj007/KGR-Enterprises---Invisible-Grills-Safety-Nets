@@ -2,11 +2,11 @@
 
 import { MapPin, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { useInViewAnimation } from '@/hooks/useInViewAnimation';
 import { locationData } from '@/constants/locations';
 import { servicesData } from '@/data/servicesData';
+
+const LOCATION_ORDER = ['chennai', 'hyderabad', 'bangalore', 'vijayawada', 'visakhapatnam'];
 
 // Top services to feature for each location
 const FEATURED_SERVICES = [
@@ -32,14 +32,31 @@ const FeaturedLocations = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {Object.entries(locationData).map(([key, location], index) => (
-            <motion.div
-              key={key}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-            >
+          {Object.entries(locationData)
+            .sort(([a], [b]) => (LOCATION_ORDER.indexOf(a) - LOCATION_ORDER.indexOf(b)) || a.localeCompare(b))
+            .map(([key, location], index) => (
+              <LocationCard key={key} locationKey={key} location={location} index={index} />
+            ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// Separate component for location card with animation
+function LocationCard({ locationKey, location, index }: { locationKey: string; location: any; index: number }) {
+  const { ref, isVisible } = useInViewAnimation();
+  
+  return (
+    <div
+      ref={ref}
+      className={`transition-all duration-500 ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
+      }`}
+      style={{
+        transitionDelay: isVisible ? `${index * 50}ms` : '0ms',
+      }}
+    >
               <div className="h-full rounded-lg transition-all" style={{
                 background: "linear-gradient(135deg, #1E2A42 0%, #121D2F 100%)",
                 border: "1px solid rgba(30, 42, 66, 0.5)",
@@ -62,7 +79,7 @@ const FeaturedLocations = () => {
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg" style={{ color: "#F0F6FF" }}>
-                        {location.name || key.charAt(0).toUpperCase() + key.slice(1)}
+                        {location.name || locationKey.charAt(0).toUpperCase() + locationKey.slice(1)}
                       </h3>
                       <p className="text-sm" style={{ color: "#C8D8EE" }}>
                         {location.state}
@@ -78,7 +95,7 @@ const FeaturedLocations = () => {
                         return (
                           <Link
                             key={serviceId}
-                            href={`/services/${serviceId}/${key}`}
+                            href={`/services/${serviceId}/${locationKey}`}
                             className="block text-sm transition-colors"
                             style={{ color: "#C8D8EE" }}
                           >
@@ -121,19 +138,15 @@ const FeaturedLocations = () => {
                     e.currentTarget.style.boxShadow = "none";
                   }}
                   >
-                    <Link href={`/locations/${key}/`} className="flex items-center justify-center gap-2">
+                    <Link href={`/locations/${locationKey}/`} className="flex items-center justify-center gap-2">
                       View Details
                       <ArrowRight className="h-4 w-4" />
                     </Link>
                   </button>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
+                </div>
+              </div>
+    </div>
   );
-};
+}
 
 export default FeaturedLocations;

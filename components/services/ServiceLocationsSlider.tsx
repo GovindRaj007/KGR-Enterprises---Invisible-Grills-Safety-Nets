@@ -8,11 +8,29 @@ const services = [
   { name: "Invisible Grills", slug: "invisible-grills" },
   { name: "Invisible Grills for Balcony", slug: "invisible-grills-balcony" },
   { name: "Invisible Grills Dealer", slug: "invisible-grills-dealer" },
-  { name: "Balcony Safety Net", slug: "balcony-safety" },
+  { name: "Balcony Safety Nets", slug: "balcony-safety" },
   { name: "Children Protection Nets", slug: "children-protection" },
 ];
 
 const allAreas = [
+  {
+    city: "Chennai",
+    slug: "chennai",
+    state: "Tamil Nadu",
+    localities: ["Anna Nagar", "T Nagar", "Velachery", "Adyar", "Porur", "OMR"],
+  },
+  {
+    city: "Bangalore",
+    slug: "bangalore",
+    state: "Karnataka",
+    localities: ["Whitefield", "Koramangala", "Indiranagar", "HSR Layout", "Marathahalli", "Electronic City"],
+  },
+  {
+    city: "Hyderabad",
+    slug: "hyderabad",
+    state: "Telangana",
+    localities: ["Banjara Hills", "Jubilee Hills", "Gachibowli", "Madhapur", "Kondapur", "Hitech City"],
+  },
   {
     city: "Vijayawada",
     slug: "vijayawada",
@@ -24,24 +42,6 @@ const allAreas = [
     slug: "visakhapatnam",
     state: "Andhra Pradesh",
     localities: ["MVP Colony", "Dwaraka Nagar", "Gajuwaka", "Madhurawada", "Seethammadhara", "Beach Road"],
-  },
-  {
-    city: "Hyderabad",
-    slug: "hyderabad",
-    state: "Telangana",
-    localities: ["Banjara Hills", "Jubilee Hills", "Gachibowli", "Madhapur", "Kondapur", "Hitech City"],
-  },
-  {
-    city: "Bangalore",
-    slug: "bangalore",
-    state: "Karnataka",
-    localities: ["Whitefield", "Koramangala", "Indiranagar", "HSR Layout", "Marathahalli", "Electronic City"],
-  },
-  {
-    city: "Chennai",
-    slug: "chennai",
-    state: "Tamil Nadu",
-    localities: ["Anna Nagar", "T Nagar", "Velachery", "Adyar", "Porur", "OMR"],
   },
 ];
 

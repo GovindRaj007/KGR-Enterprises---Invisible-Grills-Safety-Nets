@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import OptimizedImage from '@/components/shared/OptimizedImage';
 import { SEO_BRANDING_TAGLINE } from '@/constants/seo';
 
 const ConsultationFormClient = dynamic(() => import('@/components/shared/ConsultationFormClient'), { loading: () => <div /> });
@@ -27,12 +28,12 @@ export default function HeroSection() {
 
             <h1 className="text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight">
               <span style={{ color: "#F0F6FF" }}>Best Invisible Grills & Safety Nets</span>
-              <span className="block text-lg md:text-2xl lg:text-3xl xl:text-4xl font-semibold mt-2" style={{ color: "#FF6B42" }}>in Hyderabad, Bangalore, Chennai & Andhra Pradesh</span>
+              <span className="block text-lg md:text-2xl lg:text-3xl xl:text-4xl font-semibold mt-2" style={{ color: "#FF6B42" }}>in Chennai, Hyderabad, Bangalore & Andhra Pradesh</span>
             </h1>
 
             <p className="text-base md:text-lg lg:text-xl xl:text-2xl" style={{ color: "#C8D8EE" }}>
-              Professional invisible grills, balcony safety net, children protection nets,
-              bird nets & pet safety solutions. Trusted by 5000+ families across South India.
+              Professional invisible grills, balcony safety nets, children protection nets,
+              pigeon nets & pet safety solutions. Trusted by 5000+ families across South India.
             </p>
 
             {/* Features Grid */}
@@ -69,10 +70,14 @@ export default function HeroSection() {
           <div className="space-y-4 md:space-y-6 animate-fade-in">
             <div className="relative group rounded-xl md:rounded-2xl overflow-hidden shadow-strong">
               <div className="relative aspect-[16/9] md:aspect-[4/3] lg:aspect-[3/2]">
-                <img 
-                  src="/images/hero-image.jpg" 
-                  alt="Professional Invisible Grills and Safety Nets Installation" 
-                  className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105 absolute inset-0" 
+                <OptimizedImage
+                  src="/images/hero-image.jpg"
+                  alt="Invisible Grills and safety nets installation for balcony, window and child safety in Chennai, Hyderabad, Bangalore and Andhra Pradesh"
+                  className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105 absolute inset-0"
+                  loading="eager"
+                  priority
+                  fetchPriority="high"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
               </div>

@@ -222,6 +222,7 @@ module.exports = {
 			},
 			animation: {
 				'fade-in': 'fade-in 0.6s ease-out',
+				'fade-in-up': 'fade-in 0.5s ease-out forwards',
 				'float': 'float 3s ease-in-out infinite',
 				'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
 				'scroll': 'scroll 30s linear infinite',

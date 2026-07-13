@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { servicesData, serviceCategories } from '@/data/servicesData';
+import { servicesData, isCanonicalServiceSlug } from '@/data/servicesData';
 import { validLocations, locationData } from '@/constants/locations';
 
 export const dynamic = 'force-static';
@@ -9,7 +9,7 @@ export default function servicesSitemap(): MetadataRoute.Sitemap {
   const currentDate = new Date();
 
   // Get all service slugs
-  const allServices = Object.keys(servicesData);
+  const allServices = Object.keys(servicesData).filter(isCanonicalServiceSlug);
 
   // Main category services (higher priority)
   const mainCategoryServices = [
@@ -22,12 +22,14 @@ export default function servicesSitemap(): MetadataRoute.Sitemap {
     'balcony-safety',
     'children-protection',
     
-    // Main services from Bird Protection
+    // Main services from Pigeon Nets
     'pigeon-nets',
     'bird-spikes',
     
-    // Main service from Sports
-    'all-sports-practice'
+    // Main services from Sports
+    'all-sports-practice',
+    'cricket-practice',
+    'terrace-cricket',
   ];
 
   // Create sitemap entries for main category services with locations
