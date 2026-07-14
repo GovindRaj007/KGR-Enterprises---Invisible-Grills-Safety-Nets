@@ -82,7 +82,11 @@ const GallerySection = ({ showBreadcrumbs = false }: GallerySectionProps) => {
   };
 
   const galleryImages = generateGalleryImages();
-  const categories = ["All", "Cloth Hangers", ...Object.values(serviceCategories).map(cat => cat.title)];
+  const categories = [
+    { key: "all", label: "All" },
+    { key: "cloth-hangers", label: "Cloth Hangers" },
+    ...Object.values(serviceCategories).map((cat) => ({ key: cat.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''), label: cat.title })),
+  ];
   
   const IMAGES_PER_PAGE = 12;
 
@@ -134,35 +138,35 @@ const GallerySection = ({ showBreadcrumbs = false }: GallerySectionProps) => {
         {/* Category Filter */}
         <div className="flex flex-wrap justify-center gap-2 mb-6 md:mb-8">
           {categories.map((category) => {
-            const categoryCount = category === "All" 
+            const categoryCount = category.label === "All" 
               ? galleryImages.length 
-              : category === "Cloth Hangers"
+              : category.label === "Cloth Hangers"
               ? galleryImages.filter(isClothHangerImage).length
-              : galleryImages.filter(img => img.category === category).length;
+              : galleryImages.filter(img => img.category === category.label).length;
             
             return (
               <button
-                key={category}
+                key={category.key}
                 className="cursor-pointer transition-all hover:scale-105 text-xs px-2 py-1 md:px-3 md:py-1.5 rounded-full font-semibold"
-                onClick={() => handleCategoryChange(category)}
+                onClick={() => handleCategoryChange(category.label)}
                 style={{
-                  backgroundColor: activeCategory === category ? "rgba(75, 159, 255, 0.2)" : "transparent",
-                  color: activeCategory === category ? "#FF6B42" : "#C8D8EE",
-                  border: activeCategory === category ? "1px solid rgba(75, 159, 255, 0.5)" : "1px solid rgba(36, 61, 99, 0.5)",
-                  boxShadow: activeCategory === category ? "0 0 12px rgba(75, 159, 255, 0.2)" : "none"
+                  backgroundColor: activeCategory === category.label ? "rgba(75, 159, 255, 0.2)" : "transparent",
+                  color: activeCategory === category.label ? "#FF6B42" : "#C8D8EE",
+                  border: activeCategory === category.label ? "1px solid rgba(75, 159, 255, 0.5)" : "1px solid rgba(36, 61, 99, 0.5)",
+                  boxShadow: activeCategory === category.label ? "0 0 12px rgba(75, 159, 255, 0.2)" : "none"
                 }}
                 onMouseEnter={(e) => {
-                  if (activeCategory !== category) {
+                  if (activeCategory !== category.label) {
                     e.currentTarget.style.backgroundColor = "rgba(75, 159, 255, 0.1)";
                   }
                 }}
                 onMouseLeave={(e) => {
-                  if (activeCategory !== category) {
+                  if (activeCategory !== category.label) {
                     e.currentTarget.style.backgroundColor = "transparent";
                   }
                 }}
               >
-                {category} ({categoryCount})
+                {category.label} ({categoryCount})
               </button>
             );
           })}

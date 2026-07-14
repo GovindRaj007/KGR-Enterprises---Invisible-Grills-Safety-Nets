@@ -734,6 +734,15 @@ export const getServiceRoute = (serviceId: string, location?: string): string =>
   return `/services/${serviceId}`;
 };
 
+export const getServiceLocationRoute = (serviceId: string, location?: string): string => {
+  if (!location) return getServiceRoute(serviceId);
+  if (serviceId === 'invisible-grills-dealer') {
+    return `/services/invisible-grills-dealer/${location}`;
+  }
+
+  return `/services/${serviceId}/${location}`;
+};
+
 export const isCanonicalServiceSlug = (slug: string): boolean => {
   return resolveServiceSlug(slug) === slug;
 };
@@ -745,6 +754,8 @@ Object.defineProperty(servicesData, "open-area-safety-nets", {
   configurable: true,
   writable: true
 });
+
+const EXCLUDED_SERVICE_IDS_FROM_PUBLIC_CATEGORIES = ["cloth-drying"];
 
 export const serviceCategories = {
   "invisible-grills": {
@@ -773,8 +784,25 @@ export const serviceCategories = {
     title: "Sports",
     description: "Professional sports nets for various recreational and competitive activities",
     services: ["all-sports-practice", "cricket-practice", "terrace-cricket"]
+  },
+  "cloth-hangers": {
+    title: "Cloth Hangers",
+    description: "Ceiling cloth hangers for efficient drying and space saving",
+    services: ["cloth-drying"]
   }
 };
+
+export const serviceCategoriesWithoutClothHangers = Object.fromEntries(
+  Object.entries(serviceCategories)
+    .filter(([key]) => key !== "cloth-hangers")
+    .map(([key, category]) => [
+      key,
+      {
+        ...category,
+        services: category.services.filter((serviceId) => !EXCLUDED_SERVICE_IDS_FROM_PUBLIC_CATEGORIES.includes(serviceId)),
+      },
+    ])
+) as Omit<typeof serviceCategories, "cloth-hangers">;
 
 export const isClothDryingService = (service: { id: string } | string): boolean =>
   typeof service === "string" ? service === "cloth-drying" : service.id === "cloth-drying";

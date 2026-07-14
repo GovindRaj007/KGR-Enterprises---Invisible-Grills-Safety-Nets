@@ -7,7 +7,7 @@ import { Breadcrumbs } from '@/components/shared/Breadcrumbs';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Phone, ArrowRight, ChevronLeft, ChevronRight, Pointer } from 'lucide-react';
 import { PRIMARY } from '@/constants/contacts';
-import { servicesData, serviceCategories, getServiceRoute } from '@/data/servicesData';
+import { servicesData, serviceCategoriesWithoutClothHangers, getServiceRoute } from '@/data/servicesData';
 
 interface ServicesSectionProps {
   showBreadcrumbs?: boolean;
@@ -25,7 +25,7 @@ const ServicesSection = ({ showBreadcrumbs = false }: ServicesSectionProps) => {
   const SERVICES_PER_PAGE = 9;
 
   const getServicesForCategory = (categoryKey: string) => {
-    const category = serviceCategories[categoryKey as keyof typeof serviceCategories];
+    const category = serviceCategoriesWithoutClothHangers[categoryKey as keyof typeof serviceCategoriesWithoutClothHangers];
     if (!category) return [];
     
     return category.services.map(serviceId => 
@@ -65,27 +65,6 @@ const ServicesSection = ({ showBreadcrumbs = false }: ServicesSectionProps) => {
     <section id="services" className="py-12 md:py-16 lg:py-24 relative" style={{
       background: "linear-gradient(180deg, #121D2F 0%, #1E2A42 100%)"
     }}>
-      {/* Curved top edge to blend with HeroSlider bottom wave */}
-      {/* <svg
-        viewBox="0 0 1440 120"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="absolute -top-[100px] left-0 right-0 w-full h-auto block"
-        preserveAspectRatio="none"
-        style={{ minHeight: "100px" }}
-      >
-        <defs>
-          <linearGradient id="curveGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style={{ stopColor: "hsl(215, 25%, 97%)", stopOpacity: 1 }} />
-            <stop offset="100%" style={{ stopColor: "#121D2F", stopOpacity: 1 }} />
-          </linearGradient>
-        </defs>
-        <path
-          d="M0,80 Q360,105 720,80 T1440,80 L1440,0 L0,0 Z"
-          fill="url(#curveGradient)"
-        />
-      </svg> */}
-
       <div className="container mx-auto px-4">
         {showBreadcrumbs && <Breadcrumbs items={[{ label: 'Services' }]} darkMode={true} />}
         {/* Header */}
@@ -117,7 +96,7 @@ const ServicesSection = ({ showBreadcrumbs = false }: ServicesSectionProps) => {
         >
           {/* Category Tabs */}
           <TabsList className="grid w-full max-w-4xl mx-auto grid-cols-2 sm:grid-cols-4 mb-6 md:mb-8 h-auto p-1 gap-1" style={{ backgroundColor: "transparent" }}>
-            {Object.entries(serviceCategories).map(([key, category]) => (
+            {Object.entries(serviceCategoriesWithoutClothHangers).map(([key, category]) => (
               <TabsTrigger 
                 key={key}
                 value={key}
@@ -163,7 +142,7 @@ const ServicesSection = ({ showBreadcrumbs = false }: ServicesSectionProps) => {
           </TabsList>
 
           {/* Tab Content */}
-          {Object.entries(serviceCategories).map(([key, category]) => (
+          {Object.entries(serviceCategoriesWithoutClothHangers).map(([key, category]) => (
             <TabsContent key={key} value={key} className="space-y-6 md:space-y-8">
               {/* Category Description */}
               <div className="text-center space-y-2">
@@ -195,7 +174,7 @@ const ServicesSection = ({ showBreadcrumbs = false }: ServicesSectionProps) => {
                     }}
                   >
                     <div className="relative h-48 w-full overflow-hidden">
-                      <OptimizedImage src={service.image} alt={`${service.title} installation by KGR Enterprises for balcony, window and child safety in Hyderabad, Bangalore, Chennai and Vijayawada`} className="object-cover group-hover:scale-110 transition-transform duration-500 w-full h-full absolute inset-0" />
+                      <OptimizedImage src={service.image} alt={`${service.title} installation by KGR Enterprises for balcony, window and child safety in Hyderabad, Bangalore, Chennai and Vijayawada`} className="{service.id === 'cloth-drying' ? '' : 'object-cover'} group-hover:scale-110 transition-transform duration-500 w-full h-full absolute inset-0" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                       <div className="absolute top-3 left-3 px-2 md:px-3 py-1 md:py-1.5 rounded-full text-xs md:text-sm font-semibold" style={{
                         color: "#F0F6FF",
@@ -224,54 +203,6 @@ const ServicesSection = ({ showBreadcrumbs = false }: ServicesSectionProps) => {
                         ))}
                       </div>
 
-                      {/* Action Buttons */}
-                      {/* <div className="flex gap-2 pt-2" style={{ borderTop: "1px solid rgba(36, 61, 99, 0.5)" }}>
-                        <button
-                          className="flex-1 px-3 py-2 rounded text-xs md:text-sm font-semibold transition-all duration-200"
-                          style={{
-                            backgroundColor: "transparent",
-                          color: "#FF6B42",
-                          border: "1px solid rgba(75, 159, 255, 0.5)"
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = "rgba(75, 159, 255, 0.1)";
-                          e.currentTarget.style.boxShadow = "0 0 12px rgba(75, 159, 255, 0.2)";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = "transparent";
-                            e.currentTarget.style.boxShadow = "none";
-                          }}
-                          aria-label={`Learn more about ${service.title}`}
-                        >
-                          <Link href={`/services/${service.id}`} className="flex items-center justify-center gap-2">
-                            <Info className="h-3 w-3 md:h-4 md:w-4" />
-                            Details
-                          </Link>
-                        </button>
-                        <button
-                          className="flex-1 px-3 py-2 rounded text-xs md:text-sm font-semibold transition-all duration-200"
-                          style={{
-                          background: "linear-gradient(135deg, #FF6B42 0%, #F25024 100%)",
-                          color: "#ffffff",
-                          border: "none",
-                          boxShadow: "0 4px 12px rgba(255, 107, 66, 0.2)"
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.boxShadow = "0 6px 20px rgba(255, 107, 66, 0.4)";
-                          e.currentTarget.style.transform = "translateY(-2px)";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.boxShadow = "0 4px 12px rgba(255, 107, 66, 0.2)";
-                            e.currentTarget.style.transform = "none";
-                          }}
-                          aria-label={`Call now to inquire about ${service.title}`}
-                        >
-                          <a href={PRIMARY.tel} className="flex items-center justify-center gap-2" rel="noopener">
-                            <Phone className="h-3 w-3 md:h-4 md:w-4" />
-                            Call
-                          </a>
-                        </button>
-                      </div> */}
 
                       {/* Link */}
                 <span className="inline-flex items-center gap-1 text-sm font-medium text-accent transition-colors group-hover:text-accent mt-auto">

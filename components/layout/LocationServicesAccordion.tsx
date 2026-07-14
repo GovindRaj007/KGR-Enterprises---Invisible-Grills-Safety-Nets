@@ -4,7 +4,7 @@ import Link from "next/link";
 import { PRIMARY_LOCATIONS } from "@/lib/seo-metadata";
 import { servicesData, getServiceLocationRoute } from "@/data/servicesData";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
-import { MapPin } from "lucide-react";
+import { MapPin, ArrowRight } from "lucide-react";
 
 const LOCATION_ORDER = [
   "chennai",
@@ -12,14 +12,6 @@ const LOCATION_ORDER = [
   "hyderabad",
   "visakhapatnam",
   "vijayawada",
-];
-
-const CATEGORY_ORDER = [
-  "invisible-grills",
-  "safety-nets",
-  "bird-protection",
-  "sports",
-  "cloth-hangers",
 ];
 
 const CATEGORIES = [
@@ -75,7 +67,7 @@ const getServiceLabel = (serviceId: string, locationName: string) => {
   if (!service) return `${serviceId} in ${locationName}`;
 
   if (serviceId === "cloth-drying") {
-    return `Cloth Hangers in ${locationName}`;
+    return `Ceiling Cloth Hangers in ${locationName}`;
   }
 
   if (serviceId === "invisible-grills-dealer") {
@@ -100,74 +92,106 @@ const getLocationServiceLinks = (locationSlug: string, locationName: string) =>
 
 interface LocationServicesAccordionProps {
   variant?: "footer" | "desktop" | "mobile";
+  onLocationLinkClick?: () => void;
 }
 
 const variantStyles = {
   footer: {
-    wrapper: "bg-white/5 rounded-3xl border border-white/10 p-4 shadow-lg",
+    wrapper: "space-y-4",
+    locationCard: "rounded-3xl border border-white/10 bg-slate-950/95 shadow-2xl",
+    locationTrigger: "flex items-center justify-between gap-3 rounded-3xl px-5 py-4 text-left",
     locationTitle: "text-sm font-semibold text-white",
-    categoryTitle: "text-sm font-medium text-[#FF6B42]",
-    item: "text-sm text-[#C8D8EE] hover:text-white",
+    locationState: "text-xs text-slate-400",
+    categoryTrigger: "flex items-center justify-between px-4 py-3 text-left",
+    categoryTitle: "text-sm font-semibold text-[#FF6B42]",
+    categoryContent: "px-4 pb-4 pt-2",
+    serviceGroup: "rounded-3xl overflow-hidden border border-slate-200/10 bg-white divide-y divide-slate-200/10",
+    serviceItem: "flex items-center justify-between gap-3 px-4 py-3 transition-colors duration-200 bg-white hover:bg-slate-50",
+    serviceText: "text-sm font-semibold text-slate-950",
+    serviceIcon: "h-4 w-4 text-slate-950",
   },
   desktop: {
-    wrapper: "bg-slate-950/95 rounded-3xl border border-white/10 p-5 shadow-2xl max-h-[650px] overflow-y-auto",
+    wrapper: "space-y-4 py-2 max-h-[650px] overflow-y-auto",
+    locationCard: "rounded-3xl border border-white/10 bg-slate-950/95 shadow-2xl",
+    locationTrigger: "flex items-center justify-between gap-3 rounded-3xl px-4 py-4 text-left",
     locationTitle: "text-sm font-semibold text-white",
+    locationState: "text-xs text-slate-400",
+    categoryTrigger: "flex items-center justify-between px-4 py-3 text-left",
     categoryTitle: "text-sm font-semibold text-[#FF6B42]",
-    item: "text-sm text-[#C8D8EE] hover:text-white",
+    categoryContent: "px-4 pb-4 pt-2",
+    serviceGroup: "rounded-3xl overflow-hidden border border-slate-200/10 bg-white divide-y divide-slate-200/10",
+    serviceItem: "flex items-center justify-between gap-3 px-4 py-3 transition-colors duration-200 bg-white hover:bg-slate-50",
+    serviceText: "text-sm font-semibold text-slate-950",
+    serviceIcon: "h-4 w-4 text-slate-950",
   },
   mobile: {
-    wrapper: "bg-white rounded-3xl border border-slate-200 p-4 shadow-lg",
-    locationTitle: "text-base font-semibold text-slate-900",
-    categoryTitle: "text-sm font-semibold text-[#0f172a]",
-    item: "text-sm text-slate-700 hover:text-slate-900",
+    wrapper: "space-y-4",
+    locationCard: "rounded-3xl border border-slate-200 bg-slate-950/95 shadow-sm",
+    locationTrigger: "flex items-center justify-between gap-3 rounded-3xl px-4 py-4 text-left",
+    locationTitle: "text-base font-semibold text-white",
+    locationState: "text-xs text-slate-400",
+    categoryTrigger: "flex items-center justify-between px-4 py-3 text-left",
+    categoryTitle: "text-sm font-semibold text-white",
+    categoryContent: "px-4 pb-4 pt-2",
+    serviceGroup: "rounded-3xl overflow-hidden border border-slate-800 bg-slate-950 divide-y divide-slate-800",
+    serviceItem: "flex items-center justify-between gap-3 px-4 py-3 transition-colors duration-200 bg-slate-950 hover:bg-slate-900",
+    serviceText: "text-sm font-semibold text-white",
+    serviceIcon: "h-4 w-4 text-[#FF6B42]",
   },
 };
 
-export default function LocationServicesAccordion({ variant = "footer" }: LocationServicesAccordionProps) {
+export default function LocationServicesAccordion({ variant = "footer", onLocationLinkClick }: LocationServicesAccordionProps) {
   const styles = variantStyles[variant];
 
   return (
     <div className={styles.wrapper}>
-      <Accordion type="single" collapsible className="space-y-3">
+      <Accordion type="single" collapsible className="space-y-4">
         {locationMap.map((location) => (
-          <AccordionItem key={location.slug} value={`location-${location.slug}`}>
-            <AccordionTrigger className="flex items-center justify-between rounded-2xl px-4 py-3 text-left shadow-sm">
-              <div className="flex items-center gap-3">
-                <MapPin className="h-4 w-4 text-[#FF6B42] flex-shrink-0" />
-                <div>
-                  <p className={styles.locationTitle}>{location.name}</p>
-                  <p className="text-xs text-slate-400">{location.state}</p>
+          <AccordionItem key={location.slug} value={`location-${location.slug}`} className="border-none group">
+            <div className={`${styles.locationCard} w-full max-w-[375px] min-w-0`}> 
+              <AccordionTrigger className={styles.locationTrigger}>
+                <div className="flex items-center gap-3">
+                  <MapPin className="h-4 w-4 text-[#FF6B42] flex-shrink-0" />
+                  <div>
+                    <p className={styles.locationTitle}>{location.name}</p>
+                    <p className={styles.locationState}>{location.state}</p>
+                  </div>
                 </div>
-              </div>
-            </AccordionTrigger>
-            <AccordionContent className="px-2">
-              <div className="space-y-2">
-                {/* Single Accordion for categories - keeps expanded content within same parent card */}
-                <Accordion type="single" collapsible className="space-y-2">
-                  {getLocationServiceLinks(location.slug, location.name).map((category) => (
-                    <AccordionItem key={category.key} value={`${location.slug}-${category.key}`}>
-                      <AccordionTrigger className="flex items-center justify-between px-4 py-3 text-left">
-                        <span className={styles.categoryTitle}>{category.title}</span>
-                      </AccordionTrigger>
-                      <AccordionContent className="px-2 pt-2">
-                        <div className="space-y-2">
-                          {category.services.map((service) => (
-                            <Link
-                              key={service.id}
-                              href={service.href}
-                              className={`block rounded-md px-3 py-2 transition-colors duration-150 no-underline flex items-center justify-between bg-white`}
-                            >
-                              <span className="text-sm font-medium text-[hsl(var(--primary))]">{service.title}</span>
-                              <ArrowRight className="h-4 w-4 text-[hsl(var(--primary))]" />
-                            </Link>
-                          ))}
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
-              </div>
-            </AccordionContent>
+              </AccordionTrigger>
+              <AccordionContent className="px-0">
+                <div className="border-t border-white/10 px-0">
+                  <Accordion type="single" collapsible className="space-y-3">
+                    {getLocationServiceLinks(location.slug, location.name).map((category) => (
+                      <AccordionItem
+                        key={category.key}
+                        value={`${location.slug}-${category.key}`}
+                        className="border-b last:border-none"
+                      >
+                        <AccordionTrigger className={styles.categoryTrigger}>
+                          <span className={styles.categoryTitle}>{category.title}</span>
+                        </AccordionTrigger>
+                        <AccordionContent className={styles.categoryContent}>
+                          <div className={styles.serviceGroup}>
+                            {category.services.map((service, index) => (
+                              <Link
+                                key={service.id}
+                                href={service.href}
+                                prefetch={false}
+                                onClick={onLocationLinkClick}
+                                className={`${styles.serviceItem} ${index === category.services.length - 1 ? "" : ""}`}
+                              >
+                                <span className={styles.serviceText}>{service.title}</span>
+                                <ArrowRight className={styles.serviceIcon} />
+                              </Link>
+                            ))}
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                </div>
+              </AccordionContent>
+            </div>
           </AccordionItem>
         ))}
       </Accordion>

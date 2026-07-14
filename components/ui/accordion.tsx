@@ -12,6 +12,13 @@ type AccordionItemProps = {
   className?: string;
 };
 
+const AccordionContext = React.createContext<{
+  openItems: Set<string>;
+  toggleItem: (value: string) => void;
+} | null>(null);
+
+const AccordionItemContext = React.createContext<string | null>(null);
+
 const Accordion = React.forwardRef<
   HTMLDivElement,
   {
@@ -38,12 +45,9 @@ const Accordion = React.forwardRef<
   };
 
   return (
-    <div ref={ref} className={cn("w-full", className)}>
-      {React.Children.map(children, (child) => {
-        if (!React.isValidElement(child)) return child;
-        return React.cloneElement(child as React.ReactElement<any>, { openItems, toggleItem });
-      })}
-    </div>
+    <AccordionContext.Provider value={{ openItems, toggleItem }}>
+      <div ref={ref} className={cn("w-full", className)}>{children}</div>
+    </AccordionContext.Provider>
   );
 });
 Accordion.displayName = "Accordion";
@@ -54,17 +58,21 @@ const AccordionItem = React.forwardRef<
     value: string;
     className?: string;
     children: React.ReactNode;
-    openItems?: Set<string>;
-    toggleItem?: (value: string) => void;
   }
->(({ value, className, children, openItems, toggleItem }, ref) => (
-  <div ref={ref} className={cn("border-b", className)}>
-    {React.Children.map(children, (child) => {
-      if (!React.isValidElement(child)) return child;
-      return React.cloneElement(child as React.ReactElement<any>, { value, openItems, toggleItem });
-    })}
-  </div>
-));
+>(({ value, className, children }, ref) => {
+  const accordion = React.useContext(AccordionContext);
+  const isOpen = accordion?.openItems.has(value);
+
+  return (
+    <div
+      ref={ref}
+      className={cn("border-b", className)}
+      data-state={isOpen ? "open" : "closed"}
+    >
+      <AccordionItemContext.Provider value={value}>{children}</AccordionItemContext.Provider>
+    </div>
+  );
+});
 AccordionItem.displayName = "AccordionItem";
 
 const AccordionTrigger = React.forwardRef<
@@ -73,20 +81,23 @@ const AccordionTrigger = React.forwardRef<
     className?: string;
     children: React.ReactNode;
     value?: string;
-    openItems?: Set<string>;
-    toggleItem?: (value: string) => void;
   }
->(({ className, children, value, openItems, toggleItem }, ref) => {
-  const isOpen = value ? openItems?.has(value) : false;
-  
+>(({ className, children, value, ...props }, ref) => {
+  const accordion = React.useContext(AccordionContext);
+  const itemValue = value ?? React.useContext(AccordionItemContext);
+  const isOpen = itemValue ? accordion?.openItems.has(itemValue) : false;
+
   return (
     <button
       ref={ref}
-      onClick={() => value && toggleItem?.(value)}
+      onClick={() => itemValue && accordion?.toggleItem(itemValue)}
+      aria-expanded={isOpen}
+      data-state={isOpen ? "open" : "closed"}
       className={cn(
         "flex w-full items-center justify-between py-4 font-medium transition-all hover:underline",
         className
       )}
+      {...props}
     >
       {children}
       <ChevronDown className={cn("h-4 w-4 shrink-0 transition-transform duration-200", isOpen && "rotate-180")} />
@@ -101,15 +112,23 @@ const AccordionContent = React.forwardRef<
     className?: string;
     children: React.ReactNode;
     value?: string;
-    openItems?: Set<string>;
   }
->(({ className, children, value, openItems }, ref) => {
-  const isOpen = value ? openItems?.has(value) : false;
-  
+>(({ className, children, value, ...props }, ref) => {
+  const accordion = React.useContext(AccordionContext);
+  const itemValue = value ?? React.useContext(AccordionItemContext);
+  const isOpen = itemValue ? accordion?.openItems.has(itemValue) : false;
+
   return (
     <div
       ref={ref}
-      className={cn("overflow-hidden transition-all", !isOpen && "max-h-0", className)}
+      aria-hidden={!isOpen}
+      className={cn(
+        "overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]",
+        !isOpen && "hidden max-h-0 opacity-0 pointer-events-none",
+        isOpen && "block max-h-[2000px] opacity-100 pointer-events-auto",
+        className
+      )}
+      {...props}
     >
       <div className="pb-4 pt-0">{children}</div>
     </div>

@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { ChevronRight, MapPin, Phone, Home, Info, Briefcase, Image as ImageIcon, Mail, Pointer } from 'lucide-react';
 import { WhatsAppIcon } from '@/components/shared/Icons';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { servicesData, serviceCategories, getServiceRoute } from '@/data/servicesData';
+import { servicesData, serviceCategoriesWithoutClothHangers, getServiceRoute } from '@/data/servicesData';
+import LocationServicesAccordion from '@/components/layout/LocationServicesAccordion';
 import { PRIMARY } from '@/constants/contacts';
-import { PRIMARY_LOCATIONS } from '@/lib/seo-metadata';
 
 interface MenuDrawerProps {
   isOpen: boolean;
@@ -124,7 +124,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
                         </div>
                         <Tabs value={activeServiceTab} onValueChange={setActiveServiceTab}>
                           <TabsList className="w-full grid grid-cols-2 gap-2 h-auto bg-gray-100 rounded-2xl p-1">
-                            {Object.entries(serviceCategories).map(([key, cat]) => (
+                            {Object.entries(serviceCategoriesWithoutClothHangers).map(([key, cat]) => (
                               <TabsTrigger
                                 key={key}
                                 value={key}
@@ -135,7 +135,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
                             ))}
                           </TabsList>
 
-                          {Object.entries(serviceCategories).map(([key, cat]) => (
+                          {Object.entries(serviceCategoriesWithoutClothHangers).map(([key, cat]) => (
                             <TabsContent
                               key={key}
                               value={key}
@@ -147,6 +147,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
                                   <Link
                                     key={id}
                                     href={getServiceRoute(id)}
+                                    prefetch={false}
                                     className="flex items-start gap-3 p-2 rounded-md transition-colors bg-white hover:bg-gray-100 border border-gray-200"       
                                     onClick={handleClose}
                                   >
@@ -199,25 +200,8 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
 
                     {/* Locations Submenu */}
                     {isExpanded && (
-                      <div className="space-y-2 pl-4 pr-4 pb-4 bg-gray-50 rounded-lg mx-4">
-                        {PRIMARY_LOCATIONS.map((location) => (
-                          <Link
-                            key={location.name.toLowerCase()}
-                            href={`/locations/${location.name.toLowerCase()}/`} 
-                            className="flex items-start gap-3 p-2 rounded-md transition-colors bg-white hover:bg-gray-100 border border-gray-200"
-                            onClick={handleClose}
-                          >
-                            <MapPin className="h-4 w-4 text-gray-600 mt-0.5 flex-shrink-0" />
-                            <div className="flex-1">
-                              <div className="font-medium text-sm text-gray-900">
-                                {location.name}
-                              </div>
-                              <p className="text-xs line-clamp-1 mt-1 text-gray-600">
-                                {location.state}
-                              </p>
-                            </div>
-                          </Link>
-                        ))}
+                      <div className="mx-3">
+                        <LocationServicesAccordion variant="mobile" onLocationLinkClick={handleClose} />
                       </div>
                     )}
                   </div>

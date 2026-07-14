@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Phone, MapPin } from "lucide-react";
+import { Phone} from "lucide-react";
 import { WhatsAppIcon } from "@/components/shared/Icons";
 import {
   NavigationMenu,
@@ -13,9 +13,9 @@ import {
   NavigationMenuContent,
 } from "@/components/ui/navigation-menu";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { servicesData, serviceCategories, getServiceRoute } from "@/data/servicesData";
+import { servicesData, serviceCategories, serviceCategoriesWithoutClothHangers, getServiceRoute } from "@/data/servicesData";
+import LocationServicesAccordion from '@/components/layout/LocationServicesAccordion';
 import { PRIMARY } from '@/constants/contacts';
-import { PRIMARY_LOCATIONS } from '@/lib/seo-metadata';
 import { normalizeInternalLink } from "@/lib/url-utils";
 import OptimizedImage from '@/components/shared/OptimizedImage';
 
@@ -83,8 +83,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, onSearchOpen = () => {} }
           <Link
             key={serviceId}
             href={getServiceRoute(serviceId)}
+            prefetch={false}
             onClick={closeDropdown}
-            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-all duration-300 bg-transparent hover:bg-cyan-tint border-l-2 border-transparent hover:border-l-2 hover:border-cyan-400"
+            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-all duration-300 bg-transparent border border-transparent hover:bg-cyan-tint border-l-4 border-l-transparent hover:border-l-cyan-400"
             style={{ color: "#C8D8EE" }}
             onMouseEnter={(e) => {
               e.currentTarget.style.color = "#FF6B42";
@@ -100,8 +101,8 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, onSearchOpen = () => {} }
             <div className="text-sm md:text-base font-semibold leading-snug transition-colors" style={{ color: "inherit" }}>
               {service.title}
               {service.id === 'cloth-drying' && (
-                <span className="block text-[10px] font-semibold text-[#FF6B42] mt-1">
-                  & Cloth Hangers
+                <span className="block text-[13px] font-semibold text-[#FF6B42] mt-1">
+                Cloth Hangers
                 </span>
               )}
             </div>
@@ -200,8 +201,8 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, onSearchOpen = () => {} }
                 backdropFilter: "blur(16px)",
               }}>
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                  <TabsList className="mb-4 w-full flex gap-2 rounded-2xl border border-white/10 bg-white/10 p-4 shadow-sm">
-                    {Object.entries(serviceCategories).map(([categoryKey, category]) => (
+                  <TabsList className="mb-4 w-full flex gap-2 rounded-2xl border border-white/10 bg-white/10 py-10 shadow-sm">
+                    {Object.entries(serviceCategoriesWithoutClothHangers).map(([categoryKey, category]) => (
                       <TabsTrigger
                         key={categoryKey}
                         value={categoryKey}
@@ -211,7 +212,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, onSearchOpen = () => {} }
                         {categoryKey === 'invisible-grills' ? (
                           <div className="flex flex-col items-center gap-[2px] whitespace-normal">
                             <span>{category.title}</span>
-                            <span className="text-[10px] font-semibold text-[#FF6B42]">& Cloth Hangers</span>
+                            <span className="text-[13px] font-semibold text-[#FF6B42]">& Cloth Hangers</span>
                           </div>
                         ) : (
                           category.title
@@ -219,7 +220,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, onSearchOpen = () => {} }
                       </TabsTrigger>
                     ))}
                   </TabsList>
-                  {Object.entries(serviceCategories).map(([key, cat]) => (
+                  {Object.entries(serviceCategoriesWithoutClothHangers).map(([key, cat]) => (
                     <TabsContent key={key} value={key} className="space-y-2">
                       {renderServiceLinks(cat)}
                     </TabsContent>
@@ -252,40 +253,8 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, onSearchOpen = () => {} }
               Locations
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <div className="p-6 w-[300px] rounded-md" style={{
-                background: "linear-gradient(135deg, #121D2F 0%, #1E2A42 50%, #121D2F 100%)",
-                border: "1px solid #1E2A42",
-                backdropFilter: "blur(16px)",
-              }}>
-                <div className="space-y-2">
-                  {PRIMARY_LOCATIONS.map((location) => (
-                    <Link
-                      key={location.name.toLowerCase()}
-                      href={`/locations/${location.name.toLowerCase()}/`}
-                      onClick={closeDropdown}
-                      className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-all duration-300 bg-transparent hover:bg-cyan-tint border-l-2 border-transparent hover:border-l-2 hover:border-cyan-400"
-                      style={{ color: "#C8D8EE" }}
-                      onMouseEnter={(e: any) => {
-                        e.currentTarget.style.color = "#FF6B42";
-                        e.currentTarget.style.borderLeftColor = "#FF6B42";
-                        e.currentTarget.style.boxShadow = "0 2px 8px rgba(75,159,255,0.40)";
-                      }}
-                      onMouseLeave={(e: any) => {
-                        e.currentTarget.style.color = "#C8D8EE";
-                        e.currentTarget.style.borderLeftColor = "transparent";
-                        e.currentTarget.style.boxShadow = "none";
-                      }}
-                    >
-                      <div className="flex items-center gap-2 text-sm md:text-base font-semibold leading-snug transition-colors">
-                        <MapPin className="h-4 w-4 flex-shrink-0" />
-                        {location.name}
-                      </div>
-                      <p className="line-clamp-1 text-xs md:text-sm leading-normal" style={{ color: "#8FAAC8" }}>
-                        {location.state}
-                      </p>
-                    </Link>
-                  ))}
-                </div>
+              <div className="w-[420px] py-4 px-3">
+                <LocationServicesAccordion variant="desktop" />
               </div>
             </NavigationMenuContent>
           </NavigationMenuItem>

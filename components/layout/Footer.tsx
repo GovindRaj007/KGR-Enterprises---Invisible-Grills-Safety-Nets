@@ -1,21 +1,13 @@
 "use client";
 import Link from 'next/link';
-import { Phone, Mail, MapPin, Clock, ArrowRight, Shield } from 'lucide-react';
-import { PRIMARY, SECONDARY, } from '@/constants/contacts';
-import { PRIMARY_LOCATIONS } from '@/lib/seo-metadata';
+import { Phone, Mail, Clock, ArrowRight, Shield } from 'lucide-react';
+import { PRIMARY, SECONDARY } from '@/constants/contacts';
+import LocationServicesAccordion from '@/components/layout/LocationServicesAccordion';
 import OptimizedImage from '@/components/shared/OptimizedImage';
+import { servicesData, serviceCategories, getServiceRoute } from '@/data/servicesData';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 
 const Footer = () => {
-  const services = [
-    { name: 'Invisible Grills', href: '/services/invisible-grills' },
-    { name: 'Balcony Safety Nets', href: '/services/balcony-safety' },
-    { name: 'Children Protection Nets', href: '/services/children-protection' },
-    { name: 'Pigeon Nets', href: '/services/pigeon-nets' },
-    { name: 'All Sports Nets', href: '/services/all-sports-practice' },
-  ];
-
-  const locations = PRIMARY_LOCATIONS.map(loc => ({ name: loc.name, slug: loc.name.toLowerCase() }));
-
   return (
     <footer className="text-white relative" style={{
         background: "linear-gradient(180deg, #0F1729 0%, #070A10 100%)",
@@ -23,7 +15,7 @@ const Footer = () => {
       }}>
         {/* Main Footer Content */}
         <div className="container mx-auto px-4 py-4 md:py-6 lg:py-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 items-start gap-8 lg:gap-10 xl:gap-12">
 
             {/* Company Info */}
             <div className="space-y-2 md:space-y-3">
@@ -49,57 +41,48 @@ const Footer = () => {
             </div>
 
             {/* Services */}
-            <div className="space-y-4 md:space-y-6">
+            <div className="space-y-4 md:space-y-6 w-full">
               <h3 className="text-base md:text-lg font-semibold" style={{ color: "#FF6B42" }}>Our Services</h3>
-              <ul className="space-y-2 md:space-y-3">
-                {services.map((service, index) => (
-                  <li key={index}>
-                    <Link
-                      href={service.href}
-                      className="text-sm md:text-base flex items-center space-x-2 group transition-colors"
-                      style={{ color: "#C8D8EE" }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.color = "#FF6B42";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.color = "#C8D8EE";
-                      }}
-                    >
-                      <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
-                      <span>{service.name}</span>
-                    </Link>
-                  </li>
+              <Accordion type="single" collapsible className="space-y-4">
+                {Object.entries(serviceCategories).map(([categoryKey, category]) => (
+                  <AccordionItem
+                    key={categoryKey}
+                    value={categoryKey}
+                    className="rounded-3xl border border-white/10 bg-slate-950/95 shadow-2xl overflow-hidden"
+                  >
+                    <AccordionTrigger className="flex items-center justify-between px-4 py-4 text-left">
+                      <span className="text-sm font-semibold text-white">{category.title}</span>
+                    </AccordionTrigger>
+                    <AccordionContent className="px-0">
+                      <div className="rounded-b-3xl bg-white/95 divide-y divide-slate-200/10">
+                        {category.services.map((serviceId) => {
+                          const service = servicesData[serviceId as keyof typeof servicesData];
+                          return (
+                            <Link
+                              key={serviceId}
+                              href={getServiceRoute(serviceId)}
+                              className="flex items-center justify-between gap-3 px-4 py-3 transition-colors duration-150 bg-white hover:bg-slate-50"
+                            >
+                              <span className="text-sm font-semibold text-slate-950">{service?.title ?? serviceId}</span>
+                              <ArrowRight className="h-4 w-4 text-slate-950" />
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
                 ))}
-              </ul>
+              </Accordion>
             </div>
 
             {/* Service Areas */}
-            <div className="space-y-4 md:space-y-6">
+            <div className="space-y-4 md:space-y-6 w-full">
               <h3 className="text-base md:text-lg font-semibold" style={{ color: "#FF6B42" }}>Service Areas</h3>
-              <ul className="space-y-2 md:space-y-3">
-                {locations.map((location, index) => (
-                  <li key={index}>
-                    <Link 
-                      href={`/locations/${location.slug}/`} 
-                      className="text-sm md:text-base flex items-center space-x-2 transition-colors" 
-                    style={{ color: "#C8D8EE" }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.color = "#FF6B42";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.color = "#C8D8EE";
-                      }}
-                    >
-                      <MapPin className="h-3 w-3" />
-                      <span>{location.name}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              <LocationServicesAccordion variant="footer" />
             </div>
 
             {/* Contact Info */}
-            <div className="space-y-4 md:space-y-6">
+            <div className="space-y-4 md:space-y-6 w-full md:col-span-2 xl:col-span-1">
               <h3 className="text-base md:text-lg font-semibold" style={{ color: "#FF6B42" }}>Contact Info</h3>
 
               <div className="space-y-3 md:space-y-4">

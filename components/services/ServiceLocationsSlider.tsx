@@ -202,12 +202,6 @@ function LocationSlider({ areas }: LocationSliderProps) {
                     </Link>
                   ))}
                 </div>
-
-                {/* Localities */}
-                <div>
-                  <p className="mb-2 text-xs font-medium text-white/60">Popular Areas:</p>
-                  <p className="text-xs text-white/80">{area.localities.slice(0, 3).join(" • ")}</p>
-                </div>
               </div>
             </div>
           ))}
