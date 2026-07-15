@@ -31,7 +31,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const lastAnnouncementTranslateY = useRef(0);
   const lastHeaderHidden = useRef(false);
   const lastCtaVisible = useRef(false);
-  const scrollDirectionLockRef = useRef<'up' | 'down' | null>(null);
   const announcementHeight = 40;
   const headerHeight = 70;
 
@@ -40,32 +39,15 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     setIsMounted(true);
   }, []);
 
-  const setBodyScrollLock = (shouldLock: boolean) => {
-    if (typeof document === 'undefined') return;
-    const overflowValue = shouldLock ? 'hidden' : '';
-    document.body.style.overflow = overflowValue;
-    document.documentElement.style.overflow = overflowValue;
-  };
-
-  const openMenu = () => {
-    setMenuOpen(true);
-    setBodyScrollLock(true);
-  };
-
-  const closeMenu = () => {
-    setMenuOpen(false);
-    setBodyScrollLock(false);
-  };
-
   // Search open/close handlers with body scroll lock
   const openSearch = () => {
     setSearchOpen(true);
-    setBodyScrollLock(true);
+    document.body.style.overflow = 'hidden';
   };
 
   const closeSearch = () => {
     setSearchOpen(false);
-    setBodyScrollLock(false);
+    document.body.style.overflow = 'auto';
   };
 
   // Global keyboard shortcuts for search
@@ -84,12 +66,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   }, [searchOpen]);
 
   useEffect(() => {
-    if (!menuOpen && !searchOpen) {
-      setBodyScrollLock(false);
-    }
-  }, [menuOpen, searchOpen]);
-
-  useEffect(() => {
     const checkMobile = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
@@ -100,13 +76,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      const deltaY = currentScrollY - lastScrollY.current;
-      const direction = deltaY > 0 ? 'down' : deltaY < 0 ? 'up' : null;
-
-      if (direction) {
-        isScrollingDown.current = direction === 'down';
-        scrollDirectionLockRef.current = direction;
-      }
+      isScrollingDown.current = currentScrollY > lastScrollY.current;
 
       // Calculate announcement bar movement
       const announcementTransform = Math.min(currentScrollY, announcementHeight);
@@ -122,31 +92,27 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       const bottomThreshold = 100;
       const isAtBottom = currentScrollY + viewportHeight >= documentHeight - bottomThreshold;
 
-      // Mobile: Hide header and show CTA based on scroll direction and viewport threshold.
-      // Pause the transition whenever a drawer is open so the overlay remains stable.
+      // Mobile: Hide header and show CTA based on scroll direction and viewport threshold
       if (isMobileRef.current) {
         const scrollThreshold = viewportHeight / 2;
-        const drawerOpen = menuOpen || searchOpen;
 
+        // Hide header when scrolling down past half viewport
         let newHeaderHidden = false;
         let newCtaVisible = false;
-
-        if (drawerOpen) {
-          newHeaderHidden = false;
-          newCtaVisible = false;
-        } else if (direction === 'down' && currentScrollY > scrollThreshold && !isAtBottom) {
+        
+        if (currentScrollY > scrollThreshold && isScrollingDown.current && !isAtBottom) {
           newHeaderHidden = true;
           newCtaVisible = true;
-        } else if (direction === 'up') {
+        } else if (!isScrollingDown.current) {
+          // Show header and hide CTA immediately when scrolling up
           newHeaderHidden = false;
           newCtaVisible = false;
         } else if (isAtBottom) {
+          // Hide CTA when at bottom of page
           newHeaderHidden = lastHeaderHidden.current;
           newCtaVisible = false;
-        } else if (direction === null) {
-          newHeaderHidden = lastHeaderHidden.current;
-          newCtaVisible = lastCtaVisible.current;
         } else {
+          // Maintain previous state when scrolling down but under threshold
           newHeaderHidden = lastHeaderHidden.current;
           newCtaVisible = lastCtaVisible.current;
         }
@@ -191,7 +157,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       window.removeEventListener('scroll', throttledScroll);
       window.removeEventListener('resize', checkMobile);
     };
-  }, [isMounted, menuOpen, searchOpen]);
+  }, [isMounted]);
 
   // Header top position: starts at announcementHeight, moves up with announcement
   const headerTop = announcementHeight + announcementTranslateY;
@@ -234,7 +200,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           transition: 'top 100ms ease-out, opacity 300ms ease-out, transform 300ms ease-out',
         }}
       >
-        <Header menuOpen={menuOpen} onMenuToggle={() => (menuOpen ? closeMenu() : openMenu())} onSearchOpen={openSearch} />
+        <Header menuOpen={menuOpen} onMenuToggle={() => setMenuOpen(!menuOpen)} onSearchOpen={openSearch} />
       </div>
 
       {/* Bottom CTA - Always in DOM, slides up when header hides, slides down when header shows */}
@@ -246,11 +212,10 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           left: 0,
           right: 0,
           zIndex: 90,
-          opacity: isMobile && !(menuOpen || searchOpen) ? (ctaVisible ? 1 : 0) : 0,
-          transform: isMobile && !(menuOpen || searchOpen) ? (ctaVisible ? 'translateY(0)' : 'translateY(100%)') : 'translateY(100%)',
-          pointerEvents: ctaVisible && isMobile && !(menuOpen || searchOpen) ? 'auto' : 'none',
-          visibility: isMobile && !(menuOpen || searchOpen) && ctaVisible ? 'visible' : 'hidden',
-          transition: 'transform 300ms cubic-bezier(0.4, 0, 0.2, 1), opacity 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+          opacity: isMobile ? (ctaVisible ? 1 : 0) : 0,
+          transform: isMobile ? (ctaVisible ? 'translateY(0)' : 'translateY(100%)') : 'translateY(100%)',
+          pointerEvents: ctaVisible && isMobile ? 'auto' : 'none',
+          transition: 'all 300ms cubic-bezier(0.4, 0, 0.2, 1)',
           willChange: 'transform, opacity',
         }}
       >
@@ -275,7 +240,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       {/* Menu Drawer */}
       <MenuDrawer
         isOpen={menuOpen}
-        onClose={closeMenu}
+        onClose={() => setMenuOpen(false)}
       />
 
       {/* Search Drawers — rendered at root level, outside any transformed parent */}
