@@ -14,9 +14,9 @@ export default function ServiceHero({ service, mainLocationString }: { service: 
       background: "linear-gradient(135deg, #121D2F 0%, #1E2A42 50%, #1E2A42 100%)",
       border: "1px solid #1E2A42"
     }}>
-      <div className="inline-flex items-center gap-2 backdrop-blur-md border rounded-full px-4 py-2 mb-6" style={{
-        backgroundColor: "rgba(75, 159, 255, 0.08)",
-        borderColor: "rgba(75, 159, 255, 0.25)"
+      <div className="inline-flex items-center gap-2 backdrop-blur-sm border rounded-full px-4 py-2 mb-6" style={{
+        backgroundColor: "rgba(75, 159, 255, 0.05)",
+        borderColor: "rgba(75, 159, 255, 0.16)"
       }}>
         <Shield className="h-4 w-4 md:h-5 md:w-5" style={{ color: "#F0F6FF" }} />
         <span className="text-sm md:text-base font-semibold" style={{ color: "#F0F6FF" }}>Professional Installation</span>
@@ -81,9 +81,9 @@ export default function ServiceHero({ service, mainLocationString }: { service: 
           </div>
         </div>
 
-        <div className="backdrop-blur-md border rounded-2xl px-2 py-4 md:p-5" style={{
-          backgroundColor: "rgba(75, 159, 255, 0.08)",
-          borderColor: "rgba(75, 159, 255, 0.25)"
+        <div className="backdrop-blur-sm border rounded-2xl px-2 py-4 md:p-5" style={{
+          backgroundColor: "rgba(75, 159, 255, 0.05)",
+          borderColor: "rgba(75, 159, 255, 0.16)"
         }}>
           <div className="flex items-center gap-3">
             <div className="rounded-xl p-2.5 flex-shrink-0" style={{

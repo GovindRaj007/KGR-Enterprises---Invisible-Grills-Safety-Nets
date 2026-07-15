@@ -46,7 +46,7 @@ const BottomCTA: React.FC<BottomCTAProps> = ({ onMenuClick, onSearchClick }) => 
   return (
     <div className="w-full rounded-t-3xl bg-white shadow-2xl">
       {/* Navigation Grid */}
-      <div className="grid grid-cols-5 gap-1 px-0 py-2">
+      <div className="grid grid-cols-5 gap-1 px-2 py-3 sm:px-3 sm:py-3 md:px-4 md:py-3">
         {navItems.map((item) => {
           const Icon = item.Icon;
           const isExternal = item.external;
@@ -57,7 +57,7 @@ const BottomCTA: React.FC<BottomCTAProps> = ({ onMenuClick, onSearchClick }) => 
               <button
                 key={item.label}
                 onClick={item.action}
-                className="flex flex-col items-center justify-center gap-0.5 py-1 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                className="flex flex-col items-center justify-center gap-0.5 py-2 sm:py-2.5 rounded-lg hover:bg-gray-100 transition-colors duration-200"
               >
                 <Icon className="text-black" />
                 <span className="text-xs text-gray-700 font-medium text-center line-clamp-2">
@@ -74,7 +74,7 @@ const BottomCTA: React.FC<BottomCTAProps> = ({ onMenuClick, onSearchClick }) => 
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex flex-col items-center justify-center gap-0.5 py-1 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                className="flex flex-col items-center justify-center gap-0.5 py-2 sm:py-2.5 rounded-lg hover:bg-gray-100 transition-colors duration-200"
               >
                 <Icon className="text-black w-5 h-5" />
                 <span className="text-xs text-gray-700 font-medium text-center line-clamp-2">
@@ -88,7 +88,7 @@ const BottomCTA: React.FC<BottomCTAProps> = ({ onMenuClick, onSearchClick }) => 
             <Link
               key={item.label}
               href={item.href}
-              className="flex flex-col items-center justify-center gap-0.5 py-1 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+              className="flex flex-col items-center justify-center gap-0.5 py-2 sm:py-2.5 rounded-lg hover:bg-gray-100 transition-colors duration-200"
             >
               <Icon className="text-gray-800 w-5 h-5" />
               <span className="text-xs text-gray-700 font-medium text-center line-clamp-2">

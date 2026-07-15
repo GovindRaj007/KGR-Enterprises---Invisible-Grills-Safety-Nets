@@ -31,6 +31,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const lastAnnouncementTranslateY = useRef(0);
   const lastHeaderHidden = useRef(false);
   const lastCtaVisible = useRef(false);
+  const scrollDirectionLockRef = useRef<'up' | 'down' | null>(null);
   const announcementHeight = 40;
   const headerHeight = 70;
 
@@ -76,7 +77,13 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      isScrollingDown.current = currentScrollY > lastScrollY.current;
+      const deltaY = currentScrollY - lastScrollY.current;
+      const direction = deltaY > 0 ? 'down' : deltaY < 0 ? 'up' : null;
+
+      if (direction) {
+        isScrollingDown.current = direction === 'down';
+        scrollDirectionLockRef.current = direction;
+      }
 
       // Calculate announcement bar movement
       const announcementTransform = Math.min(currentScrollY, announcementHeight);
@@ -96,23 +103,22 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       if (isMobileRef.current) {
         const scrollThreshold = viewportHeight / 2;
 
-        // Hide header when scrolling down past half viewport
         let newHeaderHidden = false;
         let newCtaVisible = false;
-        
-        if (currentScrollY > scrollThreshold && isScrollingDown.current && !isAtBottom) {
+
+        if (direction === 'down' && currentScrollY > scrollThreshold && !isAtBottom) {
           newHeaderHidden = true;
           newCtaVisible = true;
-        } else if (!isScrollingDown.current) {
-          // Show header and hide CTA immediately when scrolling up
+        } else if (direction === 'up') {
           newHeaderHidden = false;
           newCtaVisible = false;
         } else if (isAtBottom) {
-          // Hide CTA when at bottom of page
           newHeaderHidden = lastHeaderHidden.current;
           newCtaVisible = false;
+        } else if (direction === null) {
+          newHeaderHidden = lastHeaderHidden.current;
+          newCtaVisible = lastCtaVisible.current;
         } else {
-          // Maintain previous state when scrolling down but under threshold
           newHeaderHidden = lastHeaderHidden.current;
           newCtaVisible = lastCtaVisible.current;
         }

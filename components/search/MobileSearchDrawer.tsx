@@ -49,6 +49,9 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
   const [queryType, setQueryType] = useState<
     "location-only" | "service-only" | "service+location"
   >("service-only");
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartYRef = useRef<number | null>(null);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -217,8 +220,46 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
     setQuery("");
     setShowResults(false);
     setResults([]);
+    setDragOffset(0);
+    setIsDragging(false);
     onClose();
   };
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    dragStartYRef.current = e.touches[0].clientY;
+    setIsDragging(true);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (dragStartYRef.current === null) return;
+    const delta = e.touches[0].clientY - dragStartYRef.current;
+    if (delta > 0) {
+      setDragOffset(Math.min(delta, 220));
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (dragOffset > 110) {
+      handleClose();
+    } else {
+      setDragOffset(0);
+    }
+    setIsDragging(false);
+    dragStartYRef.current = null;
+  };
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    window.history.pushState({ drawer: 'search' }, '', window.location.href);
+
+    const handlePopState = () => {
+      handleClose();
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [isOpen]);
 
   return (
     <div className="md:hidden">
@@ -242,8 +283,12 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
       {/* Drawer - with stopPropagation to prevent backdrop from receiving clicks */}
       <div
         onClick={(e) => e.stopPropagation()}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         style={{
           position: "fixed",
+          top: "5rem",
           bottom: 0,
           left: 0,
           right: 0,
@@ -252,15 +297,17 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
           borderTopLeftRadius: "24px",
           borderTopRightRadius: "24px",
           boxShadow: "0 -4px 16px rgba(0, 0, 0, 0.1)",
-          height: "90vh",
+          height: "calc(100dvh - 5rem)",
+          maxHeight: "calc(100dvh - 5rem)",
           overflowY: "auto",
           overflowX: "hidden",
           display: "flex",
           flexDirection: "column",
-          transform: isOpen ? "translateY(0)" : "translateY(100%)",
+          transform: isOpen ? `translateY(${dragOffset}px)` : "translateY(100%)",
           visibility: isOpen || hasOpenedRef.current ? "visible" : "hidden",
-          transition: "transform 300ms cubic-bezier(0.4, 0, 0.2, 1)",
+          transition: isDragging ? "none" : "transform 300ms cubic-bezier(0.4, 0, 0.2, 1)",
           pointerEvents: isOpen ? "auto" : "none",
+          overscrollBehavior: "contain",
         }}
       >
         {/* Only mount contents after first intentional open */}

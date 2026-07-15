@@ -84,7 +84,7 @@ const GallerySection = ({ showBreadcrumbs = false }: GallerySectionProps) => {
   const galleryImages = generateGalleryImages();
   const categories = [
     { key: "all", label: "All" },
-    { key: "cloth-hangers", label: "Cloth Hangers" },
+    { key: "special-cloth-hangers", label: "Cloth Hangers" },
     ...Object.values(serviceCategories).map((cat) => ({ key: cat.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''), label: cat.title })),
   ];
   

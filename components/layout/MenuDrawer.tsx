@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ChevronRight, MapPin, Phone, Home, Info, Briefcase, Image as ImageIcon, Mail, Pointer } from 'lucide-react';
 import { WhatsAppIcon } from '@/components/shared/Icons';
@@ -17,6 +17,11 @@ interface MenuDrawerProps {
 const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
   const [activeServiceTab, setActiveServiceTab] = useState('invisible-grills');
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartYRef = useRef<number | null>(null);
+  const DRAWER_TOP_OFFSET = '5rem';
+  const DRAWER_HEIGHT = 'calc(100dvh - 5rem)';
 
   const menuItems = [
     { label: 'Home', href: '/', icon: Home },
@@ -27,9 +32,49 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
     { label: 'Contact', href: '/contact', icon: Mail },
   ];
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    window.history.pushState({ drawer: 'menu' }, '', window.location.href);
+
+    const handlePopState = () => {
+      setExpandedItem(null);
+      setDragOffset(0);
+      onClose();
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [isOpen, onClose]);
+
   const handleClose = () => {
     setExpandedItem(null);
+    setDragOffset(0);
+    setIsDragging(false);
     onClose();
+  };
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    dragStartYRef.current = e.touches[0].clientY;
+    setIsDragging(true);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (dragStartYRef.current === null) return;
+    const delta = e.touches[0].clientY - dragStartYRef.current;
+    if (delta > 0) {
+      setDragOffset(Math.min(delta, 220));
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (dragOffset > 110) {
+      handleClose();
+    } else {
+      setDragOffset(0);
+    }
+    setIsDragging(false);
+    dragStartYRef.current = null;
   };
 
   const toggleSubmenu = (itemLabel: string) => {
@@ -60,8 +105,12 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
 
       {/* Menu Drawer */}
       <div
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         style={{
           position: 'fixed',
+          top: DRAWER_TOP_OFFSET,
           bottom: 0,
           left: 0,
           right: 0,
@@ -70,16 +119,17 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
           borderTopLeftRadius: '24px',
           borderTopRightRadius: '24px',
           boxShadow: '0 -4px 16px rgba(0, 0, 0, 0.1)',
-          maxHeight: '90vh',
-          height: '90vh',
+          maxHeight: DRAWER_HEIGHT,
+          height: DRAWER_HEIGHT,
           overflowY: 'auto',
           overflowX: 'hidden',
-          transform: isOpen ? 'translateY(0)' : 'translateY(100%)',
-          transition: 'transform 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+          transform: isOpen ? `translateY(${dragOffset}px)` : 'translateY(100%)',
+          transition: isDragging ? 'none' : 'transform 300ms cubic-bezier(0.4, 0, 0.2, 1)',
           willChange: 'transform',
           display: 'flex',
           flexDirection: 'column',
           touchAction: 'pan-y',
+          overscrollBehavior: 'contain',
         }}
       >
         {/* Menu Content */}

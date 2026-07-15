@@ -19,12 +19,10 @@ export default function ServiceImageSlider({
 }: Props) {
   const [current, setCurrent] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const touchStartX = useRef(0);
-  const touchEndX = useRef(0);
-  const dragOffset = useRef(0);
-  const containerWidth = useRef(0);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   // Auto-slide
   useEffect(() => {
@@ -39,29 +37,28 @@ export default function ServiceImageSlider({
   }, [isPaused, images, interval]);
 
   const next = () => setCurrent((c) => (c + 1) % images.length);
+  const prev = () => setCurrent((c) => (c - 1 + images.length) % images.length);
 
   const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
     setIsPaused(true);
+    setIsDragging(true);
     touchStartX.current = e.touches[0].clientX;
-    touchEndX.current = e.touches[0].clientX;
-    dragOffset.current = 0;
-    if (containerRef.current) {
-      containerWidth.current = containerRef.current.offsetWidth;
-    }
+    setDragOffset(0);
   };
 
   const handleTouchMove = (e: TouchEvent<HTMLDivElement>) => {
-    touchEndX.current = e.touches[0].clientX;
-    const diff = touchEndX.current - touchStartX.current;
-    dragOffset.current = (diff / (containerWidth.current || 1)) * 100;
+    const delta = e.touches[0].clientX - touchStartX.current;
+    setDragOffset(Math.max(-140, Math.min(140, delta)));
   };
 
   const handleTouchEnd = () => {
-    dragOffset.current = 0;
-    const swipeDistance = touchStartX.current - touchEndX.current;
-    if (swipeDistance > 50) {
+    if (dragOffset > 70) {
+      prev();
+    } else if (dragOffset < -70) {
       next();
     }
+    setDragOffset(0);
+    setIsDragging(false);
     setIsPaused(false);
   };
 
@@ -72,7 +69,6 @@ export default function ServiceImageSlider({
       <div className={useContainer ? "container relative z-10" : "relative z-10"}>
         <div className="mx-auto max-w-4xl">
           <div
-            ref={containerRef}
             className="overflow-hidden rounded-2xl shadow-xl"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
@@ -97,6 +93,10 @@ export default function ServiceImageSlider({
                       ? "opacity-0 translate-x-full"
                       : "opacity-0 -translate-x-full"
                   }`}
+                  style={i === current ? {
+                    transform: isDragging ? `translateX(${dragOffset}px)` : undefined,
+                    transition: isDragging ? "none" : undefined,
+                  } : undefined}
                 >
                   <OptimizedImage
                     src={img}
