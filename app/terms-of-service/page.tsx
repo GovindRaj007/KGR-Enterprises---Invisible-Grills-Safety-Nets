@@ -5,6 +5,9 @@ export const dynamic = 'force-static';
 export const metadata: Metadata = {
   title: 'Terms of Service | KGR Enterprises',
   description: 'Terms of Service for KGR Enterprises - Read our terms and conditions for using our services.',
+  alternates: {
+    canonical: 'https://invisiblegrillsandsafetynets.in/terms-of-service/',
+  },
   robots: 'index, follow',
 };
 

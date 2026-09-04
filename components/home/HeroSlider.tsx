@@ -22,9 +22,9 @@ const slides = [
     title: "Invisible Grills",
     subtitle: "Premium Stainless Steel Protection",
     description:
-      "Expert invisible grill installation in Chennai, Bangalore, Hyderabad and Andhra Pradesh. Our marine-grade SS316 invisible grills deliver child-safe, rust-proof protection for balconies and windows while preserving your view.",
+      "Expert invisible grill installation in Bangalore, Hyderabad, Chennai and Andhra Pradesh. Our marine-grade SS316 invisible grills deliver child-safe, rust-proof protection for balconies and windows while preserving your view.",
     image: "/images/invisible-grill-1.jpg",
-    alt: "Invisible Grills in Chennai for balcony and window safety",
+    alt: "Invisible Grills in Bangalore for balcony and window safety",
     keywords: ["Child Safety", "Rust-Proof", "Backed by Warranty"],
     href: "/services/invisible-grills",
     cta: "Explore Invisible Grills",
@@ -37,7 +37,7 @@ const slides = [
     description:
       "Partner with us for wholesale invisible grills. Access dealer pricing, installation training, and exclusive territory rights to grow your business.",
     image: "/images/invisible-grill-dealer.jpg",
-    alt: "Invisible Grills dealer and wholesale installation services in Chennai",
+    alt: "Invisible Grills dealer and wholesale installation services in Bangalore",
     keywords: ["Wholesale Pricing", "Dealer Training", "Territory Rights"],
     href: getServiceRoute("invisible-grills-dealer"),
     cta: "Become a Dealer",
@@ -166,7 +166,7 @@ export function HeroSlider() {
 
   return (
     <section
-      className="relative w-full min-h-[450px] sm:min-h-[500px] md:min-h-[600px] lg:min-h-[600px] overflow-hidden rounded-xl"
+      className="relative w-full min-h-[500px] sm:min-h-[560px] md:min-h-[660px] lg:min-h-[680px] overflow-hidden rounded-xl"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
@@ -208,7 +208,7 @@ export function HeroSlider() {
           {/* Badge */}
           <div
             key={`badge-${currentSlide}`}
-            className="hero-content-animate mb-3 md:mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 md:px-4 md:py-1.5 text-xs md:text-sm font-medium text-white backdrop-blur-sm"
+            className="hero-content-animate mb-3 md:mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 md:px-4 md:py-1.5 text-sm md:text-base font-medium text-white backdrop-blur-sm"
           >
             <slide.icon
               className="h-3 w-3 md:h-4 md:w-4"
@@ -217,28 +217,35 @@ export function HeroSlider() {
             India's Premium Safety Solutions Specialist
           </div>
 
+          {/* Page heading. Kept out of the rotation so the document always has
+              one stable, descriptive h1 regardless of the active slide. */}
+          <h1 className="sr-only">
+            Invisible Grills &amp; Safety Nets in Bangalore, Hyderabad, Chennai,
+            Vijayawada and Visakhapatnam
+          </h1>
+
           {/* Title */}
-          <h1
+          <h2
             key={`title-${currentSlide}`}
-            className="hero-content-animate mb-2 md:mb-3 font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight text-white"
+            className="hero-content-animate mb-2 md:mb-3 font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight text-white"
             style={{ animationDelay: "0.1s" }}
           >
             {slide.title}
-          </h1>
+          </h2>
 
           {/* Subtitle */}
-          <h2
+          <p
             key={`subtitle-${currentSlide}`}
-            className="hero-content-animate mb-3 md:mb-4 font-semibold text-sm sm:text-base md:text-lg lg:text-xl text-accent"
+            className="hero-content-animate mb-3 md:mb-4 font-semibold text-base sm:text-lg md:text-xl lg:text-2xl text-accent"
             style={{ color: "", animationDelay: "0.2s" }}
           >
             {slide.subtitle}
-          </h2>
+          </p>
 
           {/* Description */}
           <p
             key={`desc-${currentSlide}`}
-            className="hero-content-animate mb-3 md:mb-4 max-w-2xl text-sm md:text-base lg:text-lg line-clamp-2 md:line-clamp-3"
+            className="hero-content-animate mb-3 md:mb-4 max-w-2xl text-base md:text-lg lg:text-xl line-clamp-2 md:line-clamp-3"
             style={{
               color: "rgba(248, 251, 255, 0.8)",
               animationDelay: "0.3s",
@@ -256,7 +263,7 @@ export function HeroSlider() {
             {slide.keywords.map((keyword, idx) => (
               <span
                 key={idx}
-                className="rounded-full border px-2 py-0.5 md:px-3 md:py-1 text-xs md:text-sm text-white/90 backdrop-blur-sm"
+                className="rounded-full border px-2.5 py-1 md:px-3 md:py-1 text-sm md:text-base text-white/90 backdrop-blur-sm"
                 style={{
                   borderColor: "rgba(255, 255, 255, 0.2)",
                   backgroundColor: "rgba(255, 255, 255, 0.05)",
@@ -275,7 +282,7 @@ export function HeroSlider() {
           >
             <Button
               size="sm"
-              className="cta-gradient text-white h-9 md:h-10 text-xs md:text-sm px-4 md:px-5 flex items-center gap-2"
+              className="cta-gradient text-white h-10 md:h-11 text-sm md:text-base px-5 md:px-6 flex items-center gap-2"
               asChild
             >
               <Link href={slide.href}>
@@ -286,7 +293,7 @@ export function HeroSlider() {
             <Button
               size="sm"
               variant="outline"
-              className="h-9 md:h-10 text-xs md:text-sm px-4 md:px-5 flex items-center gap-2 text-white"
+              className="h-10 md:h-11 text-sm md:text-base px-5 md:px-6 flex items-center gap-2 text-white"
               style={{
                 borderColor: "rgba(255, 255, 255, 0.3)",
                 backgroundColor: "rgba(255, 255, 255, 0.10)",

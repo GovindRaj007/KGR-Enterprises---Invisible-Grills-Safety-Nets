@@ -3,10 +3,11 @@
 import { MapPin, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useInViewAnimation } from '@/hooks/useInViewAnimation';
-import { locationData } from '@/constants/locations';
+import { locationData, validLocations } from '@/constants/locations';
 import { servicesData } from '@/data/servicesData';
 
-const LOCATION_ORDER = ['chennai', 'hyderabad', 'bangalore', 'vijayawada', 'visakhapatnam'];
+// Ordered by constants/locations.ts so the primary focus city leads.
+const LOCATION_ORDER: string[] = [...validLocations];
 
 // Top services to feature for each location
 const FEATURED_SERVICES = [

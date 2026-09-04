@@ -218,7 +218,7 @@ const AboutSection = () => {
                 >
                   KGR Enterprises is a trusted partner, delivering the best
                   quality services in invisible grills and safety nets across
-                  Chennai, Hyderabad, Bangalore, and Andhra Pradesh. We
+                  Bangalore, Hyderabad, Chennai, and Andhra Pradesh. We
                   specialize in premium safety solutions for homes, apartments,
                   and commercial properties.
                 </p>
@@ -448,7 +448,7 @@ const AboutSection = () => {
                   recommended for safety nets!&rdquo;
                 </blockquote>
                 <div className="text-xs" style={{ color: "#8FAAC8" }}>
-                  - M. Ct.Muthiah, Chennai
+                  - Vinay Krishnamurthy, Bangalore
                 </div>
               </div>
             </div>

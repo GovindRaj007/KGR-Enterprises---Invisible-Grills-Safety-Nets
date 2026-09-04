@@ -1,23 +1,11 @@
 "use client";
 
-import dynamic from 'next/dynamic';
-import { ServiceCardsSkeleton } from '@/components/ui/Skeletons';
-
-const ServicesSection = dynamic(
-  () => import('./ServicesSection'),
-  { 
-    ssr: false,
-    loading: () => <ServiceCardsSkeleton />
-  }
-);
-
-const ServiceLocationsSlider = dynamic(
-  () => import('./ServiceLocationsSlider'),
-  { 
-    ssr: false,
-    loading: () => <div className="h-40 bg-muted animate-pulse rounded" />
-  }
-);
+// Static imports so the services listing and the location slider are present in
+// the server-rendered HTML. Both components are already imported directly by
+// the homepage and render fine there; their only browser API use is inside
+// effects and event handlers, so server rendering is safe.
+import ServicesSection from './ServicesSection';
+import ServiceLocationsSlider from './ServiceLocationsSlider';
 
 interface ServicesSectionClientProps {
   showBreadcrumbs?: boolean;

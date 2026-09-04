@@ -1,24 +1,27 @@
 import type { Metadata } from "next";
-export const dynamic = 'force-static';
 import OptimizedImage from "@/components/shared/OptimizedImage";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
-import nextDynamic from 'next/dynamic';
+import dynamic from 'next/dynamic';
 import { PRIMARY, SECONDARY, } from '@/constants/contacts';
+import { validLocations, locationData } from '@/constants/locations';
 import { Card, CardContent } from "@/components/ui/card";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import HeroWithHeaderWrapper from "@/components/layout/HeroWithHeaderWrapper";
-const ConsultationForm = nextDynamic(() => import('@/components/shared/ConsultationFormClient'), { loading: () => <div className="p-4">Loading...</div> });
+const ConsultationForm = dynamic(() => import('@/components/shared/ConsultationFormClient'), { loading: () => <div className="p-4">Loading...</div> });
 
 export const metadata: Metadata = {
   title: "Contact Us - KGR Invisible Grills & Safety Nets",
   description:
-    `Contact KGR Invisible Grills & Safety Nets for free consultation on invisible grills and safety nets. Call ${PRIMARY.spaced} or visit us in Hyderabad. Available Mon-Sat 8AM-8PM.`,
+    `Free consultation on invisible grills and safety nets. Call ${PRIMARY.spaced.trim()} or visit our Bangalore, Hyderabad, Chennai or Andhra Pradesh branch. Mon-Sat 8AM-8PM.`,
   robots: {
     index: true,
     follow: true,
     'max-image-preview': 'large',
     'max-video-preview': -1,
     'max-snippet': -1,
+  },
+  alternates: {
+    canonical: "https://invisiblegrillsandsafetynets.in/contact/",
   },
   keywords: [
     // Contact & Action Keywords
@@ -49,8 +52,8 @@ export const metadata: Metadata = {
     "business hours",
     "customer service",
     // Local Contact Keywords
+    "Bangalore office",
     "Hyderabad office",
-    "Bangalore location",
     "Chennai contact",
     "service center",
     "nearest office",
@@ -73,10 +76,10 @@ export const metadata: Metadata = {
     title: "Contact KGR Invisible Grills & Safety Nets - Free Consultation",
     description:
       "Get in touch for professional safety solutions. Free site inspection and quote.",
-  url: "https://invisiblegrillsandsafetynets.in/contact",
+  url: "https://invisiblegrillsandsafetynets.in/contact/",
     images: [
       {
-        url: "/og-contact.jpg",
+        url: "/images/hero-image.jpg",
         width: 1200,
         height: 630,
         alt: "Contact KGR Invisible Grills & Safety Nets",
@@ -118,38 +121,17 @@ export default function ContactPage() {
     {
       icon: MapPin,
       title: "Main Branches",
-      details: [
-        {
-          label: "Hyderabad",
-          value: "15-21-150/17, JK Heights, Balaji Nagar, Kukatpally, Hyderabad - 500072, Telangana",
-        },
-        {
-          label: "Bangalore",
-          value:
-            "367, 2nd A Main Rd, Sharadamba Nagar, Muthyala Nagar, Gokula Extension, Mathikere, Bengaluru - 560054, Karnataka",
-        },
-        {
-          label: "Chennai",
-          value:
-            "25, Sathya Moorthy Street, Kamaraj Nagar,NGO Colony, Choolaimedu, Greater Chennai - 600094, Tamil Nadu",
-        },
-        {
-          label: "Vijayawada",
-          value: "3-12, Ayyappa Nagar, Benz Circle, Vijayawada - 521134, Andhra Pradesh",
-        },
-        {
-          label: "Visakhapatnam",
-          value:
-            "50-79-31/1, Ganesh Nagar, Seetamma Peta, Dwaraka Nagar, Visakhapatnam - 530016, Andhra Pradesh",
-        },
-      ],
+      details: validLocations.map((slug) => ({
+        label: locationData[slug].name,
+        value: `${locationData[slug].streetAddress} - ${locationData[slug].postalCode}`,
+      })),
     },
     {
       icon: Clock,
       title: "Business Hours",
       details: [
         { label: "Monday - Saturday", value: "8:00 AM - 8:00 PM" },
-        { label: "Sunday", value: "8:00 AM - 6:00 PM" },
+        { label: "Sunday", value: "9:00 AM - 6:00 PM" },
       ],
     },
   ];
@@ -163,25 +145,16 @@ export default function ContactPage() {
     'telephone': PRIMARY.phone,
     'email': 'kgr@invisiblegrillsandsafetynets.in',
     'logo': 'https://invisiblegrillsandsafetynets.in/logo.png',
-    'description': 'Contact KGR Enterprises for professional invisible grills, safety nets, and pigeon nets across South India. Free consultation and site inspection available.',
-    'address': [
-      {
-        '@type': 'PostalAddress',
-        'streetAddress': '15-21-150/17, JK Heights, Balaji Nagar, Kukatpally',
-        'addressLocality': 'Hyderabad',
-        'addressRegion': 'Telangana',
-        'postalCode': '500072',
-        'addressCountry': 'IN'
-      },
-      {
-        '@type': 'PostalAddress',
-        'streetAddress': '367, 2nd A Main Rd, Sharadamba Nagar, Muthyala Nagar, Gokula Extension, Mathikere, Bengaluru - 560054, Karnataka',
-        'addressLocality': 'Bangalore',
-        'addressRegion': 'Karnataka',
-        'postalCode': '560054',
-        'addressCountry': 'IN'
-      }
-    ],
+    'description': 'Contact KGR Enterprises for professional invisible grills, safety nets, and bird protection solutions across South India. Free consultation and site inspection available.',
+    // All five branches, primary focus city first, from the shared source.
+    'address': validLocations.map((slug) => ({
+      '@type': 'PostalAddress',
+      'streetAddress': locationData[slug].streetAddress,
+      'addressLocality': locationData[slug].name,
+      'addressRegion': locationData[slug].state,
+      'postalCode': locationData[slug].postalCode,
+      'addressCountry': 'IN'
+    })),
     'contactPoint': {
       '@type': 'ContactPoint',
       'telephone': PRIMARY.phone,
@@ -189,18 +162,10 @@ export default function ContactPage() {
       'hoursAvailable': {
         '@type': 'OpeningHoursSpecification',
         'dayOfWeek': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-        'opens': '08:00',
-        'closes': '20:00'
+        'opens': '09:00',
+        'closes': '21:00'
       }
     },
-    'aggregateRating': {
-      '@type': 'AggregateRating',
-      'ratingValue': '4.9',
-      'bestRating': '5',
-      'worstRating': '1',
-      'ratingCount': '1126',
-      'reviewCount': '1126'
-    }
   };
 
   return (
@@ -213,8 +178,8 @@ export default function ContactPage() {
         <section className="relative overflow-hidden" style={{ borderRadius: '1rem' }}>
           <OptimizedImage
             src="/images/hero-image.jpg" 
-            alt="Contact KGR Enterprises for invisible grills, safety nets and custom safety solutions" 
-            className=" w-full h-full absolute inset-0"
+            alt="Contact KGR Enterprises" 
+            className="object-cover w-full h-full absolute inset-0"
             loading="eager"
           />
           <div className="absolute inset-0 bg-black/20" />
@@ -238,7 +203,7 @@ export default function ContactPage() {
         </section>
       </HeroWithHeaderWrapper>
 
-      <div className="container mx-auto px-4 my-4">
+      <div className="container mx-auto px-4 mb-4">
         <div className="grid lg:grid-cols-3 gap-12">
           {/* Contact Form */}
           <div className="lg:col-span-2">
@@ -305,7 +270,8 @@ export default function ContactPage() {
                         Professional Installation
                       </h3>
                       <p className="text-sm text-card-foreground/75">
-                        Scheduled installation by our certified team with warranty
+                        Scheduled installation by our certified team with 5-year
+                        warranty
                       </p>
                     </div>
                   </div>

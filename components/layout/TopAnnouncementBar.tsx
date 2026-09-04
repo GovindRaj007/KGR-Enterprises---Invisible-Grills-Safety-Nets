@@ -13,7 +13,7 @@ const TopAnnouncementBar = () => {
     "• Safety Nets for Balconies-Pigeon Control & more",
     "• Professional team with 15+ years experience",
     "• Same-day installation appointments",
-    "• Serving Chennai, Hyderabad, Bangalore & more",
+    "• Serving Bangalore, Hyderabad, Chennai & more",
   ];
 
   useEffect(() => {

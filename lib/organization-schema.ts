@@ -1,4 +1,5 @@
 import { PRIMARY } from '@/constants/contacts';
+import { validLocations, locationData, PRIMARY_LOCATION } from '@/constants/locations';
 
 export const baseUrl = 'https://invisiblegrillsandsafetynets.in';
 
@@ -44,61 +45,35 @@ export const generateOrganizationSchema = () => ({
       }
     }
   ],
-  'address': [
-    {
-      '@type': 'PostalAddress',
-      'streetAddress': '15-21-150/17, JK Heights, Balaji Nagar, Kukatpally',
-      'addressLocality': 'Hyderabad',
-      'addressRegion': 'Telangana',
-      'postalCode': '500072',
-      'addressCountry': 'IN'
-    },
-    {
-      '@type': 'PostalAddress',
-      'streetAddress': '367, 2nd A Main Rd, Sharadamba Nagar, Muthyala Nagar, Gokula Extension, Mathikere, Bengaluru - 560054, Karnataka',
-      'addressLocality': 'Bangalore',
-      'addressRegion': 'Karnataka',
-      'postalCode': '560054',
-      'addressCountry': 'IN'
-    }
-  ],
+  'address': validLocations.map(slug => ({
+    '@type': 'PostalAddress',
+    'streetAddress': locationData[slug].streetAddress,
+    'addressLocality': locationData[slug].name,
+    'addressRegion': locationData[slug].state,
+    'postalCode': locationData[slug].postalCode,
+    'addressCountry': 'IN'
+  })),
+  'geo': {
+    '@type': 'GeoCoordinates',
+    'latitude': PRIMARY_LOCATION.latitude.toString(),
+    'longitude': PRIMARY_LOCATION.longitude.toString()
+  },
   'areaServed': {
     '@type': 'State',
     'name': 'South India',
-    'containsPlace': [
-      {
-        '@type': 'City',
-        'name': 'Hyderabad',
-        'containedInPlace': {
-          '@type': 'State',
-          'name': 'Telangana'
-        }
+    'containsPlace': validLocations.map(slug => ({
+      '@type': 'City',
+      'name': locationData[slug].name,
+      'containedInPlace': {
+        '@type': 'State',
+        'name': locationData[slug].state
       },
-      {
-        '@type': 'City',
-        'name': 'Bangalore',
-        'containedInPlace': {
-          '@type': 'State',
-          'name': 'Karnataka'
-        }
-      },
-      {
-        '@type': 'City',
-        'name': 'Chennai',
-        'containedInPlace': {
-          '@type': 'State',
-          'name': 'Tamil Nadu'
-        }
-      },
-      {
-        '@type': 'City',
-        'name': 'Vijayawada',
-        'containedInPlace': {
-          '@type': 'State',
-          'name': 'Andhra Pradesh'
-        }
+      'geo': {
+        '@type': 'GeoCoordinates',
+        'latitude': locationData[slug].latitude.toString(),
+        'longitude': locationData[slug].longitude.toString()
       }
-    ]
+    }))
   },
   'sameAs': ['https://x.com/Kgr_Grills_Nets'],
   'foundingDate': '2008',

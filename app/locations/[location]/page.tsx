@@ -1,5 +1,4 @@
 import React from 'react';
-export const dynamic = 'force-static';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { MapPin } from 'lucide-react';
@@ -8,7 +7,7 @@ import HeroWithHeaderWrapper from '@/components/layout/HeroWithHeaderWrapper';
 import LocationAboutClient from '@/components/about/LocationAboutClient';
 import { PRIMARY_LOCATIONS } from '@/lib/seo-metadata';
 import { PRIMARY } from '@/constants/contacts';
-import { generateLocationContent, generateBreadcrumbSchema } from '@/lib/seo-metadata';
+import { generateLocationContent, generateBreadcrumbSchema, clampSnippet } from '@/lib/seo-metadata';
 import { locationData, validLocations } from '@/constants/locations';
 
 export async function generateStaticParams() {
@@ -33,7 +32,7 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
     };
   }
 
-  const title = `Invisible Grills & Safety Nets in ${matched.name}`;
+  const title = `${matched.name} Invisible Grills & Safety Nets Installation`;
   const canonicalPath = `/locations/${matched.name.toLowerCase()}/`;
   const locationMeta = {
     areaServed: matched.areas.join(', '),
@@ -53,7 +52,9 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
       'max-video-preview': -1,
       'max-snippet': -1,
     },
-    description: `Professional invisible grills and safety nets installation in ${matched.name}. Serving ${locationMeta.areaServed}. Free site inspection, includes Warranty, and expert installation guaranteed. Contact us for quality safety solutions.`,
+    description: clampSnippet(
+      `Invisible grills and safety nets installation in ${matched.name} — ${locationMeta.areaServed} and nearby. Free site visit and 15-year warranty.`
+    ),
     alternates: {
       canonical: `https://invisiblegrillsandsafetynets.in${canonicalPath}`
     },
@@ -75,11 +76,31 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
     twitter: {
       card: 'summary_large_image',
       title: `KGR Enterprises - Invisible Grills & Safety Nets in ${matched.name}`,
-      description: `Professional invisible grills and safety nets installation in ${matched.name}. Free site inspection and includes Warranty.`,
+      description: `Professional invisible grills and safety nets installation in ${matched.name}. Free site inspection and 15-year warranty.`,
       images: ['/images/invisible-grill-1.jpg'],
       site: '@Kgr_Grills_Nets',
       creator: '@Kgr_Grills_Nets',
     },
+    // Keywords must be specific to THIS city. A single shared list across all
+    // five location pages made every page look like a near-duplicate.
+    keywords: [
+      `invisible grills in ${matched.name}`,
+      `safety nets in ${matched.name}`,
+      `best invisible grills in ${matched.name}`,
+      `balcony safety nets in ${matched.name}`,
+      `pigeon nets in ${matched.name}`,
+      `children safety nets in ${matched.name}`,
+      `invisible grill installation in ${matched.name}`,
+      `invisible grills cost in ${matched.name}`,
+      `safety net dealers in ${matched.name}`,
+      `invisible grills in ${matched.state}`,
+      ...matched.areas.map(area => `invisible grills in ${area}`),
+      ...matched.areas.slice(0, 4).map(area => `safety nets in ${area}`),
+      "invisible grills near me",
+      "safety nets near me",
+      "KGR invisible grills",
+      "KGR safety nets",
+    ],
   };
 }
 
@@ -93,9 +114,8 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
   }
   
   // Validate against locationData (app location pages)
-  type LocationKey = (typeof validLocations)[number];
-  const normalizedLocation = locName.toLowerCase() as LocationKey;
-  if (!validLocations.includes(normalizedLocation)) {
+  const normalizedLocation = locName.toLowerCase() as keyof typeof locationData;
+  if (!validLocations.includes(normalizedLocation as any)) {
     notFound();
   }
   
@@ -140,29 +160,6 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
             'name': matched.state
           }
         },
-        'aggregateRating': {
-          '@type': 'AggregateRating',
-          'ratingValue': '4.9',
-          'reviewCount': '1126',
-          'bestRating': '5',
-          'worstRating': '1',
-          'ratingCount': '1126'
-        },
-        'review': [
-          {
-            '@type': 'Review',
-            'reviewRating': {
-              '@type': 'Rating',
-              'ratingValue': '5',
-              'bestRating': '5'
-            },
-            'author': {
-              '@type': 'Person',
-              'name': `${locationDisplay} Customer`
-            },
-            'reviewBody': `Excellent invisible grills and safety nets installation service in ${locationDisplay}.`
-          }
-        ],
         'makesOffer': [
           {
             '@type': 'Offer',
@@ -186,8 +183,8 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
             '@type': 'Offer',
             'itemOffered': {
               '@type': 'Service',
-              'name': 'Pigeon Nets',
-              'description': 'Humane pigeon net solutions for residential and commercial spaces',
+              'name': 'Bird Protection Solutions',
+              'description': 'Humane bird control nets and spikes for residential and commercial spaces',
               'areaServed': matched.areas
             }
           }
@@ -276,7 +273,7 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
                     ))}
                   </div>
                   <p className="text-xs md:text-sm text-white/60 border-t border-white/10 pt-4">
-                    Don&apos;t see your area? Contact us – we likely serve your location too!
+                    Don't see your area? Contact us – we likely serve your location too!
                   </p>
                 </div>
               </div>

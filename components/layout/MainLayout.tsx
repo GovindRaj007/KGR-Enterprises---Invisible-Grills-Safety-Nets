@@ -15,16 +15,12 @@ interface MainLayoutProps {
 }
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
-  const [isMounted, setIsMounted] = useState(false);
   const [announcementTranslateY, setAnnouncementTranslateY] = useState(0);
   const [headerHidden, setHeaderHidden] = useState(false);
   const [ctaVisible, setCtaVisible] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const announcementRef = useRef<HTMLDivElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
   const lastScrollY = useRef(0);
   const isScrollingDown = useRef(true);
   const isMobileRef = useRef(false);
@@ -33,11 +29,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const lastCtaVisible = useRef(false);
   const announcementHeight = 40;
   const headerHeight = 70;
-
-  // Ensure hydration is complete before running client-only code
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   // Search open/close handlers with body scroll lock
   const openSearch = () => {
@@ -157,7 +148,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       window.removeEventListener('scroll', throttledScroll);
       window.removeEventListener('resize', checkMobile);
     };
-  }, [isMounted]);
+  }, []);
 
   // Header top position: starts at announcementHeight, moves up with announcement
   const headerTop = announcementHeight + announcementTranslateY;
@@ -174,7 +165,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     >
       {/* Top Announcement Bar */}
       <div
-        ref={announcementRef}
         className="fixed top-0 left-0 right-0 z-40"
         style={{
           transform: `translateY(${announcementTranslateY}px)`,
@@ -186,26 +176,33 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
       {/* Header - Fixed and moves in sync with announcement bar - Full Width */}
       <div
-        ref={headerRef}
         className="fixed left-0 right-0 z-40"
         style={{
-          top: `${headerTop}px`,
+          top: `${announcementHeight}px`,
           width: '100%',
-          borderTopLeftRadius: 'clamp(1rem, 2vw, 2rem)',
-          borderTopRightRadius: 'clamp(1rem, 2vw, 2rem)',
-          opacity: headerHidden ? 0 : 1,
-          transform: headerHidden ? 'translateY(-100%)' : 'translateY(0)',
-          pointerEvents: headerHidden ? 'none' : 'auto',
-          willChange: 'opacity, transform, top',
-          transition: 'top 100ms ease-out, opacity 300ms ease-out, transform 300ms ease-out',
+          // Same untransitioned transform as the announcement bar, so the
+          // header tracks the scroll exactly and never separates from the hero.
+          transform: `translateY(${announcementTranslateY}px)`,
+          willChange: 'transform',
         }}
       >
-        <Header menuOpen={menuOpen} onMenuToggle={() => setMenuOpen(!menuOpen)} onSearchOpen={openSearch} />
+        <div
+          style={{
+            borderTopLeftRadius: 'clamp(1rem, 2vw, 2rem)',
+            borderTopRightRadius: 'clamp(1rem, 2vw, 2rem)',
+            opacity: headerHidden ? 0 : 1,
+            transform: headerHidden ? 'translateY(-100%)' : 'translateY(0)',
+            pointerEvents: headerHidden ? 'none' : 'auto',
+            willChange: 'opacity, transform',
+            transition: 'opacity 300ms ease-out, transform 300ms ease-out',
+          }}
+        >
+          <Header menuOpen={menuOpen} onMenuToggle={() => setMenuOpen(!menuOpen)} onSearchOpen={openSearch} />
+        </div>
       </div>
 
       {/* Bottom CTA - Always in DOM, slides up when header hides, slides down when header shows */}
       <div
-        ref={ctaRef}
         style={{
           position: 'fixed',
           bottom: 0,

@@ -23,7 +23,7 @@ const GallerySection = ({ showBreadcrumbs = false }: GallerySectionProps) => {
       const title = service.title.toLowerCase();
 
       if (title.includes('invisible grill')) {
-        return 'Invisible Grills installation for balcony and window safety in Chennai, Hyderabad, Bangalore and Andhra Pradesh';
+        return 'Invisible Grills installation for balcony and window safety in Bangalore, Hyderabad, Chennai and Andhra Pradesh';
       }
 
       if (title.includes('pigeon')) {

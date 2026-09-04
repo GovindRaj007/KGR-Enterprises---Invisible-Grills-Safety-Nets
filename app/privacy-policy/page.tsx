@@ -5,6 +5,9 @@ export const dynamic = 'force-static';
 export const metadata: Metadata = {
   title: 'Privacy Policy | KGR Enterprises',
   description: 'Privacy Policy for KGR Enterprises - Learn how we protect your personal information and data.',
+  alternates: {
+    canonical: 'https://invisiblegrillsandsafetynets.in/privacy-policy/',
+  },
   robots: 'index, follow',
 };
 

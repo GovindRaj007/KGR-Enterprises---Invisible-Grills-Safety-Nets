@@ -50,9 +50,9 @@
     # Service slug redirects - all with trailing slash destination
     RewriteRule ^grill/?$ /services/invisible-grills/ [R=301,L]
     RewriteRule ^grills/?$ /services/invisible-grills/ [R=301,L]
-    RewriteRule ^nets/?$ /services/safety-nets/ [R=301,L]
-    RewriteRule ^net/?$ /services/safety-nets/ [R=301,L]
-    RewriteRule ^safety-net/?$ /services/safety-nets/ [R=301,L]
+    RewriteRule ^nets/?$ /services/balcony-safety/ [R=301,L]
+    RewriteRule ^net/?$ /services/balcony-safety/ [R=301,L]
+    RewriteRule ^safety-net/?$ /services/balcony-safety/ [R=301,L]
     RewriteRule ^invisible-grill/?$ /services/invisible-grills/ [R=301,L]
     RewriteRule ^contact-us/?$ /contact/ [R=301,L]
     RewriteRule ^about-us/?$ /about/ [R=301,L]

@@ -21,7 +21,6 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
   const [isDragging, setIsDragging] = useState(false);
   const dragStartYRef = useRef<number | null>(null);
   const DRAWER_TOP_OFFSET = '5rem';
-  const DRAWER_HEIGHT = 'calc(100dvh - 5rem)';
 
   const menuItems = [
     { label: 'Home', href: '/', icon: Home },
@@ -119,12 +118,13 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
           borderTopLeftRadius: '24px',
           borderTopRightRadius: '24px',
           boxShadow: '0 -4px 16px rgba(0, 0, 0, 0.1)',
-          maxHeight: DRAWER_HEIGHT,
-          height: DRAWER_HEIGHT,
           overflowY: 'auto',
           overflowX: 'hidden',
           transform: isOpen ? `translateY(${dragOffset}px)` : 'translateY(100%)',
-          transition: isDragging ? 'none' : 'transform 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+          visibility: isOpen ? 'visible' : 'hidden',
+          transition: isDragging
+            ? 'none'
+            : `transform 300ms cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear ${isOpen ? '0s' : '300ms'}`,
           willChange: 'transform',
           display: 'flex',
           flexDirection: 'column',

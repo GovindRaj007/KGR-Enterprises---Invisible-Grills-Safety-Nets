@@ -11,6 +11,7 @@ import ServiceFAQ from "@/components/services/ServiceFAQ";
 import RelatedServices from "@/components/services/RelatedServices";
 import { PRIMARY } from "@/constants/contacts";
 import { getCanonicalUrl } from "@/lib/canonical-url";
+import { validLocations, locationData } from "@/constants/locations";
 import {
   generateServiceMetadata,
   generateServiceFAQSchema,
@@ -20,14 +21,14 @@ import { generateServiceSchema } from "@/lib/service-schema";
 
 export async function generateMetadata(): Promise<Metadata> {
   const baseMetadata = generateServiceMetadata({
-    serviceName: "Invisible Grills Dealer & Wholesale Program",
+    serviceName: "Invisible Grills Dealership",
     serviceSlug: "invisible-grills-dealer",
     shortDescription: "Become an authorized invisible grills dealer with exclusive territory rights and bulk order benefits.",
     longDescription: "Partner with KGR Enterprises for authorized invisible grills dealership. Access wholesale pricing, professional training, marketing support, and bulk order benefits. Perfect for hardware stores, contractors, and distributors across South India.",
     image: "/images/invisible-grill-1.jpg",
   });
 
-  const canonicalUrl = getCanonicalUrl("/invisible-grills-dealer");
+  const canonicalUrl = getCanonicalUrl("/services/invisible-grills-dealer");
 
   return {
     ...baseMetadata,
@@ -117,13 +118,11 @@ const dealershipTypes: DealershipType[] = [
   },
 ];
 
-const dealerLocationsList: LocationItem[] = [
-  { name: "Hyderabad", slug: "hyderabad" },
-  { name: "Bangalore", slug: "bangalore" },
-  { name: "Chennai", slug: "chennai" },
-  { name: "Vijayawada", slug: "vijayawada" },
-  { name: "Visakhapatnam", slug: "visakhapatnam" },
-];
+// Ordered by constants/locations.ts so the primary focus city leads.
+const dealerLocationsList: LocationItem[] = validLocations.map((slug) => ({
+  name: locationData[slug].name,
+  slug,
+}));
 
 const dealerFAQs = [
   {

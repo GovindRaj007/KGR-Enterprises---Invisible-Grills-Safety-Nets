@@ -29,7 +29,7 @@ const Footer = () => {
                 </div>
                 <p className="text-sm md:text-base leading-relaxed mt-0" style={{ color: "#8FAAC8" }}>
                   KGR Enterprises delivers best quality invisible grills and safety nets across
-                  Chennai, Hyderabad, Bangalore, and Andhra Pradesh. Protecting families with
+                  Bangalore, Hyderabad, Chennai, and Andhra Pradesh. Protecting families with
                   premium safety solutions.
                 </p>
               </div>

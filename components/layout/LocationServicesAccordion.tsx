@@ -2,58 +2,23 @@
 
 import Link from "next/link";
 import { PRIMARY_LOCATIONS } from "@/lib/seo-metadata";
-import { servicesData, getServiceLocationRoute } from "@/data/servicesData";
+import { validLocations } from "@/constants/locations";
+import { servicesData, serviceCategories, getServiceLocationRoute } from "@/data/servicesData";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { MapPin, ArrowRight } from "lucide-react";
 
-const LOCATION_ORDER = [
-  "chennai",
-  "bangalore",
-  "hyderabad",
-  "visakhapatnam",
-  "vijayawada",
-];
+// Ordered by constants/locations.ts so the primary focus city leads.
+const LOCATION_ORDER: string[] = [...validLocations];
 
-const CATEGORIES = [
-  {
-    key: "invisible-grills",
-    title: "Invisible Grills",
-    serviceIds: ["invisible-grills", "invisible-grills-balcony", "invisible-grills-dealer"],
-  },
-  {
-    key: "safety-nets",
-    title: "Safety Nets",
-    serviceIds: [
-      "balcony-safety",
-      "children-protection",
-      "pets-safety",
-      "grill-balcony",
-      "terrace-top",
-      "industrial-safety",
-      "duct-area",
-      "open-area",
-      "staircase-safety",
-      "construction-safety",
-      "mosquito-nets",
-      "hdpe-nylon",
-    ],
-  },
-  {
-    key: "bird-protection",
-    title: "Pigeon Nets",
-    serviceIds: ["pigeon-nets", "bird-spikes", "anti-bird-nets", "pigeon-balcony", "anti-seagull"],
-  },
-  {
-    key: "sports",
-    title: "Sports",
-    serviceIds: ["all-sports-practice", "cricket-practice", "terrace-cricket"],
-  },
-  {
-    key: "cloth-hangers",
-    title: "Cloth Hangers",
-    serviceIds: ["cloth-drying"],
-  },
-];
+// Derived from serviceCategories in servicesData.ts. This was previously a
+// second, hand-maintained copy of the same map, and it had silently fallen
+// behind: shade-nets, swimming-pool, car-parking and monkey-safety were
+// missing, so none of their per-city pages were linked from anywhere.
+const CATEGORIES = Object.entries(serviceCategories).map(([key, category]) => ({
+  key,
+  title: category.title,
+  serviceIds: category.services,
+}));
 
 const locationMap = LOCATION_ORDER
   .map((slug) => {
@@ -160,6 +125,17 @@ export default function LocationServicesAccordion({ variant = "footer", onLocati
               </AccordionTrigger>
               <AccordionContent className="px-0">
                 <div className="border-t border-white/10 px-0">
+                  <Link
+                    href={`/locations/${location.slug}/`}
+                    prefetch={false}
+                    onClick={onLocationLinkClick}
+                    className={styles.serviceItem}
+                  >
+                    <span className={styles.serviceText}>
+                      All services in {location.name}
+                    </span>
+                    <ArrowRight className={styles.serviceIcon} />
+                  </Link>
                   <Accordion type="single" collapsible className="space-y-3">
                     {getLocationServiceLinks(location.slug, location.name).map((category) => (
                       <AccordionItem

@@ -174,7 +174,7 @@ const ServicesSection = ({ showBreadcrumbs = false }: ServicesSectionProps) => {
                     }}
                   >
                     <div className="relative h-48 w-full overflow-hidden">
-                      <OptimizedImage src={service.image} alt={`${service.title} installation by KGR Enterprises for balcony, window and child safety in Hyderabad, Bangalore, Chennai and Vijayawada`} className="{service.id === 'cloth-drying' ? '' : 'object-cover'} group-hover:scale-110 transition-transform duration-500 w-full h-full absolute inset-0" />
+                      <OptimizedImage src={service.image} alt={`${service.title} installation by KGR Enterprises for balcony, window and child safety in Bangalore, Hyderabad, Chennai and Vijayawada`} className="{service.id === 'cloth-drying' ? '' : 'object-cover'} group-hover:scale-110 transition-transform duration-500 w-full h-full absolute inset-0" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                       <div className="absolute top-3 left-3 px-2 md:px-3 py-1 md:py-1.5 rounded-full text-xs md:text-sm font-semibold" style={{
                         color: "#F0F6FF",

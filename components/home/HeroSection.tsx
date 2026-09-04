@@ -28,7 +28,7 @@ export default function HeroSection() {
 
             <h1 className="text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight">
               <span style={{ color: "#F0F6FF" }}>Best Invisible Grills & Safety Nets</span>
-              <span className="block text-lg md:text-2xl lg:text-3xl xl:text-4xl font-semibold mt-2" style={{ color: "#FF6B42" }}>in Chennai, Hyderabad, Bangalore & Andhra Pradesh</span>
+              <span className="block text-lg md:text-2xl lg:text-3xl xl:text-4xl font-semibold mt-2" style={{ color: "#FF6B42" }}>in Bangalore, Hyderabad, Chennai & Andhra Pradesh</span>
             </h1>
 
             <p className="text-base md:text-lg lg:text-xl xl:text-2xl" style={{ color: "#C8D8EE" }}>
@@ -72,7 +72,7 @@ export default function HeroSection() {
               <div className="relative aspect-[16/9] md:aspect-[4/3] lg:aspect-[3/2]">
                 <OptimizedImage
                   src="/images/hero-image.jpg"
-                  alt="Invisible Grills and safety nets installation for balcony, window and child safety in Chennai, Hyderabad, Bangalore and Andhra Pradesh"
+                  alt="Invisible Grills and safety nets installation for balcony, window and child safety in Bangalore, Hyderabad, Chennai and Andhra Pradesh"
                   className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105 absolute inset-0"
                   loading="eager"
                   priority

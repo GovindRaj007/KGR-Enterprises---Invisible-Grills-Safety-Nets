@@ -1,18 +1,20 @@
 import type { Metadata } from 'next';
+import { Breadcrumbs } from '@/components/shared/Breadcrumbs';
 
 import GalleryClient from '@/components/gallery/GalleryClient';
 
-export const dynamic = 'force-static';
-
 export const metadata: Metadata = {
-  title: "Gallery - Our Safety Installations | KGR Invisible Grills & Safety Nets",
-  description: "View our portfolio of invisible grills, safety nets, and pigeon net installations across Chennai, Hyderabad, Bangalore, and Andhra Pradesh. 5000+ successful projects completed.",
+  title: "Installation Gallery | KGR Invisible Grills & Safety Nets",
+  description: "Our portfolio of invisible grill, safety net and bird protection installations across Bangalore, Hyderabad, Chennai and Andhra Pradesh. 5000+ projects.",
   robots: {
     index: true,
     follow: true,
     'max-image-preview': 'large',
     'max-video-preview': -1,
     'max-snippet': -1,
+  },
+  alternates: {
+    canonical: "https://invisiblegrillsandsafetynets.in/gallery/",
   },
   keywords: [
     // Portfolio & Gallery Keywords
@@ -37,7 +39,7 @@ export const metadata: Metadata = {
     // Service Type Gallery Keywords
     "invisible grills gallery",
     "safety nets installations",
-    "pigeon net projects",
+    "bird protection projects",
     "balcony solutions",
     "terrace projects",
     // Specific Service Showcases
@@ -48,8 +50,8 @@ export const metadata: Metadata = {
     "residential installations",
     "commercial projects",
     // Location-based Gallery
-    "Hyderabad installations",
-    "Bangalore projects",
+    "Bangalore installations",
+    "Hyderabad projects",
     "Chennai work samples",
     "installation across South India",
     // Inspiration & Discovery Keywords
@@ -64,10 +66,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Installation Gallery - KGR Invisible Grills & Safety Nets",
     description: "Browse our portfolio of professional safety net and invisible grill installations",
-  url: "https://invisiblegrillsandsafetynets.in/gallery",
+  url: "https://invisiblegrillsandsafetynets.in/gallery/",
     images: [
       {
-        url: "/og-gallery.jpg",
+        url: "/images/service-gallery-1.jpg",
         width: 1200,
         height: 630,
         alt: "KGR Enterprises Gallery"
@@ -83,15 +85,7 @@ export default function GalleryPage() {
     'name': 'KGR Enterprises',
     'url': 'https://invisiblegrillsandsafetynets.in',
     'logo': 'https://invisiblegrillsandsafetynets.in/logo.png',
-    'description': 'Portfolio and gallery of professional invisible grills and safety nets installations across Chennai, Hyderabad, Bangalore, and Andhra Pradesh. 5000+ completed projects.',
-    'aggregateRating': {
-      '@type': 'AggregateRating',
-      'ratingValue': '4.9',
-      'bestRating': '5',
-      'worstRating': '1',
-      'ratingCount': '1126',
-      'reviewCount': '1126'
-    }
+    'description': 'Portfolio and gallery of professional invisible grills and safety nets installations across Bangalore, Hyderabad, Chennai, and South India. 5000+ completed projects.',
   };
 
   return (
@@ -101,7 +95,26 @@ export default function GalleryPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
       />
       <div className="min-h-screen bg-background">
-        <GalleryClient showBreadcrumbs />
+        <div className="container mx-auto px-4 py-6">
+          <div className="[&_ol]:md:items-center [&_ol]:md:flex">
+            <Breadcrumbs
+              items={[
+                { label: "Gallery" },
+              ]}
+              darkMode={false}
+            />
+          </div>
+        </div>
+        <div className="container mx-auto px-4">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3">
+            Invisible Grills &amp; Safety Nets Gallery
+          </h1>
+          <p className="text-muted-foreground max-w-3xl">
+            Completed invisible grill, safety net and bird protection installations from
+            Bangalore, Hyderabad, Chennai, Vijayawada and Visakhapatnam.
+          </p>
+        </div>
+        <GalleryClient />
       </div>
     </>
   );

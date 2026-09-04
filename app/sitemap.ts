@@ -1,136 +1,81 @@
 import { MetadataRoute } from 'next';
-import { PRIMARY_LOCATIONS } from '@/lib/seo-metadata';
+import { servicesData, isCanonicalServiceSlug } from '@/data/servicesData';
+import { validLocations, PRIMARY_LOCATION_SLUG } from '@/constants/locations';
 
 export const dynamic = 'force-static';
+
+// Kept in sync with scripts/generate-static-sitemaps.js, which regenerates this
+// file's output during `postbuild` for the static export. Both derive their URL
+// list from servicesData + validLocations so they cannot disagree.
+
+// Services that lead the category pages and carry the strongest commercial
+// intent. Everything else still ships, one priority step lower.
+const mainCategoryServices = [
+  'invisible-grills',
+  'invisible-grills-balcony',
+  'invisible-grills-dealer',
+  'balcony-safety',
+  'children-protection',
+  'pigeon-nets',
+  'bird-spikes',
+  'all-sports-practice',
+  'cricket-practice',
+  'terrace-cricket',
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://invisiblegrillsandsafetynets.in';
   const currentDate = new Date();
 
-  // Static pages with prioritized order
+  // Alias slugs resolve to another service and emit that service's canonical,
+  // so they must never appear as their own sitemap URL.
+  const serviceSlugs = Object.keys(servicesData).filter(isCanonicalServiceSlug);
+  const isMain = (slug: string) => mainCategoryServices.includes(slug);
+
   const staticPages = [
-    {
-      url: `${baseUrl}/`,
-      lastModified: currentDate,
-      changeFrequency: 'daily' as const,
-      priority: 1.0,
-    },
-    {
-      url: `${baseUrl}/services/`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly' as const,
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/contact/`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/about/`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/gallery/`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
-    },
-  ];
-
-  // Main category services (higher priority)
-  const mainCategoryServices = [
-    'invisible-grills',
-    'invisible-grills-balcony',
-    'invisible-grills-dealer',
-    'balcony-safety',
-    'children-protection',
-    'pigeon-nets',
-    'bird-spikes',
-    'all-sports-practice',
-    'cricket-practice',
-    'terrace-cricket',
-  ];
-
-  // Other services (lower priority)
-  const otherServices = [
-    'pets-safety',
-    'grill-balcony',
-    'terrace-top',
-    'industrial-safety',
-    'duct-area',
-    'open-area',
-    'staircase-safety',
-    'construction-safety',
-    'mosquito-nets',
-    'cloth-drying',
-    'hdpe-nylon',
-    'anti-bird-nets',
-    'pigeon-balcony',
-    'anti-seagull',
-  ];
-
-  // Main category service pages (higher priority)
-  const mainServicePages = mainCategoryServices.map(service => ({
-    url: `${baseUrl}/services/${service}/`,
+    { path: '/', priority: 1.0, changeFrequency: 'daily' as const },
+    { path: '/services/', priority: 0.9, changeFrequency: 'daily' as const },
+    { path: '/gallery/', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/contact/', priority: 0.8, changeFrequency: 'monthly' as const },
+    { path: '/about/', priority: 0.7, changeFrequency: 'monthly' as const },
+    // Legal pages: indexable but low value, and previously missing entirely.
+    { path: '/privacy-policy/', priority: 0.2, changeFrequency: 'yearly' as const },
+    { path: '/terms-of-service/', priority: 0.2, changeFrequency: 'yearly' as const },
+  ].map(page => ({
+    url: `${baseUrl}${page.path}`,
     lastModified: currentDate,
-    changeFrequency: 'weekly' as const,
-    priority: 0.9,
+    changeFrequency: page.changeFrequency,
+    priority: page.priority,
   }));
 
-  // Other service pages (lower priority)
-  const otherServicePages = otherServices.map(service => ({
-    url: `${baseUrl}/services/${service}/`,
+  // The primary focus city outranks the other service cities.
+  const locationPages = validLocations.map(location => ({
+    url: `${baseUrl}/locations/${location}/`,
     lastModified: currentDate,
     changeFrequency: 'weekly' as const,
-    priority: 0.8,
+    priority: location === PRIMARY_LOCATION_SLUG ? 0.95 : 0.9,
   }));
 
-  // Location pages (high priority, just below homepage)
-  const locationPages = PRIMARY_LOCATIONS.map(location => ({
-    url: `${baseUrl}/locations/${location.name.toLowerCase()}/`,
+  const servicePages = serviceSlugs.map(slug => ({
+    url: `${baseUrl}/services/${slug}/`,
     lastModified: currentDate,
     changeFrequency: 'weekly' as const,
-    priority: 0.95,
+    priority: isMain(slug) ? 0.9 : 0.8,
   }));
 
-  // Service-Location pages (service + location combinations)
-  // Main category services with all locations
-  const mainServiceLocationPages = mainCategoryServices.flatMap(service =>
-    PRIMARY_LOCATIONS.map(location => ({
-      url: `${baseUrl}/services/${service}/${location.name.toLowerCase()}/`,
+  const serviceLocationPages = serviceSlugs.flatMap(slug =>
+    validLocations.map(location => ({
+      url: `${baseUrl}/services/${slug}/${location}/`,
       lastModified: currentDate,
       changeFrequency: 'weekly' as const,
-      priority: 0.85,
+      priority: isMain(slug) ? 0.85 : 0.75,
     }))
   );
 
-  // Other services with all locations
-  const otherServiceLocationPages = otherServices.flatMap(service =>
-    PRIMARY_LOCATIONS.map(location => ({
-      url: `${baseUrl}/services/${service}/${location.name.toLowerCase()}/`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly' as const,
-      priority: 0.75,
-    }))
-  );
-
-  // Combine all URLs in priority order:
-  // 1. Static pages (with homepage first)
-  // 2. Location pages
-  // 3. Main category services
-  // 4. Main category service-location pages
-  // 5. Other services
-  // 6. Other service-location pages
   return [
     ...staticPages,
     ...locationPages,
-    ...mainServicePages,
-    ...mainServiceLocationPages,
-    ...otherServicePages,
-    ...otherServiceLocationPages,
+    ...servicePages,
+    ...serviceLocationPages,
   ];
 }

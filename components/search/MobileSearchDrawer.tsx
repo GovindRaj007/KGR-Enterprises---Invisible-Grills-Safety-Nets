@@ -297,15 +297,15 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
           borderTopLeftRadius: "24px",
           borderTopRightRadius: "24px",
           boxShadow: "0 -4px 16px rgba(0, 0, 0, 0.1)",
-          height: "calc(100dvh - 5rem)",
-          maxHeight: "calc(100dvh - 5rem)",
           overflowY: "auto",
           overflowX: "hidden",
           display: "flex",
           flexDirection: "column",
           transform: isOpen ? `translateY(${dragOffset}px)` : "translateY(100%)",
-          visibility: isOpen || hasOpenedRef.current ? "visible" : "hidden",
-          transition: isDragging ? "none" : "transform 300ms cubic-bezier(0.4, 0, 0.2, 1)",
+          visibility: isOpen ? "visible" : "hidden",
+          transition: isDragging
+            ? "none"
+            : `transform 300ms cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear ${isOpen ? "0s" : "300ms"}`,
           pointerEvents: isOpen ? "auto" : "none",
           overscrollBehavior: "contain",
         }}
@@ -492,7 +492,7 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
                 <div style={{ textAlign: "center", color: "#6b7280", paddingTop: "32px" }}>
                   <p style={{ fontSize: "14px" }}>Start typing to search our services</p>
                   <p style={{ fontSize: "12px", marginTop: "8px", color: "#9ca3af" }}>
-                    Try: "invisible grills", "safety nets chennai", or just "bangalore"
+                    Try: "invisible grills", "safety nets bangalore", or just "chennai"
                   </p>
                 </div>
               )}

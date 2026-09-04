@@ -9,6 +9,30 @@ const TestimonialsSection = () => {
 
   const testimonials = [
     {
+      name: "Manjunath Gowda",
+      service: "Invisible Grills",
+      rating: 5,
+      review: "Excellent invisible grill installation for our Whitefield apartment. Maintains the view while providing security. Team was punctual and work quality is outstanding.",
+      initials: "MG",
+      location: "Bangalore"
+    },
+    {
+      name: "Srinivas Rao Potturi",
+      service: "Pigeon Nets",
+      rating: 5,
+      review: "Excellent service. Within few hours of raising request, pigeon net was put on my both my balcony. They have variety of nets, you can choose accordingly to your need.",
+      initials: "SRP",
+      location: "Bangalore"
+    },
+    {
+      name: "Deepa Shetty",
+      service: "Balcony Safety Nets",
+      rating: 5,
+      review: "Very satisfied with the balcony safety net installation at our HSR Layout flat. Quality materials and professional service. Highly recommended for safety needs.",
+      initials: "DS",
+      location: "Bangalore"
+    },
+    {
       name: "Rasool Basha",
       service: "Pigeon Nets",
       rating: 5,
@@ -16,45 +40,21 @@ const TestimonialsSection = () => {
       initials: "RB",
       location: "Hyderabad"
     },
-    { 
-      name: "Srinivas Rao Potturi",
-      service: "Pigeon Nets", 
-      rating: 5,
-      review: "Excellent service. Within few hours of raising request, pigeon net was put on my both my balcony. They have variety of nets, you can choose accordingly to your need.",
-      initials: "SRP",
-      location: "Bangalore"
-    },
     {
-      name: "R.N Marimuthu",
-      service: "Pigeon Safety Nets",
+      name: "Kiran Kumar Rao",
+      service: "Children Protection Nets",
       rating: 5,
-      review: "We have issue with Pigeons, we called through online his team came resolved issue with in 2hrs. We fully satisfied and Reasonable cost. I highly recommend.",
-      initials: "RNM",
-      location: "Chennai"
+      review: "Amazing service for child safety nets in Koramangala. My kids can now play safely on the balcony. Professional installation and quality materials used.",
+      initials: "KKR",
+      location: "Bangalore"
     },
     {
       name: "Shruti Rander",
       service: "Children Protection Nets",
       rating: 5,
-      review: "Amazing service for child safety nets. My kids can now play safely on the balcony. Professional installation and quality materials used.",
+      review: "Prompt response and neat finishing on our balcony nets. The team explained the material options clearly before starting the work.",
       initials: "SR",
       location: "Hyderabad"
-    },
-    {
-      name: "Manish Shrivastava",
-      service: "Invisible Grills",
-      rating: 5,
-      review: "Excellent invisible grill installation. Maintains the view while providing security. Team was punctual and work quality is outstanding.",
-      initials: "MS",
-      location: "Bangalore"
-    },
-    {
-      name: "Anita Reddy",
-      service: "Balcony Safety Nets",
-      rating: 5,
-      review: "Very satisfied with the balcony safety net installation. Quality materials and professional service. Highly recommended for safety needs.",
-      initials: "AR",
-      location: "Chennai"
     }
   ];
 

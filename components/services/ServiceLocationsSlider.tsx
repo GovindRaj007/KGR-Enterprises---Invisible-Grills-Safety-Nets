@@ -3,6 +3,7 @@
 import React , { useState, useRef, TouchEvent} from "react";
 import Link from "next/link";
 import { MapPin, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { locationData, validLocations } from "@/constants/locations";
 
 const services = [
   { name: "Invisible Grills", slug: "invisible-grills" },
@@ -12,38 +13,14 @@ const services = [
   { name: "Children Protection Nets", slug: "children-protection" },
 ];
 
-const allAreas = [
-  {
-    city: "Chennai",
-    slug: "chennai",
-    state: "Tamil Nadu",
-    localities: ["Anna Nagar", "T Nagar", "Velachery", "Adyar", "Porur", "OMR"],
-  },
-  {
-    city: "Bangalore",
-    slug: "bangalore",
-    state: "Karnataka",
-    localities: ["Whitefield", "Koramangala", "Indiranagar", "HSR Layout", "Marathahalli", "Electronic City"],
-  },
-  {
-    city: "Hyderabad",
-    slug: "hyderabad",
-    state: "Telangana",
-    localities: ["Banjara Hills", "Jubilee Hills", "Gachibowli", "Madhapur", "Kondapur", "Hitech City"],
-  },
-  {
-    city: "Vijayawada",
-    slug: "vijayawada",
-    state: "Andhra Pradesh",
-    localities: ["Benz Circle", "Governorpet", "Labbipet", "Patamata", "Gunadala", "Auto Nagar"],
-  },
-  {
-    city: "Visakhapatnam",
-    slug: "visakhapatnam",
-    state: "Andhra Pradesh",
-    localities: ["MVP Colony", "Dwaraka Nagar", "Gajuwaka", "Madhurawada", "Seethammadhara", "Beach Road"],
-  },
-];
+// Derived from constants/locations.ts (primary focus city first) so the city
+// list and localities cannot drift from the location pages and JSON-LD.
+const allAreas = validLocations.map((slug) => ({
+  city: locationData[slug].name,
+  slug,
+  state: locationData[slug].state,
+  localities: locationData[slug].areas.slice(0, 6) as unknown as string[],
+}));
 
 interface Area {
   city: string;

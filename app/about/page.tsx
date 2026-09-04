@@ -6,13 +6,11 @@ import AboutSection from "@/components/about/AboutSection";
 import TestimonialsSection from "@/components/testimonials/TestimonialsSection";
 import { Card, CardContent } from "@/components/ui/card";
 
-export const dynamic = 'force-static';
-
 export const metadata: Metadata = {
   title: "About Us - 15+ Years Experience in Safety Solutions",
-  description: "KGR Enterprises has 15+ years of experience in invisible grills and safety nets installation. Certified team, 5000+ happy customers across Chennai,Hyderabad, Bangalore.",
+  description: "15+ years installing invisible grills and safety nets. Certified team, 5000+ happy customers across Bangalore, Hyderabad, Chennai and Andhra Pradesh.",
   alternates: {
-    canonical: 'https://invisiblegrillsandsafetynets.in/about',
+    canonical: 'https://invisiblegrillsandsafetynets.in/about/',
   },
   keywords: [
     // Brand & Company Identity
@@ -51,6 +49,8 @@ export const metadata: Metadata = {
     "innovation in safety",
     "award winners in service",
     // Location Heritage
+    "invisible grills company in Bangalore",
+    "safety nets company in Bangalore",
     "South India's trusted provider",
     "regional safety experts",
     "community trusted brand",
@@ -75,7 +75,7 @@ export const metadata: Metadata = {
     url: "https://invisiblegrillsandsafetynets.in/about",
     images: [
       {
-        url: "/og-about.jpg",
+        url: "/images/hero-image.jpg",
         width: 1200,
         height: 630,
         alt: "About KGR Enterprises"
@@ -92,7 +92,7 @@ export default function AboutPage() {
     'alternateName': 'KGR Invisible Grills & Safety Nets',
     'url': 'https://invisiblegrillsandsafetynets.in',
     'logo': 'https://invisiblegrillsandsafetynets.in/logo.png',
-    'description': 'Professional installation services for invisible grills, safety nets, pigeon nets, and sports nets across South India. 15+ years of experience with 5000+ satisfied customers.',
+    'description': 'Professional installation services for invisible grills, safety nets, bird protection solutions, and sports nets across South India. 15+ years of experience with 5000+ satisfied customers.',
     'foundingDate': '2008',
     'address': {
       '@type': 'PostalAddress',
@@ -104,17 +104,9 @@ export default function AboutPage() {
     },
     'contactPoint': {
       '@type': 'ContactPoint',
-      'telephone': '+91-9337353030',
+      'telephone': '+91-7339306098',
       'contactType': 'Customer Support'
     },
-    'aggregateRating': {
-      '@type': 'AggregateRating',
-      'ratingValue': '4.9',
-      'bestRating': '5',
-      'worstRating': '1',
-      'ratingCount': '1126',
-      'reviewCount': '1126'
-    }
   };
 
   return (
@@ -128,7 +120,7 @@ export default function AboutPage() {
         <section className="relative overflow-hidden" style={{ borderRadius: '1rem' }}>
           <OptimizedImage
             src="/images/hero-image.jpg" 
-            alt="KGR Enterprises for invisible grills, balcony safety nets and child protection solutions" 
+            alt="About KGR Enterprises" 
             className="object-cover w-full h-full absolute inset-0"
             loading="eager"
           />
@@ -164,8 +156,8 @@ export default function AboutPage() {
                 Founded in 2008, KGR Enterprises has grown from a small local
                 business to become one of South India&apos;s most trusted safety
                 solutions providers. With over 15 years of experience, we have
-                successfully completed 5000+ installations across Chennai,
-                Hyderabad, Bangalore, and Andhra Pradesh.
+                successfully completed 5000+ installations across Hyderabad,
+                Hyderabad, Chennai, and Andhra Pradesh.
               </p>
             </CardContent>
           </Card>

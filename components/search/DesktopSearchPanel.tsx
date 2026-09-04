@@ -505,7 +505,7 @@ const DesktopSearchPanel: React.FC<DesktopSearchPanelProps> = ({
               color: "#9ca3af",
             }}
           >
-            <p>Available in Chennai, Hyderabad, Bangalore & more</p>
+            <p>Available in Bangalore, Hyderabad, Chennai & more</p>
           </div>
         </div>
       </div>

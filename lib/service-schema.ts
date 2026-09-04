@@ -1,5 +1,6 @@
 import { baseUrl, generateOrganizationSchema } from './organization-schema';
 import { PRIMARY } from '@/constants/contacts';
+import { validLocations, locationData } from '@/constants/locations';
 
 export function generateServiceSchema(params: {
   serviceName: string;
@@ -59,42 +60,6 @@ export function generateServiceSchema(params: {
         'validThrough': new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString()
       }
     },
-    'review': [
-      {
-        '@type': 'Review',
-        'reviewRating': {
-          '@type': 'Rating',
-          'ratingValue': '5',
-          'bestRating': '5',
-          'worstRating': '1'
-        },
-        'name': `${serviceName} Review`,
-        'author': {
-          '@type': 'Person',
-          'name': 'Rajesh Kumar'
-        },
-        'datePublished': '2025-10-15T00:00:00+05:30',
-        'reviewBody': 'Excellent product quality and professional installation service. The team was very skilled and completed the work perfectly.',
-        'publisher': organizationSchema
-      },
-      {
-        '@type': 'Review',
-        'reviewRating': {
-          '@type': 'Rating',
-          'ratingValue': '5',
-          'bestRating': '5',
-          'worstRating': '1'
-        },
-        'name': `${serviceName} Quality Review`,
-        'author': {
-          '@type': 'Person',
-          'name': 'Priya Sharma'
-        },
-        'datePublished': '2025-09-20T00:00:00+05:30',
-        'reviewBody': 'High-quality materials and expert installation. Very satisfied with both the product and service.',
-        'publisher': organizationSchema
-      }
-    ],
     'aggregateRating': {
       '@type': 'AggregateRating',
       'ratingValue': '4.9',
@@ -120,44 +85,21 @@ export function generateServiceSchema(params: {
     'serviceType': ['Installation Service', 'Home Safety', serviceName],
     'provider': organizationSchema,
     'category': 'Home Safety & Security Equipment',
-    'areaServed': [
-      {
-        '@type': 'City',
-        'name': 'Hyderabad',
-        'geo': {
-          '@type': 'GeoCoordinates',
-          'latitude': '17.385044',
-          'longitude': '78.486671'
-        }
+    // Derived from constants/locations.ts so the city list, coordinates and
+    // ordering match everywhere they are emitted (primary focus city first).
+    'areaServed': validLocations.map(slug => ({
+      '@type': 'City',
+      'name': locationData[slug].name,
+      'containedInPlace': {
+        '@type': 'State',
+        'name': locationData[slug].state
       },
-      {
-        '@type': 'City',
-        'name': 'Bangalore',
-        'geo': {
-          '@type': 'GeoCoordinates',
-          'latitude': '12.971599',
-          'longitude': '77.594563'
-        }
-      },
-      {
-        '@type': 'City',
-        'name': 'Chennai',
-        'geo': {
-          '@type': 'GeoCoordinates',
-          'latitude': '13.082680',
-          'longitude': '80.270721'
-        }
-      },
-      {
-        '@type': 'City',
-        'name': 'Vijayawada',
-        'geo': {
-          '@type': 'GeoCoordinates',
-          'latitude': '16.506174',
-          'longitude': '80.648015'
-        }
+      'geo': {
+        '@type': 'GeoCoordinates',
+        'latitude': locationData[slug].latitude.toString(),
+        'longitude': locationData[slug].longitude.toString()
       }
-    ],
+    })),
     'hasOfferCatalog': {
       '@type': 'OfferCatalog',
       'name': 'Installation Services',

@@ -7,7 +7,7 @@ export const servicesData = {
     id: "invisible-grills",
     title: "Invisible Grills",
     heroDescription: "Invisible grill installation service for balconies and windows using premium stainless steel cables. Enjoy unobstructed views, child-safe protection, and reliable anti-theft performance.",
-    description: "Premium invisible grills and invisible balcony grill systems for Chennai, Bangalore, Hyderabad, Visakhapatnam, Rajahmundry, and Vijayawada. Ideal for balcony protection, window security, and apartment safety with professional invisible grill installation.",
+    description: "Premium invisible grills and invisible balcony grill systems for Bangalore, Hyderabad, Chennai, Vijayawada, and Visakhapatnam. Ideal for balcony protection, window security, and apartment safety with professional invisible grill installation.",
     detailedDescription: "KGR Enterprises delivers premium invisible grill installation with SS316 and SS304 invisible grills for balcony, window, and apartment applications. Our transparent cable grill systems provide invisible grill protection for child safety, pet safety, and pigeon prevention without blocking your view. Trusted for invisible grill fitting, secure mounting, and professional installation across South India.",
     category: "invisible-grills",
     features: [
@@ -40,7 +40,7 @@ export const servicesData = {
     id: "invisible-grills-balcony",
     title: "Invisible Grill for Balcony",
     heroDescription: "Invisible balcony grill installation that preserves your view while protecting children, pets, and property from falls and intruders.",
-    description: "Transparent balcony invisible grills in Chennai, Bangalore, Hyderabad, Visakhapatnam, Rajahmundry, and Vijayawada. Durable SS316 and SS304 installation for premium balcony safety.",
+    description: "Transparent balcony invisible grills in Bangalore, Hyderabad, Chennai, Vijayawada, and Visakhapatnam. Durable SS316 and SS304 installation for premium balcony safety.",
     detailedDescription: "Our invisible balcony grill service brings premium invisible grill solutions to residential and apartment balconies. The transparent grill system improves safety and comfort while delivering a sleek look and long-term durability. Ideal for families seeking balcony protection, child-safe balcony rails, and invisible grill design.",
     category: "invisible-grills",
     features: [
@@ -107,8 +107,8 @@ export const servicesData = {
     id: "balcony-safety",
     title: "Balcony Safety Nets",
     heroDescription: "Protect your home with custom balcony safety nets. Keep your family safe while preserving unobstructed views and airflow.",
-    description: "Best balcony safety nets and balcony safety net installation in Chennai, Hyderabad, Bangalore, and Andhra Pradesh. Transparent balcony nets for child safety, pet protection, and secure living spaces.",
-    detailedDescription: "KGR Enterprises is a trusted partner delivering premium balcony safety net installation for apartments and homes in Chennai, Hyderabad, Bangalore, and Andhra Pradesh. Our balcony safety nets are made from UV-resistant, weatherproof HDPE and designed to protect children, pets, and family members while keeping your view clear. Choose our balcony net installation for reliable child-safe and pet-safe protection with expert fitting and long-lasting durability.",
+    description: "Best balcony safety nets and balcony safety net installation in Bangalore, Hyderabad, Chennai, and Andhra Pradesh. Transparent balcony nets for child safety, pet protection, and secure living spaces.",
+    detailedDescription: "KGR Enterprises is a trusted partner delivering premium balcony safety net installation for apartments and homes in Bangalore, Hyderabad, Chennai, and Andhra Pradesh. Our balcony safety nets are made from UV-resistant, weatherproof HDPE and designed to protect children, pets, and family members while keeping your view clear. Choose our balcony net installation for reliable child-safe and pet-safe protection with expert fitting and long-lasting durability.",
     category: "safety-nets",
     features: [
       "UV Resistant Balcony Net Material",
@@ -141,8 +141,8 @@ export const servicesData = {
     id: "children-protection",
     title: "Children Protection Nets",
     heroDescription: "Give your child the freedom to play safely. Our protective nets provide invisible security, letting kids enjoy fresh air without the worry.",
-    description: "Strong children protection nets for windows and balcony. Quality child-safe, durable, and professionally installed in Hyderabad, Bangalore, Chennai, and Andhra Pradesh.",
-    detailedDescription: "KGR Enterprises is a trusted partner, delivering the best quality child protection nets for windows and balcony, ensuring maximum safety for kids in homes and apartments. Our child-safe nets are made from durable HDPE, providing invisible protection while allowing fresh air and natural light. Trusted for quality, professional installation, and peace of mind for parents in Hyderabad, Bangalore, Chennai, and Andhra Pradesh.",
+    description: "Strong children protection nets for windows and balcony. Quality child-safe, durable, and professionally installed in Bangalore, Hyderabad, Chennai, and Andhra Pradesh.",
+    detailedDescription: "KGR Enterprises is a trusted partner, delivering the best quality child protection nets for windows and balcony, ensuring maximum safety for kids in homes and apartments. Our child-safe nets are made from durable HDPE, providing invisible protection while allowing fresh air and natural light. Trusted for quality, professional installation, and peace of mind for parents in Bangalore, Hyderabad, Chennai, and Andhra Pradesh.",
     category: "safety-nets",
     features: [
       "Child Safe Materials",
@@ -175,8 +175,8 @@ export const servicesData = {
     id: "duct-area",
     title: "Duct Area Nets",
     heroDescription: "Secure duct openings without blocking ventilation. Our duct area nets safeguard ducts and utility openings while keeping airflow unobstructed.",
-    description: "Trusted duct area net installation in Chennai, Hyderabad, Bangalore, and Andhra Pradesh. Quality duct area safety nets for ventilation shafts, ducts, and utility spaces.",
-    detailedDescription: "KGR Enterprises is a trusted partner delivering premium duct area net installation for ventilation shafts and utility spaces across Chennai, Hyderabad, Bangalore, and Andhra Pradesh. Our fire-retardant HDPE duct area nets prevent debris, bird nesting, and unauthorized access while preserving airflow and ventilation performance. Choose our duct area safety nets for reliable protection, easy maintenance, and professional installation for durable, fire-retardant protection with clean, professional installation.",
+    description: "Trusted duct area net installation in Bangalore, Hyderabad, Chennai, and Andhra Pradesh. Quality duct area safety nets for ventilation shafts, ducts, and utility spaces.",
+    detailedDescription: "KGR Enterprises is a trusted partner delivering premium duct area net installation for ventilation shafts and utility spaces across Bangalore, Hyderabad, Chennai, and Andhra Pradesh. Our fire-retardant HDPE duct area nets prevent debris, bird nesting, and unauthorized access while preserving airflow and ventilation performance. Choose our duct area safety nets for reliable protection, easy maintenance, and professional installation for durable, fire-retardant protection with clean, professional installation.",
     category: "safety-nets",
     features: [
       "Fire Retardant Material",
@@ -209,8 +209,8 @@ export const servicesData = {
     id: "cloth-drying",
     title: "Ceiling Cloth Drying Hangers",
     heroDescription: "Smart space-saving cloth drying hangers for modern homes. Dry clothes indoors with a durable ceiling-mounted system built for apartments and compact spaces.",
-    description: "Ceiling cloth drying hanger installation in Hyderabad, Bangalore, Chennai, and Andhra Pradesh. Durable cloth drying hangers for efficient indoor laundry drying.",
-    detailedDescription: "KGR Enterprises provides premium ceiling cloth drying hanger installation for apartments and homes in Hyderabad, Bangalore, Chennai, and Andhra Pradesh. Our ceiling cloth drying hangers save space, support full laundry loads, and make indoor clothes drying convenient and weather independent. Installed with strong stainless steel pulleys and durable hanger rods, our cloth drying systems are reliable, easy to use, and built for long-term performance.",
+    description: "Ceiling cloth drying hanger installation in Bangalore, Hyderabad, Chennai, and Andhra Pradesh. Durable cloth drying hangers for efficient indoor laundry drying.",
+    detailedDescription: "KGR Enterprises provides premium ceiling cloth drying hanger installation for apartments and homes in Bangalore, Hyderabad, Chennai, and Andhra Pradesh. Our ceiling cloth drying hangers save space, support full laundry loads, and make indoor clothes drying convenient and weather independent. Installed with strong stainless steel pulleys and durable hanger rods, our cloth drying systems are reliable, easy to use, and built for long-term performance.",
     category: "invisible-grills",
     features: [
       "Space Saving Design",
@@ -243,8 +243,8 @@ export const servicesData = {
     id: "pets-safety",
     title: "Pets Safety Nets",
     heroDescription: "Let your pets enjoy the outdoors safely. Protective nets designed for your furry friends, giving them freedom while keeping them secure.",
-    description: "Strong pets safety nets for balcony and terraces. Quality pet-safe, bite-resistant, and professionally installed in Hyderabad, Bangalore, Chennai, and Andhra Pradesh.",
-    detailedDescription: "KGR Enterprises is a trusted partner, delivering the best quality pet safety nets for balcony and terraces, providing secure boundaries for pets in homes and apartments. Our pet-safe HDPE nets are bite-resistant, non-toxic, and durable. Trusted for quality, professional installation, and pet safety in Hyderabad, Bangalore, Chennai, and Andhra Pradesh.",
+    description: "Strong pets safety nets for balcony and terraces. Quality pet-safe, bite-resistant, and professionally installed in Bangalore, Hyderabad, Chennai, and Andhra Pradesh.",
+    detailedDescription: "KGR Enterprises is a trusted partner, delivering the best quality pet safety nets for balcony and terraces, providing secure boundaries for pets in homes and apartments. Our pet-safe HDPE nets are bite-resistant, non-toxic, and durable. Trusted for quality, professional installation, and pet safety in Bangalore, Hyderabad, Chennai, and Andhra Pradesh.",
     category: "safety-nets",
     features: ["Pet Safe Material", "Bite Resistant", "UV Protected", "Weather Proof", "Easy Cleaning", "Durable Design"],
     benefits: [
@@ -270,8 +270,8 @@ export const servicesData = {
     id: "grill-balcony",
     title: "Grill Balcony Safety Nets",
     heroDescription: "Grill with confidence on your balcony. Heat-resistant safety nets that protect while you cook, without compromising on ventilation or outdoor enjoyment.",
-    description: "Durable grill balcony safety nets for outdoor cooking areas. Quality heat-resistant, fire-retardant, and professionally installed in Hyderabad, Bangalore, Chennai, and Andhra Pradesh.",
-    detailedDescription: "KGR Enterprises is a trusted partner, delivering the best quality grill balcony safety nets for outdoor cooking areas in homes and apartments. Our heat-resistant, fire-retardant nets provide protection and ventilation during grilling sessions. Trusted for quality, durability, and professional fitting in Hyderabad, Bangalore, Chennai, and Andhra Pradesh.",
+    description: "Durable grill balcony safety nets for outdoor cooking areas. Quality heat-resistant, fire-retardant, and professionally installed in Bangalore, Hyderabad, Chennai, and Andhra Pradesh.",
+    detailedDescription: "KGR Enterprises is a trusted partner, delivering the best quality grill balcony safety nets for outdoor cooking areas in homes and apartments. Our heat-resistant, fire-retardant nets provide protection and ventilation during grilling sessions. Trusted for quality, durability, and professional fitting in Bangalore, Hyderabad, Chennai, and Andhra Pradesh.",
     category: "safety-nets",
     features: ["Heat Resistant", "Fire Retardant", "Grease Resistant", "Easy Installation", "Weather Proof", "Ventilation Friendly"],
     benefits: [
@@ -297,8 +297,8 @@ export const servicesData = {
     id: "terrace-top",
     title: "Terrace Top Nets",
     heroDescription: "Transform your terrace into an oasis. Premium nets provide shade, privacy, and weather protection for year-round outdoor comfort.",
-    description: "Durable terrace top nets for shade, privacy, and weather protection. Quality installation in Hyderabad, Bangalore, Chennai, and Andhra Pradesh.",
-    detailedDescription: "KGR Enterprises is a trusted partner, delivering the best quality terrace top nets for shade, privacy, and weather protection in homes and commercial spaces. Our UV-stabilized HDPE nets offer complete protection and comfort for outdoor living. Trusted for quality, durability, and professional installation in Hyderabad, Bangalore, Chennai, and Andhra Pradesh.",
+    description: "Durable terrace top nets for shade, privacy, and weather protection. Quality installation in Bangalore, Hyderabad, Chennai, and Andhra Pradesh.",
+    detailedDescription: "KGR Enterprises is a trusted partner, delivering the best quality terrace top nets for shade, privacy, and weather protection in homes and commercial spaces. Our UV-stabilized HDPE nets offer complete protection and comfort for outdoor living. Trusted for quality, durability, and professional installation in Bangalore, Hyderabad, Chennai, and Andhra Pradesh.",
     category: "safety-nets",
     features: ["UV Protection", "Rain Resistant", "Privacy Coverage", "Wind Resistant", "Easy Maintenance", "Custom Fitting"],
     benefits: [
@@ -324,8 +324,8 @@ export const servicesData = {
     id: "industrial-safety",
     title: "Industrial Safety Nets",
     heroDescription: "Heavy-duty protection for industrial environments. Engineered safety nets that meet standards and keep your workplace secure and compliant.",
-    description: "Reliable industrial safety nets for warehouses, factories, and construction sites. Quality heavy-duty, fire-retardant, and professionally installed in Hyderabad, Bangalore, Chennai, and Andhra Pradesh.",
-    detailedDescription: "KGR Enterprises is a trusted partner, delivering the best quality industrial safety nets for warehouses, factories, and construction sites in Hyderabad, Bangalore, Chennai, and Andhra Pradesh. Our heavy-duty, fire-retardant HDPE nets meet all safety standards and regulations. Trusted for quality, durability, and professional fitting for industrial applications.",
+    description: "Reliable industrial safety nets for warehouses, factories, and construction sites. Quality heavy-duty, fire-retardant, and professionally installed in Bangalore, Hyderabad, Chennai, and Andhra Pradesh.",
+    detailedDescription: "KGR Enterprises is a trusted partner, delivering the best quality industrial safety nets for warehouses, factories, and construction sites in Bangalore, Hyderabad, Chennai, and Andhra Pradesh. Our heavy-duty, fire-retardant HDPE nets meet all safety standards and regulations. Trusted for quality, durability, and professional fitting for industrial applications.",
     category: "safety-nets",
     features: ["Heavy Duty Material", "High Load Capacity", "Fire Retardant", "Industrial Grade", "Weather Resistant", "Safety Compliant"],
     benefits: [
@@ -351,8 +351,8 @@ export const servicesData = {
     id: "open-area",
     title: "Open Area Safety Nets",
     heroDescription: "Create safe recreational spaces with comprehensive coverage. Protective nets for gardens and playgrounds, ensuring worry-free outdoor fun.",
-    description: "Quality open area safety nets for gardens, playgrounds, and recreational spaces. Large coverage, UV-resistant, and professionally installed in Hyderabad, Bangalore, Chennai, and Andhra Pradesh.",
-    detailedDescription: "KGR Enterprises is a trusted partner, delivering the best quality open area safety nets for gardens, playgrounds, and recreational spaces in Hyderabad, Bangalore, Chennai, and Andhra Pradesh. Our UV-stabilized HDPE nets provide large coverage, safety, and durability for outdoor environments. Trusted for quality, professional installation, and safe recreational spaces.",
+    description: "Quality open area safety nets for gardens, playgrounds, and recreational spaces. Large coverage, UV-resistant, and professionally installed in Bangalore, Hyderabad, Chennai, and Andhra Pradesh.",
+    detailedDescription: "KGR Enterprises is a trusted partner, delivering the best quality open area safety nets for gardens, playgrounds, and recreational spaces in Bangalore, Hyderabad, Chennai, and Andhra Pradesh. Our UV-stabilized HDPE nets provide large coverage, safety, and durability for outdoor environments. Trusted for quality, professional installation, and safe recreational spaces.",
     category: "safety-nets",
     features: ["Large Coverage", "UV Stabilized", "Weather Resistant", "Flexible Installation", "Eco Friendly", "Long Lasting"],
     benefits: [
@@ -378,8 +378,8 @@ export const servicesData = {
     id: "staircase-safety",
     title: "Staircase Safety Nets",
     heroDescription: "Prevent falls and ensure safety for all ages. Custom-fitted nets for staircases that blend seamlessly with your home's design.",
-    description: "Quality staircase safety nets for homes and apartments. Prevents falls, child-safe, and professionally installed in Hyderabad, Bangalore, Chennai, and Andhra Pradesh.",
-    detailedDescription: "KGR Enterprises is a trusted partner, delivering the best quality staircase safety nets for homes and apartments in Hyderabad, Bangalore, Chennai, and Andhra Pradesh. Our custom-fitted HDPE nets prevent falls, ensure child and elderly safety, and blend with interior design. Trusted for quality, professional installation, and maximum safety.",
+    description: "Quality staircase safety nets for homes and apartments. Prevents falls, child-safe, and professionally installed in Bangalore, Hyderabad, Chennai, and Andhra Pradesh.",
+    detailedDescription: "KGR Enterprises is a trusted partner, delivering the best quality staircase safety nets for homes and apartments in Bangalore, Hyderabad, Chennai, and Andhra Pradesh. Our custom-fitted HDPE nets prevent falls, ensure child and elderly safety, and blend with interior design. Trusted for quality, professional installation, and maximum safety.",
     category: "safety-nets",
     features: ["Custom Fitting", "Fall Prevention", "Aesthetic Design", "Easy Installation", "Child Safe", "Durable Material"],
     benefits: [
@@ -405,8 +405,8 @@ export const servicesData = {
     id: "construction-safety",
     title: "Construction Safety Nets",
     heroDescription: "Protect your workers and site with professional-grade safety nets. OSHA-compliant solutions for construction safety and peace of mind.",
-    description: "Quality construction safety nets for worker protection and debris control. Heavy-duty, OSHA-compliant, and professionally installed in Hyderabad, Bangalore, Chennai, and Andhra Pradesh.",
-    detailedDescription: "KGR Enterprises is a trusted partner, delivering the best quality construction safety nets for worker protection and debris control at construction sites in Hyderabad, Bangalore, Chennai, and Andhra Pradesh. Our heavy-duty, OSHA-compliant nets provide reliable safety and meet international standards. Trusted for quality, durability, and professional fitting for construction projects.",
+    description: "Quality construction safety nets for worker protection and debris control. Heavy-duty, OSHA-compliant, and professionally installed in Bangalore, Hyderabad, Chennai, and Andhra Pradesh.",
+    detailedDescription: "KGR Enterprises is a trusted partner, delivering the best quality construction safety nets for worker protection and debris control at construction sites in Bangalore, Hyderabad, Chennai, and Andhra Pradesh. Our heavy-duty, OSHA-compliant nets provide reliable safety and meet international standards. Trusted for quality, durability, and professional fitting for construction projects.",
     category: "safety-nets",
     features: ["Worker Protection", "Debris Control", "Heavy Duty", "Quick Setup", "Reusable", "Safety Standards"],
     benefits: [
@@ -432,8 +432,8 @@ export const servicesData = {
     id: "mosquito-nets",
     title: "Mosquito Nets",
     heroDescription: "Keep insects out, let nature in. Fine mesh mosquito protection for windows and doors, ensuring health and comfort without chemicals.",
-    description: "Quality mosquito nets for doors, windows, and outdoor areas. Fine mesh, insect protection, and professionally installed in Hyderabad, Bangalore, Chennai, and Andhra Pradesh.",
-    detailedDescription: "KGR Enterprises is a trusted partner, delivering the best quality mosquito nets for doors, windows, and outdoor areas in Hyderabad, Bangalore, Chennai, and Andhra Pradesh. Our fine mesh nets provide effective insect protection, maintain ventilation, and are easy to clean. Trusted for quality, professional installation, and healthy living environments.",
+    description: "Quality mosquito nets for doors, windows, and outdoor areas. Fine mesh, insect protection, and professionally installed in Bangalore, Hyderabad, Chennai, and Andhra Pradesh.",
+    detailedDescription: "KGR Enterprises is a trusted partner, delivering the best quality mosquito nets for doors, windows, and outdoor areas in Bangalore, Hyderabad, Chennai, and Andhra Pradesh. Our fine mesh nets provide effective insect protection, maintain ventilation, and are easy to clean. Trusted for quality, professional installation, and healthy living environments.",
     category: "safety-nets",
     features: ["Fine Mesh", "Insect Protection", "Ventilation Friendly", "Easy Cleaning", "Durable Frame", "Custom Fitting"],
     benefits: [
@@ -459,8 +459,8 @@ export const servicesData = {
     id: "hdpe-nylon",
     title: "HDPE Nets, Nylon Nets",
     heroDescription: "Versatile protection for any application. Premium HDPE and nylon nets engineered for strength, durability, and adaptability.",
-    description: "Quality HDPE and nylon nets for safety, protection, and recreational uses. Premium material, versatile, and professionally installed in Hyderabad, Bangalore, Chennai, and Andhra Pradesh.",
-    detailedDescription: "KGR Enterprises is a trusted partner, delivering the best quality HDPE and nylon nets for safety, protection, and recreational uses in Hyderabad, Bangalore, Chennai, and Andhra Pradesh. Our premium quality nets are available in various mesh sizes and colors for different requirements. Trusted for quality, versatility, and professional installation.",
+    description: "Quality HDPE and nylon nets for safety, protection, and recreational uses. Premium material, versatile, and professionally installed in Bangalore, Hyderabad, Chennai, and Andhra Pradesh.",
+    detailedDescription: "KGR Enterprises is a trusted partner, delivering the best quality HDPE and nylon nets for safety, protection, and recreational uses in Bangalore, Hyderabad, Chennai, and Andhra Pradesh. Our premium quality nets are available in various mesh sizes and colors for different requirements. Trusted for quality, versatility, and professional installation.",
     category: "safety-nets",
     features: ["Premium Material", "Versatile Use", "High Strength", "Weather Proof", "Custom Sizes", "Multi Purpose"],
     benefits: [
@@ -471,8 +471,8 @@ export const servicesData = {
       "Custom specifications available",
       "Cost-effective solution"
     ],
-    images: ["/images/Hdpe-net-1.jpg", "/images/Hdpe-net-2.jpg", "/images/Hdpe-net-3.jpg"],
-    image: "/images/Hdpe-net-1.jpg",
+    images: ["/images/open-area-net-1.jpg", "/images/industrial-net-1.jpg", "/images/open-area-net-3.jpg"],
+    image: "/images/open-area-net-1.jpg",
     specifications: [
       { label: "Material Options", value: "HDPE & Nylon" },
       { label: "Mesh Sizes", value: "10mm to 50mm" },
@@ -487,8 +487,8 @@ export const servicesData = {
     id: "pigeon-nets",
     title: "Pigeon Nets",
     heroDescription: "Protect balconies and terraces with custom pigeon nets. Our bird net installation keeps pigeons and other birds out while preserving open views.",
-    description: "Pigeon net installation in Hyderabad, Bangalore, Chennai, and Andhra Pradesh. Effective anti pigeon net solutions for balconies, windows, and outdoor areas.",
-    detailedDescription: "KGR Enterprises provides high-quality pigeon net installation for balconies, windows, and residential areas in Hyderabad, Bangalore, Chennai, and Andhra Pradesh. Our custom pigeon nets and anti pigeon net systems prevent bird nesting, droppings, and property damage while staying humane and unobtrusive. Trust our bird net installation experts for clean, long-lasting bird control.",
+    description: "Pigeon net installation in Bangalore, Hyderabad, Chennai, and Andhra Pradesh. Effective anti pigeon net solutions for balconies, windows, and outdoor areas.",
+    detailedDescription: "KGR Enterprises provides high-quality pigeon net installation for balconies, windows, and residential areas in Bangalore, Hyderabad, Chennai, and Andhra Pradesh. Our custom pigeon nets and anti pigeon net systems prevent bird nesting, droppings, and property damage while staying humane and unobtrusive. Trust our bird net installation experts for clean, long-lasting bird control.",
     category: "bird-protection",
     features: ["Humane Control", "Mess Prevention", "Weather Resistant", "Easy Installation", "Bird Safe", "Long Lasting"],
     benefits: [
@@ -635,7 +635,7 @@ export const servicesData = {
       "Safe practice environment for players",
       "Cost-effective multi-sport solution"
     ],
-    images: ["/images/all-sports-net-1.jpg","/images/all-sports-net-2.jpg","/images/all-sports-net-3.jpg"],
+    images: ["/images/all-sports-net-1.jpg","/images/all-sports-net-3.jpg"],
     image: "/images/all-sports-net-1.jpg",
     specifications: [
       { label: "Material", value: "Knotted HDPE" },
@@ -710,6 +710,142 @@ export const servicesData = {
     ]
   },
 
+  "shade-nets": {
+    id: "shade-nets",
+    title: "Shade Nets",
+    heroDescription: "Premium shade solutions for outdoor spaces. UV-blocking shade nets that provide comfort, protection, and climate control for terraces, gardens, and commercial areas.",
+    description: "Professional shade net installation in Bangalore, Hyderabad, Chennai, Vijayawada, and Visakhapatnam. Quality UV-blocking shade nets for residential and commercial spaces.",
+    detailedDescription: "KGR Enterprises delivers premium shade net installation for terraces, gardens, parking areas, and commercial spaces across Bangalore, Hyderabad, Chennai, Vijayawada, and Visakhapatnam. Our UV-stabilized shade nets block 50-90% of harmful sun rays, reduce temperature significantly, and create comfortable outdoor environments. Ideal for protecting plants, reducing cooling costs, and creating weather-protected outdoor living areas. Trusted for quality materials, expert installation, and long-lasting performance.",
+    category: "safety-nets",
+    features: [
+      "UV Blocking (50-90% protection)",
+      "Temperature Reduction",
+      "Weather Resistant",
+      "Multiple Density Options",
+      "Easy Installation",
+      "Long Lasting Material"
+    ],
+    benefits: [
+      "Blocks harmful UV rays effectively",
+      "Reduces ambient temperature by 10-15°C",
+      "Protects plants and outdoor furniture",
+      "Lowers air conditioning costs",
+      "Creates comfortable outdoor spaces",
+      "Multiple uses for residential and commercial"
+    ],
+    images: ["/images/shade-net-1.jpg", "/images/shade-net-2.jpg", "/images/shade-net-3.jpg"],
+    image: "/images/shade-net-1.jpg",
+    specifications: [
+      { label: "Material", value: "UV Stabilized HDPE" },
+      { label: "Density Options", value: "50%, 75%, 90% Shade" },
+      { label: "Installation", value: "By Our Expert Team" },
+      { label: "UV Protection", value: "Blocks 50-90% UV" },
+      { label: "Temperature Reduction", value: "10-15°C" }
+    ]
+  },
+
+  "swimming-pool": {
+    id: "swimming-pool",
+    title: "Swimming Pool Safety Nets",
+    heroDescription: "Professional pool safety nets for family protection. Strong, durable nets that prevent accidental pool entry while maintaining easy access for swimmers.",
+    description: "Swimming pool safety nets installation in Bangalore, Hyderabad, Chennai, Vijayawada, and Visakhapatnam. Quality child-safe pool protection with professional installation.",
+    detailedDescription: "KGR Enterprises provides premium swimming pool safety nets for residential and commercial pools across Bangalore, Hyderabad, Chennai, Vijayawada, and Visakhapatnam. Our child-safe pool nets prevent accidental entry while allowing water drainage and easy access for intended users. Made from strong, UV-resistant materials, our pool nets meet safety standards and provide reliable protection for families. Trusted for quality, safety certification, and expert installation.",
+    category: "safety-nets",
+    features: [
+      "Child-Safe Protection",
+      "Strong Load Capacity",
+      "Water Drainage Design",
+      "UV Resistant Material",
+      "Easy Access for Swimmers",
+      "Safety Certified"
+    ],
+    benefits: [
+      "Prevents accidental pool entry",
+      "Child and pet safety protection",
+      "Reduces drowning risk significantly",
+      "Easy water drainage",
+      "Durable and long-lasting",
+      "Professional safety standards"
+    ],
+    images: ["/images/swimming-pool-net-1.jpg"],
+    image: "/images/swimming-pool-net-1.jpg",
+    specifications: [
+      { label: "Material", value: "High Strength UV-Resistant HDPE" },
+      { label: "Load Capacity", value: "500kg distributed load" },
+      { label: "Installation", value: "By Our Expert Team" },
+      { label: "Safety Standard", value: "ASTM Compliant" },
+      { label: "Mesh Size", value: "6mm x 6mm" }
+    ]
+  },
+
+  "car-parking": {
+    id: "car-parking",
+    title: "Car Parking Nets & Shades",
+    heroDescription: "Protect your vehicles with professional parking nets and shades. Durable, UV-blocking solutions that safeguard cars from sun damage, bird droppings, and weather.",
+    description: "Professional car parking shade nets and safety nets in Bangalore, Hyderabad, Chennai, Vijayawada, and Visakhapatnam. Quality vehicle protection with expert installation.",
+    detailedDescription: "KGR Enterprises delivers premium car parking shade nets and protective nets for residential, commercial, and industrial parking areas across Bangalore, Hyderabad, Chennai, Vijayawada, and Visakhapatnam. Our UV-blocking parking shades protect vehicles from sun damage, harsh weather, and bird droppings while providing safe, comfortable parking environments. Ideal for apartment complexes, commercial lots, and car dealerships. Trusted for quality materials, durability, and professional installation.",
+    category: "safety-nets",
+    features: [
+      "UV Blocking Shade",
+      "Bird Droppings Protection",
+      "Weather Resistant",
+      "Easy Installation",
+      "Multiple Vehicle Capacity",
+      "Temperature Control"
+    ],
+    benefits: [
+      "Protects vehicles from UV damage",
+      "Prevents bird dropping corrosion",
+      "Shields from hail and weather",
+      "Reduces interior temperature",
+      "Extends vehicle paint life",
+      "Cost-effective protection solution"
+    ],
+    images: ["/images/car-parking-net-1.jpg", "/images/car-parking-net-2.jpg", "/images/car-parking-net-3.jpg"],
+    image: "/images/car-parking-net-1.jpg",
+    specifications: [
+      { label: "Material", value: "UV Stabilized HDPE" },
+      { label: "Density", value: "50-75% Shade" },
+      { label: "Installation", value: "By Our Expert Team" },
+      { label: "Vehicle Capacity", value: "Customizable" },
+      { label: "Wind Resistance", value: "Up to 80 km/h" }
+    ]
+  },
+
+  "monkey-safety": {
+    id: "monkey-safety",
+    title: "Monkey Safety Nets",
+    heroDescription: "Protect your home and balcony from monkey intrusions. Humane, effective nets that keep monkeys out while maintaining your view and ventilation.",
+    description: "Monkey safety nets and monkey protection nets in Bangalore, Hyderabad, Chennai, Vijayawada, and Visakhapatnam. Quality humane monkey deterrent with professional installation.",
+    detailedDescription: "KGR Enterprises provides premium monkey safety nets for residential balconies and terraces across Bangalore, Hyderabad, Chennai, Vijayawada, and Visakhapatnam. Our strong, humane monkey-proof nets prevent property damage, food theft, and potential injuries from monkey intrusions while allowing normal balcony use. Ideal for apartments, villas, and commercial buildings in areas with monkey populations. Made with strong materials and professional installation for maximum effectiveness. Trusted for quality, humane protection, and proven monkey deterrence.",
+    category: "safety-nets",
+    features: [
+      "Humane Monkey Protection",
+      "Strong Barrier Design",
+      "Easy Balcony Access",
+      "Weather Resistant",
+      "Transparent Mesh",
+      "Professional Installation"
+    ],
+    benefits: [
+      "Prevents monkey property damage",
+      "Protects food from theft",
+      "Prevents injuries from monkeys",
+      "Maintains balcony aesthetics",
+      "Humane animal treatment",
+      "Long-lasting protection"
+    ],
+    images: ["/images/monkey-net-2.jpg", "/images/monkey-net-3.jpg"],
+    image: "/images/monkey-net-2.jpg",
+    specifications: [
+      { label: "Material", value: "High Strength Nylon" },
+      { label: "Mesh Size", value: "10mm x 10mm" },
+      { label: "Installation", value: "By Our Expert Team" },
+      { label: "Safety Method", value: "100% Humane" },
+      { label: "Durability", value: "5+ Years" }
+    ]
+  },
+
   // Backwards-compatible alias for legacy/SEO-friendly slug
   // Maps `/services/open-area-safety-nets` to the existing `open-area` entry
   // (keeps one source of truth while supporting older URLs)
@@ -769,7 +905,8 @@ export const serviceCategories = {
     services: [
       "balcony-safety", "children-protection", "pets-safety", "grill-balcony", "terrace-top",
       "industrial-safety", "duct-area", "open-area", "staircase-safety",
-      "construction-safety", "mosquito-nets", "hdpe-nylon"
+      "construction-safety", "mosquito-nets", "hdpe-nylon",
+      "shade-nets", "swimming-pool", "car-parking", "monkey-safety"
     ]
   },
   "bird-protection": {
@@ -1123,6 +1260,150 @@ export const serviceSpecificLocationFAQs: Record<string, Record<string, Array<{ 
       {
         question: "Do you provide installation in Vijayawada?",
         answer: "Yes — we offer installation and maintenance services in Vijayawada and nearby areas. Contact us to schedule a site visit.",
+      }
+    ]
+  },
+  "shade-nets": {
+    hyderabad: [
+      {
+        question: "What density shade nets do you provide?",
+        answer: "We offer 50%, 75%, and 90% shade nets depending on your sun protection needs. 90% is ideal for maximum cooling.",
+      },
+      {
+        question: "Can shade nets reduce temperature?",
+        answer: "Yes — our UV-blocking shade nets reduce ambient temperature by 10-15°C, making outdoor spaces significantly more comfortable.",
+      }
+    ],
+    bangalore: [
+      {
+        question: "Are shade nets suitable for Bangalore's climate?",
+        answer: "Yes — our UV-stabilized shade nets are perfect for Bangalore's hot climate, protecting plants and creating comfortable outdoor spaces.",
+      }
+    ],
+    chennai: [
+      {
+        question: "Do you install shade nets for terraces in Chennai?",
+        answer: "Yes — we provide shade net installation across Chennai for terraces, gardens, and parking areas.",
+      }
+    ],
+    vijayawada: [
+      {
+        question: "Can shade nets be installed on balconies?",
+        answer: "Yes — we install shade nets on balconies, terraces, and open areas across Vijayawada.",
+      }
+    ],
+    visakhapatnam: [
+      {
+        question: "How long do shade nets last?",
+        answer: "Our UV-stabilized shade nets typically last 5-7 years depending on sun exposure and maintenance.",
+      }
+    ]
+  },
+  "swimming-pool": {
+    hyderabad: [
+      {
+        question: "Are pool safety nets required by law?",
+        answer: "Yes — pool safety nets are recommended by safety standards and many jurisdictions. They prevent accidental entry and drowning.",
+      },
+      {
+        question: "Do pool nets affect water circulation?",
+        answer: "No — our pool nets have water drainage design, allowing proper water circulation while maintaining child safety.",
+      }
+    ],
+    bangalore: [
+      {
+        question: "Can pool safety nets support weight?",
+        answer: "Yes — our safety nets are designed to support distributed loads up to 500kg while maintaining child safety.",
+      }
+    ],
+    chennai: [
+      {
+        question: "Are pool safety nets durable in coastal areas?",
+        answer: "Yes — we use UV-resistant materials that withstand coastal salt spray and humidity.",
+      }
+    ],
+    vijayawada: [
+      {
+        question: "How easy are pool nets to install?",
+        answer: "Our professional installation team handles everything, ensuring proper fitting and safety compliance.",
+      }
+    ],
+    visakhapatnam: [
+      {
+        question: "Can pool nets be customized for different pool sizes?",
+        answer: "Yes — we provide custom pool safety net solutions for all pool dimensions and shapes.",
+      }
+    ]
+  },
+  "car-parking": {
+    hyderabad: [
+      {
+        question: "What is the best shade density for car parking?",
+        answer: "We recommend 50-75% shade nets for car parking. They block UV effectively while maintaining visibility.",
+      },
+      {
+        question: "Can parking nets reduce car temperature?",
+        answer: "Yes — shade nets reduce interior car temperature by 15-20°C compared to direct sun exposure.",
+      }
+    ],
+    bangalore: [
+      {
+        question: "Are car parking nets suitable for apartment complexes?",
+        answer: "Yes — we install customized parking shade nets for apartments, villas, and commercial parking areas.",
+      }
+    ],
+    chennai: [
+      {
+        question: "Do parking nets protect from bird droppings?",
+        answer: "Yes — one key benefit of our car parking nets is protection from bird droppings and weather damage.",
+      }
+    ],
+    vijayawada: [
+      {
+        question: "What is the wind resistance of car parking nets?",
+        answer: "Our parking nets withstand winds up to 80 km/h, making them reliable in various weather conditions.",
+      }
+    ],
+    visakhapatnam: [
+      {
+        question: "Can parking nets cover multiple vehicles?",
+        answer: "Yes — we design parking nets to cover single or multiple vehicles depending on your space and requirements.",
+      }
+    ]
+  },
+  "monkey-safety": {
+    hyderabad: [
+      {
+        question: "Are monkey safety nets 100% effective?",
+        answer: "Yes — our strong, professionally installed monkey nets provide complete protection when properly maintained.",
+      },
+      {
+        question: "Do monkey nets affect balcony access?",
+        answer: "No — our nets are designed to allow normal human use while keeping monkeys out completely.",
+      }
+    ],
+    bangalore: [
+      {
+        question: "Why are monkey safety nets needed in Bangalore?",
+        answer: "Bangalore has significant monkey populations that can cause property damage and steal food. Our nets provide humane, effective protection.",
+      }
+    ],
+    chennai: [
+      {
+        question: "How long do monkey nets last?",
+        answer: "Our high-strength nylon monkey nets typically last 5+ years, making them a cost-effective long-term solution.",
+      }
+    ],
+    vijayawada: [
+      {
+        question: "Can monkey nets be installed on all balcony types?",
+        answer: "Yes — we customize monkey net installation for all balcony designs and sizes across Vijayawada.",
+      }
+    ],
+    visakhapatnam: [
+      {
+        question: "Are monkey nets visible from inside?",
+        answer: "Our transparent mesh nets are minimally visible, maintaining your balcony view while providing complete protection.",
       }
     ]
   }

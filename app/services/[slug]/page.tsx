@@ -8,7 +8,7 @@ import {
   serviceSpecificLocationFAQs,
   resolveServiceSlug,
 } from "@/data/servicesData";
-import { validLocations, locationData } from "@/constants/locations";
+import { validLocations, locationData, PRIMARY_LOCATION } from "@/constants/locations";
 import { getCanonicalUrl } from "@/lib/canonical-url";
 import {
   generateServiceMetadata,
@@ -177,8 +177,8 @@ export default async function ServiceDetailPage({ params }: Props) {
           answer: `Costs vary by area, size and specifications. Contact ${PRIMARY.display} for a free quote and site inspection.`,
         },
         {
-          question: `Do you provide ${productName} in Hyderabad, Bangalore and Chennai?`,
-          answer: `Yes — we provide ${productName} across Hyderabad, Bangalore, Chennai, Vijayawada and major cities in Andhra Pradesh.`,
+          question: `Do you provide ${productName} in Bangalore, Hyderabad and Chennai?`,
+          answer: `Yes — we provide ${productName} across Bangalore, Hyderabad, Chennai, Vijayawada and Visakhapatnam.`,
         },
         {
           question: `How long does ${productName} installation take?`,
@@ -277,16 +277,16 @@ export default async function ServiceDetailPage({ params }: Props) {
         url: "https://invisiblegrillsandsafetynets.in",
         address: {
           "@type": "PostalAddress",
-          addressLocality: "Hyderabad",
-          addressRegion: "Telangana",
+          streetAddress: PRIMARY_LOCATION.streetAddress,
+          addressLocality: PRIMARY_LOCATION.name,
+          addressRegion: PRIMARY_LOCATION.state,
+          postalCode: PRIMARY_LOCATION.postalCode,
           addressCountry: "IN",
         },
-        areaServed: [
-          { "@type": "City", name: "Chennai" },
-          { "@type": "City", name: "Hyderabad" },
-          { "@type": "City", name: "Bangalore" },
-          { "@type": "City", name: "Vijayawada" },
-        ],
+        areaServed: validLocations.map((slug) => ({
+          "@type": "City",
+          name: locationData[slug].name,
+        })),
         openingHoursSpecification: {
           "@type": "OpeningHoursSpecification",
           dayOfWeek: [

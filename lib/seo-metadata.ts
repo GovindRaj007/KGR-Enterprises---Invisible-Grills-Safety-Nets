@@ -1,55 +1,94 @@
 import type { Metadata } from 'next';
 import { PRIMARY } from '@/constants/contacts';
+import { locationData, validLocations, PRIMARY_LOCATION, LOCATION_NAMES } from '@/constants/locations';
 
-// Primary service locations
-export const PRIMARY_LOCATIONS = [
-  {
-    name: 'Hyderabad',
-    state: 'Telangana',
-    areas: ['Uppal', 'Kukatpally', 'Madhapur', 'Gachibowli', 'Kondapur', 'Miyapur'],
-    streetAddress: '15-21-150/17, JK Heights, Balaji Nagar, Kukatpally',
-    postalCode: '500072',
-    latitude: 17.48134,
-    longitude: 78.40828,
-  },
-  {
-    name: 'Bangalore',
-    state: 'Karnataka',
-    areas: ['Whitefield', 'Electronic City', 'Marathahalli', 'HSR Layout', 'Koramangala'],
-    streetAddress: '367, 2nd A Main Rd, Sharadamba Nagar, Muthyala Nagar, Gokula Extension, Mathikere, Bengaluru - 560054, Karnataka',
-    postalCode: '560054',
-    latitude: 13.04266073172332,
-    longitude: 77.55298708465743,
-  },
-  {
-    name: 'Chennai',
-    state: 'Tamil Nadu',
-    areas: ['Anna Nagar', 'T Nagar', 'Velachery', 'Adyar', 'Porur'],
-    streetAddress: '25, Sathya Moorthy Street, Kamaraj Nagar,NGO Colony, Choolaimedu, Greater Chennai - 600094, Tamil Nadu',
-    postalCode: '600094',
-    latitude: 13.065460796383261,
-    longitude: 80.2214640558218,
-  },
-  {
-    name: 'Vijayawada',
-    state: 'Andhra Pradesh',
-    areas: ['Benz Circle', 'Governorpet', 'Patamata', 'Auto Nagar'],
-    streetAddress: '3-12, Ayyappa Nagar, Benz Circle, Vijayawada - 521134, Andhra Pradesh',
-    postalCode: '521134',
-    latitude: 16.483198690558233,
-    longitude: 80.66901608208298,
-  },
-   {
-    name: 'Visakhapatnam',
-    state: 'Andhra Pradesh',
-    areas: ['MVP Colony', 'Dwaraka Nagar', 'Gajuwaka', 'Madhurawada', 'Seethammadhara', 'Beach Road'],
-    streetAddress: '50-79-31/1, Ganesh Nagar, Seetamma Peta, Dwaraka Nagar, Visakhapatnam - 530016, Andhra Pradesh',
-    postalCode: '530016',
-    latitude: 17.73464614605787,
-    longitude: 83.31177354232871,
-  },
-];
+// Primary service locations, derived from the single source of truth in
+// constants/locations.ts so addresses/coordinates stay identical everywhere
+// they are emitted (metadata, JSON-LD, sitemaps).
+export const PRIMARY_LOCATIONS = validLocations.map(slug => {
+  const loc = locationData[slug];
+  return {
+    name: loc.name as string,
+    state: loc.state as string,
+    areas: [...loc.primaryAreas] as string[],
+    allAreas: [...loc.areas] as string[],
+    streetAddress: loc.streetAddress as string,
+    postalCode: loc.postalCode as string,
+    latitude: loc.latitude as number,
+    longitude: loc.longitude as number,
+  };
+});
 
+
+// "Bangalore, Hyderabad, Chennai, Vijayawada and Visakhapatnam"
+export const LOCATIONS_SENTENCE = `${LOCATION_NAMES.slice(0, -1).join(', ')} and ${LOCATION_NAMES[LOCATION_NAMES.length - 1]}`;
+
+// Generate a focused keyword set for a service.
+//
+// This deliberately stays small. The `keywords` meta tag is ignored by Google
+// and an oversized one only bloats the HTML payload (it previously emitted
+// ~127KB per service page, which more than tripled document size and hurt LCP).
+// We keep a tight, human-plausible set covering the primary city first, then
+// the remaining service cities, plus the generic intent variations.
+export function generateLocationKeywords(serviceName: string): string[] {
+  const keywords: string[] = [];
+
+  // Generic, non-geo intent variations.
+  keywords.push(
+    serviceName,
+    `${serviceName} installation`,
+    `${serviceName} services`,
+    `${serviceName} price`,
+    `${serviceName} cost`,
+    `${serviceName} near me`,
+    `best ${serviceName}`,
+    `professional ${serviceName} installation`,
+    `${serviceName} dealers`,
+    `${serviceName} installation cost`,
+  );
+
+  // City-level variations, primary city first (PRIMARY_LOCATIONS is ordered).
+  PRIMARY_LOCATIONS.forEach(location => {
+    const city = location.name;
+    keywords.push(
+      `${serviceName} in ${city}`,
+      `${serviceName} installation in ${city}`,
+      `best ${serviceName} in ${city}`,
+      `${serviceName} cost in ${city}`,
+      `${serviceName} dealers in ${city}`,
+      `${serviceName} near me in ${city}`,
+      `${serviceName} in ${location.state}`,
+    );
+  });
+
+  // Neighbourhood-level long tail for the primary city only — this is where
+  // local intent actually converts, and it keeps the list a sane length.
+  PRIMARY_LOCATION.primaryAreas.forEach(area => {
+    keywords.push(`${serviceName} in ${area}`, `${serviceName} installation ${area} ${PRIMARY_LOCATION.name}`);
+  });
+
+  return [...new Set(keywords)];
+}
+
+// Google truncates meta descriptions around 155-160 characters. Trim on a word
+// boundary so snippets never end mid-word.
+export function clampSnippet(text: string, max = 155): string {
+  const clean = text.replace(/\s+/g, ' ').trim();
+  if (clean.length <= max) return clean;
+  const cut = clean.slice(0, max);
+  const lastSpace = cut.lastIndexOf(' ');
+  return (lastSpace > max * 0.6 ? cut.slice(0, lastSpace) : cut).replace(/[\s,.;:-]+$/, '');
+}
+
+// Append the brand to a title, degrading gracefully so long service names do
+// not push the title past Google's ~60 character display window: full brand,
+// then the short form, then no brand at all.
+export function withBrand(base: string, max = 60): string {
+  const full = `${base} | KGR Enterprises`;
+  if (full.length <= max) return full;
+  const short = `${base} | KGR`;
+  return short.length <= max ? short : base;
+}
 
 // Generate service-specific metadata with location targeting
 // Google Analytics 4 configuration
@@ -63,31 +102,68 @@ export function generateServiceMetadata(params: {
   image: string;
   primaryLocation?: string;
 }): Metadata {
-  const { serviceName, serviceSlug, shortDescription, longDescription, image, primaryLocation } = params;
+  // longDescription is intentionally not used in the meta description: long copy
+  // belongs in the page body, and Google truncates snippets around 155 chars.
+  const { serviceName, serviceSlug, shortDescription, image, primaryLocation } = params;
   
   // Generate location-specific content
   const locationInfo = primaryLocation
     ? PRIMARY_LOCATIONS.find(loc => loc.name === primaryLocation)
     : null;
 
+  // A page targeting one city says so; the generic service page leads with the
+  // primary focus city but names the wider footprint, so the two never compete
+  // for the same query.
   const locationSuffix = primaryLocation
     ? ` in ${primaryLocation}`
-    : ' in Chennai, Hyderabad, Bangalore, and Andhra Pradesh';
+    : ` in ${PRIMARY_LOCATION.name} & South India`;
 
-  const areas = locationInfo 
+  const areas = locationInfo
     ? `Serving ${locationInfo.areas.join(', ')} and surrounding areas`
-    : 'Serving all major areas across South India';
+    : `Serving ${LOCATIONS_SENTENCE}`;
 
-  const title = primaryLocation
-    ? `${serviceName}${locationSuffix} | Professional Installation Services`
-    : `${serviceName} Installation Services${locationSuffix} | KGR Enterprises`;
+  // Keep titles inside Google's ~60 character display window.
+  const title = withBrand(`${serviceName}${locationSuffix}`);
 
-  // Enhanced description with location-specific details and value propositions
-  const description = `${shortDescription}${locationSuffix}. ${areas}. ${longDescription} Professional installation backed by warranty, quality materials, and free site inspection. Call ${PRIMARY.display} for expert service.`;
+  // Keep descriptions near the ~155 character snippet limit. The long service
+  // copy belongs in the page body, not in the meta description.
+  const alreadyNamesCity = new RegExp(`\\b(${(primaryLocation ?? PRIMARY_LOCATION.name)})\\b`, 'i').test(shortDescription);
+  const descriptionTail = alreadyNamesCity
+    ? `. Free site visit, 15-year warranty. Call ${PRIMARY.display.trim()}.`
+    : `${locationSuffix}. Free site visit, 15-year warranty. Call ${PRIMARY.display.trim()}.`;
+  const description = `${clampSnippet(shortDescription.replace(/\.$/, ''), 155 - descriptionTail.length)}${descriptionTail}`;
+  const socialDescription = clampSnippet(`${shortDescription}${locationSuffix}. ${areas}.`, 280);
+  
+  // Generate enhanced keywords combining location and industry terms
+  const locationKeywords = generateLocationKeywords(serviceName);
+  const serviceTypeKeywords = [
+    'residential installation',
+    'commercial installation',
+    'apartment fitting',
+    'villa installation',
+    'office installation'
+  ];
+  const qualityKeywords = [
+    'professional installation',
+    'certified installers',
+    'expert fitting',
+    'quality materials',
+    'warranty service'
+  ];
+  const serviceKeywords = [
+    'authorized dealer',
+    'free inspection',
+    'same day service',
+    '24x7 support',
+    'emergency service'
+  ];
 
+  const keywords = [...new Set([...locationKeywords, ...serviceTypeKeywords, ...qualityKeywords, ...serviceKeywords])].join(', ');
+  
   return {
     title,
     description,
+    keywords,
     robots: {
       index: true,
       follow: true,
@@ -100,7 +176,7 @@ export function generateServiceMetadata(params: {
     },
     openGraph: {
       title,
-      description,
+      description: socialDescription,
       url: `https://invisiblegrillsandsafetynets.in/services/${serviceSlug}/`,
       siteName: 'KGR Invisible Grills & Safety Nets',
       images: [
@@ -108,7 +184,7 @@ export function generateServiceMetadata(params: {
           url: image,
           width: 1200,
           height: 630,
-          alt: `${serviceName} - Professional Installation Services in Chennai, Hyderabad, Bangalore, and Andhra Pradesh`,
+          alt: `${serviceName} - Professional Installation Services in ${LOCATIONS_SENTENCE}`,
         },
       ],
       type: 'article',
@@ -117,7 +193,7 @@ export function generateServiceMetadata(params: {
     twitter: {
       card: 'summary_large_image',
       title,
-      description,
+      description: socialDescription,
       images: [image],
       site: '@Kgr_Grills_Nets',
       creator: '@Kgr_Grills_Nets', 
@@ -177,7 +253,7 @@ export function generateServiceSchema(params: {
       'priceValidUntil': new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString(),
       'availability': 'https://schema.org/InStock',
       'itemCondition': 'https://schema.org/NewCondition',
-      'warranty': '10-year manufacturer warranty',
+      'warranty': '15-year manufacturer warranty',
       'seller': {
         '@type': 'Organization',
         'name': 'KGR Enterprises',
@@ -193,8 +269,8 @@ export function generateServiceSchema(params: {
         '@type': 'GeoCircle',
         'geoMidpoint': {
           '@type': 'GeoCoordinates',
-          'latitude': 17.48134,
-          'longitude': 78.40828
+          'latitude': PRIMARY_LOCATION.latitude,
+          'longitude': PRIMARY_LOCATION.longitude
         },
         'geoRadius': {
           '@type': 'QuantitativeValue',
@@ -203,45 +279,6 @@ export function generateServiceSchema(params: {
         }
       }
     },
-    'review': [{
-      '@type': 'Review',
-      'reviewRating': {
-        '@type': 'Rating',
-        'ratingValue': 5,
-        'bestRating': 5,
-        
-      },
-      'author': {
-        '@type': 'Person',
-        'name': 'Rajesh Kumar'
-      },
-      'datePublished': new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString().split('T')[0],
-      'reviewBody': 'Excellent service and professional installation. The quality of materials used is outstanding.',
-      'publisher': {
-        '@type': 'Organization',
-        'name': 'KGR Enterprises',
-        'sameAs': 'https://invisiblegrillsandsafetynets.in'
-      }
-    },
-    {
-      '@type': 'Review',
-      'reviewRating': {
-        '@type': 'Rating',
-        'ratingValue': 5,
-        'bestRating': 5,
-      },
-      'author': {
-        '@type': 'Person',
-        'name': 'Priya Sharma'
-      },
-      'datePublished': new Date(new Date().setMonth(new Date().getMonth() - 2)).toISOString().split('T')[0],
-      'reviewBody': 'Very satisfied with their installation service. The team was punctual and professional.',
-      'publisher': {
-        '@type': 'Organization',
-        'name': 'KGR Enterprises',
-        'sameAs': 'https://invisiblegrillsandsafetynets.in'
-      }
-    }],
     'aggregateRating': {
       '@type': 'AggregateRating',
       'ratingValue': 4.9,
@@ -300,7 +337,8 @@ export function generateServiceSchema(params: {
         'description': description,
         'image': `https://invisiblegrillsandsafetynets.in${image}`,
         'category': 'Home Improvement Services',
-'provider': {
+        'keywords': generateLocationKeywords(serviceName).join(', '),
+        'provider': {
           '@type': 'LocalBusiness',
           'name': 'KGR Invisible Grills & Safety Nets',
           'telephone': PRIMARY.phone,
@@ -316,28 +354,18 @@ export function generateServiceSchema(params: {
             'itemListElement': [
               { '@type': 'Offer', 'itemOffered': { '@type': 'Service', 'name': 'Invisible Grills Installation' } },
               { '@type': 'Offer', 'itemOffered': { '@type': 'Service', 'name': 'Safety Nets Installation' } },
-              { '@type': 'Offer', 'itemOffered': { '@type': 'Service', 'name': 'Pigeon Nets' } },
+              { '@type': 'Offer', 'itemOffered': { '@type': 'Service', 'name': 'Bird Protection Solutions' } },
               { '@type': 'Offer', 'itemOffered': { '@type': 'Service', 'name': 'Sports Nets Installation' } }
             ]
           },
-          'address': [
-            {
-              '@type': 'PostalAddress',
-              'streetAddress': '15-21-150/17, JK Heights, Balaji Nagar, Kukatpally',
-              'addressLocality': 'Hyderabad',
-              'addressRegion': 'Telangana',
-              'postalCode': '500072',
-              'addressCountry': 'IN'
-            },
-            {
-              '@type': 'PostalAddress',
-              'streetAddress': '367, 2nd A Main Rd, Sharadamba Nagar, Muthyala Nagar, Gokula Extension, Mathikere, Bengaluru - 560054, Karnataka',
-              'addressLocality': 'Bangalore',
-              'addressRegion': 'Karnataka',
-              'postalCode': '560054',
-              'addressCountry': 'IN'
-            }
-          ],
+          'address': PRIMARY_LOCATIONS.map(loc => ({
+            '@type': 'PostalAddress',
+            'streetAddress': loc.streetAddress,
+            'addressLocality': loc.name,
+            'addressRegion': loc.state,
+            'postalCode': loc.postalCode,
+            'addressCountry': 'IN'
+          })),
           'areaServed': {
             '@type': 'State',
             'name': 'South India',
@@ -363,12 +391,11 @@ export function generateServiceSchema(params: {
           },
           'geo': {
             '@type': 'GeoCoordinates',
-            'latitude': '17.48134',
-            'longitude': '78.40828',
-            'addressRegion': 'Telangana',
-            'addressLocality': 'Hyderabad'
-          },
-          'hasMap': 'https://www.google.com/maps?cid=your-google-business-id'
+            'latitude': PRIMARY_LOCATION.latitude.toString(),
+            'longitude': PRIMARY_LOCATION.longitude.toString(),
+            'addressRegion': PRIMARY_LOCATION.state,
+            'addressLocality': PRIMARY_LOCATION.name
+          }
         },
         'offers': {
           '@type': 'AggregateOffer',
@@ -391,19 +418,6 @@ export function generateServiceSchema(params: {
               }
             }
           ]
-        },
-        'review': {
-          '@type': 'Review',
-          'reviewRating': {
-            '@type': 'Rating',
-            'ratingValue': '4.9',
-            'bestRating': '5',
-            'worstRating': '1'
-          },
-          'author': {
-            '@type': 'Organization',
-            'name': 'KGR Enterprises'
-          }
         },
         'aggregateRating': {
           '@type': 'AggregateRating',
@@ -530,134 +544,139 @@ export function generateServiceFAQSchema(faqs: Array<{ question: string; answer:
   };
 }
 
+// Per-city profile used to give each city genuinely different copy rather than
+// the same paragraph with the city name swapped in. Exported so the service +
+// location pages can use it too, not just /locations/[location]/.
+export const LOCATION_PROFILES = {
+  'Hyderabad': {
+    climate: 'hot and humid weather conditions',
+    concern: ['dust accumulation', 'high pollution levels', 'seasonal rains', 'high-rise apartments'],
+    benefit: [
+      'weather-resistant materials',
+      'anti-corrosive coatings',
+      'all-season durability',
+      'specialized high-rise solutions',
+      'pollution-resistant finishes'
+    ],
+    areas: ['Kukatpally', 'Madhapur', 'Gachibowli', 'Banjara Hills', 'Jubilee Hills', 'Hitech City'],
+    expertise: '15+ years of installation experience in Hyderabad',
+    specialFeature: 'Specialized solutions for Hyderabad\'s unique climate and modern architecture',
+    serviceHighlights: {
+      'invisible-grills': 'Perfect for Hyderabad\'s luxury apartments and villas',
+      'safety-nets': 'Designed for Hyderabad\'s high-rise buildings',
+      'bird-protection': 'Ideal for Hyderabad\'s urban bird challenges',
+      'sports': 'Custom solutions for Hyderabad\'s sports facilities'
+    }
+  },
+  'Bangalore': {
+    climate: 'pleasant year-round weather with occasional heavy rains',
+    concern: ['high-rise apartments', 'modern architecture', 'wind exposure', 'tech parks'],
+    benefit: [
+      'high-altitude installation expertise',
+      'wind-resistant designs',
+      'modern aesthetic solutions',
+      'tech-park specific solutions',
+      'premium finishing options'
+    ],
+    areas: ['Whitefield', 'Electronic City', 'Marathahalli', 'HSR Layout', 'Koramangala', 'Indiranagar', 'JP Nagar'],
+    expertise: 'Experts in high-rise installations across Bangalore',
+    specialFeature: 'Custom solutions for tech-parks and modern apartment complexes',
+    serviceHighlights: {
+      'invisible-grills': 'Ideal for Bangalore\'s modern apartments and tech parks',
+      'safety-nets': 'Perfect for Bangalore\'s high-rise corporate buildings',
+      'bird-protection': 'Specialized solutions for Bangalore\'s IT parks',
+      'sports': 'Professional installations for Bangalore\'s sports facilities'
+    }
+  },
+  'Chennai': {
+    climate: 'coastal climate with high humidity',
+    concern: [
+      'salt air corrosion',
+      'monsoon impact',
+      'coastal winds',
+      'beachfront properties',
+      'high humidity'
+    ],
+    benefit: [
+      'marine-grade materials',
+      'corrosion-resistant solutions',
+      'monsoon-proof installations',
+      'salt-resistant coatings',
+      'humidity-resistant materials'
+    ],
+    areas: ['Anna Nagar', 'T Nagar', 'Velachery', 'Adyar', 'Porur', 'OMR', 'ECR', 'Mylapore'],
+    expertise: 'Specialized in coastal area installations with marine-grade materials',
+    specialFeature: 'Anti-corrosion technology optimized for Chennai\'s coastal environment',
+    serviceHighlights: {
+      'invisible-grills': 'Marine-grade invisible grills for Chennai\'s coastal homes',
+      'safety-nets': 'Salt-resistant safety nets for Chennai\'s apartments',
+      'bird-protection': 'Durable bird protection for Chennai\'s coastal buildings',
+      'sports': 'Weather-resistant sports nets for Chennai\'s facilities'
+    }
+  },
+  'Visakhapatnam': {
+    climate: 'coastal tropical climate with high humidity',
+    concern: [
+      'coastal corrosion',
+      'sea breeze',
+      'high humidity',
+      'beachfront properties',
+      'industrial areas'
+    ],
+    benefit: [
+      'marine-grade materials',
+      'corrosion-resistant installations',
+      'humidity-resistant solutions',
+      'industrial-grade protection',
+      'beachfront-optimized designs'
+    ],
+    areas: ['MVP Colony', 'Dwaraka Nagar', 'Gajuwaka', 'Madhurawada', 'Seethammadhara', 'Beach Road'],
+    expertise: 'Specialized in coastal and industrial area installations',
+    specialFeature: 'Marine-grade solutions optimized for Visakhapatnam\'s coastal environment',
+    serviceHighlights: {
+      'invisible-grills': 'Corrosion-resistant invisible grills for coastal homes',
+      'safety-nets': 'Industrial-grade safety nets for Vizag buildings',
+      'bird-protection': 'Durable bird protection for coastal properties',
+      'sports': 'Weather-resistant sports solutions for Visakhapatnam'
+    }
+  },
+  'Vijayawada': {
+    climate: 'tropical weather with intense summers',
+    concern: [
+      'extreme heat',
+      'monsoon challenges',
+      'dust storms',
+      'residential complexes',
+      'commercial buildings'
+    ],
+    benefit: [
+      'heat-resistant materials',
+      'all-weather protection',
+      'dust-proof solutions',
+      'UV-resistant materials',
+      'temperature-optimized installations'
+    ],
+    areas: ['Benz Circle', 'Governorpet', 'Patamata', 'Auto Nagar', 'Gurunanak Colony', 'Madhura Nagar'],
+    expertise: 'Leading service provider in Andhra Pradesh with extensive local experience',
+    specialFeature: 'Heat and monsoon resistant installations with local expertise',
+    serviceHighlights: {
+      'invisible-grills': 'Heat-resistant invisible grills for Andhra Pradesh homes',
+      'safety-nets': 'All-weather safety nets for Vijayawada buildings',
+      'bird-protection': 'Durable bird protection for local climate',
+      'sports': 'Custom sports solutions for Andhra Pradesh facilities'
+    }
+  },
+};
+
 // Generate rich, unique content variations for each location
 export function generateLocationContent(serviceName: string, location: string): {
   heading: string;
   description: string;
   features: string[];
 } {
-  const locationSpecific = {
-    'Hyderabad': {
-      climate: 'hot and humid weather conditions',
-      concern: ['dust accumulation', 'high pollution levels', 'seasonal rains', 'high-rise apartments'],
-      benefit: [
-        'weather-resistant materials',
-        'anti-corrosive coatings',
-        'all-season durability',
-        'specialized high-rise solutions',
-        'pollution-resistant finishes'
-      ],
-      areas: ['Kukatpally', 'Madhapur', 'Gachibowli', 'Banjara Hills', 'Jubilee Hills', 'Hitech City'],
-      expertise: '15+ years of installation experience in Hyderabad',
-      specialFeature: 'Specialized solutions for Hyderabad\'s unique climate and modern architecture',
-      serviceHighlights: {
-        'invisible-grills': 'Perfect for Hyderabad\'s luxury apartments and villas',
-        'safety-nets': 'Designed for Hyderabad\'s high-rise buildings',
-        'bird-protection': 'Ideal for Hyderabad\'s urban bird challenges',
-        'sports': 'Custom solutions for Hyderabad\'s sports facilities'
-      }
-    },
-    'Bangalore': {
-      climate: 'pleasant year-round weather with occasional heavy rains',
-      concern: ['high-rise apartments', 'modern architecture', 'wind exposure', 'tech parks'],
-      benefit: [
-        'high-altitude installation expertise',
-        'wind-resistant designs',
-        'modern aesthetic solutions',
-        'tech-park specific solutions',
-        'premium finishing options'
-      ],
-      areas: ['Whitefield', 'Electronic City', 'Marathahalli', 'HSR Layout', 'Koramangala', 'Indiranagar', 'JP Nagar'],
-      expertise: 'Experts in high-rise installations across Bangalore',
-      specialFeature: 'Custom solutions for tech-parks and modern apartment complexes',
-      serviceHighlights: {
-        'invisible-grills': 'Ideal for Bangalore\'s modern apartments and tech parks',
-        'safety-nets': 'Perfect for Bangalore\'s high-rise corporate buildings',
-        'bird-protection': 'Specialized solutions for Bangalore\'s IT parks',
-        'sports': 'Professional installations for Bangalore\'s sports facilities'
-      }
-    },
-    'Chennai': {
-      climate: 'coastal climate with high humidity',
-      concern: [
-        'salt air corrosion',
-        'monsoon impact',
-        'coastal winds',
-        'beachfront properties',
-        'high humidity'
-      ],
-      benefit: [
-        'marine-grade materials',
-        'corrosion-resistant solutions',
-        'monsoon-proof installations',
-        'salt-resistant coatings',
-        'humidity-resistant materials'
-      ],
-      areas: ['Anna Nagar', 'T Nagar', 'Velachery', 'Adyar', 'Porur', 'OMR', 'ECR', 'Mylapore'],
-      expertise: 'Specialized in coastal area installations with marine-grade materials',
-      specialFeature: 'Anti-corrosion technology optimized for Chennai\'s coastal environment',
-      serviceHighlights: {
-        'invisible-grills': 'Marine-grade invisible grills for Chennai\'s coastal homes',
-        'safety-nets': 'Salt-resistant safety nets for Chennai\'s apartments',
-        'bird-protection': 'Durable pigeon nets for Chennai\'s coastal buildings',
-        'sports': 'Weather-resistant sports nets for Chennai\'s facilities'
-      }
-    },
-    'Visakhapatnam': {
-      climate: 'coastal tropical climate with high humidity',
-      concern: [
-        'coastal corrosion',
-        'sea breeze',
-        'high humidity',
-        'beachfront properties',
-        'industrial areas'
-      ],
-      benefit: [
-        'marine-grade materials',
-        'corrosion-resistant installations',
-        'humidity-resistant solutions',
-        'industrial-grade protection',
-        'beachfront-optimized designs'
-      ],
-      areas: ['MVP Colony', 'Dwaraka Nagar', 'Gajuwaka', 'Madhurawada', 'Seethammadhara', 'Beach Road'],
-      expertise: 'Specialized in coastal and industrial area installations',
-      specialFeature: 'Marine-grade solutions optimized for Visakhapatnam\'s coastal environment',
-      serviceHighlights: {
-        'invisible-grills': 'Corrosion-resistant invisible grills for coastal homes',
-        'safety-nets': 'Industrial-grade safety nets for Vizag buildings',
-        'bird-protection': 'Durable pigeon nets for coastal properties',
-        'sports': 'Weather-resistant sports solutions for Visakhapatnam'
-      }
-    },
-    'Vijayawada': {
-      climate: 'tropical weather with intense summers',
-      concern: [
-        'extreme heat',
-        'monsoon challenges',
-        'dust storms',
-        'residential complexes',
-        'commercial buildings'
-      ],
-      benefit: [
-        'heat-resistant materials',
-        'all-weather protection',
-        'dust-proof solutions',
-        'UV-resistant materials',
-        'temperature-optimized installations'
-      ],
-      areas: ['Benz Circle', 'Governorpet', 'Patamata', 'Auto Nagar', 'Gurunanak Colony', 'Madhura Nagar'],
-      expertise: 'Leading service provider in Andhra Pradesh with extensive local experience',
-      specialFeature: 'Heat and monsoon resistant installations with local expertise',
-      serviceHighlights: {
-        'invisible-grills': 'Heat-resistant invisible grills for Andhra Pradesh homes',
-        'safety-nets': 'All-weather safety nets for Vijayawada buildings',
-        'bird-protection': 'Durable pigeon nets for local climate',
-        'sports': 'Custom sports solutions for Andhra Pradesh facilities'
-      }
-    },
-  };
+  const locationSpecific = LOCATION_PROFILES;
   
-  const loc = locationSpecific[location as keyof typeof locationSpecific] || locationSpecific['Hyderabad'];
+  const loc = locationSpecific[location as keyof typeof locationSpecific] || locationSpecific['Bangalore'];
   
   const benefits = loc.benefit.join(' with ');
   const concerns = loc.concern.join(', ');
@@ -671,7 +690,7 @@ export function generateLocationContent(serviceName: string, location: string): 
       `Free same-day site inspection in ${location}`,
       `${loc.specialFeature}`,
       `Expert team with local experience`,
-      `Includes warranty with service support`,
+      `15-year warranty with service support`,
       `24/7 customer support in ${location}`,
       `Customized solutions for ${location} climate`,
       `Best-in-class materials and installation`,

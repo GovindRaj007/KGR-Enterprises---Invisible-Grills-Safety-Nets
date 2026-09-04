@@ -39,8 +39,8 @@ const BottomCTA: React.FC<BottomCTAProps> = ({ onMenuClick, onSearchClick }) => 
     { Icon: MenuIcon, label: 'Menu', href: '#menu', action: onMenuClick },
     { Icon: SearchIcon, label: 'Search', href: '#search', action: onSearchClick },
     { Icon: ServicesIcon, label: 'Services', href: '/services', action: undefined },
-    { Icon: WhatsAppIcon, label: 'WhatsApp', href: 'https://wa.me/1234567890', external: true, action: undefined },
-    { Icon: Phone, label: 'Call', href: 'tel:+1234567890', external: true, action: undefined },
+    { Icon: WhatsAppIcon, label: 'WhatsApp', href: 'https://wa.me/919337353030', external: true, action: undefined },
+    { Icon: Phone, label: 'Call', href: 'tel:+919337353030', external: true, action: undefined },
   ];
 
   return (

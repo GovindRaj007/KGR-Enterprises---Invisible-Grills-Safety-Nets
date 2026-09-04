@@ -330,7 +330,7 @@ export const normalizeSearchQuery = (query: string): string => {
 };
 
 // Location names (only source of truth for location matching)
-const LOCATION_NAMES = ["hyderabad", "bangalore", "chennai", "vijayawada", "visakhapatnam"] as const;
+const LOCATION_NAMES = ["bangalore", "hyderabad", "chennai", "vijayawada", "visakhapatnam"] as const;
 
 // Export for reference (dynamic - no hardcoded variations)
 export const LOCATION_KEYWORDS = Object.fromEntries(
@@ -442,9 +442,9 @@ export const getLocationNamesFromLocations = (locationString: string): string[] 
     locationString.toLowerCase().includes(loc)
   );
 
-  // If any location is found, return all 4 main locations for consistency
+  // If any location is found, return all main locations for consistency
   if (hasAnyLocation) {
-    return ["Hyderabad", "Bangalore", "Chennai", "Andhra Pradesh"];
+    return ["Bangalore", "Hyderabad", "Chennai", "Andhra Pradesh"];
   }
 
   return [];

@@ -7,7 +7,7 @@ import OptimizedImage from "@/components/shared/OptimizedImage";
 const showcaseImages = [
   {
     src: "/images/invisible-grill-1.jpg",
-    alt: "Invisible Grills installation for balcony and window safety in Chennai",
+    alt: "Invisible Grills installation for balcony and window safety in Bangalore",
     label: "Invisible Grills",
   },
   {
