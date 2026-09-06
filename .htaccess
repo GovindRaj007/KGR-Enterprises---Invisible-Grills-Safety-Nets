@@ -148,3 +148,11 @@ Options -Indexes
         Require all denied
     </IfModule>
 </FilesMatch>
+# The deploy branch carries a stub package.json purely to satisfy Hostinger's
+# Git pipeline, which refuses to deploy a repository without one. It is build
+# metadata, not site content, so keep it out of the web root's public surface.
+<FilesMatch "^(package(-lock)?\.json)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</FilesMatch>
