@@ -1,0 +1,150 @@
+# ============================================================================
+# ROOT HTACCESS FOR HOSTINGER DEPLOYMENT - NEXT.JS STATIC EXPORT
+# ============================================================================
+# Purpose: Handle redirects, URL rewrites, security, and GSC indexing issues
+# Last Updated: Feb 2026
+# ============================================================================
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    
+    # ========================================================================
+    # CANONICAL DOMAIN: Redirect www to non-www (preserve path/query)
+    # Ensures a single preferred host for SEO (https://invisiblegrillsandsafetynets.in)
+    # ========================================================================
+    RewriteCond %{HTTP_HOST} ^www\.invisiblegrillsandsafetynets\.in$ [NC]
+    RewriteRule ^ https://invisiblegrillsandsafetynets.in%{REQUEST_URI} [L,R=301]
+    
+    # ========================================================================
+    # 1. FORCE HTTPS (Critical for SEO)
+    # ========================================================================
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    
+    # ========================================================================
+    # 2. HANDLE MALFORMED URLS
+    # ========================================================================
+    # Remove double slashes (except in https://)
+    RewriteCond %{THE_REQUEST} //
+    RewriteRule .* /$0 [R=301,L]
+    
+    # Handle trailing special characters
+    RewriteRule ^(.*)[&?]+$ /$1 [L,R=301]
+    
+    # ========================================================================
+    # 3. ENSURE TRAILING SLASHES FOR ALL PAGES (Critical for GSC)
+    # ========================================================================
+    # Redirect files to directories with trailing slash
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} !\.html$
+    RewriteCond %{REQUEST_URI} !\.json$
+    RewriteCond %{REQUEST_URI} !\.xml$
+    RewriteCond %{REQUEST_URI} !\.txt$
+    RewriteRule ^(.+)$ /$1/ [R=301,L]
+    
+    # ========================================================================
+    # 4. OLD URL TO NEW URL REDIRECTS (GSC Redirect Errors Fix)
+    # ========================================================================
+    # Service slug redirects - all with trailing slash destination
+    RewriteRule ^grill/?$ /services/invisible-grills/ [R=301,L]
+    RewriteRule ^grills/?$ /services/invisible-grills/ [R=301,L]
+    RewriteRule ^nets/?$ /services/balcony-safety/ [R=301,L]
+    RewriteRule ^net/?$ /services/balcony-safety/ [R=301,L]
+    RewriteRule ^safety-net/?$ /services/balcony-safety/ [R=301,L]
+    RewriteRule ^invisible-grill/?$ /services/invisible-grills/ [R=301,L]
+    RewriteRule ^contact-us/?$ /contact/ [R=301,L]
+    RewriteRule ^about-us/?$ /about/ [R=301,L]
+    
+    # ========================================================================
+    # 5. NEXT.JS STATIC EXPORT ROUTING (Critical for Hostinger)
+    # ========================================================================
+    # If the requested resource exists as a file, serve it directly
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule .* - [L]
+    
+    # If the requested resource exists as a directory, serve it directly
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule .* - [L]
+    
+    # Try to serve .html version if it exists (for static HTML files)
+    RewriteCond %{REQUEST_FILENAME}.html -f
+    RewriteRule ^(.+)$ $1.html [L]
+    
+    # Fallback to index.html for client-side routing
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule .* /index.html [L]
+</IfModule>
+
+# ============================================================================
+# SECURITY HEADERS (Hostinger + GSC Optimization)
+# ============================================================================
+<IfModule mod_headers.c>
+    # Remove server signature
+    Header always unset "X-Powered-By"
+    Header always unset "Server"
+    
+    # Security headers for better crawlability
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    
+    # Cache Control - HTML pages (no cache for GSC freshness)
+    <FilesMatch "\.(html|htm)$">
+        Header set Cache-Control "public, max-age=0, must-revalidate"
+        Header set Pragma "public"
+    </FilesMatch>
+    
+    # Cache Control - CSS, JS (long cache)
+    <FilesMatch "\.(css|js|json)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    
+    # Cache Control - Images (long cache)
+    <FilesMatch "\.(jpg|jpeg|png|gif|ico|svg|webp|woff|woff2|ttf|eot)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+</IfModule>
+
+# ============================================================================
+# ETAG CONFIGURATION (For cache validation)
+# ============================================================================
+<FilesMatch "\.(html|css|js|json|xml|txt)$">
+    FileETag All
+</FilesMatch>
+
+# ============================================================================
+# COMPRESSION (Gzip + Brotli for better performance)
+# ============================================================================
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+    AddOutputFilterByType DEFLATE application/javascript application/json application/xml
+    AddOutputFilterByType DEFLATE application/rss+xml application/atom+xml
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+<IfModule mod_brotli.c>
+    AddOutputFilterByType BROTLI_COMPRESS text/html text/plain text/xml text/css
+    AddOutputFilterByType BROTLI_COMPRESS text/javascript application/javascript application/json
+</IfModule>
+
+# ============================================================================
+# ERROR PAGES & SECURITY
+# ============================================================================
+ErrorDocument 404 /404.html
+Options -Indexes
+
+# ============================================================================
+# HOSTINGER-SPECIFIC OPTIMIZATIONS
+# ============================================================================
+# Disable PHP/CGI/other unwanted handlers
+<FilesMatch "\.(php|phtml|php3|php4|php5|pht|phar|phps|shtml|ctp|ihtml|php7|phps|pht|phtml|shtml)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</FilesMatch>

@@ -1,0 +1,22 @@
+User-Agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+Disallow: /*?*utm_source=
+Disallow: /*?*utm_medium=
+Disallow: /*?*utm_campaign=
+
+User-Agent: Mediapartners-Google
+Allow: /
+
+User-Agent: AhrefsBot
+User-Agent: SemrushBot
+User-Agent: MJ12bot
+User-Agent: DotBot
+Crawl-delay: 10
+
+Sitemap: https://invisiblegrillsandsafetynets.in/sitemap-index.xml
+Sitemap: https://invisiblegrillsandsafetynets.in/sitemap.xml
+Sitemap: https://invisiblegrillsandsafetynets.in/sitemap-services.xml
+Sitemap: https://invisiblegrillsandsafetynets.in/sitemap-images.xml
