@@ -79,6 +79,23 @@ jobs:
           find .deploy -mindepth 1 -maxdepth 1 -not -name .git -exec rm -rf {} +
           cp -a out/. .deploy/
 
+          # Hostinger's Git pipeline refuses to deploy a repository with no
+          # package.json, even on the "Other" (no-build) preset. This stub
+          # satisfies that check without building anything - the site on this
+          # branch is already the finished static export. .htaccess denies web
+          # access to it, so it is never served.
+          cat > .deploy/package.json <<'JSON'
+          {
+            "name": "kgr-enterprises-static",
+            "version": "1.0.0",
+            "private": true,
+            "description": "Prebuilt static export. Built by GitHub Actions from the master branch - do not build this branch.",
+            "scripts": {
+              "build": "echo 'Prebuilt static export - nothing to build.'"
+            }
+          }
+          JSON
+
           cd .deploy
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
