@@ -872,6 +872,9 @@ export const SERVICE_URL_SLUGS: Record<string, string> = {
   "swimming-pool": "swimming-pool-safety-nets",
   "car-parking": "car-parking-nets",
   "monkey-safety": "monkey-safety-nets",
+  "pigeon-balcony": "pigeon-nets-balcony",
+  "all-sports-practice": "all-sports-practice-nets",
+  "cricket-practice": "cricket-practice-nets",
 };
 
 const SERVICE_IDS_BY_URL_SLUG: Record<string, string> = Object.fromEntries(
