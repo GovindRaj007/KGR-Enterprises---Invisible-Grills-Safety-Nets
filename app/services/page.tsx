@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
-import { servicesData } from "@/data/servicesData";
+import { servicesData, getServiceRoute } from '@/data/servicesData';
 import { ServicesSectionClient, ServiceLocationsSliderClient } from "@/components/services/ServicesClientWrapper";
 
 export const metadata: Metadata = {
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     title: "KGR Enterprises Services - Complete Safety Solutions",
     description:
       "Invisible grills, safety nets, bird protection, and sports nets installation services",
-    url: "https://invisiblegrillsandsafetynets.in/services",
+    url: "https://invisiblegrillsandsafetynets.in/services/",
     images: [
       {
         url: "/images/service-gallery-2.jpg",
@@ -109,7 +109,7 @@ export default function ServicesPage() {
             "@type": "Service",
             name: service.title,
             description: service.description,
-            url: `https://invisiblegrillsandsafetynets.in/services/${slug}/`,
+            url: `https://invisiblegrillsandsafetynets.in${getServiceRoute(slug)}`,
             image: service.image,
             provider: {
               "@type": "Organization",

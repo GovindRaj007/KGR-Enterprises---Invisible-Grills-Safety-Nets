@@ -42,12 +42,15 @@ if (!servicesDataMatch) {
 // Evaluate the servicesData object
 const servicesData = eval('(' + servicesDataMatch[1] + ')');
 
-// Slugs that only exist as redirect/alias targets. They resolve to another
-// service and emit that service's canonical, so they must never be listed as
-// their own sitemap URL.
-const aliasMatch = servicesDataContent.match(/export const SERVICE_SLUG_ALIASES: Record<string, string> = ({[\s\S]*?});/);
-const SERVICE_SLUG_ALIASES = aliasMatch ? eval('(' + aliasMatch[1] + ')') : {};
-const isCanonicalSlug = slug => !(slug in SERVICE_SLUG_ALIASES);
+// Public URL slug per service id (only where it differs from the id). Service
+// pages live at the site root: /<url-slug>/, /<url-slug>/<city>/, ...
+// Mirrors getServiceRoute() in data/servicesData.ts.
+const urlSlugMatch = servicesDataContent.match(/export const SERVICE_URL_SLUGS: Record<string, string> = ({[\s\S]*?});/);
+if (!urlSlugMatch) {
+  throw new Error('Could not find SERVICE_URL_SLUGS in data/servicesData.ts');
+}
+const SERVICE_URL_SLUGS = eval('(' + urlSlugMatch[1] + ')');
+const serviceRoute = (id, ...rest) => '/' + [SERVICE_URL_SLUGS[id] || id, ...rest].join('/') + '/';
 
 const BASE_URL = 'https://invisiblegrillsandsafetynets.in';
 
@@ -61,7 +64,30 @@ if (!locationsMatch) {
 const LOCATIONS = eval(locationsMatch[1]);
 const PRIMARY_LOCATION = LOCATIONS[0];
 
-const SERVICE_SLUGS = Object.keys(servicesData).filter(isCanonicalSlug);
+const SERVICE_SLUGS = Object.keys(servicesData);
+
+// Neighbourhood pages (/<slug>/<city>/<area>/) from constants/service-areas.ts.
+const serviceAreasPath = path.join(process.cwd(), 'constants', 'service-areas.ts');
+const serviceAreasContent = fs.readFileSync(serviceAreasPath, 'utf8');
+const areaServicesMatch = serviceAreasContent.match(/export const AREA_PAGE_SERVICES = (\[[\s\S]*?\]);/);
+const serviceAreasMatch = serviceAreasContent.match(/export const serviceAreas[^=]*= ({[\s\S]*?\r?\n});/);
+if (!areaServicesMatch || !serviceAreasMatch) {
+  throw new Error('Could not find AREA_PAGE_SERVICES / serviceAreas in constants/service-areas.ts');
+}
+const AREA_PAGE_SERVICES = eval(areaServicesMatch[1]);
+const SERVICE_AREAS = eval('(' + serviceAreasMatch[1] + ')');
+const AREAS_LASTMOD = () => lastmodFor('constants/service-areas.ts');
+// Mirrors slugifyArea() in constants/service-areas.ts.
+const slugifyArea = name => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+const SERVICE_AREA_PAGES = AREA_PAGE_SERVICES.flatMap(slug =>
+  LOCATIONS.flatMap(loc =>
+    (SERVICE_AREAS[loc] || []).map(area => ({
+      url: serviceRoute(slug, loc, slugifyArea(area.name)),
+      priority: loc === PRIMARY_LOCATION ? '0.8' : '0.7',
+      changefreq: 'weekly'
+    }))
+  )
+);
 
 // Services that lead the category pages and carry the strongest commercial
 // intent. Everything else still ships, one priority step lower.
@@ -116,14 +142,14 @@ function generateSitemap() {
   }));
 
   const servicePages = SERVICE_SLUGS.map(slug => ({
-    url: `/services/${slug}/`,
+    url: serviceRoute(slug),
     priority: isMainService(slug) ? '0.9' : '0.8',
     changefreq: 'weekly'
   }));
 
   const serviceLocationPages = SERVICE_SLUGS.flatMap(slug =>
     LOCATIONS.map(loc => ({
-      url: `/services/${slug}/${loc}/`,
+      url: serviceRoute(slug, loc),
       priority: isMainService(slug) ? '0.85' : '0.75',
       changefreq: 'weekly'
     }))
@@ -134,6 +160,7 @@ function generateSitemap() {
     ...locationPages.map(p => ({ ...p, lastmod: LOCATIONS_LASTMOD() })),
     ...servicePages.map(p => ({ ...p, lastmod: SERVICES_LASTMOD() })),
     ...serviceLocationPages.map(p => ({ ...p, lastmod: SERVICES_LASTMOD() })),
+    ...SERVICE_AREA_PAGES.map(p => ({ ...p, lastmod: AREAS_LASTMOD() })),
   ];
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -149,7 +176,7 @@ function generateImageSitemap() {
   const entries = SERVICE_SLUGS.map(slug => {
     const service = servicesData[slug];
     return {
-      url: `${BASE_URL}/services/${slug}/`,
+      url: `${BASE_URL}${serviceRoute(slug)}`,
       images: [
         {
           loc: `${BASE_URL}${service.image}`,
@@ -185,13 +212,16 @@ ${entry.images.map(img => `    <image:image>
 
 function generateServicesSitemap() {
   const lastmod = SERVICES_LASTMOD();
-  const entries = SERVICE_SLUGS.flatMap(slug => [
-    { url: `${BASE_URL}/services/${slug}/`, priority: isMainService(slug) ? 0.9 : 0.8 },
-    ...LOCATIONS.map(location => ({
-      url: `${BASE_URL}/services/${slug}/${location}/`,
-      priority: isMainService(slug) ? 0.85 : 0.75
-    }))
-  ]);
+  const entries = [
+    ...SERVICE_SLUGS.flatMap(slug => [
+      { url: `${BASE_URL}${serviceRoute(slug)}`, priority: isMainService(slug) ? 0.9 : 0.8 },
+      ...LOCATIONS.map(location => ({
+        url: `${BASE_URL}${serviceRoute(slug, location)}`,
+        priority: isMainService(slug) ? 0.85 : 0.75
+      }))
+    ]),
+    ...SERVICE_AREA_PAGES.map(p => ({ url: `${BASE_URL}${p.url}`, priority: p.priority })),
+  ];
 
   const servicesSitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -217,7 +247,7 @@ generateServicesSitemap();
 // Note: there is deliberately no hreflang sitemap. The site is published in a
 // single language (en-IN); the previous one declared hi/te/ta/kn alternates that
 // all pointed at the same English URL, which Google discards as invalid.
-const sitemapIndexLastmod = [SERVICES_LASTMOD(), LOCATIONS_LASTMOD()].sort().pop();
+const sitemapIndexLastmod = [SERVICES_LASTMOD(), LOCATIONS_LASTMOD(), AREAS_LASTMOD()].sort().pop();
 const sitemapIndex = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>

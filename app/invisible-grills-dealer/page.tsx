@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getServiceRoute } from '@/data/servicesData';
 export const dynamic = 'force-static';
 import Link from "next/link";
 import { Store, Award, TrendingUp, Users, Truck, Package, ArrowRight, Phone, CheckCircle2 } from "lucide-react";
@@ -28,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
     image: "/images/invisible-grill-1.jpg",
   });
 
-  const canonicalUrl = getCanonicalUrl("/services/invisible-grills-dealer");
+  const canonicalUrl = getCanonicalUrl(getServiceRoute("invisible-grills-dealer"));
 
   return {
     ...baseMetadata,
@@ -379,7 +380,7 @@ export default function InvisibleGrillsDealerPage() {
               {dealerLocationsList.map((loc) => (
                 <Link
                   key={loc.slug}
-                  href={`/services/invisible-grills/${loc.slug}`}
+                  href={getServiceRoute('invisible-grills', loc.slug)}
                   className="flex items-center justify-between rounded-xl bg-gradient-to-br from-[hsl(222,47%,11%)] via-[hsl(217,33%,17%)] to-[hsl(215,25%,22%)] p-4 transition-all hover:shadow-lg hover:-translate-y-1 border border-white/10"
                 >
                   <span className="font-medium text-white">{loc.name}</span>

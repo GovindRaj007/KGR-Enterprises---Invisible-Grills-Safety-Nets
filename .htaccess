@@ -10,6 +10,76 @@
     RewriteBase /
     
     # ========================================================================
+    # 0. SERVICE URL RESTRUCTURE (Oct 2026)
+    # Service pages moved from /services/<slug>/ to /<slug>/, and the safety-net
+    # services gained a "-nets" suffix. Absolute targets, and placed before the
+    # host/HTTPS/trailing-slash rules, so every old URL reaches its new address
+    # in a single 301. Keep in sync with SERVICE_URL_SLUGS in data/servicesData.ts.
+    # ========================================================================
+    # Renamed services (with or without city / area segments)
+    RewriteRule ^services/balcony-safety/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/balcony-safety-nets/$1/ [R=301,L]
+    RewriteRule ^services/balcony-safety/?$ https://invisiblegrillsandsafetynets.in/balcony-safety-nets/ [R=301,L]
+    RewriteRule ^services/children-protection/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/children-safety-nets/$1/ [R=301,L]
+    RewriteRule ^services/children-protection/?$ https://invisiblegrillsandsafetynets.in/children-safety-nets/ [R=301,L]
+    RewriteRule ^services/pets-safety/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/pet-safety-nets/$1/ [R=301,L]
+    RewriteRule ^services/pets-safety/?$ https://invisiblegrillsandsafetynets.in/pet-safety-nets/ [R=301,L]
+    RewriteRule ^services/grill-balcony/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/grill-balcony-safety-nets/$1/ [R=301,L]
+    RewriteRule ^services/grill-balcony/?$ https://invisiblegrillsandsafetynets.in/grill-balcony-safety-nets/ [R=301,L]
+    RewriteRule ^services/terrace-top/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/terrace-top-nets/$1/ [R=301,L]
+    RewriteRule ^services/terrace-top/?$ https://invisiblegrillsandsafetynets.in/terrace-top-nets/ [R=301,L]
+    RewriteRule ^services/industrial-safety/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/industrial-safety-nets/$1/ [R=301,L]
+    RewriteRule ^services/industrial-safety/?$ https://invisiblegrillsandsafetynets.in/industrial-safety-nets/ [R=301,L]
+    RewriteRule ^services/duct-area/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/duct-area-nets/$1/ [R=301,L]
+    RewriteRule ^services/duct-area/?$ https://invisiblegrillsandsafetynets.in/duct-area-nets/ [R=301,L]
+    RewriteRule ^services/open-area/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/open-area-safety-nets/$1/ [R=301,L]
+    RewriteRule ^services/open-area/?$ https://invisiblegrillsandsafetynets.in/open-area-safety-nets/ [R=301,L]
+    RewriteRule ^services/staircase-safety/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/staircase-safety-nets/$1/ [R=301,L]
+    RewriteRule ^services/staircase-safety/?$ https://invisiblegrillsandsafetynets.in/staircase-safety-nets/ [R=301,L]
+    RewriteRule ^services/construction-safety/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/construction-safety-nets/$1/ [R=301,L]
+    RewriteRule ^services/construction-safety/?$ https://invisiblegrillsandsafetynets.in/construction-safety-nets/ [R=301,L]
+    RewriteRule ^services/hdpe-nylon/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/hdpe-nylon-nets/$1/ [R=301,L]
+    RewriteRule ^services/hdpe-nylon/?$ https://invisiblegrillsandsafetynets.in/hdpe-nylon-nets/ [R=301,L]
+    RewriteRule ^services/swimming-pool/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/swimming-pool-safety-nets/$1/ [R=301,L]
+    RewriteRule ^services/swimming-pool/?$ https://invisiblegrillsandsafetynets.in/swimming-pool-safety-nets/ [R=301,L]
+    RewriteRule ^services/car-parking/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/car-parking-nets/$1/ [R=301,L]
+    RewriteRule ^services/car-parking/?$ https://invisiblegrillsandsafetynets.in/car-parking-nets/ [R=301,L]
+    RewriteRule ^services/monkey-safety/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/monkey-safety-nets/$1/ [R=301,L]
+    RewriteRule ^services/monkey-safety/?$ https://invisiblegrillsandsafetynets.in/monkey-safety-nets/ [R=301,L]
+    # Same renames for anyone who guesses the old slug at the new root level
+    RewriteRule ^balcony-safety/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/balcony-safety-nets/$1/ [R=301,L]
+    RewriteRule ^balcony-safety/?$ https://invisiblegrillsandsafetynets.in/balcony-safety-nets/ [R=301,L]
+    RewriteRule ^children-protection/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/children-safety-nets/$1/ [R=301,L]
+    RewriteRule ^children-protection/?$ https://invisiblegrillsandsafetynets.in/children-safety-nets/ [R=301,L]
+    RewriteRule ^pets-safety/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/pet-safety-nets/$1/ [R=301,L]
+    RewriteRule ^pets-safety/?$ https://invisiblegrillsandsafetynets.in/pet-safety-nets/ [R=301,L]
+    RewriteRule ^grill-balcony/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/grill-balcony-safety-nets/$1/ [R=301,L]
+    RewriteRule ^grill-balcony/?$ https://invisiblegrillsandsafetynets.in/grill-balcony-safety-nets/ [R=301,L]
+    RewriteRule ^terrace-top/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/terrace-top-nets/$1/ [R=301,L]
+    RewriteRule ^terrace-top/?$ https://invisiblegrillsandsafetynets.in/terrace-top-nets/ [R=301,L]
+    RewriteRule ^industrial-safety/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/industrial-safety-nets/$1/ [R=301,L]
+    RewriteRule ^industrial-safety/?$ https://invisiblegrillsandsafetynets.in/industrial-safety-nets/ [R=301,L]
+    RewriteRule ^duct-area/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/duct-area-nets/$1/ [R=301,L]
+    RewriteRule ^duct-area/?$ https://invisiblegrillsandsafetynets.in/duct-area-nets/ [R=301,L]
+    RewriteRule ^open-area/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/open-area-safety-nets/$1/ [R=301,L]
+    RewriteRule ^open-area/?$ https://invisiblegrillsandsafetynets.in/open-area-safety-nets/ [R=301,L]
+    RewriteRule ^staircase-safety/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/staircase-safety-nets/$1/ [R=301,L]
+    RewriteRule ^staircase-safety/?$ https://invisiblegrillsandsafetynets.in/staircase-safety-nets/ [R=301,L]
+    RewriteRule ^construction-safety/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/construction-safety-nets/$1/ [R=301,L]
+    RewriteRule ^construction-safety/?$ https://invisiblegrillsandsafetynets.in/construction-safety-nets/ [R=301,L]
+    RewriteRule ^hdpe-nylon/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/hdpe-nylon-nets/$1/ [R=301,L]
+    RewriteRule ^hdpe-nylon/?$ https://invisiblegrillsandsafetynets.in/hdpe-nylon-nets/ [R=301,L]
+    RewriteRule ^swimming-pool/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/swimming-pool-safety-nets/$1/ [R=301,L]
+    RewriteRule ^swimming-pool/?$ https://invisiblegrillsandsafetynets.in/swimming-pool-safety-nets/ [R=301,L]
+    RewriteRule ^car-parking/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/car-parking-nets/$1/ [R=301,L]
+    RewriteRule ^car-parking/?$ https://invisiblegrillsandsafetynets.in/car-parking-nets/ [R=301,L]
+    RewriteRule ^monkey-safety/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/monkey-safety-nets/$1/ [R=301,L]
+    RewriteRule ^monkey-safety/?$ https://invisiblegrillsandsafetynets.in/monkey-safety-nets/ [R=301,L]
+    # Every other service: just drop the /services prefix. (/services/ itself,
+    # the listing page, has no second segment and is left alone.)
+    RewriteRule ^services/([^/.]+)/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/$1/$2/ [R=301,L]
+    RewriteRule ^services/([^/.]+)/?$ https://invisiblegrillsandsafetynets.in/$1/ [R=301,L]
+
+    # ========================================================================
     # CANONICAL DOMAIN: Redirect www to non-www (preserve path/query)
     # Ensures a single preferred host for SEO (https://invisiblegrillsandsafetynets.in)
     # ========================================================================
@@ -48,12 +118,12 @@
     # 4. OLD URL TO NEW URL REDIRECTS (GSC Redirect Errors Fix)
     # ========================================================================
     # Service slug redirects - all with trailing slash destination
-    RewriteRule ^grill/?$ /services/invisible-grills/ [R=301,L]
-    RewriteRule ^grills/?$ /services/invisible-grills/ [R=301,L]
-    RewriteRule ^nets/?$ /services/balcony-safety/ [R=301,L]
-    RewriteRule ^net/?$ /services/balcony-safety/ [R=301,L]
-    RewriteRule ^safety-net/?$ /services/balcony-safety/ [R=301,L]
-    RewriteRule ^invisible-grill/?$ /services/invisible-grills/ [R=301,L]
+    RewriteRule ^grill/?$ /invisible-grills/ [R=301,L]
+    RewriteRule ^grills/?$ /invisible-grills/ [R=301,L]
+    RewriteRule ^nets/?$ /balcony-safety-nets/ [R=301,L]
+    RewriteRule ^net/?$ /balcony-safety-nets/ [R=301,L]
+    RewriteRule ^safety-net/?$ /balcony-safety-nets/ [R=301,L]
+    RewriteRule ^invisible-grill/?$ /invisible-grills/ [R=301,L]
     RewriteRule ^contact-us/?$ /contact/ [R=301,L]
     RewriteRule ^about-us/?$ /about/ [R=301,L]
     
@@ -100,6 +170,11 @@
         Header set Pragma "public"
     </FilesMatch>
     
+    # Fonts are assets, not pages - keep them out of Google's index reports
+    <FilesMatch "\.(woff|woff2|ttf|eot|otf)$">
+        Header set X-Robots-Tag "noindex"
+    </FilesMatch>
+
     # Cache Control - CSS, JS (long cache)
     <FilesMatch "\.(css|js|json)$">
         Header set Cache-Control "public, max-age=31536000, immutable"

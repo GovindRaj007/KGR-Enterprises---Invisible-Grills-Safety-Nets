@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
-import { servicesData, isCanonicalServiceSlug } from '@/data/servicesData';
+import { servicesData, getServiceRoute } from '@/data/servicesData';
 import { validLocations, PRIMARY_LOCATION_SLUG } from '@/constants/locations';
+import { AREA_PAGE_SERVICES, getServiceAreas, slugifyArea } from '@/constants/service-areas';
 
 export const dynamic = 'force-static';
 
@@ -27,9 +28,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://invisiblegrillsandsafetynets.in';
   const currentDate = new Date();
 
-  // Alias slugs resolve to another service and emit that service's canonical,
-  // so they must never appear as their own sitemap URL.
-  const serviceSlugs = Object.keys(servicesData).filter(isCanonicalServiceSlug);
+  // Service ids; getServiceRoute() turns each into its public URL.
+  const serviceSlugs = Object.keys(servicesData);
   const isMain = (slug: string) => mainCategoryServices.includes(slug);
 
   const staticPages = [
@@ -57,7 +57,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   const servicePages = serviceSlugs.map(slug => ({
-    url: `${baseUrl}/services/${slug}/`,
+    url: `${baseUrl}${getServiceRoute(slug)}`,
     lastModified: currentDate,
     changeFrequency: 'weekly' as const,
     priority: isMain(slug) ? 0.9 : 0.8,
@@ -65,11 +65,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const serviceLocationPages = serviceSlugs.flatMap(slug =>
     validLocations.map(location => ({
-      url: `${baseUrl}/services/${slug}/${location}/`,
+      url: `${baseUrl}${getServiceRoute(slug, location)}`,
       lastModified: currentDate,
       changeFrequency: 'weekly' as const,
       priority: isMain(slug) ? 0.85 : 0.75,
     }))
+  );
+
+  // Neighbourhood pages, e.g. /invisible-grills/bangalore/whitefield/
+  const serviceAreaPages = AREA_PAGE_SERVICES.flatMap(slug =>
+    validLocations.flatMap(location =>
+      getServiceAreas(location).map(area => ({
+        url: `${baseUrl}${getServiceRoute(slug, location, slugifyArea(area.name))}`,
+        lastModified: currentDate,
+        changeFrequency: 'weekly' as const,
+        priority: location === PRIMARY_LOCATION_SLUG ? 0.8 : 0.7,
+      }))
+    )
   );
 
   return [
@@ -77,5 +89,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...locationPages,
     ...servicePages,
     ...serviceLocationPages,
+    ...serviceAreaPages,
   ];
 }

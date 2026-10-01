@@ -4,7 +4,7 @@ import { MapPin, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useInViewAnimation } from '@/hooks/useInViewAnimation';
 import { locationData, validLocations } from '@/constants/locations';
-import { servicesData } from '@/data/servicesData';
+import { servicesData, getServiceRoute } from '@/data/servicesData';
 
 // Ordered by constants/locations.ts so the primary focus city leads.
 const LOCATION_ORDER: string[] = [...validLocations];
@@ -96,7 +96,7 @@ function LocationCard({ locationKey, location, index }: { locationKey: string; l
                         return (
                           <Link
                             key={serviceId}
-                            href={`/services/${serviceId}/${locationKey}`}
+                            href={getServiceRoute(serviceId, locationKey)}
                             className="block text-sm transition-colors"
                             style={{ color: "#C8D8EE" }}
                           >

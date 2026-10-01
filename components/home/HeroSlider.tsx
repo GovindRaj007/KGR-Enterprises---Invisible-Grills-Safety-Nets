@@ -26,7 +26,7 @@ const slides = [
     image: "/images/invisible-grill-1.jpg",
     alt: "Invisible Grills in Bangalore for balcony and window safety",
     keywords: ["Child Safety", "Rust-Proof", "Backed by Warranty"],
-    href: "/services/invisible-grills",
+    href: getServiceRoute("invisible-grills"),
     cta: "Explore Invisible Grills",
   },
   {
@@ -52,7 +52,7 @@ const slides = [
     image: "/images/balcony-net-1.jpg",
     alt: "Safety Net Installation for Balcony with child and pet protection",
     keywords: ["Child Safety", "Pet Protection", "Weather Resistant"],
-    href: "/services/balcony-safety",
+    href: getServiceRoute("balcony-safety"),
     cta: "Explore Safety Nets",
   },
   {
@@ -65,7 +65,7 @@ const slides = [
     image: "/images/cloth-drying-pulley-1.jpg",
     alt: "Ceiling Cloth Hanger Installation for space-saving laundry drying",
     keywords: ["Pulley System", "Space Saving", "Rust-Proof"],
-    href: "/services/cloth-drying",
+    href: getServiceRoute("cloth-drying"),
     cta: "Explore Hangers",
   },
   {
@@ -78,7 +78,7 @@ const slides = [
     image: "/images/all-sports-net-1.jpg",
     alt: "Artificial Cricket Turf Installation and cricket practice nets",
     keywords: ["Professional Grade", "Durable", "Weather Resistant"],
-    href: "/services/all-sports-practice",
+    href: getServiceRoute("all-sports-practice"),
     cta: "Explore Sports Nets",
   },
 ];
@@ -220,8 +220,8 @@ export function HeroSlider() {
           {/* Page heading. Kept out of the rotation so the document always has
               one stable, descriptive h1 regardless of the active slide. */}
           <h1 className="sr-only">
-            Invisible Grills &amp; Safety Nets in Bangalore, Hyderabad, Chennai,
-            Vijayawada and Visakhapatnam
+            Invisible Grills in Bangalore, Hyderabad, Chennai &amp; Andhra Pradesh
+            (Vijayawada, Visakhapatnam) — Invisible Grills &amp; Safety Nets Near You
           </h1>
 
           {/* Title */}

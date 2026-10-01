@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { PRIMARY } from '@/constants/contacts';
 import { locationData, validLocations, PRIMARY_LOCATION, LOCATION_NAMES } from '@/constants/locations';
+import { getServiceRoute } from '@/data/servicesData';
 
 // Primary service locations, derived from the single source of truth in
 // constants/locations.ts so addresses/coordinates stay identical everywhere
@@ -172,12 +173,12 @@ export function generateServiceMetadata(params: {
       'max-video-preview': -1,
     },
     alternates: {
-      canonical: `https://invisiblegrillsandsafetynets.in/services/${serviceSlug}/`,
+      canonical: `https://invisiblegrillsandsafetynets.in${getServiceRoute(serviceSlug)}`,
     },
     openGraph: {
       title,
       description: socialDescription,
-      url: `https://invisiblegrillsandsafetynets.in/services/${serviceSlug}/`,
+      url: `https://invisiblegrillsandsafetynets.in${getServiceRoute(serviceSlug)}`,
       siteName: 'KGR Invisible Grills & Safety Nets',
       images: [
         {
@@ -299,14 +300,14 @@ export function generateServiceSchema(params: {
       productSchema,
       {
         '@type': 'WebPage',
-        '@id': `https://invisiblegrillsandsafetynets.in/services/${slug}/#webpage`,
-        'url': `https://invisiblegrillsandsafetynets.in/services/${slug}/`,
+        '@id': `https://invisiblegrillsandsafetynets.in${getServiceRoute(slug)}#webpage`,
+        'url': `https://invisiblegrillsandsafetynets.in${getServiceRoute(slug)}`,
         'name': `${serviceName} in ${PRIMARY_LOCATIONS.map(loc => loc.name).join(', ')}`,
         'isPartOf': {
           '@id': 'https://invisiblegrillsandsafetynets.in/#website'
         },
         'primaryImageOfPage': {
-          '@id': `https://invisiblegrillsandsafetynets.in/services/${slug}/#primaryimage`
+          '@id': `https://invisiblegrillsandsafetynets.in${getServiceRoute(slug)}#primaryimage`
         },
         'dateModified': new Date().toISOString(),
         'description': description,
@@ -314,7 +315,7 @@ export function generateServiceSchema(params: {
       },
       {
         '@type': 'ImageObject',
-        '@id': `https://invisiblegrillsandsafetynets.in/services/${slug}/#primaryimage`,
+        '@id': `https://invisiblegrillsandsafetynets.in${getServiceRoute(slug)}#primaryimage`,
         'url': `https://invisiblegrillsandsafetynets.in${image}`,
         'contentUrl': `https://invisiblegrillsandsafetynets.in${image}`,
         'caption': `${serviceName} Installation Services`
@@ -437,7 +438,7 @@ export function generateServiceSchema(params: {
             }
           }
         },
-        'url': `https://invisiblegrillsandsafetynets.in/services/${slug}/`,
+        'url': `https://invisiblegrillsandsafetynets.in${getServiceRoute(slug)}`,
         'potentialAction': [
           {
             '@type': 'ContactAction',
@@ -456,7 +457,7 @@ export function generateServiceSchema(params: {
             '@type': 'ViewAction',
             'target': {
               '@type': 'EntryPoint',
-              'urlTemplate': `https://invisiblegrillsandsafetynets.in/services/${slug}/`,
+              'urlTemplate': `https://invisiblegrillsandsafetynets.in${getServiceRoute(slug)}`,
               'inLanguage': 'en-IN'
             },
             'name': 'View Service Details'
@@ -464,7 +465,7 @@ export function generateServiceSchema(params: {
         ],
         'mainEntityOfPage': {
           '@type': 'WebPage',
-          '@id': `https://invisiblegrillsandsafetynets.in/services/${slug}/#webpage`
+          '@id': `https://invisiblegrillsandsafetynets.in${getServiceRoute(slug)}#webpage`
         }
       }
     ]

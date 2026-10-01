@@ -846,52 +846,67 @@ export const servicesData = {
     ]
   },
 
-  // Backwards-compatible alias for legacy/SEO-friendly slug
-  // Maps `/services/open-area-safety-nets` to the existing `open-area` entry
-  // (keeps one source of truth while supporting older URLs)
-  // Backwards-compatible alias for legacy/SEO-friendly slug
-  // Maps `/services/open-area-safety-nets` to the existing `open-area` entry
-  // (keeps one source of truth while supporting older URLs)
 };
 
-export const SERVICE_SLUG_ALIASES: Record<string, string> = {
-  "open-area-safety-nets": "open-area",
+// Public URL slug for each service id, where it differs from the id.
+//
+// Service ids are internal keys (servicesData, categories, FAQs, images) and
+// stay stable; only the public URL changes. Service pages live at the site
+// root: /<url-slug>/, /<url-slug>/<city>/, /<url-slug>/<city>/<area>/.
+//
+// scripts/generate-static-sitemaps.js reads this map with a regex + eval, so
+// keep it a plain object literal. Old URLs are 301-redirected in .htaccess —
+// when a slug changes here, add the matching redirect there.
+export const SERVICE_URL_SLUGS: Record<string, string> = {
+  "balcony-safety": "balcony-safety-nets",
+  "children-protection": "children-safety-nets",
+  "pets-safety": "pet-safety-nets",
+  "grill-balcony": "grill-balcony-safety-nets",
+  "terrace-top": "terrace-top-nets",
+  "industrial-safety": "industrial-safety-nets",
+  "duct-area": "duct-area-nets",
+  "open-area": "open-area-safety-nets",
+  "staircase-safety": "staircase-safety-nets",
+  "construction-safety": "construction-safety-nets",
+  "hdpe-nylon": "hdpe-nylon-nets",
+  "swimming-pool": "swimming-pool-safety-nets",
+  "car-parking": "car-parking-nets",
+  "monkey-safety": "monkey-safety-nets",
 };
 
-export const resolveServiceSlug = (slug: string): string => {
-  return SERVICE_SLUG_ALIASES[slug] ?? slug;
+const SERVICE_IDS_BY_URL_SLUG: Record<string, string> = Object.fromEntries(
+  Object.entries(SERVICE_URL_SLUGS).map(([id, slug]) => [slug, id])
+);
+
+// Service id -> the slug used in its public URL.
+export const getServiceUrlSlug = (serviceId: string): string => {
+  return SERVICE_URL_SLUGS[serviceId] ?? serviceId;
 };
 
-export const getServiceRoute = (serviceId: string, location?: string): string => {
-  if (serviceId === 'invisible-grills-dealer') {
-    return location ? `/services/invisible-grills-dealer/${location}` : '/services/invisible-grills-dealer';
-  }
+// URL slug -> service id. Returns undefined for anything that is not the
+// current public slug of a service (including a bare id that has been renamed),
+// so old slugs can never render a duplicate page.
+export const resolveServiceSlug = (urlSlug: string): string | undefined => {
+  const serviceId = SERVICE_IDS_BY_URL_SLUG[urlSlug] ?? urlSlug;
+  if (!(serviceId in servicesData)) return undefined;
+  return getServiceUrlSlug(serviceId) === urlSlug ? serviceId : undefined;
+};
 
-  return `/services/${serviceId}`;
+// The one place service URLs are built. Always returns a trailing slash to
+// match `trailingSlash: true` and the canonical URLs.
+export const getServiceRoute = (serviceId: string, location?: string, area?: string): string => {
+  const base = `/${getServiceUrlSlug(serviceId)}/`;
+  if (!location) return base;
+  return area ? `${base}${location}/${area}/` : `${base}${location}/`;
 };
 
 export const getServiceLocationRoute = (serviceId: string, location?: string): string => {
-  if (!location) return getServiceRoute(serviceId);
-  if (serviceId === 'invisible-grills-dealer') {
-    return `/services/invisible-grills-dealer/${location}`;
-  }
-
-  return `/services/${serviceId}/${location}`;
+  return getServiceRoute(serviceId, location);
 };
 
-export const isCanonicalServiceSlug = (slug: string): boolean => {
-  return resolveServiceSlug(slug) === slug;
-};
-
-// Assign alias at runtime without TypeScript-only syntax so Node scripts can load this file.
-Object.defineProperty(servicesData, "open-area-safety-nets", {
-  value: servicesData["open-area"],
-  enumerable: true,
-  configurable: true,
-  writable: true
-});
-
-const EXCLUDED_SERVICE_IDS_FROM_PUBLIC_CATEGORIES = ["cloth-drying"];
+// The dealer programme has its own hand-built page at app/invisible-grills-dealer,
+// so the generic service template must not also generate that URL.
+export const SERVICES_WITH_CUSTOM_PAGE = ["invisible-grills-dealer"];
 
 export const serviceCategories = {
   "invisible-grills": {
@@ -929,16 +944,12 @@ export const serviceCategories = {
   }
 };
 
+// Categories shown as tabs in the home services section, the navbar dropdown
+// and the mobile menu. Cloth hangers do not get a tab of their own there: the
+// service is listed under "Invisible Grills & Cloth Hangers", so only the
+// standalone category is dropped — the service itself stays in the list.
 export const serviceCategoriesWithoutClothHangers = Object.fromEntries(
-  Object.entries(serviceCategories)
-    .filter(([key]) => key !== "cloth-hangers")
-    .map(([key, category]) => [
-      key,
-      {
-        ...category,
-        services: category.services.filter((serviceId) => !EXCLUDED_SERVICE_IDS_FROM_PUBLIC_CATEGORIES.includes(serviceId)),
-      },
-    ])
+  Object.entries(serviceCategories).filter(([key]) => key !== "cloth-hangers")
 ) as Omit<typeof serviceCategories, "cloth-hangers">;
 
 export const isClothDryingService = (service: { id: string } | string): boolean =>
@@ -1102,37 +1113,37 @@ export const serviceLocationFAQs = {
 // SEO Enhancement: Internal linking suggestions
 export const serviceInternalLinks = {
   "invisible-grills": [
-    { text: "Balcony Safety Nets", href: "/services/balcony-safety" },
-    { text: "Children Protection Nets", href: "/services/children-protection" },
-    { text: "Pigeon Nets", href: "/services/pigeon-nets" },
+    { text: "Balcony Safety Nets", href: getServiceRoute("balcony-safety") },
+    { text: "Children Protection Nets", href: getServiceRoute("children-protection") },
+    { text: "Pigeon Nets", href: getServiceRoute("pigeon-nets") },
   ],
   "invisible-grills-dealer": [
-    { text: "Invisible Grills", href: "/services/invisible-grills" },
-    { text: "Invisible Grill for Balcony", href: "/services/invisible-grills-balcony" },
-    { text: "Balcony Safety Nets", href: "/services/balcony-safety" }
+    { text: "Invisible Grills", href: getServiceRoute("invisible-grills") },
+    { text: "Invisible Grill for Balcony", href: getServiceRoute("invisible-grills-balcony") },
+    { text: "Balcony Safety Nets", href: getServiceRoute("balcony-safety") }
   ],
   "balcony-safety": [
-    { text: "Invisible Grills", href: "/services/invisible-grills" },
-    { text: "Children Protection", href: "/services/children-protection" },
-    { text: "Pet Safety Nets", href: "/services/pets-safety" },
+    { text: "Invisible Grills", href: getServiceRoute("invisible-grills") },
+    { text: "Children Protection", href: getServiceRoute("children-protection") },
+    { text: "Pet Safety Nets", href: getServiceRoute("pets-safety") },
   ],
   "children-protection": [
-    { text: "Balcony Safety Nets", href: "/services/balcony-safety" },
-    { text: "Staircase Safety Nets", href: "/services/staircase-safety" },
-    { text: "Invisible Grill for Balcony", href: "/services/invisible-grills-balcony" },
+    { text: "Balcony Safety Nets", href: getServiceRoute("balcony-safety") },
+    { text: "Staircase Safety Nets", href: getServiceRoute("staircase-safety") },
+    { text: "Invisible Grill for Balcony", href: getServiceRoute("invisible-grills-balcony") },
   ],
   "pigeon-nets": [
-    { text: "Anti Bird Nets", href: "/services/anti-bird-nets" },
-    { text: "Bird Spikes", href: "/services/bird-spikes" },
-    { text: "Balcony Safety Nets", href: "/services/balcony-safety" },
+    { text: "Anti Bird Nets", href: getServiceRoute("anti-bird-nets") },
+    { text: "Bird Spikes", href: getServiceRoute("bird-spikes") },
+    { text: "Balcony Safety Nets", href: getServiceRoute("balcony-safety") },
   ],
   "cricket-practice": [
-    { text: "All Sports Practice Nets", href: "/services/all-sports-practice" },
-    { text: "Terrace Cricket Nets & Box Cricket", href: "/services/terrace-cricket" },
+    { text: "All Sports Practice Nets", href: getServiceRoute("all-sports-practice") },
+    { text: "Terrace Cricket Nets & Box Cricket", href: getServiceRoute("terrace-cricket") },
   ],
   "terrace-cricket": [
-    { text: "Cricket Practice Nets", href: "/services/cricket-practice" },
-    { text: "All Sports Practice Nets", href: "/services/all-sports-practice" },
+    { text: "Cricket Practice Nets", href: getServiceRoute("cricket-practice") },
+    { text: "All Sports Practice Nets", href: getServiceRoute("all-sports-practice") },
   ]
 };
 

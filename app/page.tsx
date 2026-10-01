@@ -8,10 +8,15 @@ import AboutClient from "@/components/about/AboutClient";
 import GalleryClient from "@/components/gallery/GalleryClient";
 import TestimonialsClient from "@/components/testimonials/TestimonialsClient";
 import ServiceLocationsSlider from "@/components/services/ServiceLocationsSlider";
+import InvisibleGrillsNearYou from "@/components/home/InvisibleGrillsNearYou";
+import { INVISIBLE_GRILL_PRICE } from "@/lib/local-seo-content";
+import { PRIMARY } from "@/constants/contacts";
 
-const TITLE = "Invisible Grills & Safety Nets in Bangalore | KGR Enterprises";
+// Leads with the exact phrase people search ("invisible grills in bangalore")
+// and names the other service cities, so the home page also ranks for them.
+const TITLE = "Invisible Grills in Bangalore, Hyderabad & Chennai | KGR";
 const DESCRIPTION =
-  "Invisible grill and safety net installation in Bangalore, Hyderabad, Chennai, Vijayawada and Visakhapatnam. Marine-grade SS316 grills and pigeon nets.";
+  `Invisible grills near you in Bangalore, Hyderabad, Chennai, Vijayawada & Vizag. SS316 grills from ₹${INVISIBLE_GRILL_PRICE.from}/sq ft, 15-yr warranty. Free site visit.`;
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -24,7 +29,7 @@ export const metadata: Metadata = {
     type: "website",
     title: TITLE,
     description:
-      "Professional invisible grill installation and safety nets in Bangalore and across South India. Marine-grade stainless steel grills, pigeon nets, and child-safe balcony protection.",
+      "Professional invisible grill installation and safety nets in Bangalore, Hyderabad, Chennai and Andhra Pradesh. SS316 marine-grade grills, pigeon nets and child-safe balcony protection.",
     url: "https://invisiblegrillsandsafetynets.in/",
     siteName: "KGR Enterprises",
     images: [
@@ -32,7 +37,7 @@ export const metadata: Metadata = {
         url: "/images/invisible-grill-1.jpg",
         width: 1200,
         height: 630,
-        alt: "Invisible Grills in Bangalore - KGR Enterprises",
+        alt: "Invisible grills installed on an apartment balcony in Bangalore - KGR Enterprises",
         type: "image/jpeg",
       },
       {
@@ -47,7 +52,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: TITLE,
     description:
-      "Invisible grill installation and safety nets in Bangalore, Hyderabad, Chennai and nearby cities. SS316 grills and pigeon net solutions.",
+      "Invisible grill installation and safety nets in Bangalore, Hyderabad, Chennai, Vijayawada and Visakhapatnam. SS316 grills and pigeon net solutions.",
     images: ["/images/invisible-grill-1.jpg"],
     site: "@Kgr_Grills_Nets",
     creator: "@Kgr_Grills_Nets",
@@ -67,7 +72,7 @@ const homeFaqs = [
   {
     question: "What are invisible grills?",
     answer:
-      "Invisible grills are high-tensile stainless steel cable systems that protect balconies and windows without blocking your view. Our Bangalore installations use marine-grade SS316 cable for long-lasting performance.",
+      "Invisible grills are high-tensile stainless steel cable systems that protect balconies and windows without blocking your view. Our installations in Bangalore, Hyderabad, Chennai and Andhra Pradesh use marine-grade SS316 cable for long-lasting, rust-free performance.",
   },
   {
     question: "Are invisible grills safe?",
@@ -75,9 +80,19 @@ const homeFaqs = [
       "Yes — when professionally installed they offer child safety, pet safety, and effective pigeon prevention without obstructing airflow or visibility.",
   },
   {
-    question: "How much do invisible grills cost?",
+    question: "What is the cost of invisible grills in Bangalore?",
     answer:
-      "Cost depends on size, material (SS316 or SS304), and location. We provide free site visits and transparent quotes across Bangalore, Hyderabad, Chennai, Vijayawada and Visakhapatnam.",
+      `Invisible grills in Bangalore start from ₹${INVISIBLE_GRILL_PRICE.from} per sq ft and usually cost ₹${INVISIBLE_GRILL_PRICE.from}–₹${INVISIBLE_GRILL_PRICE.to} per sq ft including installation, depending on cable grade (SS316 or SS304), thickness, spacing and area. The same pricing applies in Hyderabad, Chennai, Vijayawada and Visakhapatnam. Site inspection and quote are free.`,
+  },
+  {
+    question: "Where can I find invisible grills near me?",
+    answer:
+      `KGR Enterprises has local installation teams in Bangalore, Hyderabad, Chennai, Vijayawada and Visakhapatnam, covering areas such as Whitefield, Electronic City, HSR Layout, Gachibowli, Kukatpally, OMR, Velachery, Benz Circle and MVP Colony. Call ${PRIMARY.display.trim()} for a free site visit, usually the same or next day.`,
+  },
+  {
+    question: "How long does invisible grill installation take?",
+    answer:
+      "A typical apartment balcony takes 4–6 hours. There is no welding — aluminium tracks are anchored and the stainless steel cables are tensioned by hand — so the work is clean and quick.",
   },
   {
     question: "Why choose invisible grills?",
@@ -133,8 +148,9 @@ export default function HomePage() {
       <AboutClient />
       <GalleryClient />
       <ServiceLocationsSlider />
+      <InvisibleGrillsNearYou />
       <section id="faq" className="container mx-auto px-4 py-12">
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">Invisible Grills in Bangalore — FAQ</h2>
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">Frequently Asked Questions About Invisible Grills in Bangalore, Hyderabad & Chennai</h2>
         <div className="space-y-3">
           {homeFaqs.map((faq) => (
             <details key={faq.question} className="bg-white/5 p-4 rounded">

@@ -28,7 +28,9 @@ export function Breadcrumbs({ items, darkMode = true }: BreadcrumbsProps) {
       '@type': 'ListItem',
       position: index + 1,
       name: item.label,
-      item: item.href ? `https://invisiblegrillsandsafetynets.in${item.href}` : undefined,
+      // Trailing slash to match the canonical URLs (trailingSlash: true); the
+      // slash-less form 301s and showed up in GSC as "Page with redirect".
+      item: item.href ? `https://invisiblegrillsandsafetynets.in${item.href.replace(/\/?$/, '/')}` : undefined,
     })),
   };
 

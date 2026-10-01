@@ -48,11 +48,14 @@ export default function ServiceFAQ({ faqs }: ServiceFAQProps) {
                   }`}
                 />
               </button>
-              {openIndex === index && (
-                <div className="px-6 pb-4 text-white/80 border-t border-white/10 bg-white/5">
-                  {faq.answer}
-                </div>
-              )}
+              {/* Always rendered (just hidden) so answers are in the crawled
+                  HTML and match the FAQPage JSON-LD. */}
+              <div
+                hidden={openIndex !== index}
+                className="px-6 pb-4 text-white/80 border-t border-white/10 bg-white/5"
+              >
+                {faq.answer}
+              </div>
             </div>
           ))}
         </div>

@@ -7,6 +7,9 @@ import {
   servicesData,
   serviceSpecificLocationFAQs,
   resolveServiceSlug,
+  getServiceRoute,
+  getServiceUrlSlug,
+  SERVICES_WITH_CUSTOM_PAGE,
 } from "@/data/servicesData";
 import { validLocations, locationData, PRIMARY_LOCATION } from "@/constants/locations";
 import { getCanonicalUrl } from "@/lib/canonical-url";
@@ -48,14 +51,19 @@ type Props = {
 };
 
 // Generate static params for all services
+// Only the slugs below exist; anything else (including old slugs) is a 404.
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
-  return Object.keys(servicesData).map((slug) => ({ slug }));
+  return Object.keys(servicesData)
+    .filter((id) => !SERVICES_WITH_CUSTOM_PAGE.includes(id))
+    .map((id) => ({ slug: getServiceUrlSlug(id) }));
 }
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const canonicalSlug = resolveServiceSlug(slug);
+  const canonicalSlug = resolveServiceSlug(slug) ?? '';
   const service = servicesData[canonicalSlug as keyof typeof servicesData];
 
   if (!service) {
@@ -80,7 +88,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 
   const etag = `W/"${canonicalSlug}-${service.title.replace(/\s+/g, "-").toLowerCase()}"`;
-  const canonicalUrl = getCanonicalUrl(`/services/${canonicalSlug}`);
+  const canonicalUrl = getCanonicalUrl(getServiceRoute(canonicalSlug));
 
   return {
     ...baseMetadata,
@@ -106,7 +114,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ServiceDetailPage({ params }: Props) {
   const { slug } = await params;
-  const canonicalSlug = resolveServiceSlug(slug);
+  const canonicalSlug = resolveServiceSlug(slug) ?? '';
   const service: ServiceData | undefined = servicesData[canonicalSlug as keyof typeof servicesData];
 
   if (!service) notFound();
@@ -520,7 +528,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                 return (
                   <Link
                     key={loc}
-                    href={`/services/${canonicalSlug}/${loc}`}
+                    href={getServiceRoute(canonicalSlug, loc)}
                     className="flex items-center justify-between rounded-xl bg-gradient-to-br from-[hsl(222,47%,11%)] via-[hsl(217,33%,17%)] to-[hsl(215,25%,22%)] p-4 transition-all hover:shadow-lg hover:-translate-y-1"
                   >
                     <span className="font-medium text-white">{locData.name}</span>

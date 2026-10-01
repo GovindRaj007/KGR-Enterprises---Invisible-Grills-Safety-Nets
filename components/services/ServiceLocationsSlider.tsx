@@ -4,6 +4,7 @@ import React , { useState, useRef, TouchEvent} from "react";
 import Link from "next/link";
 import { MapPin, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { locationData, validLocations } from "@/constants/locations";
+import { getServiceRoute } from '@/data/servicesData';
 
 const services = [
   { name: "Invisible Grills", slug: "invisible-grills" },
@@ -171,7 +172,7 @@ function LocationSlider({ areas }: LocationSliderProps) {
                   {services.map((service, idx) => (
                     <Link
                       key={idx}
-                      href={`/services/${service.slug}/${area.slug}`}
+                      href={getServiceRoute(service.slug, area.slug)}
                       className="flex items-center justify-between rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white transition-colors hover:bg-white/15"
                     >
                       <span className="truncate">{service.name}</span>

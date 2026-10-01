@@ -9,6 +9,11 @@ import { PRIMARY_LOCATIONS } from '@/lib/seo-metadata';
 import { PRIMARY } from '@/constants/contacts';
 import { generateLocationContent, generateBreadcrumbSchema, clampSnippet } from '@/lib/seo-metadata';
 import { locationData, validLocations } from '@/constants/locations';
+import Link from 'next/link';
+import { getServiceAreas, slugifyArea } from '@/constants/service-areas';
+import { buildLocalFaqs } from '@/lib/local-seo-content';
+import { LocalFAQ, faqPageSchema } from '@/components/location/LocalSeoSections';
+import { servicesData, getServiceRoute } from '@/data/servicesData';
 
 export async function generateStaticParams() {
   return PRIMARY_LOCATIONS.map(loc => ({
@@ -32,7 +37,9 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
     };
   }
 
-  const title = `${matched.name} Invisible Grills & Safety Nets Installation`;
+  // City hub for every service. The exact "invisible grills in <city>" title
+  // belongs to /invisible-grills/<city>/ so the two don't compete.
+  const title = `Safety Nets & Invisible Grills Services in ${matched.name}`;
   const canonicalPath = `/locations/${matched.name.toLowerCase()}/`;
   const locationMeta = {
     areaServed: matched.areas.join(', '),
@@ -53,7 +60,7 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
       'max-snippet': -1,
     },
     description: clampSnippet(
-      `Invisible grills and safety nets installation in ${matched.name} — ${locationMeta.areaServed} and nearby. Free site visit and 15-year warranty.`
+      `Invisible grills, balcony safety nets & pigeon nets near you in ${matched.name} — ${locationMeta.areaServed} and nearby. Free site visit, 15-year warranty.`
     ),
     alternates: {
       canonical: `https://invisiblegrillsandsafetynets.in${canonicalPath}`
@@ -97,7 +104,9 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
       ...matched.areas.map(area => `invisible grills in ${area}`),
       ...matched.areas.slice(0, 4).map(area => `safety nets in ${area}`),
       "invisible grills near me",
+      `invisible grills near me in ${matched.name}`,
       "safety nets near me",
+      `safety nets near me in ${matched.name}`,
       "KGR invisible grills",
       "KGR safety nets",
     ],
@@ -124,6 +133,24 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
 
   const phone = PRIMARY.phone;
   const locContent = generateLocationContent('Invisible Grills & Safety Nets', locationDisplay);
+  const cityAreas = getServiceAreas(normalizedLocation);
+  const faqs = buildLocalFaqs({
+    service: servicesData['invisible-grills'],
+    place: locationDisplay,
+    city: locationDisplay,
+    citySlug: normalizedLocation,
+    areasSample: cityAreas.map(a => a.name),
+  }).slice(0, 5);
+  const popularServices = [
+    ['invisible-grills', 'Invisible Grills'],
+    ['invisible-grills-balcony', 'Invisible Grill for Balcony'],
+    ['balcony-safety', 'Balcony Safety Nets'],
+    ['children-protection', 'Children Protection Nets'],
+    ['pigeon-nets', 'Pigeon Nets'],
+    ['pets-safety', 'Pets Safety Nets'],
+    ['duct-area', 'Duct Area Nets'],
+    ['cricket-practice', 'Cricket Practice Nets'],
+  ] as const;
   
   // Generate breadcrumb schema (matching service location pages pattern)
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -221,6 +248,7 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
           '@id': `https://invisiblegrillsandsafetynets.in/locations/${normalizedLocation}/`
         }
       },
+      faqPageSchema(faqs, `https://invisiblegrillsandsafetynets.in/locations/${normalizedLocation}/`),
       breadcrumbSchema
     ]
   };
@@ -281,6 +309,42 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
           </div>
         </section>
 
+        {/* Service hub: links every service's page for this city */}
+        <section className="section-bg-1 relative py-12 md:py-16">
+          <div className="absolute inset-0 grid-pattern opacity-30" />
+          <div className="container relative z-10">
+            <h2 className="mb-8 text-center font-heading text-3xl font-bold text-foreground md:text-4xl">
+              Our Services in {locationDisplay}
+            </h2>
+            <div className="mx-auto grid max-w-5xl gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {popularServices.map(([slug, label]) => (
+                <Link
+                  key={slug}
+                  href={getServiceRoute(slug, normalizedLocation)}
+                  className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white transition hover:border-accent hover:text-accent"
+                >
+                  {label} in {locationDisplay}
+                </Link>
+              ))}
+            </div>
+            <h3 className="mb-4 mt-12 text-center font-heading text-2xl font-semibold text-foreground">
+              Invisible Grills Near Me in {locationDisplay}
+            </h3>
+            <div className="mx-auto flex max-w-5xl flex-wrap justify-center gap-2">
+              {cityAreas.map(area => (
+                <Link
+                  key={area.name}
+                  href={getServiceRoute('invisible-grills', normalizedLocation, slugifyArea(area.name))}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-3 py-1.5 text-sm text-white/85 transition hover:border-accent hover:text-accent"
+                >
+                  <MapPin className="h-3.5 w-3.5 text-accent" />
+                  {area.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* About Section */}
     
           <LocationAboutClient location={locationDisplay} />
@@ -307,6 +371,7 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
             </div>
           </div>
         </section>
+        <LocalFAQ faqs={faqs} serviceTitle="Invisible Grills & Safety Nets" place={locationDisplay} />
       </main>
     </>
   );

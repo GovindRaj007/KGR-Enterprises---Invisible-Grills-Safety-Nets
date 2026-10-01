@@ -22,7 +22,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "invisible grills marine-grade SS316 rust-proof child-safe unobstructed views balcony window security",
     useCase: "Balcony windows security aesthetics",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh Vijayawada",
-    url: "/services/invisible-grills",
+    url: getServiceRoute("invisible-grills"),
   },
   {
     id: "invisible-grills-balcony",
@@ -34,7 +34,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "balcony invisible grills high quality steel cables modern aesthetics premium protection",
     useCase: "Balcony protection family safety property value",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh Vijayawada",
-    url: "/services/invisible-grills-balcony",
+    url: getServiceRoute("invisible-grills-balcony"),
   },
   {
     id: "invisible-grills-dealer",
@@ -57,7 +57,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "balcony safety nets UV-resistant weather-proof HDPE transparent child protection",
     useCase: "Apartment balcony family safety child protection",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
-    url: "/services/balcony-safety",
+    url: getServiceRoute("balcony-safety"),
   },
   {
     id: "children-protection",
@@ -68,7 +68,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "children protection child safety nets HDPE bite-resistant durable kids",
     useCase: "Windows balcony playgrounds child safety",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
-    url: "/services/children-protection",
+    url: getServiceRoute("children-protection"),
   },
   {
     id: "pets-safety",
@@ -79,7 +79,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "pet safety nets pet-friendly bite-resistant non-toxic pet accident prevention",
     useCase: "Balcony terraces pet containment",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
-    url: "/services/pets-safety",
+    url: getServiceRoute("pets-safety"),
   },
   {
     id: "grill-balcony",
@@ -91,7 +91,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "grill balcony nets heat-resistant fire-retardant grease-resistant outdoor cooking",
     useCase: "Balcony grilling outdoor cooking safety",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
-    url: "/services/grill-balcony",
+    url: getServiceRoute("grill-balcony"),
   },
   {
     id: "terrace-top",
@@ -102,7 +102,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "terrace nets UV protection rain resistant privacy coverage wind resistant shade",
     useCase: "Terraces outdoor living shade control",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
-    url: "/services/terrace-top",
+    url: getServiceRoute("terrace-top"),
   },
   {
     id: "industrial-safety",
@@ -113,7 +113,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "industrial safety nets fire-retardant OSHA compliant worker protection heavy-duty",
     useCase: "Warehouses factories construction sites",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
-    url: "/services/industrial-safety",
+    url: getServiceRoute("industrial-safety"),
   },
   {
     id: "duct-area",
@@ -124,7 +124,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "duct area nets fire-retardant ventilation safe debris prevention bird prevention HVAC",
     useCase: "HVAC ducts ventilation shafts utility spaces",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
-    url: "/services/duct-area",
+    url: getServiceRoute("duct-area"),
   },
   {
     id: "open-area",
@@ -136,7 +136,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "open area nets UV stabilized playground safety garden protection large coverage",
     useCase: "Gardens playgrounds recreational areas",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
-    url: "/services/open-area",
+    url: getServiceRoute("open-area"),
   },
   {
     id: "staircase-safety",
@@ -147,7 +147,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "staircase nets fall prevention child-safe custom-fitted aesthetic design elderly safety",
     useCase: "Indoor outdoor stairs elderly safety",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
-    url: "/services/staircase-safety",
+    url: getServiceRoute("staircase-safety"),
   },
   {
     id: "construction-safety",
@@ -159,7 +159,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "construction safety nets OSHA compliant worker protection debris control heavy-duty",
     useCase: "Construction sites worker safety",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
-    url: "/services/construction-safety",
+    url: getServiceRoute("construction-safety"),
   },
   {
     id: "mosquito-nets",
@@ -171,7 +171,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "mosquito nets fine mesh dengue prevention malaria protection ventilation friendly",
     useCase: "Doors windows insect prevention",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
-    url: "/services/mosquito-nets",
+    url: getServiceRoute("mosquito-nets"),
   },
   {
     id: "cloth-drying",
@@ -182,7 +182,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "cloth drying hangers ceiling mounted space-saving pulley system rust-proof hanger hangers balcony cloth hangers ceiling hanger",
     useCase: "Apartments homes indoor drying",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
-    url: "/services/cloth-drying",
+    url: getServiceRoute("cloth-drying"),
   },
   {
     id: "hdpe-nylon",
@@ -194,7 +194,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "HDPE nets nylon nets versatile high-tensile weather-proof custom specifications multipurpose",
     useCase: "Multiple applications multipurpose use",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
-    url: "/services/hdpe-nylon",
+    url: getServiceRoute("hdpe-nylon"),
   },
   {
     id: "pigeon-nets",
@@ -206,7 +206,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "pigeon nets humane bird control bird nesting prevention mess prevention weather-resistant",
     useCase: "Balcony residential pigeon prevention",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
-    url: "/services/pigeon-nets",
+    url: getServiceRoute("pigeon-nets"),
   },
   {
     id: "bird-spikes",
@@ -218,7 +218,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "bird spikes humane deterrent perching prevention stainless steel 304 low-maintenance",
     useCase: "Ledges signs architectural features",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
-    url: "/services/bird-spikes",
+    url: getServiceRoute("bird-spikes"),
   },
   {
     id: "anti-bird-nets",
@@ -229,7 +229,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "anti-bird nets comprehensive bird control multi-species protection humane solution",
     useCase: "Large areas combined bird control",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
-    url: "/services/anti-bird-nets",
+    url: getServiceRoute("anti-bird-nets"),
   },
   {
     id: "pigeon-balcony",
@@ -240,7 +240,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "balcony pigeon nets custom-fitted aesthetic design bird control low-profile residential",
     useCase: "Residential balcony bird prevention",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
-    url: "/services/pigeon-balcony",
+    url: getServiceRoute("pigeon-balcony"),
   },
   {
     id: "anti-seagull",
@@ -252,7 +252,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "anti-seagull nets marine-grade coastal environments heavy-duty salt-water resistant",
     useCase: "Coastal properties commercial buildings",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh Visakhapatnam",
-    url: "/services/anti-seagull",
+    url: getServiceRoute("anti-seagull"),
   },
   {
     id: "all-sports-practice",
@@ -264,7 +264,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "all-sports nets cricket football tennis badminton volleyball professional-grade multi-sport",
     useCase: "Training facilities multi-sport use",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
-    url: "/services/all-sports-practice",
+    url: getServiceRoute("all-sports-practice"),
   },
   {
     id: "cricket-practice",
@@ -275,7 +275,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "cricket nets cricket practice nets cricket net installation best cricket nets coaching ball practice bowling training batting practice",
     useCase: "Cricket nets cricket academies practice grounds schools",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
-    url: "/services/cricket-practice",
+    url: getServiceRoute("cricket-practice"),
   },
   {
     id: "terrace-cricket",
@@ -287,7 +287,7 @@ export const SEARCH_DATA: SearchDataItem[] = [
       "terrace cricket nets box cricket nets cricket turf installation cricket turf construction rooftop cricket portable custom cricket nets turf cricket turf nets box cricket construction",
     useCase: "Rooftops apartments terrace cricket turf cricket cricket turf installation construction",
     locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
-    url: "/services/terrace-cricket",
+    url: getServiceRoute("terrace-cricket"),
   },
 ];
 
@@ -582,9 +582,9 @@ export const buildSearchResultUrl = (
     (queryType === "location-only" || queryType === "service+location") &&
     location
   ) {
-    return `/services/${item.id}/${location}`;
+    return getServiceRoute(item.id, location);
   }
 
-  // Service-only: use item's own URL (which is /services/[slug])
+  // Service-only: use item's own URL (which is /[slug]/)
   return item.url;
 };

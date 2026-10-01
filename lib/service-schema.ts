@@ -1,6 +1,7 @@
 import { baseUrl, generateOrganizationSchema } from './organization-schema';
 import { PRIMARY } from '@/constants/contacts';
 import { validLocations, locationData } from '@/constants/locations';
+import { getServiceRoute } from '@/data/servicesData';
 
 export function generateServiceSchema(params: {
   serviceName: string;
@@ -34,7 +35,7 @@ export function generateServiceSchema(params: {
     'category': category === 'bird-protection' ? 'Pest Control > Bird Control' : 'Home Safety & Security > Safety Equipment',
     'productID': `KGR-PROD-${slug.toUpperCase()}`,
     'material': specifications.find(s => s.label.toLowerCase().includes('material'))?.value,
-    'url': `${baseUrl}/services/${slug}`,
+    'url': `${baseUrl}${getServiceRoute(slug)}`,
     'additionalProperty': specifications.map(spec => ({
       '@type': 'PropertyValue',
       'name': spec.label,

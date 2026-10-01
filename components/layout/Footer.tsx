@@ -6,6 +6,31 @@ import LocationServicesAccordion from '@/components/layout/LocationServicesAccor
 import OptimizedImage from '@/components/shared/OptimizedImage';
 import { servicesData, serviceCategories, getServiceRoute } from '@/data/servicesData';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
+import { validLocations, locationData } from '@/constants/locations';
+import { getServiceAreas, slugifyArea } from '@/constants/service-areas';
+
+// Site-wide links to the city and busiest neighbourhood invisible-grill pages.
+// Plain links (not inside an accordion) so they are always in the HTML.
+const POPULAR_SEARCHES = [
+  ...validLocations.map(slug => ({
+    label: `Invisible Grills in ${locationData[slug].name}`,
+    href: getServiceRoute('invisible-grills', slug),
+  })),
+  ...getServiceAreas('bangalore').slice(0, 10).map(area => ({
+    label: `Invisible Grills in ${area.name}`,
+    href: getServiceRoute('invisible-grills', 'bangalore', slugifyArea(area.name)),
+  })),
+  ...(['hyderabad', 'chennai'] as const).flatMap(slug =>
+    getServiceAreas(slug).slice(0, 3).map(area => ({
+      label: `Invisible Grills in ${area.name}`,
+      href: getServiceRoute('invisible-grills', slug, slugifyArea(area.name)),
+    }))
+  ),
+  ...validLocations.map(slug => ({
+    label: `Balcony Safety Nets in ${locationData[slug].name}`,
+    href: getServiceRoute('balcony-safety', slug),
+  })),
+];
 
 const Footer = () => {
   return (
@@ -129,11 +154,25 @@ const Footer = () => {
           </div>
         </div>
 
+        {/* Popular searches */}
+        <div className="container mx-auto px-4 pb-6">
+          <h3 className="mb-3 text-sm font-semibold" style={{ color: "#FF6B42" }}>Popular Searches</h3>
+          <ul className="flex flex-wrap gap-x-4 gap-y-2 text-xs md:text-sm">
+            {POPULAR_SEARCHES.map(link => (
+              <li key={link.href}>
+                <Link href={link.href} className="transition-colors hover:text-white" style={{ color: "#8FAAC8" }}>
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
         {/* Bottom Footer */}
         <div style={{ borderTop: "1px solid #1E2A42" }}>
           <div className="container mx-auto px-4 py-4 md:py-6">
             <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-              <div className="text-xs md:text-sm text-center md:text-left" style={{ color: "#8FAAC8" }}>© 2025 KGR Enterprises. All rights reserved.</div>
+              <div className="text-xs md:text-sm text-center md:text-left" style={{ color: "#8FAAC8" }}>© {new Date().getFullYear()} KGR Enterprises. All rights reserved.</div>
 
               <div className="flex flex-wrap justify-center md:justify-end gap-4 md:gap-6 text-xs md:text-sm">
                 <Link href="/privacy-policy" className="transition-colors min-h-0" style={{ color: "#C8D8EE" }}
