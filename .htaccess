@@ -45,6 +45,12 @@
     RewriteRule ^services/car-parking/?$ https://invisiblegrillsandsafetynets.in/car-parking-nets/ [R=301,L]
     RewriteRule ^services/monkey-safety/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/monkey-safety-nets/$1/ [R=301,L]
     RewriteRule ^services/monkey-safety/?$ https://invisiblegrillsandsafetynets.in/monkey-safety-nets/ [R=301,L]
+    RewriteRule ^services/pigeon-balcony/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/pigeon-nets-balcony/$1/ [R=301,L]
+    RewriteRule ^services/pigeon-balcony/?$ https://invisiblegrillsandsafetynets.in/pigeon-nets-balcony/ [R=301,L]
+    RewriteRule ^services/all-sports-practice/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/all-sports-practice-nets/$1/ [R=301,L]
+    RewriteRule ^services/all-sports-practice/?$ https://invisiblegrillsandsafetynets.in/all-sports-practice-nets/ [R=301,L]
+    RewriteRule ^services/cricket-practice/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/cricket-practice-nets/$1/ [R=301,L]
+    RewriteRule ^services/cricket-practice/?$ https://invisiblegrillsandsafetynets.in/cricket-practice-nets/ [R=301,L]
     # Same renames for anyone who guesses the old slug at the new root level
     RewriteRule ^balcony-safety/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/balcony-safety-nets/$1/ [R=301,L]
     RewriteRule ^balcony-safety/?$ https://invisiblegrillsandsafetynets.in/balcony-safety-nets/ [R=301,L]
@@ -74,6 +80,12 @@
     RewriteRule ^car-parking/?$ https://invisiblegrillsandsafetynets.in/car-parking-nets/ [R=301,L]
     RewriteRule ^monkey-safety/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/monkey-safety-nets/$1/ [R=301,L]
     RewriteRule ^monkey-safety/?$ https://invisiblegrillsandsafetynets.in/monkey-safety-nets/ [R=301,L]
+    RewriteRule ^pigeon-balcony/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/pigeon-nets-balcony/$1/ [R=301,L]
+    RewriteRule ^pigeon-balcony/?$ https://invisiblegrillsandsafetynets.in/pigeon-nets-balcony/ [R=301,L]
+    RewriteRule ^all-sports-practice/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/all-sports-practice-nets/$1/ [R=301,L]
+    RewriteRule ^all-sports-practice/?$ https://invisiblegrillsandsafetynets.in/all-sports-practice-nets/ [R=301,L]
+    RewriteRule ^cricket-practice/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/cricket-practice-nets/$1/ [R=301,L]
+    RewriteRule ^cricket-practice/?$ https://invisiblegrillsandsafetynets.in/cricket-practice-nets/ [R=301,L]
     # Every other service: just drop the /services prefix. (/services/ itself,
     # the listing page, has no second segment and is left alone.)
     RewriteRule ^services/([^/.]+)/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/$1/$2/ [R=301,L]
