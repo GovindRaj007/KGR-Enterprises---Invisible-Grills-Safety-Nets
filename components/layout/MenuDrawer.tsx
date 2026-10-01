@@ -104,9 +104,6 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
 
       {/* Menu Drawer */}
       <div
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
         style={{
           position: 'fixed',
           top: DRAWER_TOP_OFFSET,
@@ -134,8 +131,14 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
       >
         {/* Menu Content */}
         <div className="flex-1 overflow-y-auto">
-          {/* Menu Header - Drag Handle - Sticky */}
-          <div className="sticky top-0 bg-white flex justify-center py-2 z-10"> 
+          {/* Menu Header - Drag Handle - Sticky. Swipe-to-close listens here
+              only, so scrolling the menu content never drags the drawer. */}
+          <div
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            className="sticky top-0 bg-white flex justify-center py-3 z-10 touch-none"
+          >
             <div className="w-12 h-1 bg-gray-300 rounded-full" />
           </div>
 

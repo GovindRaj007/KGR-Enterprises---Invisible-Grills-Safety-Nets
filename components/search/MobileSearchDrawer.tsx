@@ -283,9 +283,6 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
       {/* Drawer - with stopPropagation to prevent backdrop from receiving clicks */}
       <div
         onClick={(e) => e.stopPropagation()}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
         style={{
           position: "fixed",
           top: "5rem",
@@ -313,12 +310,17 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
         {/* Only mount contents after first intentional open */}
         {(isOpen || hasOpenedRef.current) && (
           <>
-            {/* Drag Handle */}
+            {/* Drag Handle. Swipe-to-close listens here only, so scrolling
+                the results never drags the drawer. */}
             <div
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
               style={{
                 display: "flex",
                 justifyContent: "center",
-                padding: "8px 0",
+                padding: "12px 0",
+                touchAction: "none",
                 backgroundColor: "#ffffff",
                 position: "sticky",
                 top: 0,
