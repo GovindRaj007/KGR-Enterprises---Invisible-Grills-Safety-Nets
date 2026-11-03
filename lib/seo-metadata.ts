@@ -78,7 +78,11 @@ export function clampSnippet(text: string, max = 155): string {
   if (clean.length <= max) return clean;
   const cut = clean.slice(0, max);
   const lastSpace = cut.lastIndexOf(' ');
-  return (lastSpace > max * 0.6 ? cut.slice(0, lastSpace) : cut).replace(/[\s,.;:-]+$/, '');
+  // Also drop a dangling "and" / "&" / "or" left by the cut, so a snippet never
+  // ends "…Chennai, Vijayawada, and".
+  return (lastSpace > max * 0.6 ? cut.slice(0, lastSpace) : cut)
+    .replace(/[\s,.;:-]+$/, '')
+    .replace(/[\s,]+(and|or|&)$/i, '');
 }
 
 // Append the brand to a title, degrading gracefully so long service names do
@@ -130,8 +134,8 @@ export function generateServiceMetadata(params: {
   // copy belongs in the page body, not in the meta description.
   const alreadyNamesCity = new RegExp(`\\b(${(primaryLocation ?? PRIMARY_LOCATION.name)})\\b`, 'i').test(shortDescription);
   const descriptionTail = alreadyNamesCity
-    ? `. Free site visit, 15-year warranty. Call ${PRIMARY.display.trim()}.`
-    : `${locationSuffix}. Free site visit, 15-year warranty. Call ${PRIMARY.display.trim()}.`;
+    ? `. Free site visit, 10-year warranty. Call ${PRIMARY.display.trim()}.`
+    : `${locationSuffix}. Free site visit, 10-year warranty. Call ${PRIMARY.display.trim()}.`;
   const description = `${clampSnippet(shortDescription.replace(/\.$/, ''), 155 - descriptionTail.length)}${descriptionTail}`;
   const socialDescription = clampSnippet(`${shortDescription}${locationSuffix}. ${areas}.`, 280);
   
@@ -245,16 +249,15 @@ export function generateServiceSchema(params: {
     'offers': {
       '@type': 'AggregateOffer',
       'priceCurrency': 'INR',
-      'priceRange': '₹110 - ₹150 per sq ft',
-      'lowPrice': 110,
-      'highPrice': 150,
+      'priceRange': '₹145 per sq ft',
+      'lowPrice': 145,
       'offerCount': 50,
-      'price': 140,
+      'price': 145,
       'unitText': 'per square foot',
       'priceValidUntil': new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString(),
       'availability': 'https://schema.org/InStock',
       'itemCondition': 'https://schema.org/NewCondition',
-      'warranty': '15-year manufacturer warranty',
+      'warranty': '10-year warranty',
       'seller': {
         '@type': 'Organization',
         'name': 'KGR Enterprises',
@@ -280,18 +283,6 @@ export function generateServiceSchema(params: {
         }
       }
     },
-    'aggregateRating': {
-      '@type': 'AggregateRating',
-      'ratingValue': 4.9,
-      'bestRating': 5,
-      'ratingCount': 1126,
-      'reviewCount': 1126,
-      'author': {
-        '@type': 'Organization',
-        'name': 'KGR Enterprises',
-        'sameAs': 'https://invisiblegrillsandsafetynets.in'
-      }
-    }
   };
   
   return {
@@ -359,7 +350,7 @@ export function generateServiceSchema(params: {
               { '@type': 'Offer', 'itemOffered': { '@type': 'Service', 'name': 'Sports Nets Installation' } }
             ]
           },
-          'address': PRIMARY_LOCATIONS.map(loc => ({
+          'address': PRIMARY_LOCATIONS.filter(loc => loc.streetAddress).map(loc => ({
             '@type': 'PostalAddress',
             'streetAddress': loc.streetAddress,
             'addressLocality': loc.name,
@@ -403,7 +394,6 @@ export function generateServiceSchema(params: {
           'availability': 'InStock',
           'priceRange': priceRange,
           'priceCurrency': 'INR',
-          'offerCount': '1000+',
           'offers': [
             {
               '@type': 'Offer',
@@ -419,24 +409,6 @@ export function generateServiceSchema(params: {
               }
             }
           ]
-        },
-        'aggregateRating': {
-          '@type': 'AggregateRating',
-          'ratingValue': '4.9',
-          'ratingCount': '1126',
-          'bestRating': '5',
-          'worstRating': '1',
-          'reviewCount': '1126',
-          'itemReviewed': {
-            '@type': 'Service',
-            'name': serviceName,
-            'description': description,
-            'provider': {
-              '@type': 'Organization',
-              'name': 'KGR Enterprises',
-              'url': 'https://invisiblegrillsandsafetynets.in/'
-            }
-          }
         },
         'url': `https://invisiblegrillsandsafetynets.in${getServiceRoute(slug)}`,
         'potentialAction': [
@@ -641,6 +613,26 @@ export const LOCATION_PROFILES = {
       'sports': 'Weather-resistant sports solutions for Visakhapatnam'
     }
   },
+  'Guntur': {
+    climate: 'hot tropical weather with long, intense summers',
+    concern: ['extreme heat', 'monsoon rains', 'dust', 'independent houses and new apartments'],
+    benefit: [
+      'heat-resistant materials',
+      'UV-resistant finishes',
+      'all-weather protection',
+      'dust-proof solutions',
+      'low-maintenance stainless steel'
+    ],
+    areas: ['Brodipet', 'Arundelpet', 'Lakshmipuram', 'Brindavan Gardens', 'Pattabhipuram', 'Amaravathi Road'],
+    expertise: 'A dedicated installation team based in Guntur',
+    specialFeature: 'Heat and monsoon resistant installations by our own Guntur team',
+    serviceHighlights: {
+      'invisible-grills': 'Heat-resistant invisible grills for Guntur homes and apartments',
+      'safety-nets': 'All-weather safety nets for Guntur buildings',
+      'bird-protection': 'Durable pigeon and bird protection for Guntur homes',
+      'sports': 'Custom sports and cricket nets for Guntur'
+    }
+  },
   'Vijayawada': {
     climate: 'tropical weather with intense summers',
     concern: [
@@ -691,7 +683,7 @@ export function generateLocationContent(serviceName: string, location: string): 
       `Free same-day site inspection in ${location}`,
       `${loc.specialFeature}`,
       `Expert team with local experience`,
-      `15-year warranty with service support`,
+      `10-year warranty with service support`,
       `24/7 customer support in ${location}`,
       `Customized solutions for ${location} climate`,
       `Best-in-class materials and installation`,

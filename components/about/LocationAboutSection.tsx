@@ -60,7 +60,7 @@ const LocationAboutSection = ({ location }: { location: string }) => {
   const stats = [
     {
       icon: Users,
-      value: "5000+",
+      value: "4000+",
       label: "Happy Customers",
       color: "text-primary",
     },

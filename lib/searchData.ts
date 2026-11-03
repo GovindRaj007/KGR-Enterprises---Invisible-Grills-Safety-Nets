@@ -11,6 +11,10 @@ export interface SearchDataItem {
   url: string;
 }
 
+// Most results a search panel lists. High enough that a broad query such as
+// "nets" shows every matching service; the panels scroll.
+export const MAX_RESULTS = 30;
+
 export const SEARCH_DATA: SearchDataItem[] = [
   {
     id: "invisible-grills",
@@ -197,6 +201,54 @@ export const SEARCH_DATA: SearchDataItem[] = [
     url: getServiceRoute("hdpe-nylon"),
   },
   {
+    id: "shade-nets",
+    name: "Shade Nets",
+    category: "Safety Nets",
+    description:
+      "UV-blocking shade nets for terraces, gardens, balconies and parking areas. 50%, 75% and 90% shade options.",
+    keywords:
+      "shade nets shade net green shade nets sun shade UV-blocking terrace shade garden shade nursery agro shade net heat protection",
+    useCase: "Terrace garden balcony sun heat protection",
+    locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
+    url: getServiceRoute("shade-nets"),
+  },
+  {
+    id: "swimming-pool",
+    name: "Swimming Pool Safety Nets",
+    category: "Safety Nets",
+    description:
+      "Child-safe swimming pool safety nets and pool covers that prevent accidental falls into the water.",
+    keywords:
+      "swimming pool safety nets pool nets pool cover net child-safe pool protection drowning prevention",
+    useCase: "Swimming pool child safety villas apartments",
+    locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
+    url: getServiceRoute("swimming-pool"),
+  },
+  {
+    id: "car-parking",
+    name: "Car Parking Nets & Shades",
+    category: "Safety Nets",
+    description:
+      "Car parking shade nets and safety nets that protect vehicles from sun, heat and bird droppings.",
+    keywords:
+      "car parking nets car parking shade nets parking shades vehicle protection sun heat bird droppings",
+    useCase: "Car parking vehicle protection apartments villas",
+    locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
+    url: getServiceRoute("car-parking"),
+  },
+  {
+    id: "monkey-safety",
+    name: "Monkey Safety Nets",
+    category: "Safety Nets",
+    description:
+      "Strong, humane monkey safety nets that keep monkeys out of balconies, terraces and open areas.",
+    keywords:
+      "monkey safety nets monkey nets monkey protection nets anti monkey nets humane monkey deterrent balcony terrace",
+    useCase: "Balcony terrace monkey protection",
+    locations: "Hyderabad Bangalore Chennai Andhra Pradesh",
+    url: getServiceRoute("monkey-safety"),
+  },
+  {
     id: "pigeon-nets",
     name: "Pigeon Nets",
     category: "Bird Protection",
@@ -306,6 +358,20 @@ export const FUSE_OPTIONS = {
   ],
 };
 
+// Fuse.js is loaded after the page is interactive (see app/layout.tsx), so the
+// index is created on first search rather than when a search box mounts.
+type FuseIndex = { search: (query: string) => Array<{ item: SearchDataItem; score?: number }> };
+type FuseConstructor = new (data: SearchDataItem[], options: typeof FUSE_OPTIONS) => FuseIndex;
+
+let fuseInstance: FuseIndex | null = null;
+export const getFuse = (): FuseIndex | null => {
+  const Fuse = typeof window !== 'undefined' ? (window as unknown as { Fuse?: FuseConstructor }).Fuse : undefined;
+  if (!fuseInstance && Fuse) {
+    fuseInstance = new Fuse(SEARCH_DATA, FUSE_OPTIONS);
+  }
+  return fuseInstance;
+};
+
 // Expand common query synonyms so short terms like "turf" or "cricket turf" resolve reliably.
 export const normalizeSearchQuery = (query: string): string => {
   const normalized = query.toLowerCase().trim();
@@ -330,7 +396,7 @@ export const normalizeSearchQuery = (query: string): string => {
 };
 
 // Location names (only source of truth for location matching)
-const LOCATION_NAMES = ["bangalore", "hyderabad", "chennai", "vijayawada", "visakhapatnam"] as const;
+const LOCATION_NAMES = ["bangalore", "hyderabad", "chennai", "vijayawada", "visakhapatnam", "guntur"] as const;
 
 // Export for reference (dynamic - no hardcoded variations)
 export const LOCATION_KEYWORDS = Object.fromEntries(
@@ -462,8 +528,8 @@ const locationMatches = (serviceLocations: string, targetLocation: string): bool
     return true;
   }
   
-  // Vijayawada/Visakhapatnam -> Andhra Pradesh mapping
-  if ((normalized === "vijayawada" || normalized === "visakhapatnam") &&
+  // Andhra Pradesh cities -> Andhra Pradesh mapping
+  if ((normalized === "vijayawada" || normalized === "visakhapatnam" || normalized === "guntur") &&
       serviceLocations.includes("andhra pradesh")) {
     return true;
   }

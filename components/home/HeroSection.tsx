@@ -33,7 +33,7 @@ export default function HeroSection() {
 
             <p className="text-base md:text-lg lg:text-xl xl:text-2xl" style={{ color: "#C8D8EE" }}>
               Professional invisible grills, balcony safety nets, children protection nets,
-              pigeon nets & pet safety solutions. Trusted by 5000+ families across South India.
+              pigeon nets & pet safety solutions. Trusted by 4000+ families across South India.
             </p>
 
             {/* Features Grid */}
@@ -60,7 +60,7 @@ export default function HeroSection() {
                 </div>
                 <div className="flex flex-col md:flex-row md:items-center md:gap-2">
                   <span className="text-xs md:text-sm lg:text-base font-semibold" style={{ color: "#F0F6FF" }}>4.9/5</span>
-                  <span className="text-xs md:text-sm lg:text-base" style={{ color: "#C8D8EE" }}>5000+ Families</span>
+                  <span className="text-xs md:text-sm lg:text-base" style={{ color: "#C8D8EE" }}>4000+ Families</span>
                 </div>
               </div>
             </div>

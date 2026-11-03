@@ -6,14 +6,15 @@ import Link from 'next/link';
 import { servicesData, resolveServiceSlug, getServiceRoute, getServiceUrlSlug, serviceSpecificLocationFAQs } from '@/data/servicesData';
 import { getCanonicalUrl } from '@/lib/canonical-url';
 import { PRIMARY } from '@/constants/contacts';
-import { generateBreadcrumbSchema, clampSnippet, withBrand, LOCATION_PROFILES } from '@/lib/seo-metadata';
+import { generateBreadcrumbSchema, clampSnippet, LOCATION_PROFILES } from '@/lib/seo-metadata';
 import { Phone, ArrowRight, MapPin, Star, Building, CheckCircle2, IndianRupee } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Breadcrumbs } from '@/components/shared/Breadcrumbs';
 import HeroWithHeaderWrapper from '@/components/layout/HeroWithHeaderWrapper';
 
-import { locationData, validLocations } from '@/constants/locations';
+import { locationData, validLocations, LOCATION_ALIASES, locationLabel } from '@/constants/locations';
 import { getServiceAreas, hasAreaPages, slugifyArea } from '@/constants/service-areas';
+import { AGGREGATE_RATING } from '@/constants/business';
 import { RelatedServicesClient } from '@/components/services/ServiceDetailSectionsClient';
 import {
   INVISIBLE_GRILL_PRICE,
@@ -21,9 +22,12 @@ import {
   buildLocalFaqs,
   fitTitle,
   isInvisibleGrillService,
+  cityTitleCandidates,
+  cityDescriptionOverride,
 } from '@/lib/local-seo-content';
 import {
   GrillPriceAndSpecs,
+  KeyFacts,
   GrillComparison,
   InstallProcess,
   NearMeAreas,
@@ -67,23 +71,22 @@ export async function generateMetadata({
   ];
 
   const { from } = INVISIBLE_GRILL_PRICE;
-  // The main invisible-grills city page carries the price in the title, as the
-  // top-ranking local competitors do; it lifts click-through on "cost" intent.
-  const title = canonicalSlug === 'invisible-grills'
-    ? fitTitle([
-        `Invisible Grills in ${locationFormatted} | From ₹${from}/sq ft | KGR`,
-        `Invisible Grills in ${locationFormatted} | From ₹${from}/sq ft`,
-        withBrand(`Invisible Grills in ${locationFormatted}`),
-      ])
-    : withBrand(`${service.title} in ${locationFormatted}`);
+  const label = locationLabel(normalizedLocation);
+  const alias = LOCATION_ALIASES[normalizedLocation];
+  if (alias) {
+    locationKeywords.push(`${lower} in ${alias}`, `${lower} ${alias}`);
+  }
 
-  const description = isGrill
-    ? clampSnippet(
-        `${service.title} in ${locationFormatted} from ₹${from}/sq ft — SS316, child & pet safe, 15-yr warranty. Free site visit near you: ${locationInfo.primaryAreas.slice(0, 2).join(', ')} & more.`
-      )
-    : clampSnippet(
-        `${service.title} in ${locationFormatted} near you. Free site visit and 15-year warranty. Serving ${locationInfo.primaryAreas.join(', ')} and nearby.`
-      );
+  // Service-specific wording (and the price, for invisible grills) taken from
+  // the queries these pages already get impressions for.
+  const title = fitTitle(cityTitleCandidates(service, locationFormatted, label));
+
+  const description = clampSnippet(
+    cityDescriptionOverride(service, label) ??
+      (isGrill
+        ? `${service.title} for balconies & windows in ${label} from ₹${from}/sq ft — SS316, 10-yr warranty. Free site visit near you: ${locationInfo.primaryAreas.slice(0, 2).join(', ')} & more.`
+        : `${service.title} installation in ${label} near you. Free site visit and 10-year warranty. Serving ${locationInfo.primaryAreas.join(', ')} and nearby.`)
+  );
   // Open Graph has more room than a SERP snippet, so it keeps the area list.
   const socialDescription = clampSnippet(
     `Professional ${lower} in ${locationFormatted}. Serving ${cityAreas.join(', ')}.`,
@@ -166,6 +169,18 @@ export default async function ServiceLocationPage({ params }: Props) {
   const isGrill = isInvisibleGrillService(service);
   const lower = service.title.toLowerCase();
   const { from } = INVISIBLE_GRILL_PRICE;
+  // "Visakhapatnam (Vizag)" — used once in the hero and intro so the everyday
+  // name people search by is on the page.
+  const label = locationLabel(normalizedLocation);
+  // Balcony-grill and dealer pages overlap with the main invisible-grills page
+  // for the same city; link to it so visitors (and Google) reach the page with
+  // pricing and neighbourhood coverage.
+  // The dealer x city pages are written for people looking for someone to
+  // supply and fit invisible grills ("invisible grill dealers in <city>"),
+  // not for would-be dealers; the dealership programme has its own page.
+  const isDealer = canonicalSlug === 'invisible-grills-dealer';
+  const heading = isDealer ? `Invisible Grill Dealers & Installers in ${locationFormatted}` : `${service.title} in ${locationFormatted}`;
+  const linksToMainGrillPage = service.category === 'invisible-grills' && !['invisible-grills', 'cloth-drying'].includes(canonicalSlug);
 
   // City-specific material: climate, the problems local properties actually
   // have, and what we do about them. Falls back to the primary city's profile.
@@ -196,6 +211,18 @@ export default async function ServiceLocationPage({ params }: Props) {
       citySlug: normalizedLocation,
       areasSample: cityAreas.map(a => a.name),
     }),
+    ...(isDealer
+      ? [
+          {
+            question: `Are you an invisible grill dealer or an installer in ${locationFormatted}?`,
+            answer: `Both. KGR Enterprises supplies its own SS316 invisible grill systems and installs them with an in-house team, so you deal with one company for the material, the fitting and the ${BUSINESS_FACTS.warrantyYears}-year warranty.`,
+          },
+          {
+            question: `Do you supply invisible grill material to contractors and builders in ${locationFormatted}?`,
+            answer: `Yes. Through our dealer programme we supply invisible grill material in bulk at wholesale prices, with installation training and marketing support. See the invisible grills dealer page for details.`,
+          },
+        ]
+      : []),
     ...(isGrill ? [] : serviceSpecificLocationFAQs[canonicalSlug]?.[normalizedLocation] ?? []),
   ];
 
@@ -206,7 +233,7 @@ export default async function ServiceLocationPage({ params }: Props) {
     { name: 'Home', url: '/' },
     { name: 'Services', url: '/services/' },
     { name: service.title, url: getServiceRoute(canonicalSlug) },
-    { name: `${service.title} in ${locationFormatted}`, url: pagePath }
+    { name: heading, url: pagePath }
   ], pagePath);
 
   const baseUrl = 'https://invisiblegrillsandsafetynets.in';
@@ -220,7 +247,7 @@ export default async function ServiceLocationPage({ params }: Props) {
       {
         "@type": ["Service", "HomeAndConstructionBusiness"],
         "@id": `${pageUrl}#service`,
-        "name": `${service.title} in ${locationFormatted}`,
+        "name": heading,
         "description": service.description,
         "image": {
           "@type": "ImageObject",
@@ -229,7 +256,7 @@ export default async function ServiceLocationPage({ params }: Props) {
           "height": 675
         },
         "telephone": PRIMARY.phone,
-        "priceRange": isGrill ? `₹${INVISIBLE_GRILL_PRICE.from}–₹${INVISIBLE_GRILL_PRICE.to} per sq ft` : "₹₹",
+        "priceRange": isGrill ? `₹${INVISIBLE_GRILL_PRICE.from} per sq ft` : "₹₹",
         "address": {
           "@type": "PostalAddress",
           "streetAddress": locationInfo.streetAddress,
@@ -254,7 +281,7 @@ export default async function ServiceLocationPage({ params }: Props) {
         },
         "provider": {
           "@type": "LocalBusiness",
-          "@id": "https://invisiblegrillsandsafetynets.in#organization",
+          "@id": "https://invisiblegrillsandsafetynets.in/#organization",
           "name": "KGR Enterprises",
           "telephone": PRIMARY.phone,
           "image": {
@@ -305,12 +332,13 @@ export default async function ServiceLocationPage({ params }: Props) {
                 "validThrough": oneYearFromNow
               }
             },
-            {
+            // Priced offers only where the price is shown on the page.
+            ...(isGrill ? [{
               "@type": "Offer",
               "itemOffered": {
                 "@type": "Service",
-                "name": `Standard ${service.title} Installation`,
-                "description": `Professional installation with quality materials and 15-year warranty`
+                "name": `${service.title} Installation`,
+                "description": `Professional installation with quality materials and 10-year warranty`
               },
               "areaServed": locationFormatted,
               "priceSpecification": {
@@ -323,41 +351,13 @@ export default async function ServiceLocationPage({ params }: Props) {
               },
               "warranty": {
                 "@type": "WarrantyPromise",
-                "durationOfWarranty": "P15Y",
+                "durationOfWarranty": "P10Y",
                 "warrantyScope": "Labor and Materials"
               }
-            },
-            {
-              "@type": "Offer",
-              "itemOffered": {
-                "@type": "Service",
-                "name": `Premium ${service.title} Installation`,
-                "description": `Premium grade materials with extended warranty and priority support`
-              },
-              "areaServed": locationFormatted,
-              "priceSpecification": {
-                "@type": "UnitPriceSpecification",
-                "price": String(INVISIBLE_GRILL_PRICE.to),
-                "priceCurrency": "INR",
-                "unitText": "per square foot",
-                "validFrom": currentDate,
-                "validThrough": oneYearFromNow
-              },
-              "warranty": {
-                "@type": "WarrantyPromise",
-                "durationOfWarranty": "P20Y",
-                "warrantyScope": "Labor and Materials"
-              }
-            }
+            }] : [])
           ]
         },
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "4.9",
-          "ratingCount": "1126",
-          "bestRating": "5",
-          "worstRating": "1"
-        },
+        "aggregateRating": AGGREGATE_RATING,
       },
       faqPageSchema(faqs, pageUrl),
       breadcrumbSchema
@@ -380,6 +380,7 @@ export default async function ServiceLocationPage({ params }: Props) {
                 src={service.image}
                 alt={`${service.title} installed on an apartment balcony in ${locationFormatted}`}
                 className="h-full w-full object-cover"
+                priority
               />
               <div className="absolute inset-0 bg-gradient-to-r from-[hsl(222,47%,8%,0.45)] via-[hsl(222,47%,10%,0.35)] to-[hsl(222,47%,10%,0.25)]" />
             </div>
@@ -400,14 +401,25 @@ export default async function ServiceLocationPage({ params }: Props) {
                 {/* Location Indicator */}
                 <div className="mb-4 flex items-center gap-2 text-white/80">
                   <MapPin className="h-5 w-5" />
-                  <span>Serving all areas of {locationFormatted}, {locationInfo.state}</span>
+                  <span>Serving all areas of {label}, {locationInfo.state}</span>
                 </div>
 
                 <h1 className="mb-6 font-heading text-4xl font-bold text-white md:text-5xl lg:text-6xl">
-                  {service.title} in {locationFormatted}
+                  {heading}
                 </h1>
                 <p className="mb-8 text-lg text-white/80 md:text-xl">
-                  {isGrill
+                  {isDealer ? (
+                    <>
+                      Looking for invisible grill dealers in {label}? Buy direct from the installer:
+                      KGR Enterprises supplies and fits SS316 marine-grade invisible grills across{' '}
+                      {locationFormatted} from ₹{from}/sq ft, with a free site inspection and a{' '}
+                      {BUSINESS_FACTS.warrantyYears}-year warranty. Contractors and builders can buy in bulk through our{' '}
+                      <Link href={getServiceRoute('invisible-grills-dealer')} className="font-semibold text-white underline underline-offset-2">
+                        dealer programme
+                      </Link>
+                      .
+                    </>
+                  ) : isGrill
                     ? `Looking for invisible grills in ${locationFormatted}? KGR Enterprises installs SS316 marine-grade invisible grills for balconies, windows and high-rise apartments across ${locationFormatted} — from ₹${from}/sq ft with a free site inspection.`
                     : `Looking for ${lower} in ${locationFormatted}? ${service.heroDescription ?? service.description}`}
                 </p>
@@ -455,7 +467,7 @@ export default async function ServiceLocationPage({ params }: Props) {
             <div className="grid gap-12 md:grid-cols-2">
               <div>
                 <h2 className="mb-6 font-heading text-3xl font-bold text-foreground md:text-4xl">
-                  Trusted {service.title} Experts Across {locationFormatted}
+                  {isDealer ? `Trusted Invisible Grill Dealers & Installers Across ${locationFormatted}` : `Trusted ${service.title} Experts Across ${locationFormatted}`}
                 </h2>
                 <p className="mb-4 text-foreground/90">
                   KGR Enterprises is a leading provider of {lower} in {locationFormatted}, with{' '}
@@ -470,6 +482,15 @@ export default async function ServiceLocationPage({ params }: Props) {
                   {locationFormatted} — so whenever you search for {lower} near me in{' '}
                   {locationFormatted}, a local team is close by.
                 </p>
+                {linksToMainGrillPage && (
+                  <p className="mb-8 text-foreground/90">
+                    For pricing, specifications and every neighbourhood we cover, see{' '}
+                    <Link href={getServiceRoute('invisible-grills', normalizedLocation)} className="font-semibold text-accent underline-offset-2 hover:underline">
+                      invisible grills in {locationFormatted}
+                    </Link>
+                    .
+                  </p>
+                )}
                 <ul className="space-y-3">
                   {service.benefits.map((benefit, index) => (
                     <li key={index} className="flex items-start gap-3">
@@ -502,9 +523,13 @@ export default async function ServiceLocationPage({ params }: Props) {
                 </ul>
                 <div className="mt-6 border-t border-white/10 pt-4 text-sm text-white/70">
                   <p className="font-semibold text-white">KGR Enterprises — {locationFormatted}</p>
-                  <address className="not-italic">
-                    {locationInfo.streetAddress}, {locationInfo.state} {locationInfo.postalCode}
-                  </address>
+                  {locationInfo.streetAddress ? (
+                    <address className="not-italic">
+                      {locationInfo.streetAddress}, {locationInfo.state} {locationInfo.postalCode}
+                    </address>
+                  ) : (
+                    <p>Local installation team in {locationFormatted} — call to book a free site visit.</p>
+                  )}
                   <a href={`tel:${PRIMARY.phone}`} className="mt-1 inline-block text-accent">
                     {PRIMARY.display.trim()}
                   </a>
@@ -523,6 +548,19 @@ export default async function ServiceLocationPage({ params }: Props) {
             />
             <GrillComparison place={locationFormatted} />
           </>
+        )}
+
+        {!isGrill && (
+          <KeyFacts
+            title={`${service.title} in ${label} at a Glance`}
+            facts={[
+              ...service.specifications,
+              { label: 'Installation time', value: `${BUSINESS_FACTS.installHours} hours (typical home)` },
+              { label: 'Site inspection & quote', value: 'Free' },
+              { label: 'Neighbourhoods covered', value: `${cityAreas.length}+ across ${locationFormatted}` },
+              { label: 'Call / WhatsApp', value: PRIMARY.display.trim() },
+            ]}
+          />
         )}
 
         {/* City-specific specification notes */}
@@ -616,7 +654,7 @@ export default async function ServiceLocationPage({ params }: Props) {
           <div className="container">
             <div className="mx-auto max-w-3xl text-center">
               <h2 className="mb-4 font-heading text-3xl font-bold text-white md:text-4xl">
-                Ready for {service.title} in {locationFormatted}?
+                {isDealer ? `Need Invisible Grills Supplied & Installed in ${locationFormatted}?` : `Ready for ${service.title} in ${locationFormatted}?`}
               </h2>
               <p className="mb-8 text-lg text-white/80">
                 Book a free site inspection with our {locationFormatted} team. We'll measure, recommend

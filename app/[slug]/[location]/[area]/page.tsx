@@ -13,7 +13,7 @@ import { Breadcrumbs } from '@/components/shared/Breadcrumbs';
 import HeroWithHeaderWrapper from '@/components/layout/HeroWithHeaderWrapper';
 import { servicesData, resolveServiceSlug, getServiceRoute, getServiceUrlSlug } from '@/data/servicesData';
 import { PRIMARY } from '@/constants/contacts';
-import { locationData, validLocations, type LocationSlug } from '@/constants/locations';
+import { locationData, validLocations, locationLabel, type LocationSlug } from '@/constants/locations';
 import {
   AREA_PAGE_SERVICES,
   findServiceArea,
@@ -59,24 +59,28 @@ function resolve(params: Params) {
   const area = findServiceArea(location, areaSlug);
   if (!area) return null;
   const city = locationData[location as LocationSlug];
-  return { service, area, city, citySlug: location as LocationSlug, areaSlug };
+  // "Whitefield, Bangalore"
+  const where = `${area.name}, ${city.name}`;
+  return { service, area, city, citySlug: location as LocationSlug, areaSlug, where };
 }
 
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const resolved = resolve(await params);
   if (!resolved) return {};
-  const { service, area, city, citySlug, areaSlug } = resolved;
+  const { service, area, city, citySlug, areaSlug, where } = resolved;
   const { from } = INVISIBLE_GRILL_PRICE;
   const lower = service.title.toLowerCase();
 
   const title = fitTitle([
-    `${service.title} in ${area.name}, ${city.name} | From ₹${from}/sq ft`,
+    // the short name people also search by, e.g. "RR Nagar"
+    ...(area.aka ? [`${service.title} in ${area.name} (${area.aka}) | From ₹${from}/sq ft`, `${service.title} in ${area.name} (${area.aka}), ${city.name}`, `${service.title} in ${area.name} (${area.aka})`] : []),
+    `${service.title} in ${where} | From ₹${from}/sq ft`,
     `${service.title} in ${area.name} | From ₹${from}/sq ft | KGR`,
-    `${service.title} in ${area.name}, ${city.name}`,
+    `${service.title} in ${where}`,
     withBrand(`${service.title} in ${area.name}`),
   ]);
   const description = clampSnippet(
-    `${service.title} in ${area.name}, ${city.name} from ₹${from}/sq ft. SS316 marine-grade, child & pet safe, 15-yr warranty. Free site visit near you in ${area.name}.`
+    `${service.title} in ${where} from ₹${from}/sq ft. SS316 marine-grade, child & pet safe, 10-yr warranty. Free site visit near you in ${area.name}.`
   );
   const path = getServiceRoute(service.id, citySlug, areaSlug);
 
@@ -85,6 +89,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     description,
     keywords: [
       `${lower} in ${area.name}`,
+      ...(area.aka ? [`${lower} in ${area.aka}`] : []),
       `${lower} ${area.name}`,
       `${lower} in ${area.name} ${city.name}`,
       `${lower} near me`,
@@ -99,7 +104,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
       description,
       url: getCanonicalUrl(path),
       siteName: 'KGR Invisible Grills & Safety Nets',
-      images: [{ url: service.image, width: 1200, height: 630, alt: `${service.title} in ${area.name}, ${city.name}` }],
+      images: [{ url: service.image, width: 1200, height: 630, alt: `${service.title} in ${where}` }],
       type: 'article',
       locale: 'en-IN',
     },
@@ -118,8 +123,8 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
 export default async function ServiceAreaPage({ params }: { params: Promise<Params> }) {
   const resolved = resolve(await params);
   if (!resolved) notFound();
-  const { service, area, city, citySlug, areaSlug } = resolved;
-  const { from, to } = INVISIBLE_GRILL_PRICE;
+  const { service, area, city, citySlug, areaSlug, where } = resolved;
+  const { from } = INVISIBLE_GRILL_PRICE;
   const lower = service.title.toLowerCase();
 
   const baseUrl = 'https://invisiblegrillsandsafetynets.in';
@@ -148,6 +153,7 @@ export default async function ServiceAreaPage({ params }: { params: Promise<Para
     city: city.name,
     citySlug,
     areasSample: [area.name, ...area.nearby],
+    where,
   });
 
   const schema = {
@@ -156,14 +162,14 @@ export default async function ServiceAreaPage({ params }: { params: Promise<Para
       {
         '@type': 'Service',
         '@id': `${pageUrl}#service`,
-        name: `${service.title} in ${area.name}, ${city.name}`,
+        name: `${service.title} in ${where}`,
         serviceType: `${service.title} Installation`,
-        description: `Professional ${lower} installation in ${area.name}, ${city.name} using SS316 marine-grade stainless steel cable. From ₹${from} per sq ft with free site inspection.`,
+        description: `Professional ${lower} installation in ${where} using SS316 marine-grade stainless steel cable. From ₹${from} per sq ft with free site inspection.`,
         image: `${baseUrl}${service.image}`,
         url: pageUrl,
         provider: {
           '@type': 'LocalBusiness',
-          '@id': `${baseUrl}#organization`,
+          '@id': `${baseUrl}/#organization`,
           name: 'KGR Enterprises',
           telephone: PRIMARY.phone,
           url: baseUrl,
@@ -185,11 +191,9 @@ export default async function ServiceAreaPage({ params }: { params: Promise<Para
           containedInPlace: { '@type': 'City', name: city.name },
         },
         offers: {
-          '@type': 'AggregateOffer',
+          '@type': 'Offer',
           priceCurrency: 'INR',
-          lowPrice: from,
-          highPrice: to,
-          offerCount: 2,
+          price: from,
           availability: 'https://schema.org/InStock',
         },
       },
@@ -217,8 +221,9 @@ export default async function ServiceAreaPage({ params }: { params: Promise<Para
             <div className="absolute inset-0">
               <OptimizedImage
                 src={service.image}
-                alt={`${service.title} installed on a balcony in ${area.name}, ${city.name}`}
+                alt={`${service.title} installed on a balcony in ${where}`}
                 className="h-full w-full object-cover"
+                priority
               />
               <div className="absolute inset-0 bg-gradient-to-r from-[hsl(222,47%,8%,0.85)] via-[hsl(222,47%,10%,0.7)] to-[hsl(222,47%,10%,0.5)]" />
             </div>
@@ -238,14 +243,16 @@ export default async function ServiceAreaPage({ params }: { params: Promise<Para
               <div className="mx-auto max-w-4xl">
                 <div className="mb-4 flex items-center gap-2 text-white/80">
                   <MapPin className="h-5 w-5" />
-                  <span>{area.name}, {city.name}, {city.state}</span>
+                  <span>
+                    {area.name}
+                    {area.aka ? ` (${area.aka})` : ''}, {locationLabel(citySlug)}, {city.state}
+                  </span>
                 </div>
                 <h1 className="mb-6 font-heading text-4xl font-bold text-white md:text-5xl lg:text-6xl">
                   {service.title} in {area.name}
                 </h1>
                 <p className="mb-8 text-lg text-white/85 md:text-xl">
-                  Safe, stylish and rust-free balcony protection for homes and apartments in {area.name},{' '}
-                  {city.name}. SS316 marine-grade invisible grills from ₹{from}/sq ft, installed by our local
+                  Safe, stylish and rust-free balcony protection for homes and apartments in {where}. SS316 marine-grade invisible grills from ₹{from}/sq ft, installed by our local
                   team with a free site inspection.
                 </p>
                 <div className="mb-8 flex flex-col gap-4 sm:flex-row">
@@ -286,7 +293,7 @@ export default async function ServiceAreaPage({ params }: { params: Promise<Para
             <div className="grid gap-10 md:grid-cols-2">
               <div>
                 <h2 className="mb-6 font-heading text-3xl font-bold text-foreground md:text-4xl">
-                  Invisible Grills Installers in {area.name}, {city.name}
+                  Invisible Grills Installers in {where}
                 </h2>
                 <p className="mb-4 text-foreground/90">{areaIntro(area.name, city.name, area.kind)}</p>
                 <p className="mb-4 text-foreground/90">

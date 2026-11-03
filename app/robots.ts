@@ -26,6 +26,27 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: 'Mediapartners-Google',
         allow: '/',
       },
+      // AI search and answer engines. They are already covered by `*`; naming
+      // them makes the intent explicit, so the site can be read, cited and
+      // linked in ChatGPT, Perplexity, Claude, Gemini and Copilot answers.
+      {
+        userAgent: [
+          'GPTBot',
+          'OAI-SearchBot',
+          'ChatGPT-User',
+          'PerplexityBot',
+          'Perplexity-User',
+          'ClaudeBot',
+          'Claude-SearchBot',
+          'Claude-User',
+          'Google-Extended',
+          'Applebot-Extended',
+          'meta-externalagent',
+          'Amazonbot',
+          'CCBot',
+        ],
+        allow: '/',
+      },
       // Slow down aggressive commercial crawlers.
       {
         userAgent: ['AhrefsBot', 'SemrushBot', 'MJ12bot', 'DotBot'],

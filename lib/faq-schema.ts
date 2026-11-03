@@ -50,7 +50,7 @@ export const serviceFAQs: { [key: string]: FAQItem[] } = {
     },
     {
       question: 'What is the cost of invisible grills?',
-      answer: 'The cost of invisible grills typically ranges from ₹110 to ₹150 per square foot, depending on the window size, frame material, and customization requirements.'
+      answer: 'The cost of invisible grills is ₹145 per square foot including installation; the final amount depends on the window size, frame material, and customization requirements.'
     }
   ],
   'balcony-safety': [

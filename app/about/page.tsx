@@ -8,7 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export const metadata: Metadata = {
   title: "About Us - 15+ Years Experience in Safety Solutions",
-  description: "15+ years installing invisible grills and safety nets. Certified team, 5000+ happy customers across Bangalore, Hyderabad, Chennai and Andhra Pradesh.",
+  description: "KGR Enterprises has 15+ years of experience in invisible grills and safety nets installation. Certified team, 5000+ happy customers across Hyderabad, Bangalore, Chennai.",
   alternates: {
     canonical: 'https://invisiblegrillsandsafetynets.in/about/',
   },
@@ -49,8 +49,6 @@ export const metadata: Metadata = {
     "innovation in safety",
     "award winners in service",
     // Location Heritage
-    "invisible grills company in Bangalore",
-    "safety nets company in Bangalore",
     "South India's trusted provider",
     "regional safety experts",
     "community trusted brand",
@@ -75,7 +73,7 @@ export const metadata: Metadata = {
     url: "https://invisiblegrillsandsafetynets.in/about",
     images: [
       {
-        url: "/images/hero-image.jpg",
+        url: "/og-about.jpg",
         width: 1200,
         height: 630,
         alt: "About KGR Enterprises"
@@ -107,6 +105,14 @@ export default function AboutPage() {
       'telephone': '+91-7339306098',
       'contactType': 'Customer Support'
     },
+    'aggregateRating': {
+      '@type': 'AggregateRating',
+      'ratingValue': '4.9',
+      'bestRating': '5',
+      'worstRating': '1',
+      'ratingCount': '1126',
+      'reviewCount': '1126'
+    }
   };
 
   return (
@@ -157,7 +163,7 @@ export default function AboutPage() {
                 business to become one of South India&apos;s most trusted safety
                 solutions providers. With over 15 years of experience, we have
                 successfully completed 5000+ installations across Hyderabad,
-                Hyderabad, Chennai, and Andhra Pradesh.
+                Bangalore, Chennai, and Andhra Pradesh.
               </p>
             </CardContent>
           </Card>

@@ -2,7 +2,7 @@
 // NAP (name / address / phone) consistency matters for local SEO, so all
 // metadata, JSON-LD and sitemap code must read city data from here.
 // Order matters: the first entry is the primary SEO focus city.
-export const validLocations = ['bangalore', 'hyderabad', 'chennai', 'vijayawada', 'visakhapatnam'] as const;
+export const validLocations = ['bangalore', 'hyderabad', 'chennai', 'vijayawada', 'visakhapatnam', 'guntur'] as const;
 
 export const locationData = {
   bangalore: {
@@ -85,10 +85,34 @@ export const locationData = {
     name: 'Visakhapatnam',
     streetAddress: '50-79-31/1, Ganesh Nagar, Seetamma Peta, Dwaraka Nagar, Visakhapatnam',
     postalCode: '530016'
+  },
+  // Guntur has its own installation team but no walk-in branch, so it has no
+  // street address: pages and structured data must never invent one. The
+  // coordinates are the city centre, used for the map and areaServed only.
+  guntur: {
+    areas: [
+      'Brodipet', 'Arundelpet', 'Lakshmipuram', 'Pattabhipuram', 'Brindavan Gardens', 'Nallapadu',
+      'Gorantla', 'Amaravathi Road', 'Kothapet', 'AT Agraharam', 'Chandramouli Nagar', 'Vidya Nagar',
+      'Koritepadu', 'Syamala Nagar'
+    ],
+    primaryAreas: ['Brodipet', 'Arundelpet', 'Lakshmipuram', 'Brindavan Gardens'],
+    description: 'Serving Guntur city and nearby areas with a local installation team',
+    state: 'Andhra Pradesh',
+    priority: 0.85,
+    latitude: 16.3067,
+    longitude: 80.4365,
+    name: 'Guntur',
+    streetAddress: undefined,
+    postalCode: undefined
   }
 } as const;
 
 export type LocationSlug = (typeof validLocations)[number];
+
+// Cities with a walk-in branch (a street address). Contact details, branch
+// listings and per-branch LocalBusiness markup use only these.
+export const hasOffice = (slug: LocationSlug): boolean => Boolean(locationData[slug].streetAddress);
+export const OFFICE_LOCATIONS = validLocations.filter(hasOffice);
 
 // The city the site leads with in titles, descriptions and schema.
 export const PRIMARY_LOCATION_SLUG: LocationSlug = 'bangalore';
@@ -96,3 +120,16 @@ export const PRIMARY_LOCATION = locationData[PRIMARY_LOCATION_SLUG];
 
 // Ordered city list for copy such as "Bangalore, Hyderabad, Chennai …".
 export const LOCATION_NAMES = validLocations.map(slug => locationData[slug].name);
+
+// Everyday names people search by, where they differ from the official name.
+// Search Console shows as many "vizag" queries as "visakhapatnam" ones, and the
+// pages ranked far lower for them because the word never appeared on the page.
+export const LOCATION_ALIASES: Partial<Record<LocationSlug, string>> = {
+  visakhapatnam: 'Vizag',
+};
+
+// "Visakhapatnam (Vizag)" where an alias exists, otherwise just the name.
+export function locationLabel(slug: LocationSlug): string {
+  const alias = LOCATION_ALIASES[slug];
+  return alias ? `${locationData[slug].name} (${alias})` : locationData[slug].name;
+}

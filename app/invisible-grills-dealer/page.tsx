@@ -184,11 +184,11 @@ export default function InvisibleGrillsDealerPage() {
   const combinedSchema = {
     "@context": "https://schema.org",
     "@graph": [
-      serviceSchema,
+      ...serviceSchema['@graph'],
       faqSchema,
       {
         "@type": "LocalBusiness",
-        "@id": "https://invisiblegrillsandsafetynets.in#organization",
+        "@id": "https://invisiblegrillsandsafetynets.in/#organization",
         name: "KGR Invisible Grills & Safety Nets",
         image: {
           "@type": "ImageObject",

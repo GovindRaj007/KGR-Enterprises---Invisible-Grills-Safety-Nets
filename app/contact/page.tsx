@@ -3,7 +3,7 @@ import OptimizedImage from "@/components/shared/OptimizedImage";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import dynamic from 'next/dynamic';
 import { PRIMARY, SECONDARY, } from '@/constants/contacts';
-import { validLocations, locationData } from '@/constants/locations';
+import { locationData, OFFICE_LOCATIONS } from '@/constants/locations';
 import { Card, CardContent } from "@/components/ui/card";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import HeroWithHeaderWrapper from "@/components/layout/HeroWithHeaderWrapper";
@@ -121,7 +121,7 @@ export default function ContactPage() {
     {
       icon: MapPin,
       title: "Main Branches",
-      details: validLocations.map((slug) => ({
+      details: OFFICE_LOCATIONS.map((slug) => ({
         label: locationData[slug].name,
         value: `${locationData[slug].streetAddress} - ${locationData[slug].postalCode}`,
       })),
@@ -147,7 +147,7 @@ export default function ContactPage() {
     'logo': 'https://invisiblegrillsandsafetynets.in/logo.png',
     'description': 'Contact KGR Enterprises for professional invisible grills, safety nets, and bird protection solutions across South India. Free consultation and site inspection available.',
     // All five branches, primary focus city first, from the shared source.
-    'address': validLocations.map((slug) => ({
+    'address': OFFICE_LOCATIONS.map((slug) => ({
       '@type': 'PostalAddress',
       'streetAddress': locationData[slug].streetAddress,
       'addressLocality': locationData[slug].name,

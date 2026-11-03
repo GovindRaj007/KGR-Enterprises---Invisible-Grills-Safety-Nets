@@ -7,25 +7,20 @@
 
 import { PRIMARY } from '@/constants/contacts';
 import type { AreaKind } from '@/constants/service-areas';
+import { BUSINESS_FACTS } from '@/constants/business';
 
-// Per-sq-ft price range, installation included. Matches the offers already
-// declared in the service JSON-LD (lib/seo-metadata.ts).
-export const INVISIBLE_GRILL_PRICE = { from: 120, to: 150 } as const;
+// The one published invisible-grill price: per sq ft, installation included.
+// Page copy, titles and JSON-LD offers all read it from here.
+export const INVISIBLE_GRILL_PRICE = { from: 145 } as const;
 
-export const BUSINESS_FACTS = {
-  installations: '600+',
-  rating: '4.9',
-  warrantyYears: 10,
-  installHours: '4–6',
-  experienceYears: '15+',
-} as const;
+export { BUSINESS_FACTS } from '@/constants/business';
 
 type Service = { id: string; title: string; category: string };
 
 // Invisible-grill pages get the price / spec / comparison content. The dealer
 // programme and cloth hangers share the category but are not grills.
 export function isInvisibleGrillService(service: Service): boolean {
-  return service.category === 'invisible-grills' && !['invisible-grills-dealer', 'cloth-drying'].includes(service.id);
+  return service.category === 'invisible-grills' && service.id !== 'cloth-drying';
 }
 
 // Return the first title that fits Google's ~60 character display window.
@@ -43,6 +38,8 @@ export const CITY_MATERIAL_NOTE: Record<string, string> = {
     "Chennai's salty, humid coastal air rusts ordinary steel quickly, so every Chennai installation uses SS316 marine-grade cable and stainless fittings — never SS304 near the coast.",
   vijayawada:
     "Vijayawada's intense summers and heavy monsoons call for materials that do not fade, crack or rust. SS316 cable with UV-stable coating handles both without maintenance.",
+  guntur:
+    "Guntur's long, hot summers fade paint and rust iron grills quickly. SS316 stainless steel cable with a UV-stable nylon coating needs no repainting and stays smooth to the touch through the summer.",
   visakhapatnam:
     "Visakhapatnam's sea breeze carries salt far inland, so we only use SS316 marine-grade cable and stainless anchors here — the same grade used on ships and seaside railings.",
 };
@@ -76,18 +73,21 @@ export function buildLocalFaqs(params: {
   city: string;
   citySlug: string;
   areasSample: string[];
+  // Full place label when "<place>, <city>" would be wrong, e.g. a separate
+  // town such as "Guntur, Andhra Pradesh".
+  where?: string;
 }): FAQ[] {
-  const { service, place, city, citySlug, areasSample } = params;
+  const { service, place, city, citySlug, areasSample, where } = params;
   const areas = areasSample.slice(0, 6).join(', ');
-  const inPlace = place === city ? `in ${city}` : `in ${place}, ${city}`;
+  const inPlace = where ? `in ${where}` : place === city ? `in ${city}` : `in ${place}, ${city}`;
   const coastal = citySlug === 'chennai' || citySlug === 'visakhapatnam';
-  const { from, to } = INVISIBLE_GRILL_PRICE;
+  const { from } = INVISIBLE_GRILL_PRICE;
 
   if (isInvisibleGrillService(service)) {
     return [
       {
-        question: `What is the cost of invisible grills ${inPlace}?`,
-        answer: `Invisible grills ${inPlace} start from ₹${from} per sq ft and usually cost ₹${from}–₹${to} per sq ft including installation. The final price depends on the cable grade (SS304 or SS316), cable thickness, spacing, floor height and total area. We give a fixed written quote after a free site inspection — no hidden charges.`,
+        question: `What is the invisible grill price per square foot ${inPlace}?`,
+        answer: `Invisible grills ${inPlace} cost ₹${from} per sq ft including installation. The final amount depends on the cable grade (SS304 or SS316), cable thickness, spacing, floor height and total area. We give a fixed written quote after a free site inspection — no hidden charges.`,
       },
       {
         question: `Where can I get invisible grills installed near me ${inPlace}?`,
@@ -115,6 +115,16 @@ export function buildLocalFaqs(params: {
         question: `Do you offer a free site inspection ${inPlace}?`,
         answer: `Yes. Site inspection, measurement and quotation are free ${inPlace}. Our technician explains the cable options, spacing and exact cost before any work starts.`,
       },
+      {
+        question: `How do I choose the best invisible grills ${inPlace}?`,
+        answer: `Compare four things: the cable grade (SS316 marine-grade lasts far longer than SS304 or iron), the cable thickness and spacing (closer spacing for small children and pets), the warranty in writing, and whether the same company both supplies and installs the grills. KGR Enterprises uses SS316 cable, sets spacing on site and gives a ${BUSINESS_FACTS.warrantyYears}-year warranty on materials and workmanship.`,
+      },
+      ...(citySlug === 'bangalore'
+        ? [{
+            question: `Do I need my apartment association's approval for invisible grills in Bangalore?`,
+            answer: `Many gated communities in Bangalore have façade guidelines for balconies. Invisible grills are usually easier to approve than iron grills because they barely change how the building looks. We can share product details and photos for your association and match the spacing or finish they ask for.`,
+          }]
+        : []),
       {
         question: `What warranty do you give on invisible grills?`,
         answer: `Our invisible grills come with up to ${BUSINESS_FACTS.warrantyYears} years of warranty on materials and workmanship, plus after-sales support from our local ${city} team.`,
@@ -175,3 +185,48 @@ export const GRILL_USES = [
   'Terraces & open terraces',
   'Villas & duplex homes',
 ] as const;
+
+// Title candidates for a service + city page, most descriptive first; pass the
+// result to fitTitle(). `label` is the city with its everyday alias, e.g.
+// "Visakhapatnam (Vizag)"; `city` is the plain name used when that is too long.
+//
+// The service-specific wording follows what Search Console shows people type:
+// "pigeon net installation near me", "pigeon safety nets in …", "ceiling cloth
+// dryer installation near me", "invisible grill for balcony <city>".
+export function cityTitleCandidates(service: Service, city: string, label: string): string[] {
+  const price = `From ₹${INVISIBLE_GRILL_PRICE.from}/sq ft`;
+  const places = label === city ? [city] : [label, city];
+  const each = (make: (place: string) => string[]) => places.flatMap(make);
+  switch (service.id) {
+    case 'invisible-grills':
+      return each(p => [`Invisible Grills in ${p} | Installation ${price.replace('From', 'from')}`, `Invisible Grills in ${p} | ${price} | KGR`, `Invisible Grills in ${p} | ${price}`, `Invisible Grills in ${p}`]);
+    case 'invisible-grills-dealer':
+      return each(p => [`Invisible Grill Dealers & Installers in ${p} | KGR`, `Invisible Grill Dealers & Installers in ${p}`, `Invisible Grill Dealers in ${p}`]);
+    case 'invisible-grills-balcony':
+      return each(p => [`Invisible Grill for Balcony in ${p} | ${price}`, `Invisible Grill for Balcony in ${p}`]);
+    case 'pigeon-nets':
+      return each(p => [`Pigeon Nets Installation in ${p} | Pigeon Safety Nets`, `Pigeon Nets Installation in ${p} | KGR`, `Pigeon Nets Installation in ${p}`]);
+    case 'cloth-drying':
+      return each(p => [`Ceiling Cloth Drying Hangers Installation in ${p}`, `Ceiling Cloth Drying Hangers in ${p}`]);
+    default:
+      return each(p => [`${service.title} in ${p} | KGR Enterprises`, `${service.title} in ${p} | KGR`, `${service.title} in ${p}`]);
+  }
+}
+
+// Meta description for the few services where the generic one misses the
+// wording people search with. Returns undefined to keep the default.
+export function cityDescriptionOverride(service: Service, label: string): string | undefined {
+  const call = `Free site visit — call ${PRIMARY.display.trim()}.`;
+  switch (service.id) {
+    case 'pigeon-nets':
+      return `Pigeon net installation in ${label} near you. Pigeon safety nets for balconies, windows and duct areas, fitted by our local team. ${call}`;
+    case 'cloth-drying':
+      return `Ceiling cloth drying hanger installation in ${label} near you. Space-saving pulley cloth hangers for balconies and utility areas. ${call}`;
+    case 'terrace-cricket':
+      return `Box cricket on your terrace in ${label}: cricket turf, nets and a full enclosure, custom-built and installed. ${call}`;
+    case 'invisible-grills-dealer':
+      return `Invisible grill dealers & installers in ${label}: SS316 grills supplied and fitted by our own team from ₹${INVISIBLE_GRILL_PRICE.from}/sq ft, ${BUSINESS_FACTS.warrantyYears}-year warranty. ${call}`;
+    default:
+      return undefined;
+  }
+}

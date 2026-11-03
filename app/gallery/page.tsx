@@ -4,8 +4,8 @@ import { Breadcrumbs } from '@/components/shared/Breadcrumbs';
 import GalleryClient from '@/components/gallery/GalleryClient';
 
 export const metadata: Metadata = {
-  title: "Installation Gallery | KGR Invisible Grills & Safety Nets",
-  description: "Our portfolio of invisible grill, safety net and bird protection installations across Bangalore, Hyderabad, Chennai and Andhra Pradesh. 5000+ projects.",
+  title: "Gallery - Our Safety Installations | KGR Invisible Grills & Safety Nets",
+  description: "View our portfolio of invisible grills, safety nets, and bird protection installations across Hyderabad, Bangalore, Chennai. 5000+ successful projects completed.",
   robots: {
     index: true,
     follow: true,
@@ -50,8 +50,8 @@ export const metadata: Metadata = {
     "residential installations",
     "commercial projects",
     // Location-based Gallery
-    "Bangalore installations",
-    "Hyderabad projects",
+    "Hyderabad installations",
+    "Bangalore projects",
     "Chennai work samples",
     "installation across South India",
     // Inspiration & Discovery Keywords
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
   url: "https://invisiblegrillsandsafetynets.in/gallery/",
     images: [
       {
-        url: "/images/service-gallery-1.jpg",
+        url: "/og-gallery.jpg",
         width: 1200,
         height: 630,
         alt: "KGR Enterprises Gallery"
@@ -85,7 +85,15 @@ export default function GalleryPage() {
     'name': 'KGR Enterprises',
     'url': 'https://invisiblegrillsandsafetynets.in',
     'logo': 'https://invisiblegrillsandsafetynets.in/logo.png',
-    'description': 'Portfolio and gallery of professional invisible grills and safety nets installations across Bangalore, Hyderabad, Chennai, and South India. 5000+ completed projects.',
+    'description': 'Portfolio and gallery of professional invisible grills and safety nets installations across Hyderabad, Bangalore, Chennai, and South India. 5000+ completed projects.',
+    'aggregateRating': {
+      '@type': 'AggregateRating',
+      'ratingValue': '4.9',
+      'bestRating': '5',
+      'worstRating': '1',
+      'ratingCount': '1126',
+      'reviewCount': '1126'
+    }
   };
 
   return (
@@ -104,15 +112,6 @@ export default function GalleryPage() {
               darkMode={false}
             />
           </div>
-        </div>
-        <div className="container mx-auto px-4">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3">
-            Invisible Grills &amp; Safety Nets Gallery
-          </h1>
-          <p className="text-muted-foreground max-w-3xl">
-            Completed invisible grill, safety net and bird protection installations from
-            Bangalore, Hyderabad, Chennai, Vijayawada and Visakhapatnam.
-          </p>
         </div>
         <GalleryClient />
       </div>

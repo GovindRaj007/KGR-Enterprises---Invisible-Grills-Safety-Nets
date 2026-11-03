@@ -1,12 +1,13 @@
 import { PRIMARY } from '@/constants/contacts';
-import { validLocations, locationData, PRIMARY_LOCATION } from '@/constants/locations';
+import { BUSINESS_FACTS, SOCIAL_PROFILES } from '@/constants/business';
+import { validLocations, locationData, PRIMARY_LOCATION, OFFICE_LOCATIONS } from '@/constants/locations';
 
 export const baseUrl = 'https://invisiblegrillsandsafetynets.in';
 
 export const generateOrganizationSchema = () => ({
   '@context': 'https://schema.org',
   '@type': ['Organization', 'LocalBusiness'],
-  '@id': `${baseUrl}#organization`,
+  '@id': `${baseUrl}/#organization`,
   'name': 'KGR Enterprises',
   'alternateName': 'KGR Invisible Grills & Safety Nets',
   'description': 'Professional installation services for invisible grills, safety nets, pigeon nets, and sports nets across South India.',
@@ -45,7 +46,7 @@ export const generateOrganizationSchema = () => ({
       }
     }
   ],
-  'address': validLocations.map(slug => ({
+  'address': OFFICE_LOCATIONS.map(slug => ({
     '@type': 'PostalAddress',
     'streetAddress': locationData[slug].streetAddress,
     'addressLocality': locationData[slug].name,
@@ -75,8 +76,8 @@ export const generateOrganizationSchema = () => ({
       }
     }))
   },
-  'sameAs': ['https://x.com/Kgr_Grills_Nets'],
-  'foundingDate': '2008',
+  'sameAs': SOCIAL_PROFILES,
+  'foundingDate': String(BUSINESS_FACTS.foundedYear),
   'foundingLocation': {
     '@type': 'Place',
     'address': {
@@ -87,13 +88,5 @@ export const generateOrganizationSchema = () => ({
     }
   },
   'knowsLanguage': ['en', 'hi', 'te', 'ta', 'kn'],
-  'slogan': 'Ensuring Safety with Style',
-  'numberOfEmployees': {
-    '@type': 'QuantitativeValue',
-    'value': 50
-  },
-  'award': [
-    'Best Safety Solutions Provider 2025 - South India',
-    'Excellence in Customer Service 2024'
-  ]
+  'slogan': 'Ensuring Safety with Style'
 });

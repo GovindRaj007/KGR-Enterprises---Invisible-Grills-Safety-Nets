@@ -4,12 +4,14 @@
 
 import Link from 'next/link';
 import { MapPin, ArrowRight } from 'lucide-react';
-import { validLocations, locationData } from '@/constants/locations';
+import { validLocations, locationData, PRIMARY_LOCATION_SLUG } from '@/constants/locations';
 import { getServiceAreas, slugifyArea } from '@/constants/service-areas';
 import { INVISIBLE_GRILL_PRICE } from '@/lib/local-seo-content';
 import { getServiceRoute } from '@/data/servicesData';
 
+// The primary focus city (Bangalore) gets twice the neighbourhood links.
 const AREAS_PER_CITY = 8;
+const AREAS_PRIMARY_CITY = 16;
 
 export default function InvisibleGrillsNearYou() {
   return (
@@ -28,7 +30,7 @@ export default function InvisibleGrillsNearYou() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {validLocations.map(slug => {
             const city = locationData[slug];
-            const areas = getServiceAreas(slug).slice(0, AREAS_PER_CITY);
+            const areas = getServiceAreas(slug).slice(0, slug === PRIMARY_LOCATION_SLUG ? AREAS_PRIMARY_CITY : AREAS_PER_CITY);
             return (
               <div
                 key={slug}

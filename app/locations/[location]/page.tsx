@@ -8,12 +8,12 @@ import LocationAboutClient from '@/components/about/LocationAboutClient';
 import { PRIMARY_LOCATIONS } from '@/lib/seo-metadata';
 import { PRIMARY } from '@/constants/contacts';
 import { generateLocationContent, generateBreadcrumbSchema, clampSnippet } from '@/lib/seo-metadata';
-import { locationData, validLocations } from '@/constants/locations';
+import { locationData, validLocations, locationLabel, type LocationSlug } from '@/constants/locations';
 import Link from 'next/link';
 import { getServiceAreas, slugifyArea } from '@/constants/service-areas';
-import { buildLocalFaqs } from '@/lib/local-seo-content';
+import { buildLocalFaqs, fitTitle } from '@/lib/local-seo-content';
 import { LocalFAQ, faqPageSchema } from '@/components/location/LocalSeoSections';
-import { servicesData, getServiceRoute } from '@/data/servicesData';
+import { servicesData, getServiceRoute, serviceCategoriesWithoutClothHangers } from '@/data/servicesData';
 
 export async function generateStaticParams() {
   return PRIMARY_LOCATIONS.map(loc => ({
@@ -37,9 +37,14 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
     };
   }
 
-  // City hub for every service. The exact "invisible grills in <city>" title
-  // belongs to /invisible-grills/<city>/ so the two don't compete.
-  const title = `Safety Nets & Invisible Grills Services in ${matched.name}`;
+  // Search Console shows these hub pages are the best-ranking page for
+  // "invisible grills in <city>" in most cities, so the title leads with it.
+  const label = locationLabel(normalizedLocation as LocationSlug);
+  const title = fitTitle([
+    `Invisible Grills & Safety Nets in ${label} | KGR Enterprises`,
+    `Invisible Grills & Safety Nets in ${label} | KGR`,
+    `Invisible Grills & Safety Nets in ${label}`,
+  ]);
   const canonicalPath = `/locations/${matched.name.toLowerCase()}/`;
   const locationMeta = {
     areaServed: matched.areas.join(', '),
@@ -60,14 +65,14 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
       'max-snippet': -1,
     },
     description: clampSnippet(
-      `Invisible grills, balcony safety nets & pigeon nets near you in ${matched.name} — ${locationMeta.areaServed} and nearby. Free site visit, 15-year warranty.`
+      `Invisible grills, balcony safety nets & pigeon nets near you in ${label} — ${locationMeta.areaServed} and nearby. Free site visit, 10-year warranty.`
     ),
     alternates: {
       canonical: `https://invisiblegrillsandsafetynets.in${canonicalPath}`
     },
     openGraph: {
       title: `KGR Enterprises - Invisible Grills & Safety Nets in ${matched.name}`,
-      description: `Leading provider of invisible grills and safety nets in ${matched.name}. Professional installation, marine-grade materials, and lifetime support.`,
+      description: `Leading provider of invisible grills and safety nets in ${matched.name}. Professional installation, marine-grade materials, and after-sales support.`,
       url: `https://invisiblegrillsandsafetynets.in/locations/${locName.toLowerCase()}/`,
       siteName: 'KGR Enterprises',
       type: 'website',
@@ -83,7 +88,7 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
     twitter: {
       card: 'summary_large_image',
       title: `KGR Enterprises - Invisible Grills & Safety Nets in ${matched.name}`,
-      description: `Professional invisible grills and safety nets installation in ${matched.name}. Free site inspection and 15-year warranty.`,
+      description: `Professional invisible grills and safety nets installation in ${matched.name}. Free site inspection and 10-year warranty.`,
       images: ['/images/invisible-grill-1.jpg'],
       site: '@Kgr_Grills_Nets',
       creator: '@Kgr_Grills_Nets',
@@ -141,16 +146,11 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
     citySlug: normalizedLocation,
     areasSample: cityAreas.map(a => a.name),
   }).slice(0, 5);
-  const popularServices = [
-    ['invisible-grills', 'Invisible Grills'],
-    ['invisible-grills-balcony', 'Invisible Grill for Balcony'],
-    ['balcony-safety', 'Balcony Safety Nets'],
-    ['children-protection', 'Children Protection Nets'],
-    ['pigeon-nets', 'Pigeon Nets'],
-    ['pets-safety', 'Pets Safety Nets'],
-    ['duct-area', 'Duct Area Nets'],
-    ['cricket-practice', 'Cricket Practice Nets'],
-  ] as const;
+  // Every service in this city, grouped as in the main menu.
+  const serviceGroups = Object.values(serviceCategoriesWithoutClothHangers).map(category => ({
+    title: category.title,
+    services: category.services.filter(id => id in servicesData),
+  }));
   
   // Generate breadcrumb schema (matching service location pages pattern)
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -316,15 +316,23 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
             <h2 className="mb-8 text-center font-heading text-3xl font-bold text-foreground md:text-4xl">
               Our Services in {locationDisplay}
             </h2>
-            <div className="mx-auto grid max-w-5xl gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {popularServices.map(([slug, label]) => (
-                <Link
-                  key={slug}
-                  href={getServiceRoute(slug, normalizedLocation)}
-                  className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white transition hover:border-accent hover:text-accent"
-                >
-                  {label} in {locationDisplay}
-                </Link>
+            <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-2 lg:grid-cols-4">
+              {serviceGroups.map(group => (
+                <div key={group.title}>
+                  <h3 className="mb-3 font-heading text-lg font-semibold text-accent">{group.title}</h3>
+                  <ul className="space-y-2">
+                    {group.services.map(id => (
+                      <li key={id}>
+                        <Link
+                          href={getServiceRoute(id, normalizedLocation)}
+                          className="block rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white transition hover:border-accent hover:text-accent"
+                        >
+                          {servicesData[id as keyof typeof servicesData].title} in {locationDisplay}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               ))}
             </div>
             <h3 className="mb-4 mt-12 text-center font-heading text-2xl font-semibold text-foreground">

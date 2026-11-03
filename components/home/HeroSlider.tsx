@@ -332,7 +332,7 @@ export function HeroSlider() {
               </span>
             </div>
             <span className="text-xs md:text-sm text-white/80 leading-tight">
-              5000+ Families Trusted
+              4000+ Families Trusted
             </span>
           </div>
         </div>

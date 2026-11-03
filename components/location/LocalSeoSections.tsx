@@ -31,8 +31,30 @@ type Props = {
   otherCities: Array<{ name: string; href: string }>;
 };
 
+// Compact, scannable summary of the facts people (and answer engines) look for
+// first. Rendered as a definition list so each fact is one label + one value.
+export function KeyFacts({ title, facts }: { title: string; facts: Array<{ label: string; value: string }> }) {
+  return (
+    <section className="relative bg-white py-12 md:py-16" aria-labelledby="key-facts">
+      <div className="container relative z-10">
+        <h2 id="key-facts" className="mb-8 text-center font-heading text-2xl font-bold text-gray-900 md:text-3xl">
+          {title}
+        </h2>
+        <dl className="mx-auto grid max-w-4xl gap-x-8 sm:grid-cols-2">
+          {facts.map(fact => (
+            <div key={fact.label} className="flex items-baseline justify-between gap-4 border-b border-gray-200 py-3">
+              <dt className="text-sm text-gray-600 md:text-base">{fact.label}</dt>
+              <dd className="text-right text-sm font-semibold text-gray-900 md:text-base">{fact.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  );
+}
+
 export function GrillPriceAndSpecs({ place, citySlug, specifications }: Pick<Props, 'place' | 'citySlug' | 'specifications'>) {
-  const { from, to } = INVISIBLE_GRILL_PRICE;
+  const { from } = INVISIBLE_GRILL_PRICE;
   return (
     <section className="section-bg-4 relative py-16 md:py-20">
       <div className="container relative z-10">
@@ -42,9 +64,9 @@ export function GrillPriceAndSpecs({ place, citySlug, specifications }: Pick<Pro
               Invisible Grills Price in {place}
             </h2>
             <p className="mb-4 text-foreground/90">
-              The cost of invisible grills in {place} starts from <strong>₹{from} per sq ft</strong> and
-              usually falls between ₹{from} and ₹{to} per sq ft, installation included. What moves the
-              price is the cable grade (SS304 or SS316), cable thickness, spacing between cables, the
+              The cost of invisible grills in {place} is <strong>₹{from} per sq ft</strong>,
+              installation included. What moves the
+              final amount is the cable grade (SS304 or SS316), cable thickness, spacing between cables, the
               floor height and the total area to be covered.
             </p>
             <p className="mb-6 text-foreground/90">

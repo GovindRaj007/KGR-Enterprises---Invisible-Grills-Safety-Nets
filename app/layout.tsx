@@ -6,12 +6,13 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import MainLayout from "@/components/layout/MainLayout";
 import { PRIMARY } from '@/constants/contacts';
-import { validLocations, locationData } from '@/constants/locations';
+import { locationData, PRIMARY_LOCATION, LOCATION_NAMES, OFFICE_LOCATIONS } from '@/constants/locations';
+import { BUSINESS_FACTS, BUSINESS_DESCRIPTION, SOCIAL_PROFILES } from '@/constants/business';
 
 const SITE_URL = "https://invisiblegrillsandsafetynets.in";
 const SITE_TITLE = "KGR Enterprises – Invisible Grills & Safety Nets in Bangalore";
 const SITE_DESCRIPTION =
-  "Premium invisible grills and safety nets installation in Bangalore, Hyderabad, Chennai, Vijayawada and Visakhapatnam. Marine-grade steel, 15-year warranty.";
+  "Premium invisible grills and safety nets installation in Bangalore, Hyderabad, Chennai, Vijayawada and Visakhapatnam. Marine-grade steel, 10-year warranty.";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -128,7 +129,7 @@ export default function RootLayout({
           "@id": "https://invisiblegrillsandsafetynets.in/#primaryimage"
         },
         "thumbnailUrl": "https://invisiblegrillsandsafetynets.in/logo.png",
-        "datePublished": "2008-01-01T00:00:00+00:00",
+        "datePublished": "2010-01-01T00:00:00+00:00",
         "dateModified": currentDate,
         "description": SITE_DESCRIPTION,
 
@@ -163,7 +164,31 @@ export default function RootLayout({
         "@type": "Organization",
         "@id": "https://invisiblegrillsandsafetynets.in/#organization",
         "name": "KGR Enterprises",
+        "alternateName": ["KGR Invisible Grills & Safety Nets", "KGR Invisible Grills"],
         "url": "https://invisiblegrillsandsafetynets.in",
+        // Entity facts: who the business is, what it does and where. These are
+        // what search and AI answer engines use to describe and cite it.
+        "description": BUSINESS_DESCRIPTION,
+        "foundingDate": String(BUSINESS_FACTS.foundedYear),
+        "email": "kgr.invisiblegrills.nets@gmail.com",
+        "sameAs": SOCIAL_PROFILES,
+        "knowsAbout": [
+          "Invisible grills",
+          "SS316 stainless steel invisible grill installation",
+          "Balcony safety nets",
+          "Pigeon nets and bird protection",
+          "Children and pet safety nets",
+          "Sports and cricket practice nets"
+        ],
+        "areaServed": LOCATION_NAMES.map(name => ({ "@type": "City", "name": name })),
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": PRIMARY_LOCATION.streetAddress,
+          "addressLocality": PRIMARY_LOCATION.name,
+          "addressRegion": PRIMARY_LOCATION.state,
+          "postalCode": PRIMARY_LOCATION.postalCode,
+          "addressCountry": "IN"
+        },
         "logo": {
           "@type": "ImageObject",
           "@id": "https://invisiblegrillsandsafetynets.in/#logo",
@@ -181,11 +206,11 @@ export default function RootLayout({
           "telephone": phoneNumber,
           "contactType": "customer service",
           "areaServed": "IN",
-          "availableLanguage": "English"
+          "availableLanguage": ["English", "Hindi", "Kannada", "Telugu", "Tamil"]
         },
         // One LocalBusiness per branch, derived from constants/locations.ts so
         // the NAP data here can never drift from the location pages.
-        "department": validLocations.map(slug => {
+        "department": OFFICE_LOCATIONS.map(slug => {
           const loc = locationData[slug];
           return {
             "@type": "LocalBusiness",
@@ -227,14 +252,6 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         
-        {/* Preload Critical Assets */}
-        <link 
-          rel="preload" 
-          as="image" 
-          href="/images/hero-image.jpg"
-          fetchPriority="high"
-        />
-        
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -254,8 +271,10 @@ export default function RootLayout({
             });
           `}
         </Script>
-        {/* Fuse.js for client-side search - Load early to avoid timing issues */}
-        <Script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js" strategy="beforeInteractive" />
+        {/* Fuse.js for client-side search. Loaded when the browser is idle: it is
+            only needed once someone searches, and loading it in the head blocked
+            rendering on every page. The index is created on first search. */}
+        <Script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js" strategy="lazyOnload" />
       </head>
       <body className={inter.className}>
         <TooltipProvider>

@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type OptimizedImageProps = {
   src: string;
@@ -18,29 +18,17 @@ type OptimizedImageProps = {
   [key: string]: unknown;
 };
 
-const manifestUrl = '/optimized-images.json';
-let manifestCache: Record<string, string[]> | null = null;
-let manifestPromise: Promise<Record<string, string[]>> | null = null;
+// basename -> optimized WebP path, inlined at build time by next.config.ts.
+// Resolving it synchronously means the server-rendered HTML already points at
+// the small WebP, so the browser never downloads the heavy original first.
+const OPTIMIZED_IMAGES: Record<string, string> = JSON.parse(
+  process.env.NEXT_PUBLIC_OPTIMIZED_IMAGES || '{}'
+);
 
-async function getManifest() {
-  if (manifestCache) return manifestCache;
-
-  // If the optimized manifest was preloaded before hydration, use it and avoid a fetch
-  if (typeof window !== 'undefined' && (window as any).__OPTIMIZED_IMAGES__) {
-    manifestCache = (window as any).__OPTIMIZED_IMAGES__ as Record<string, string[]>;
-    return manifestCache;
-  }
-
-  if (!manifestPromise) {
-    manifestPromise = fetch(manifestUrl)
-      .then(async (response) => {
-        if (!response.ok) return {};
-        return (await response.json()) as Record<string, string[]>;
-      })
-      .catch(() => ({}));
-  }
-  manifestCache = await manifestPromise;
-  return manifestCache;
+function resolveOptimizedSrc(src: string): string {
+  if (src.startsWith('http') || src.startsWith('/images/optimized/')) return src;
+  const basename = src.split('/').pop()?.split('.')[0];
+  return (basename && OPTIMIZED_IMAGES[basename]) || src;
 }
 
 const OptimizedImage = ({
@@ -57,37 +45,14 @@ const OptimizedImage = ({
   fill = false,
   ...props
 }: OptimizedImageProps) => {
-  const [optimizedSrc, setOptimizedSrc] = useState(src);
+  // Falls back to the original file if the optimized one fails to load.
   const [isFallback, setIsFallback] = useState(false);
 
-  const fallbackSrc = useMemo(() => src, [src]);
-
   useEffect(() => {
-    if (src.startsWith('http') || src.startsWith('/images/optimized/')) {
-      setOptimizedSrc(src);
-      setIsFallback(false);
-      return;
-    }
-
-    setOptimizedSrc(src);
     setIsFallback(false);
-
-    let isMounted = true;
-
-    getManifest().then((manifest) => {
-      if (!isMounted) return;
-      const basename = src.split('/').pop()?.split('.')[0];
-      if (basename && manifest[basename]?.length) {
-        setOptimizedSrc(manifest[basename][0]);
-      }
-    });
-
-    return () => {
-      isMounted = false;
-    };
   }, [src]);
 
-  const imageSrc = isFallback ? fallbackSrc : optimizedSrc;
+  const imageSrc = isFallback ? src : resolveOptimizedSrc(src);
 
   return (
     <Image

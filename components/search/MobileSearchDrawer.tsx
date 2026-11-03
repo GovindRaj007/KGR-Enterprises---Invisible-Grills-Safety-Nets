@@ -6,6 +6,8 @@ import { Search, X } from "lucide-react";
 import {
   SEARCH_DATA,
   FUSE_OPTIONS,
+  getFuse,
+  MAX_RESULTS,
   normalizeSearchQuery,
   getSpecialSearchResults,
   extractLocationFromQuery,
@@ -120,6 +122,7 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
 
   // Enhanced search function with location and category context
   const runSearch = useCallback((searchQuery: string) => {
+    fuseInstanceRef.current ??= getFuse();
     if (!fuseInstanceRef.current) return;
 
     const normalizedQuery = normalizeSearchQuery(searchQuery);
@@ -152,7 +155,7 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
 
     // CASE 1: Location-only search (e.g., "hyderabad", "bangalore")
     if (type === "location-only" && location) {
-      const locationServices = getServicesByLocation(location).slice(0, 12);
+      const locationServices = getServicesByLocation(location).slice(0, MAX_RESULTS);
       setResults(locationServices);
       setShowResults(true);
       return;
@@ -186,7 +189,7 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
         resultsData = fuzzyResults;
       }
 
-      setResults(resultsData.slice(0, 12));
+      setResults(resultsData.slice(0, MAX_RESULTS));
       setShowResults(true);
       return;
     }
@@ -195,7 +198,7 @@ const MobileSearchDrawer: React.FC<MobileSearchDrawerProps> = ({
     const cleanQuery = removeLocationFromQuery(normalizedQuery) || normalizedQuery;
     const searchResults = fuseInstanceRef.current
       .search(cleanQuery)
-      .slice(0, 12);
+      .slice(0, MAX_RESULTS);
 
     const resultsData = searchResults.map((r: any) => r.item);
     setResults(resultsData);

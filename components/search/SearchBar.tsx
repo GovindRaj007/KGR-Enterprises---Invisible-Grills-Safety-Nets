@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { X, Search } from "lucide-react";
-import { SEARCH_DATA, FUSE_OPTIONS, type SearchDataItem } from "@/lib/searchData";
+import { SEARCH_DATA, FUSE_OPTIONS, getFuse, type SearchDataItem } from "@/lib/searchData";
 import { normalizeSearchQuery } from "@/lib/searchData";
 import { getSpecialSearchResults } from "@/lib/searchData";
 
@@ -91,6 +91,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   // Search function
   const runSearch = useCallback((searchQuery: string) => {
+    fuseInstanceRef.current ??= getFuse();
     if (!fuseInstanceRef.current) return;
 
     const normalizedQuery = normalizeSearchQuery(searchQuery);

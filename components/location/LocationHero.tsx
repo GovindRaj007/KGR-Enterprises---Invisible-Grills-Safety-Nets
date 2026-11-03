@@ -15,7 +15,7 @@ type Props = {
 export default function LocationHero({ location, breadcrumbItems }: Props) {
   return (
     <section className="relative overflow-hidden mb-0">
-      <OptimizedImage src="/images/hero-image.jpg" alt={`Invisible Grills and safety nets installation in ${location} for balcony, window and child safety`} className=" w-full h-full absolute inset-0" />
+      <OptimizedImage src="/images/hero-image.jpg" alt={`Invisible Grills and safety nets installation in ${location} for balcony, window and child safety`} className=" w-full h-full absolute inset-0" priority />
       <div className="absolute inset-0" style={{
         background: "linear-gradient(135deg, rgba(5, 13, 31, 0.4) 0%, rgba(15, 32, 64, 0.3) 100%)"
       }} />

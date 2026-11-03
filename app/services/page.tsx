@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     "certified installation",
     "expert services",
     "best quality materials",
-    "15-year warranty",
+    "10-year warranty",
     "trusted service provider",
     // Long-tail Service Keywords
     "affordable safety systems",

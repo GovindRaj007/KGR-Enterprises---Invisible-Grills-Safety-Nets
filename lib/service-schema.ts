@@ -2,6 +2,7 @@ import { baseUrl, generateOrganizationSchema } from './organization-schema';
 import { PRIMARY } from '@/constants/contacts';
 import { validLocations, locationData } from '@/constants/locations';
 import { getServiceRoute } from '@/data/servicesData';
+import { AGGREGATE_RATING } from '@/constants/business';
 
 export function generateServiceSchema(params: {
   serviceName: string;
@@ -10,23 +11,28 @@ export function generateServiceSchema(params: {
   slug: string;
   category?: string;
   specifications?: Array<{ label: string; value: string }>;
+  // Per-sq-ft price range. Pass it only for services whose price is shown on
+  // the page: structured-data prices must match visible content.
+  price?: { from: number };
 }) {
-  const { serviceName, description, image, slug, category = 'safety-equipment', specifications = [] } = params;
+  const { serviceName, description, image, slug, category = 'safety-equipment', specifications = [], price } = params;
   const organizationSchema = generateOrganizationSchema();
 
   // Product schema representing the physical product
   const productSchema = {
-    '@type': ['Product', 'Service'],
+    // Google requires offers (or reviews) on a Product, so services without a
+    // published price are described as a Service only.
+    '@type': price ? ['Product', 'Service'] : 'Service',
     'name': serviceName,
     'description': description,
     'brand': {
       '@type': 'Brand',
-      '@id': `${baseUrl}#organization`,
+      '@id': `${baseUrl}/#organization`,
       'name': 'KGR Enterprises'
     },
     'manufacturer': {
       '@type': 'Organization',
-      '@id': `${baseUrl}#organization`,
+      '@id': `${baseUrl}/#organization`,
       'name': 'KGR Enterprises'
     },
     'image': `${baseUrl}${image}`,
@@ -41,12 +47,10 @@ export function generateServiceSchema(params: {
       'name': spec.label,
       'value': spec.value
     })),
-    'offers': {
-      '@type': 'AggregateOffer',
+    'offers': price && {
+      '@type': 'Offer',
       'priceCurrency': 'INR',
-      'lowPrice': '110',
-      'highPrice': '150',
-      'offerCount': '3',
+      'price': String(price.from),
       'priceValidUntil': new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString(),
       'itemCondition': 'https://schema.org/NewCondition',
       'availability': 'https://schema.org/InStock',
@@ -54,21 +58,14 @@ export function generateServiceSchema(params: {
       'areaServed': ['IN'],
       'priceSpecification': {
         '@type': 'PriceSpecification',
-        'price': '110',
+        'price': String(price.from),
         'priceCurrency': 'INR',
         'unitText': 'per square foot',
         'validFrom': new Date().toISOString(),
         'validThrough': new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString()
       }
     },
-    'aggregateRating': {
-      '@type': 'AggregateRating',
-      'ratingValue': '4.9',
-      'bestRating': '5',
-      'worstRating': '1',
-      'ratingCount': '1126',
-      'reviewCount': '1126'
-    }
+    'aggregateRating': AGGREGATE_RATING
   };
 
   const currentDate = new Date().toISOString();
@@ -121,16 +118,16 @@ export function generateServiceSchema(params: {
             'validThrough': oneYearFromNow
           }
         },
-        {
+        ...(price ? [{
           '@type': 'Offer',
           'itemOffered': {
             '@type': 'Service',
-            'name': `Standard ${serviceName} Installation`,
+            'name': `${serviceName} Installation`,
             'description': `Professional installation with quality materials and backed by warranty`
           },
           'priceSpecification': {
             '@type': 'PriceSpecification',
-            'price': '110',
+            'price': String(price.from),
             'priceCurrency': 'INR',
             'unitText': 'per square foot',
             'validFrom': currentDate,
@@ -141,38 +138,10 @@ export function generateServiceSchema(params: {
             'durationOfWarranty': 'P10Y',
             'warrantyScope': 'Labor and Materials'
           }
-        },
-        {
-          '@type': 'Offer',
-          'itemOffered': {
-            '@type': 'Service',
-            'name': `Premium ${serviceName} Installation`,
-            'description': `Premium grade materials with extended warranty and priority support`
-          },
-          'priceSpecification': {
-            '@type': 'PriceSpecification',
-            'price': '150',
-            'priceCurrency': 'INR',
-            'unitText': 'per square foot',
-            'validFrom': currentDate,
-            'validThrough': oneYearFromNow
-          },
-          'warranty': {
-            '@type': 'WarrantyPromise',
-            'durationOfWarranty': 'P10Y',
-            'warrantyScope': 'Labor and Materials'
-          }
-        }
+        }] : [])
       ]
     },
-    'aggregateRating': {
-      '@type': 'AggregateRating',
-      'ratingValue': '4.9',
-      'ratingCount': '1126',
-      'bestRating': '5',
-      'worstRating': '1',
-      'reviewCount': '1000'
-    }
+    'aggregateRating': AGGREGATE_RATING
   };
 
   // Return combined schema

@@ -1,4 +1,24 @@
+import fs from 'fs'
+import path from 'path'
 import type { NextConfig } from 'next'
+
+// Map of image basename -> optimized WebP path, written by the prebuild step
+// (scripts/optimize-images.ts). Inlined at build time so OptimizedImage can put
+// the small WebP straight into the server-rendered HTML instead of loading the
+// original first and swapping after hydration. Missing manifest (e.g. a fresh
+// clone running `next dev`) simply means the original images are used.
+function readOptimizedImages(): Record<string, string> {
+  try {
+    const manifest: Record<string, string[]> = JSON.parse(
+      fs.readFileSync(path.join(process.cwd(), 'public', 'optimized-images.json'), 'utf8')
+    )
+    return Object.fromEntries(
+      Object.entries(manifest).filter(([, files]) => files.length).map(([name, files]) => [name, files[0]])
+    )
+  } catch {
+    return {}
+  }
+}
 
 const nextConfig: NextConfig = {
   eslint: {
@@ -6,6 +26,9 @@ const nextConfig: NextConfig = {
   },
   output: 'export',
   outputFileTracingRoot: process.cwd(),
+  env: {
+    NEXT_PUBLIC_OPTIMIZED_IMAGES: JSON.stringify(readOptimizedImages()),
+  },
   images: {
     unoptimized: true,
     loader: 'custom',

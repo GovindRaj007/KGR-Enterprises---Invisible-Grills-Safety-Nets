@@ -19,6 +19,7 @@ export const AREA_PAGE_SERVICES = ['invisible-grills'];
 //   mixed       – apartments, independent homes and commercial side by side
 //   coastal     – sea-facing / near-sea area (salt air)
 // office: true marks the area where our city office is.
+// aka: the short name people also search by ("RR Nagar", "Sarjapur").
 export type AreaKind = 'it' | 'established' | 'growth' | 'mixed' | 'coastal';
 
 export type ServiceArea = {
@@ -26,6 +27,7 @@ export type ServiceArea = {
   kind: AreaKind;
   nearby: string[];
   office?: boolean;
+  aka?: string;
 };
 
 export const serviceAreas: Record<string, ServiceArea[]> = {
@@ -38,12 +40,12 @@ export const serviceAreas: Record<string, ServiceArea[]> = {
     { name: 'Koramangala', kind: 'established', nearby: ['HSR Layout', 'Indiranagar', 'BTM Layout'] },
     { name: 'Indiranagar', kind: 'established', nearby: ['Koramangala', 'Domlur', 'CV Raman Nagar'] },
     { name: 'Hebbal', kind: 'mixed', nearby: ['Nagavara', 'Thanisandra', 'Yelahanka'] },
-    { name: 'Sarjapur Road', kind: 'growth', nearby: ['Bellandur', 'Varthur', 'HSR Layout'] },
+    { name: 'Sarjapur Road', aka: 'Sarjapur', kind: 'growth', nearby: ['Bellandur', 'Varthur', 'HSR Layout'] },
     { name: 'Thanisandra', kind: 'growth', nearby: ['Hennur Road', 'Nagavara', 'Jakkur'] },
-    { name: 'Hennur Road', kind: 'growth', nearby: ['Kalyan Nagar', 'Thanisandra', 'Horamavu'] },
+    { name: 'Hennur Road', aka: 'Hennur', kind: 'growth', nearby: ['Kalyan Nagar', 'Thanisandra', 'Horamavu'] },
     { name: 'Yelahanka', kind: 'growth', nearby: ['Jakkur', 'Kogilu', 'Hebbal'] },
-    { name: 'Bannerghatta Road', kind: 'mixed', nearby: ['Arekere', 'JP Nagar', 'BTM Layout'] },
-    { name: 'Rajarajeshwari Nagar', kind: 'established', nearby: ['Uttarahalli', 'Kengeri', 'Banashankari'] },
+    { name: 'Bannerghatta Road', aka: 'Bannerghatta', kind: 'mixed', nearby: ['Arekere', 'JP Nagar', 'BTM Layout'] },
+    { name: 'Rajarajeshwari Nagar', aka: 'RR Nagar', kind: 'established', nearby: ['Uttarahalli', 'Kengeri', 'Banashankari'] },
     { name: 'Jakkur', kind: 'growth', nearby: ['Yelahanka', 'Thanisandra', 'Hebbal'] },
     { name: 'Kogilu', kind: 'growth', nearby: ['Yelahanka', 'Jakkur', 'Thanisandra'] },
     { name: 'Varthur', kind: 'growth', nearby: ['Whitefield', 'Sarjapur Road', 'Panathur'] },
@@ -69,6 +71,8 @@ export const serviceAreas: Record<string, ServiceArea[]> = {
     { name: 'Rajajinagar', kind: 'established', nearby: ['Malleswaram', 'Yeshwantpur', 'Basaveshwaranagar'] },
     { name: 'Yeshwantpur', kind: 'mixed', nearby: ['Mathikere', 'Malleswaram', 'Rajajinagar'] },
     { name: 'Mathikere', kind: 'established', nearby: ['Yeshwantpur', 'Malleswaram', 'Hebbal'], office: true },
+    { name: 'Harlur', kind: 'growth', nearby: ['HSR Layout', 'Sarjapur Road', 'Bellandur'] },
+    { name: 'Devanahalli', kind: 'growth', nearby: ['Yelahanka', 'Kogilu', 'Jakkur'] },
   ],
   hyderabad: [
     { name: 'Gachibowli', kind: 'it', nearby: ['Kondapur', 'Nanakramguda', 'Manikonda'] },
@@ -89,6 +93,9 @@ export const serviceAreas: Record<string, ServiceArea[]> = {
     { name: 'Uppal', kind: 'mixed', nearby: ['Habsiguda', 'Nacharam', 'LB Nagar'] },
     { name: 'Secunderabad', kind: 'established', nearby: ['Begumpet', 'Tarnaka', 'Alwal'] },
     { name: 'Ameerpet', kind: 'mixed', nearby: ['Begumpet', 'SR Nagar', 'Punjagutta'] },
+    { name: 'Erragadda', kind: 'mixed', nearby: ['Sanath Nagar', 'Ameerpet', 'SR Nagar'] },
+    { name: 'BN Reddy Nagar', kind: 'growth', nearby: ['Vanasthalipuram', 'LB Nagar', 'Hayathnagar'] },
+    { name: 'Hafeezpet', kind: 'growth', nearby: ['Miyapur', 'Kondapur', 'Madhapur'] },
   ],
   chennai: [
     { name: 'OMR', kind: 'it', nearby: ['Sholinganallur', 'Thoraipakkam', 'Perungudi'] },
@@ -110,6 +117,9 @@ export const serviceAreas: Record<string, ServiceArea[]> = {
     { name: 'Tambaram', kind: 'growth', nearby: ['Chromepet', 'Medavakkam', 'Perungalathur'] },
     { name: 'Chromepet', kind: 'mixed', nearby: ['Tambaram', 'Pallavaram', 'Medavakkam'] },
     { name: 'ECR', kind: 'coastal', nearby: ['Neelankarai', 'Injambakkam', 'Thiruvanmiyur'] },
+    { name: 'Ambattur', kind: 'mixed', nearby: ['Anna Nagar', 'Mogappair', 'Avadi'] },
+    { name: 'Besant Nagar', kind: 'coastal', nearby: ['Adyar', 'Thiruvanmiyur', 'Mylapore'] },
+    { name: 'Kelambakkam', kind: 'growth', nearby: ['Navalur', 'Siruseri', 'OMR'] },
   ],
   vijayawada: [
     { name: 'Benz Circle', kind: 'mixed', nearby: ['Patamata', 'Gurunanak Colony', 'Labbipet'], office: true },
@@ -136,6 +146,18 @@ export const serviceAreas: Record<string, ServiceArea[]> = {
     { name: 'Gajuwaka', kind: 'mixed', nearby: ['Sheela Nagar', 'Kurmannapalem', 'Pedagantyada'] },
     { name: 'NAD Junction', kind: 'mixed', nearby: ['Gopalapatnam', 'Marripalem', 'Akkayyapalem'] },
     { name: 'Pendurthi', kind: 'growth', nearby: ['Gopalapatnam', 'Sujatha Nagar', 'Vepagunta'] },
+  ],
+  guntur: [
+    { name: 'Brodipet', kind: 'established', nearby: ['Arundelpet', 'Lakshmipuram', 'Kothapet'] },
+    { name: 'Arundelpet', kind: 'established', nearby: ['Brodipet', 'Lakshmipuram', 'Kothapet'] },
+    { name: 'Lakshmipuram', kind: 'established', nearby: ['Brodipet', 'Arundelpet', 'Pattabhipuram'] },
+    { name: 'Pattabhipuram', kind: 'established', nearby: ['Lakshmipuram', 'Vidya Nagar', 'Brindavan Gardens'] },
+    { name: 'Brindavan Gardens', kind: 'established', nearby: ['Pattabhipuram', 'Lakshmipuram', 'Amaravathi Road'] },
+    { name: 'Vidya Nagar', kind: 'established', nearby: ['Pattabhipuram', 'Brodipet', 'Kothapet'] },
+    { name: 'Kothapet', kind: 'mixed', nearby: ['Brodipet', 'Arundelpet', 'Nallapadu'] },
+    { name: 'Amaravathi Road', kind: 'growth', nearby: ['Brindavan Gardens', 'Gorantla', 'Lakshmipuram'] },
+    { name: 'Gorantla', kind: 'growth', nearby: ['Amaravathi Road', 'Nallapadu', 'Brindavan Gardens'] },
+    { name: 'Nallapadu', kind: 'growth', nearby: ['Gorantla', 'Kothapet', 'Pattabhipuram'] },
   ],
 };
 

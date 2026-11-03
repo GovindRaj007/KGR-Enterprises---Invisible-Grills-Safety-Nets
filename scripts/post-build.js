@@ -9,6 +9,18 @@ fs.copyFileSync(
 
 console.log('✅ .htaccess file copied to out directory');
 
+// Files Next copies into out/ that must not be public URLs. Google reported
+// /optimized-images.json as "crawled - not indexed", and /404/ served the
+// not-found page with a 200 status (a soft 404). The real 404 page is
+// out/404.html, used by ErrorDocument in .htaccess.
+for (const unwanted of ['optimized-images.json', '404']) {
+  const target = path.join(__dirname, '../out', unwanted);
+  if (fs.existsSync(target)) {
+    fs.rmSync(target, { recursive: true, force: true });
+    console.log(`✅ removed out/${unwanted}`);
+  }
+}
+
 // Validate XML sitemap files
 function validateSitemapFile(filePath) {
   if (fs.existsSync(filePath)) {

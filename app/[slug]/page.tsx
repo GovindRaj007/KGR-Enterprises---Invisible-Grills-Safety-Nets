@@ -20,6 +20,9 @@ import {
 } from "@/lib/seo-metadata";
 import { generateServiceSchema } from "@/lib/service-schema";
 import { PRIMARY } from "@/constants/contacts";
+import { INVISIBLE_GRILL_PRICE, BUSINESS_FACTS } from "@/lib/local-seo-content";
+import { KeyFacts, GrillComparison } from "@/components/location/LocalSeoSections";
+import { LOCATION_NAMES } from "@/constants/locations";
 import { CheckCircle2, ArrowRight, Phone, Shield, Fence, Wind, Ruler, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
@@ -87,11 +90,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     image: service.image,
   });
 
+  // "invisible grill installation" and "invisible grill for balcony installation"
+  // are the non-city queries these two pages get impressions for; the city in
+  // the old title also made them compete with the Bangalore page.
+  const titleOverride: Record<string, string> = {
+    'invisible-grills': `Invisible Grills Installation | From ₹${INVISIBLE_GRILL_PRICE.from}/sq ft | KGR`,
+    'invisible-grills-balcony': 'Invisible Grill for Balcony – Installation & Price | KGR',
+  };
+  const title = titleOverride[canonicalSlug] ?? baseMetadata.title;
+  const descriptionOverride: Record<string, string> = {
+    'invisible-grills': `Invisible grill installation for balconies and windows from ₹${INVISIBLE_GRILL_PRICE.from}/sq ft. SS316 marine-grade, ${BUSINESS_FACTS.warrantyYears}-year warranty, free site visit. Call ${PRIMARY.display.trim()}.`,
+    'invisible-grills-balcony': `Invisible grill for balcony installation from ₹${INVISIBLE_GRILL_PRICE.from}/sq ft: clear view, child & pet safe, ${BUSINESS_FACTS.warrantyYears}-year warranty. Free site visit. Call ${PRIMARY.display.trim()}.`,
+  };
+  const description = descriptionOverride[canonicalSlug] ?? baseMetadata.description;
+
   const etag = `W/"${canonicalSlug}-${service.title.replace(/\s+/g, "-").toLowerCase()}"`;
   const canonicalUrl = getCanonicalUrl(getServiceRoute(canonicalSlug));
 
   return {
     ...baseMetadata,
+    title,
+    description,
+    openGraph: { ...baseMetadata.openGraph, title: title ?? undefined },
+    twitter: { ...baseMetadata.twitter, title: title ?? undefined },
     verification: {
       google: "P8HUVCb--rZ-IF-X_ZwXQX1FOPvjQI5M0MWRtAwVMfc",
     },
@@ -125,58 +146,62 @@ export default async function ServiceDetailPage({ params }: Props) {
   const isClothDrying = canonicalSlug === 'cloth-drying';
   const isInvisibleGrills = service.category === "invisible-grills" && !isClothDrying;
 
-  // Build FAQ array
+  // Build FAQ array. The invisible-grill questions follow what people actually
+  // search ("price per square foot", "are invisible grills safe", "invisible
+  // grill vs pigeon net", "pros and cons") and answer with specifics.
+  const loadCapacity = service.specifications.find((s) => s.label === "Load Capacity")?.value;
+  const cableThickness = service.specifications.find((s) => s.label === "Cable Thickness")?.value;
   const faqs: FAQ[] = isInvisibleGrills
     ? [
         {
-          question: "What are Invisible Grills?",
+          question: "What is the price of invisible grills per square foot?",
           answer:
-            "Invisible grills are stainless steel cable systems installed on balconies and windows to provide strong protection without blocking your view. Our installation teams fit transparent grill systems precisely for homes and apartments.",
+            `Invisible grills cost ₹${INVISIBLE_GRILL_PRICE.from} per square foot including installation, for both balconies and windows. The final amount depends on the cable grade (SS304 or SS316), cable thickness, spacing, floor height and total area. KGR Enterprises gives a fixed written quote after a free site inspection in Bangalore, Hyderabad, Chennai, Vijayawada and Visakhapatnam.`,
         },
         {
-          question: "Are Invisible Grills Safe?",
+          question: "What are invisible grills?",
           answer:
-            "Yes — our premium invisible grills are designed for child safety, pet safety, and anti-theft protection while maintaining airflow and unobstructed views.",
+            "Invisible grills are high-tensile stainless steel cables fixed vertically or horizontally across a balcony or window and held in aluminium tracks. They stop children and pets from falling and keep intruders out, while leaving the view, light and airflow open — from a few feet away the cables almost disappear.",
         },
         {
-          question: "How Strong are Invisible Grills?",
+          question: "What material are invisible grills made of?",
           answer:
-            "Our SS316 and SS304 invisible grills use high-tensile cables that can resist impact, prevent theft, and support everyday household safety requirements.",
+            `Our invisible grills use SS316 marine-grade stainless steel cable${cableThickness ? ` (${cableThickness} thick)` : ""} with a nylon coating, fixed in powder-coated aluminium tracks with stainless steel anchors. SS316 resists rust far better than SS304 or iron, which matters in coastal cities such as Chennai and Visakhapatnam.`,
         },
         {
-          question: "How Long do Invisible Grills Last?",
+          question: "Are invisible grills safe and strong?",
           answer:
-            "With marine-grade stainless steel and professional installation, our invisible grills are built to last 15+ years with minimal maintenance.",
+            `Yes. Each cable is tensioned stainless steel${loadCapacity ? ` rated at ${loadCapacity}` : ""}, and the cable spacing is set on site — closer for homes with toddlers or small pets. Installed correctly, invisible grills prevent falls from balconies and windows and act as an anti-theft barrier.`,
         },
         {
-          question: "Do Invisible Grills Prevent Theft?",
+          question: "Invisible grill vs pigeon net — which is better?",
           answer:
-            "Yes — the strong stainless steel cable structure acts as a secure barrier for balconies and windows, making unauthorized access much harder.",
+            "They solve different problems. Invisible grills are a structural safety barrier: they prevent falls, deter intruders and last far longer, but cost more. Pigeon nets cost less and are the better choice when birds are the only concern. Many apartments fit invisible grills for safety and add a pigeon net behind them to keep birds out completely.",
         },
         {
-          question: "Can Invisible Grills Stop Children from Falling?",
+          question: "What are the pros and cons of invisible grills?",
           answer:
-            "Absolutely — our balcony and window grills are installed to prevent accidental falls and ensure child safety in apartments and homes.",
+            "Pros: an open, unobstructed view; no rust and no repainting; child and pet safety; a modern look; quick installation without welding. Cons: a higher upfront cost than iron grills or nets; cables must be professionally tensioned; and with wider spacing small birds can still get through, so a pigeon net may be needed as well.",
         },
         {
-          question: "Are Invisible Grills Good for Pets?",
+          question: "Which invisible grill is best — SS316 or SS304?",
           answer:
-            "Yes — our pet-safe invisible grills keep cats and dogs safe on balconies and windows while allowing fresh air and daylight.",
+            "SS316 marine-grade stainless steel is the best choice for balconies and anywhere exposed to rain or coastal air, because it resists corrosion far better. SS304 is a strong, lower-cost option for sheltered or indoor openings such as staircases.",
         },
         {
-          question: "Do Invisible Grills Prevent Pigeons?",
+          question: "How long does installation take, and what is the warranty?",
           answer:
-            "Properly installed invisible grills work with pigeon nets to prevent birds from nesting and keep your balcony clean.",
+            `A typical apartment balcony is installed in ${BUSINESS_FACTS.installHours} hours with no welding. KGR Enterprises gives a ${BUSINESS_FACTS.warrantyYears}-year warranty on materials and workmanship.`,
         },
         {
-          question: "How are Invisible Grills Installed?",
+          question: "How long do invisible grills last?",
           answer:
-            "We perform a free site survey, measure the opening, and install the grill system using corrosion-resistant anchors and stainless steel cables for a seamless finish.",
+            "With marine-grade stainless steel and professional installation, invisible grills are built to last 15+ years with minimal maintenance — an occasional wipe with a damp cloth is enough.",
         },
         {
-          question: "Which Invisible Grill is Best?",
+          question: "Do invisible grills keep pigeons out?",
           answer:
-            "Our SS316 invisible grills are the top choice for coastal climate durability and premium performance, while SS304 is a strong, cost-effective option for interior applications.",
+            "Partly. Close cable spacing discourages pigeons, but small birds can pass between cables. For complete bird protection, combine invisible grills with a pigeon net.",
         },
       ]
     : [
@@ -190,7 +215,7 @@ export default async function ServiceDetailPage({ params }: Props) {
         },
         {
           question: `How long does ${productName} installation take?`,
-          answer: `Installation typically takes 4-6 hours depending on size and site conditions.`,
+          answer: `Installation typically takes ${BUSINESS_FACTS.installHours} hours depending on size and site conditions. Site inspection and quotation are free.`,
         },
       ];
 
@@ -261,6 +286,7 @@ export default async function ServiceDetailPage({ params }: Props) {
     slug: canonicalSlug,
     category: service.category,
     specifications: service.specifications,
+    price: isInvisibleGrills ? INVISIBLE_GRILL_PRICE : undefined,
   });
 
   const faqSchema = generateServiceFAQSchema(faqs);
@@ -268,11 +294,11 @@ export default async function ServiceDetailPage({ params }: Props) {
   const combinedSchema = {
     "@context": "https://schema.org",
     "@graph": [
-      serviceSchema,
+      ...serviceSchema['@graph'],
       faqSchema,
       {
         "@type": "LocalBusiness",
-        "@id": "https://invisiblegrillsandsafetynets.in#organization",
+        "@id": "https://invisiblegrillsandsafetynets.in/#organization",
         name: "KGR Enterprises",
         image: {
           "@type": "ImageObject",
@@ -329,6 +355,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                 src={service.image} 
                 alt={`${service.title} installation by KGR Enterprises for homes, balconies and commercial properties`}
                 className="h-full w-full object-cover"
+                priority
               />
               <div className="absolute inset-0 bg-gradient-to-r from-[hsl(222,47%,8%,0.95)] via-[hsl(222,47%,10%,0.88)] to-[hsl(222,47%,10%,0.75)]" />
             </div>
@@ -377,6 +404,21 @@ export default async function ServiceDetailPage({ params }: Props) {
             </div>
           </section>
         </HeroWithHeaderWrapper>
+
+        <KeyFacts
+          title={`${service.title} at a Glance`}
+          facts={[
+            ...(isInvisibleGrills
+              ? [{ label: 'Price', value: `₹${INVISIBLE_GRILL_PRICE.from} per sq ft, installed` }]
+              : []),
+            ...service.specifications.slice(0, 3),
+            { label: 'Warranty', value: `${BUSINESS_FACTS.warrantyYears} years` },
+            { label: 'Installation time', value: `${BUSINESS_FACTS.installHours} hours (typical home)` },
+            { label: 'Site inspection & quote', value: 'Free' },
+            { label: 'Cities served', value: LOCATION_NAMES.join(', ') },
+            { label: 'Call / WhatsApp', value: PRIMARY.display.trim() },
+          ]}
+        />
 
         {isInvisibleGrills && (
           <section className="section-bg-5 relative py-16 md:py-24">
@@ -539,6 +581,8 @@ export default async function ServiceDetailPage({ params }: Props) {
             </div>
           </div>
         </section>
+
+        {isInvisibleGrills && <GrillComparison place="Bangalore, Hyderabad and Chennai" />}
 
         {/* FAQ Section - White Background */}
         <div id="faq">

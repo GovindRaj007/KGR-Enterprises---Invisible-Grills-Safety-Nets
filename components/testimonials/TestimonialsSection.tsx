@@ -174,7 +174,7 @@ const TestimonialsSection = () => {
         {/* Trust Indicators */}
         <div className="mt-8 md:mt-12 flex flex-wrap justify-center gap-6 md:gap-12 text-center">
           <div>
-            <div className="text-2xl md:text-3xl font-bold" style={{ color: "#FF6B42" }}>5000+</div>
+            <div className="text-2xl md:text-3xl font-bold" style={{ color: "#FF6B42" }}>4000+</div>
             <div className="text-xs md:text-sm" style={{ color: "#C8D8EE" }}>Happy Customers</div>
           </div>
           <div>
