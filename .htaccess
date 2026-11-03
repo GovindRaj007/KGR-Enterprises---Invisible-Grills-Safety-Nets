@@ -86,6 +86,8 @@
     RewriteRule ^all-sports-practice/?$ https://invisiblegrillsandsafetynets.in/all-sports-practice-nets/ [R=301,L]
     RewriteRule ^cricket-practice/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/cricket-practice-nets/$1/ [R=301,L]
     RewriteRule ^cricket-practice/?$ https://invisiblegrillsandsafetynets.in/cricket-practice-nets/ [R=301,L]
+    # Guntur briefly lived under Vijayawada before getting its own city pages
+    RewriteRule ^invisible-grills/vijayawada/guntur/?$ https://invisiblegrillsandsafetynets.in/invisible-grills/guntur/ [R=301,L]
     # Every other service: just drop the /services prefix. (/services/ itself,
     # the listing page, has no second segment and is left alone.)
     RewriteRule ^services/([^/.]+)/([^.]*[^/.])/?$ https://invisiblegrillsandsafetynets.in/$1/$2/ [R=301,L]
@@ -154,10 +156,10 @@
     RewriteCond %{REQUEST_FILENAME}.html -f
     RewriteRule ^(.+)$ $1.html [L]
     
-    # Fallback to index.html for client-side routing
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule .* /index.html [L]
+    # No catch-all to index.html: every page is a real file in this static
+    # export. A catch-all made unknown URLs (e.g. /anything.txt) return the
+    # home page with a 200 - a "soft 404" that wastes crawl budget. Anything
+    # not matched above now gets a real 404 via ErrorDocument below.
 </IfModule>
 
 # ============================================================================
@@ -182,6 +184,12 @@
         Header set Pragma "public"
     </FilesMatch>
     
+    # Next.js page payloads (index.txt, fetched on in-site navigation) and JSON
+    # data files are not pages - keep them out of Google's index reports
+    <FilesMatch "^index\.txt$|\.json$">
+        Header set X-Robots-Tag "noindex"
+    </FilesMatch>
+
     # Fonts are assets, not pages - keep them out of Google's index reports
     <FilesMatch "\.(woff|woff2|ttf|eot|otf)$">
         Header set X-Robots-Tag "noindex"
