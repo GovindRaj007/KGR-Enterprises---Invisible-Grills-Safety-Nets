@@ -44,6 +44,7 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
     `Invisible Grills & Safety Nets in ${label} | KGR Enterprises`,
     `Invisible Grills & Safety Nets in ${label} | KGR`,
     `Invisible Grills & Safety Nets in ${label}`,
+    `Invisible Grills & Safety Nets in ${matched.name} | KGR`,
   ]);
   const canonicalPath = `/locations/${matched.name.toLowerCase()}/`;
   const locationMeta = {

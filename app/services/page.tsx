@@ -4,7 +4,7 @@ import { servicesData, getServiceRoute } from '@/data/servicesData';
 import { ServicesSectionClient, ServiceLocationsSliderClient } from "@/components/services/ServicesClientWrapper";
 
 export const metadata: Metadata = {
-  title: "Invisible Grills, Safety Nets & Bird Protection Services",
+  title: "Invisible Grills, Safety Nets & Bird Protection | KGR",
   description:
     "Invisible grills, balcony safety nets, children protection nets, pigeon nets and sports nets. Professional installation in Bangalore and across South India.",
   robots: {

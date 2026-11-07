@@ -3,9 +3,9 @@
 // state), so all of it — including FAQ answers — is in the crawled markup.
 
 import Link from 'next/link';
-import { CheckCircle2, MapPin, ArrowRight, IndianRupee, X } from 'lucide-react';
+import { CheckCircle2, MapPin, ArrowRight, Phone, X } from 'lucide-react';
+import { PRIMARY } from '@/constants/contacts';
 import {
-  INVISIBLE_GRILL_PRICE,
   BUSINESS_FACTS,
   INSTALL_STEPS,
   GRILL_VS_IRON,
@@ -54,35 +54,30 @@ export function KeyFacts({ title, facts }: { title: string; facts: Array<{ label
 }
 
 export function GrillPriceAndSpecs({ place, citySlug, specifications }: Pick<Props, 'place' | 'citySlug' | 'specifications'>) {
-  const { from } = INVISIBLE_GRILL_PRICE;
   return (
     <section className="section-bg-4 relative py-16 md:py-20">
       <div className="container relative z-10">
         <div className="grid gap-10 lg:grid-cols-2">
           <div>
             <h2 className="mb-4 font-heading text-3xl font-bold text-foreground md:text-4xl">
-              Invisible Grills Price in {place}
+              What Decides the Cost of Invisible Grills in {place}?
             </h2>
             <p className="mb-4 text-foreground/90">
-              The cost of invisible grills in {place} is <strong>₹{from} per sq ft</strong>,
-              installation included. What moves the
-              final amount is the cable grade (SS304 or SS316), cable thickness, spacing between cables, the
-              floor height and the total area to be covered.
+              The cost of invisible grills in {place} depends on the cable grade (SS304 or SS316), cable
+              thickness, spacing between cables, the floor height and the total area to be covered.
             </p>
             <p className="mb-6 text-foreground/90">
               Invisible grills cost a little more than basic iron grills, but they never need painting,
               do not rust and last far longer — so over the life of the flat they work out cheaper. We
               measure on site and give a fixed written quote with no hidden charges.
             </p>
-            <div className={`${cardClass} inline-flex items-center gap-4 p-5`}>
-              <IndianRupee className="h-8 w-8 flex-shrink-0 text-accent" />
+            <a href={`tel:${PRIMARY.phone}`} className={`${cardClass} inline-flex items-center gap-4 p-5`}>
+              <Phone className="h-8 w-8 flex-shrink-0 text-accent" />
               <div>
-                <p className="text-sm text-white/70">Starting from</p>
-                <p className="text-2xl font-bold text-white">
-                  ₹{from}/sq ft <span className="text-sm font-normal text-white/70">(installation included)</span>
-                </p>
+                <p className="text-sm text-white/70">Free site visit & precise quotation</p>
+                <p className="text-2xl font-bold text-white">{PRIMARY.display.trim()}</p>
               </div>
-            </div>
+            </a>
           </div>
 
           <div>

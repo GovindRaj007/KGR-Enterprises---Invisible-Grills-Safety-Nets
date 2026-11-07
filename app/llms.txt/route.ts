@@ -6,7 +6,7 @@ import { servicesData, serviceCategories, getServiceRoute } from '@/data/service
 import { validLocations, locationData } from '@/constants/locations';
 import { PRIMARY, SECONDARY } from '@/constants/contacts';
 import { BUSINESS_FACTS, BUSINESS_DESCRIPTION } from '@/constants/business';
-import { INVISIBLE_GRILL_PRICE } from '@/lib/local-seo-content';
+import { priceRangeAnswer } from '@/lib/local-seo-content';
 
 export const dynamic = 'force-static';
 
@@ -24,7 +24,7 @@ export function GET() {
   lines.push(`- Founded: ${BUSINESS_FACTS.foundedYear}`);
   lines.push(`- Installations completed: ${BUSINESS_FACTS.installations}`);
   lines.push(`- Cities served: ${cities.map(c => `${c.name} (${c.state})`).join(', ')}`);
-  lines.push(`- Invisible grills price: ₹${INVISIBLE_GRILL_PRICE.from} per sq ft, installation included`);
+  lines.push(`- Invisible grills price: ${priceRangeAnswer('').replace('Invisible grills  cost ', '').replace(/^./, c => c.toUpperCase())}`);
   lines.push('- Invisible grill material: SS316 marine-grade stainless steel cable, nylon coated');
   lines.push(`- Warranty: ${BUSINESS_FACTS.warrantyYears} years`);
   lines.push(`- Typical installation time: ${BUSINESS_FACTS.installHours} hours for an apartment balcony`);
@@ -41,7 +41,7 @@ export function GET() {
 
   lines.push('## Invisible grills by city', '');
   validLocations.forEach(slug => {
-    lines.push(`- [Invisible Grills in ${locationData[slug].name}](${BASE}${getServiceRoute('invisible-grills', slug)}): price, specifications, areas covered and FAQs`);
+    lines.push(`- [Invisible Grills in ${locationData[slug].name}](${BASE}${getServiceRoute('invisible-grills', slug)}): specifications, areas covered, FAQs and free quotation`);
   });
   lines.push('');
 

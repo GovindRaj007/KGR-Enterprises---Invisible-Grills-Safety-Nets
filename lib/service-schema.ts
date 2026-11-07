@@ -13,7 +13,7 @@ export function generateServiceSchema(params: {
   specifications?: Array<{ label: string; value: string }>;
   // Per-sq-ft price range. Pass it only for services whose price is shown on
   // the page: structured-data prices must match visible content.
-  price?: { from: number };
+  price?: { from: number; to: number };
 }) {
   const { serviceName, description, image, slug, category = 'safety-equipment', specifications = [], price } = params;
   const organizationSchema = generateOrganizationSchema();
@@ -48,17 +48,19 @@ export function generateServiceSchema(params: {
       'value': spec.value
     })),
     'offers': price && {
-      '@type': 'Offer',
+      '@type': 'AggregateOffer',
       'priceCurrency': 'INR',
-      'price': String(price.from),
+      'lowPrice': String(price.from),
+      'highPrice': String(price.to),
       'priceValidUntil': new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString(),
       'itemCondition': 'https://schema.org/NewCondition',
       'availability': 'https://schema.org/InStock',
       'seller': organizationSchema,
       'areaServed': ['IN'],
       'priceSpecification': {
-        '@type': 'PriceSpecification',
-        'price': String(price.from),
+        '@type': 'UnitPriceSpecification',
+        'minPrice': price.from,
+        'maxPrice': price.to,
         'priceCurrency': 'INR',
         'unitText': 'per square foot',
         'validFrom': new Date().toISOString(),
@@ -127,7 +129,8 @@ export function generateServiceSchema(params: {
           },
           'priceSpecification': {
             '@type': 'PriceSpecification',
-            'price': String(price.from),
+            'minPrice': price.from,
+            'maxPrice': price.to,
             'priceCurrency': 'INR',
             'unitText': 'per square foot',
             'validFrom': currentDate,

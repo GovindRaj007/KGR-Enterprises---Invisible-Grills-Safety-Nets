@@ -9,14 +9,14 @@ import GalleryClient from "@/components/gallery/GalleryClient";
 import TestimonialsClient from "@/components/testimonials/TestimonialsClient";
 import ServiceLocationsSlider from "@/components/services/ServiceLocationsSlider";
 import InvisibleGrillsNearYou from "@/components/home/InvisibleGrillsNearYou";
-import { INVISIBLE_GRILL_PRICE } from "@/lib/local-seo-content";
+import { priceRangeAnswer } from "@/lib/local-seo-content";
 import { PRIMARY } from "@/constants/contacts";
 
 // Leads with the exact phrase people search ("invisible grills in bangalore")
 // and names the other service cities, so the home page also ranks for them.
 const TITLE = "Invisible Grills in Bangalore, Hyderabad & Chennai | KGR";
 const DESCRIPTION =
-  `Invisible grills near you in Bangalore, Hyderabad, Chennai, Vijayawada & Vizag. SS316 grills from ₹${INVISIBLE_GRILL_PRICE.from}/sq ft, 10-yr warranty. Free site visit.`;
+  `Invisible grills & safety nets near you in Bangalore, Hyderabad, Chennai, Vijayawada & Vizag. SS316 grills, 10-yr warranty. Call ${PRIMARY.display.trim()}.`;
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -82,7 +82,7 @@ const homeFaqs = [
   {
     question: "What is the cost of invisible grills in Bangalore?",
     answer:
-      `Invisible grills in Bangalore cost ₹${INVISIBLE_GRILL_PRICE.from} per sq ft including installation; the final amount depends on cable grade (SS316 or SS304), thickness, spacing and area. The same pricing applies in Hyderabad, Chennai, Vijayawada and Visakhapatnam. Site inspection and quote are free.`,
+      `${priceRangeAnswer('in Bangalore')} The same pricing applies in Hyderabad, Chennai, Vijayawada, Visakhapatnam and Guntur.`,
   },
   {
     question: "Where can I find invisible grills near me?",

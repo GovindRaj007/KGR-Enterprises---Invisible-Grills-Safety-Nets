@@ -85,14 +85,11 @@ export function clampSnippet(text: string, max = 155): string {
     .replace(/[\s,]+(and|or|&)$/i, '');
 }
 
-// Append the brand to a title, degrading gracefully so long service names do
-// not push the title past Google's ~60 character display window: full brand,
-// then the short form, then no brand at all.
+// Append the brand to a title: the full name when it fits Google's ~60
+// character window, otherwise the short form. The brand is never dropped.
 export function withBrand(base: string, max = 60): string {
   const full = `${base} | KGR Enterprises`;
-  if (full.length <= max) return full;
-  const short = `${base} | KGR`;
-  return short.length <= max ? short : base;
+  return full.length <= max ? full : `${base} | KGR`;
 }
 
 // Generate service-specific metadata with location targeting
@@ -128,7 +125,8 @@ export function generateServiceMetadata(params: {
     : `Serving ${LOCATIONS_SENTENCE}`;
 
   // Keep titles inside Google's ~60 character display window.
-  const title = withBrand(`${serviceName}${locationSuffix}`);
+  // Long service names drop the city suffix rather than overflow the title.
+  const title = [withBrand(`${serviceName}${locationSuffix}`), withBrand(serviceName)].find(t => t.length <= 60) ?? withBrand(serviceName);
 
   // Keep descriptions near the ~155 character snippet limit. The long service
   // copy belongs in the page body, not in the meta description.
@@ -249,10 +247,10 @@ export function generateServiceSchema(params: {
     'offers': {
       '@type': 'AggregateOffer',
       'priceCurrency': 'INR',
-      'priceRange': '₹145 per sq ft',
-      'lowPrice': 145,
+      'priceRange': '₹100 - ₹145 per sq ft',
+      'lowPrice': 100,
+      'highPrice': 145,
       'offerCount': 50,
-      'price': 145,
       'unitText': 'per square foot',
       'priceValidUntil': new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString(),
       'availability': 'https://schema.org/InStock',

@@ -5,7 +5,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Phone, ArrowRight, MapPin, Star, Building, IndianRupee, CheckCircle2 } from 'lucide-react';
+import { Phone, ArrowRight, MapPin, Star, Building, CheckCircle2 } from 'lucide-react';
 
 import OptimizedImage from '@/components/shared/OptimizedImage';
 import { Button } from '@/components/ui/button';
@@ -68,19 +68,18 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const resolved = resolve(await params);
   if (!resolved) return {};
   const { service, area, city, citySlug, areaSlug, where } = resolved;
-  const { from } = INVISIBLE_GRILL_PRICE;
   const lower = service.title.toLowerCase();
 
   const title = fitTitle([
     // the short name people also search by, e.g. "RR Nagar"
-    ...(area.aka ? [`${service.title} in ${area.name} (${area.aka}) | From ₹${from}/sq ft`, `${service.title} in ${area.name} (${area.aka}), ${city.name}`, `${service.title} in ${area.name} (${area.aka})`] : []),
-    `${service.title} in ${where} | From ₹${from}/sq ft`,
-    `${service.title} in ${area.name} | From ₹${from}/sq ft | KGR`,
+    ...(area.aka ? [`${service.title} in ${area.name} (${area.aka}), ${city.name}`, `${service.title} in ${area.name} (${area.aka})`] : []),
+    `${service.title} in ${where} | Call ${PRIMARY.display.trim()}`,
+    `${service.title} in ${where} | Free Site Visit`,
     `${service.title} in ${where}`,
     withBrand(`${service.title} in ${area.name}`),
   ]);
   const description = clampSnippet(
-    `${service.title} in ${where} from ₹${from}/sq ft. SS316 marine-grade, child & pet safe, 10-yr warranty. Free site visit near you in ${area.name}.`
+    `${service.title} in ${where} — SS316 marine-grade, child & pet safe, 10-yr warranty. Free site visit near you in ${area.name}. Call ${PRIMARY.display.trim()}.`
   );
   const path = getServiceRoute(service.id, citySlug, areaSlug);
 
@@ -124,7 +123,7 @@ export default async function ServiceAreaPage({ params }: { params: Promise<Para
   const resolved = resolve(await params);
   if (!resolved) notFound();
   const { service, area, city, citySlug, areaSlug, where } = resolved;
-  const { from } = INVISIBLE_GRILL_PRICE;
+  const { from, to } = INVISIBLE_GRILL_PRICE;
   const lower = service.title.toLowerCase();
 
   const baseUrl = 'https://invisiblegrillsandsafetynets.in';
@@ -164,7 +163,7 @@ export default async function ServiceAreaPage({ params }: { params: Promise<Para
         '@id': `${pageUrl}#service`,
         name: `${service.title} in ${where}`,
         serviceType: `${service.title} Installation`,
-        description: `Professional ${lower} installation in ${where} using SS316 marine-grade stainless steel cable. From ₹${from} per sq ft with free site inspection.`,
+        description: `Professional ${lower} installation in ${where} using SS316 marine-grade stainless steel cable, with free site inspection.`,
         image: `${baseUrl}${service.image}`,
         url: pageUrl,
         provider: {
@@ -191,9 +190,10 @@ export default async function ServiceAreaPage({ params }: { params: Promise<Para
           containedInPlace: { '@type': 'City', name: city.name },
         },
         offers: {
-          '@type': 'Offer',
+          '@type': 'AggregateOffer',
           priceCurrency: 'INR',
-          price: from,
+          lowPrice: from,
+          highPrice: to,
           availability: 'https://schema.org/InStock',
         },
       },
@@ -252,7 +252,7 @@ export default async function ServiceAreaPage({ params }: { params: Promise<Para
                   {service.title} in {area.name}
                 </h1>
                 <p className="mb-8 text-lg text-white/85 md:text-xl">
-                  Safe, stylish and rust-free balcony protection for homes and apartments in {where}. SS316 marine-grade invisible grills from ₹{from}/sq ft, installed by our local
+                  Safe, stylish and rust-free balcony protection for homes and apartments in {where}. SS316 marine-grade invisible grills, installed by our local
                   team with a free site inspection.
                 </p>
                 <div className="mb-8 flex flex-col gap-4 sm:flex-row">
@@ -268,10 +268,6 @@ export default async function ServiceAreaPage({ params }: { params: Promise<Para
                   </Button>
                 </div>
                 <div className="flex flex-wrap gap-4">
-                  <div className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm text-white">
-                    <IndianRupee className="h-4 w-4 text-accent" />
-                    From ₹{from}/sq ft, installation included
-                  </div>
                   <div className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm text-white">
                     <Star className="h-4 w-4 fill-accent text-accent" />
                     {BUSINESS_FACTS.rating} Rated

@@ -20,7 +20,7 @@ import {
 } from "@/lib/seo-metadata";
 import { generateServiceSchema } from "@/lib/service-schema";
 import { PRIMARY } from "@/constants/contacts";
-import { INVISIBLE_GRILL_PRICE, BUSINESS_FACTS } from "@/lib/local-seo-content";
+import { INVISIBLE_GRILL_PRICE, BUSINESS_FACTS, priceRangeAnswer } from "@/lib/local-seo-content";
 import { KeyFacts, GrillComparison } from "@/components/location/LocalSeoSections";
 import { LOCATION_NAMES } from "@/constants/locations";
 import { CheckCircle2, ArrowRight, Phone, Shield, Fence, Wind, Ruler, Sparkles } from "lucide-react";
@@ -94,13 +94,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // are the non-city queries these two pages get impressions for; the city in
   // the old title also made them compete with the Bangalore page.
   const titleOverride: Record<string, string> = {
-    'invisible-grills': `Invisible Grills Installation | From ₹${INVISIBLE_GRILL_PRICE.from}/sq ft | KGR`,
-    'invisible-grills-balcony': 'Invisible Grill for Balcony – Installation & Price | KGR',
+    'invisible-grills': `Invisible Grills Installation | Call ${PRIMARY.display.trim()} | KGR`,
+    'invisible-grills-balcony': 'Invisible Grill for Balcony | Free Site Visit | KGR',
   };
   const title = titleOverride[canonicalSlug] ?? baseMetadata.title;
   const descriptionOverride: Record<string, string> = {
-    'invisible-grills': `Invisible grill installation for balconies and windows from ₹${INVISIBLE_GRILL_PRICE.from}/sq ft. SS316 marine-grade, ${BUSINESS_FACTS.warrantyYears}-year warranty, free site visit. Call ${PRIMARY.display.trim()}.`,
-    'invisible-grills-balcony': `Invisible grill for balcony installation from ₹${INVISIBLE_GRILL_PRICE.from}/sq ft: clear view, child & pet safe, ${BUSINESS_FACTS.warrantyYears}-year warranty. Free site visit. Call ${PRIMARY.display.trim()}.`,
+    'invisible-grills': `Invisible grill installation for balconies and windows. SS316 marine-grade, child & pet safe, ${BUSINESS_FACTS.warrantyYears}-year warranty, free site visit. Call ${PRIMARY.display.trim()}.`,
+    'invisible-grills-balcony': `Invisible grill for balcony installation: clear view, child & pet safe, SS316 steel, ${BUSINESS_FACTS.warrantyYears}-year warranty. Free site visit. Call ${PRIMARY.display.trim()}.`,
   };
   const description = descriptionOverride[canonicalSlug] ?? baseMetadata.description;
 
@@ -156,7 +156,7 @@ export default async function ServiceDetailPage({ params }: Props) {
         {
           question: "What is the price of invisible grills per square foot?",
           answer:
-            `Invisible grills cost ₹${INVISIBLE_GRILL_PRICE.from} per square foot including installation, for both balconies and windows. The final amount depends on the cable grade (SS304 or SS316), cable thickness, spacing, floor height and total area. KGR Enterprises gives a fixed written quote after a free site inspection in Bangalore, Hyderabad, Chennai, Vijayawada and Visakhapatnam.`,
+            `${priceRangeAnswer('for balconies and windows')} We serve Bangalore, Hyderabad, Chennai, Vijayawada, Visakhapatnam and Guntur.`,
         },
         {
           question: "What are invisible grills?",
@@ -408,9 +408,6 @@ export default async function ServiceDetailPage({ params }: Props) {
         <KeyFacts
           title={`${service.title} at a Glance`}
           facts={[
-            ...(isInvisibleGrills
-              ? [{ label: 'Price', value: `₹${INVISIBLE_GRILL_PRICE.from} per sq ft, installed` }]
-              : []),
             ...service.specifications.slice(0, 3),
             { label: 'Warranty', value: `${BUSINESS_FACTS.warrantyYears} years` },
             { label: 'Installation time', value: `${BUSINESS_FACTS.installHours} hours (typical home)` },

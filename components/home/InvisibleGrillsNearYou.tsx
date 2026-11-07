@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { MapPin, ArrowRight } from 'lucide-react';
 import { validLocations, locationData, PRIMARY_LOCATION_SLUG } from '@/constants/locations';
 import { getServiceAreas, slugifyArea } from '@/constants/service-areas';
-import { INVISIBLE_GRILL_PRICE } from '@/lib/local-seo-content';
 import { getServiceRoute } from '@/data/servicesData';
 
 // The primary focus city (Bangalore) gets twice the neighbourhood links.
@@ -23,8 +22,8 @@ export default function InvisibleGrillsNearYou() {
         </h2>
         <p className="mx-auto mb-10 max-w-3xl text-center text-foreground/80">
           Looking for invisible grills in Bangalore, Hyderabad, Chennai or Andhra Pradesh? Our local teams
-          install SS316 marine-grade invisible grills from ₹{INVISIBLE_GRILL_PRICE.from}/sq ft with a free
-          site inspection. Choose your city or neighbourhood.
+          install SS316 marine-grade invisible grills with a free site inspection and a precise
+          quotation. Choose your city or neighbourhood.
         </p>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

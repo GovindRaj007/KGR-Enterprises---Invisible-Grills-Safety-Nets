@@ -9,9 +9,15 @@ import { PRIMARY } from '@/constants/contacts';
 import type { AreaKind } from '@/constants/service-areas';
 import { BUSINESS_FACTS } from '@/constants/business';
 
-// The one published invisible-grill price: per sq ft, installation included.
-// Page copy, titles and JSON-LD offers all read it from here.
-export const INVISIBLE_GRILL_PRICE = { from: 145 } as const;
+// Invisible-grill price range per sq ft, installation included.
+// Shown to visitors ONLY inside FAQ answers (as a range, with a "contact us
+// for a precise quotation" note) and used in JSON-LD offers. Never put it in
+// titles, meta descriptions, headings, badges or other page copy.
+export const INVISIBLE_GRILL_PRICE = { from: 100, to: 145 } as const;
+
+// The FAQ wording for the price, shared by every page that answers it.
+export const priceRangeAnswer = (inPlace: string) =>
+  `Invisible grills ${inPlace} cost ₹${INVISIBLE_GRILL_PRICE.from} to ₹${INVISIBLE_GRILL_PRICE.to} per sq ft including installation, depending on the quality of materials (SS304 or SS316 cable, thickness and spacing) and the total area. Contact us for a precise quotation — site inspection and quote are free.`;
 
 export { BUSINESS_FACTS } from '@/constants/business';
 
@@ -23,9 +29,12 @@ export function isInvisibleGrillService(service: Service): boolean {
   return service.category === 'invisible-grills' && service.id !== 'cloth-drying';
 }
 
-// Return the first title that fits Google's ~60 character display window.
+// Return the first candidate that fits Google's ~60 character display window
+// once branded. Every title carries the KGR brand: candidates without it get
+// " | KGR" appended. If none fits, the shortest branded one is used.
 export function fitTitle(candidates: string[], max = 60): string {
-  return candidates.find(t => t.length <= max) ?? candidates[candidates.length - 1];
+  const branded = candidates.map(t => (t.includes('KGR') ? t : `${t} | KGR`));
+  return branded.find(t => t.length <= max) ?? branded.reduce((a, b) => (b.length < a.length ? b : a));
 }
 
 // City-level material advice. Coastal cities get SS316 as the default.
@@ -81,13 +90,12 @@ export function buildLocalFaqs(params: {
   const areas = areasSample.slice(0, 6).join(', ');
   const inPlace = where ? `in ${where}` : place === city ? `in ${city}` : `in ${place}, ${city}`;
   const coastal = citySlug === 'chennai' || citySlug === 'visakhapatnam';
-  const { from } = INVISIBLE_GRILL_PRICE;
 
   if (isInvisibleGrillService(service)) {
     return [
       {
         question: `What is the invisible grill price per square foot ${inPlace}?`,
-        answer: `Invisible grills ${inPlace} cost ₹${from} per sq ft including installation. The final amount depends on the cable grade (SS304 or SS316), cable thickness, spacing, floor height and total area. We give a fixed written quote after a free site inspection — no hidden charges.`,
+        answer: priceRangeAnswer(inPlace),
       },
       {
         question: `Where can I get invisible grills installed near me ${inPlace}?`,
@@ -194,22 +202,23 @@ export const GRILL_USES = [
 // "pigeon net installation near me", "pigeon safety nets in …", "ceiling cloth
 // dryer installation near me", "invisible grill for balcony <city>".
 export function cityTitleCandidates(service: Service, city: string, label: string): string[] {
-  const price = `From ₹${INVISIBLE_GRILL_PRICE.from}/sq ft`;
+  const call = `Call ${PRIMARY.display.trim()}`;
   const places = label === city ? [city] : [label, city];
   const each = (make: (place: string) => string[]) => places.flatMap(make);
   switch (service.id) {
     case 'invisible-grills':
-      return each(p => [`Invisible Grills in ${p} | Installation ${price.replace('From', 'from')}`, `Invisible Grills in ${p} | ${price} | KGR`, `Invisible Grills in ${p} | ${price}`, `Invisible Grills in ${p}`]);
+      return each(p => [`Invisible Grills in ${p} | Balcony & Window Installation`, `Invisible Grills in ${p} | ${call}`, `Invisible Grills in ${p} | KGR Enterprises`, `Invisible Grills in ${p}`]);
     case 'invisible-grills-dealer':
       return each(p => [`Invisible Grill Dealers & Installers in ${p} | KGR`, `Invisible Grill Dealers & Installers in ${p}`, `Invisible Grill Dealers in ${p}`]);
     case 'invisible-grills-balcony':
-      return each(p => [`Invisible Grill for Balcony in ${p} | ${price}`, `Invisible Grill for Balcony in ${p}`]);
+      return each(p => [`Invisible Grill for Balcony in ${p} | ${call}`, `Invisible Grill for Balcony in ${p} | Installation`, `Invisible Grill for Balcony in ${p}`]);
     case 'pigeon-nets':
       return each(p => [`Pigeon Nets Installation in ${p} | Pigeon Safety Nets`, `Pigeon Nets Installation in ${p} | KGR`, `Pigeon Nets Installation in ${p}`]);
     case 'cloth-drying':
       return each(p => [`Ceiling Cloth Drying Hangers Installation in ${p}`, `Ceiling Cloth Drying Hangers in ${p}`]);
     default:
-      return each(p => [`${service.title} in ${p} | KGR Enterprises`, `${service.title} in ${p} | KGR`, `${service.title} in ${p}`]);
+      // last resort for long names: the part before "&" ("Terrace Cricket Nets")
+      return each(p => [`${service.title} in ${p} | KGR Enterprises`, `${service.title} in ${p} | KGR`, `${service.title.split(' & ')[0]} in ${p} | KGR`]);
   }
 }
 
@@ -225,7 +234,7 @@ export function cityDescriptionOverride(service: Service, label: string): string
     case 'terrace-cricket':
       return `Box cricket on your terrace in ${label}: cricket turf, nets and a full enclosure, custom-built and installed. ${call}`;
     case 'invisible-grills-dealer':
-      return `Invisible grill dealers & installers in ${label}: SS316 grills supplied and fitted by our own team from ₹${INVISIBLE_GRILL_PRICE.from}/sq ft, ${BUSINESS_FACTS.warrantyYears}-year warranty. ${call}`;
+      return `Invisible grill dealers & installers in ${label}: SS316 grills supplied and fitted by our own team, ${BUSINESS_FACTS.warrantyYears}-year warranty. ${call}`;
     default:
       return undefined;
   }

@@ -5,22 +5,24 @@ import HeroWithHeaderWrapper from "@/components/layout/HeroWithHeaderWrapper";
 import AboutSection from "@/components/about/AboutSection";
 import TestimonialsSection from "@/components/testimonials/TestimonialsSection";
 import { Card, CardContent } from "@/components/ui/card";
+import { PRIMARY } from "@/constants/contacts";
+import { BUSINESS_FACTS, AGGREGATE_RATING } from "@/constants/business";
 
 export const metadata: Metadata = {
-  title: "About Us - 15+ Years Experience in Safety Solutions",
-  description: "KGR Enterprises has 15+ years of experience in invisible grills and safety nets installation. Certified team, 5000+ happy customers across Hyderabad, Bangalore, Chennai.",
+  title: `About KGR Enterprises – Invisible Grills Experts Since ${BUSINESS_FACTS.foundedYear}`,
+  description: `KGR Enterprises has installed invisible grills and safety nets since ${BUSINESS_FACTS.foundedYear}: ${BUSINESS_FACTS.installations} installations across Bangalore, Hyderabad, Chennai and Andhra Pradesh.`,
   alternates: {
     canonical: 'https://invisiblegrillsandsafetynets.in/about/',
   },
   keywords: [
     // Brand & Company Identity
     "KGR Enterprises",
-    "safety experts since 2008",
+    `safety experts since ${BUSINESS_FACTS.foundedYear}`,
     "15 years experience",
     "family-owned business",
     // Company Credibility & Trust
     "certified installation team",
-    "5000+ satisfied customers",
+    `${BUSINESS_FACTS.installations} installations`,
     "industry leaders",
     "trusted safety provider",
     "best in class service",
@@ -47,7 +49,6 @@ export const metadata: Metadata = {
     "safety solutions pioneer",
     "market leaders",
     "innovation in safety",
-    "award winners in service",
     // Location Heritage
     "South India's trusted provider",
     "regional safety experts",
@@ -69,7 +70,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "About KGR Enterprises - Invisible Grills & Safety Nets Experts",
-    description: "Trusted safety solutions provider with 15+ years experience and 5000+ satisfied customers",
+    description: `Trusted safety solutions provider since ${BUSINESS_FACTS.foundedYear} with ${BUSINESS_FACTS.installations} installations`,
     url: "https://invisiblegrillsandsafetynets.in/about",
     images: [
       {
@@ -86,12 +87,14 @@ export default function AboutPage() {
   const organizationSchema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
+    // Same entity as the site-wide Organization in app/layout.tsx
+    '@id': 'https://invisiblegrillsandsafetynets.in/#organization',
     'name': 'KGR Enterprises',
     'alternateName': 'KGR Invisible Grills & Safety Nets',
     'url': 'https://invisiblegrillsandsafetynets.in',
     'logo': 'https://invisiblegrillsandsafetynets.in/logo.png',
-    'description': 'Professional installation services for invisible grills, safety nets, bird protection solutions, and sports nets across South India. 15+ years of experience with 5000+ satisfied customers.',
-    'foundingDate': '2008',
+    'description': `Professional installation services for invisible grills, safety nets, bird protection solutions, and sports nets across South India. In business since ${BUSINESS_FACTS.foundedYear} with ${BUSINESS_FACTS.installations} installations.`,
+    'foundingDate': String(BUSINESS_FACTS.foundedYear),
     'address': {
       '@type': 'PostalAddress',
       'streetAddress': '15-21-150/17, JK Heights, Balaji Nagar, Kukatpally',
@@ -102,17 +105,10 @@ export default function AboutPage() {
     },
     'contactPoint': {
       '@type': 'ContactPoint',
-      'telephone': '+91-7339306098',
+      'telephone': PRIMARY.phone,
       'contactType': 'Customer Support'
     },
-    'aggregateRating': {
-      '@type': 'AggregateRating',
-      'ratingValue': '4.9',
-      'bestRating': '5',
-      'worstRating': '1',
-      'ratingCount': '1126',
-      'reviewCount': '1126'
-    }
+    'aggregateRating': AGGREGATE_RATING
   };
 
   return (
@@ -144,7 +140,7 @@ export default function AboutPage() {
                 <span className="text-gradient-on-dark">KGR Enterprises</span>
               </h1>
               <p className="text-xl text-white/90">
-                Your Trusted Partner in Safety Solutions Since 2008
+                Your Trusted Partner in Safety Solutions Since {BUSINESS_FACTS.foundedYear}
               </p>
             </div>
           </div>
@@ -159,10 +155,10 @@ export default function AboutPage() {
             <CardContent className="p-4 md:p-6 space-y-4">
               <h2 className="text-xl md:text-2xl font-bold text-card-foreground">Our Story</h2>
               <p className="text-card-foreground/80">
-                Founded in 2008, KGR Enterprises has grown from a small local
+                Founded in {BUSINESS_FACTS.foundedYear}, KGR Enterprises has grown from a small local
                 business to become one of South India&apos;s most trusted safety
                 solutions providers. With over 15 years of experience, we have
-                successfully completed 5000+ installations across Hyderabad,
+                successfully completed {BUSINESS_FACTS.installations} installations across Hyderabad,
                 Bangalore, Chennai, and Andhra Pradesh.
               </p>
             </CardContent>
