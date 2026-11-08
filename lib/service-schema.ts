@@ -3,6 +3,7 @@ import { PRIMARY } from '@/constants/contacts';
 import { validLocations, locationData } from '@/constants/locations';
 import { getServiceRoute } from '@/data/servicesData';
 import { AGGREGATE_RATING } from '@/constants/business';
+import { MERCHANT_OFFER_DETAILS, PRICE_VALID_FROM } from '@/lib/local-seo-content';
 
 export function generateServiceSchema(params: {
   serviceName: string;
@@ -57,13 +58,14 @@ export function generateServiceSchema(params: {
       'availability': 'https://schema.org/InStock',
       'seller': organizationSchema,
       'areaServed': ['IN'],
+      ...MERCHANT_OFFER_DETAILS,
       'priceSpecification': {
         '@type': 'UnitPriceSpecification',
         'minPrice': price.from,
         'maxPrice': price.to,
         'priceCurrency': 'INR',
         'unitText': 'per square foot',
-        'validFrom': new Date().toISOString(),
+        'validFrom': PRICE_VALID_FROM,
         'validThrough': new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString()
       }
     },

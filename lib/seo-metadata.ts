@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { PRIMARY } from '@/constants/contacts';
+import { MERCHANT_OFFER_DETAILS } from '@/lib/local-seo-content';
 import { locationData, validLocations, PRIMARY_LOCATION, LOCATION_NAMES } from '@/constants/locations';
 import { getServiceRoute } from '@/data/servicesData';
 
@@ -256,6 +257,7 @@ export function generateServiceSchema(params: {
       'availability': 'https://schema.org/InStock',
       'itemCondition': 'https://schema.org/NewCondition',
       'warranty': '10-year warranty',
+      ...MERCHANT_OFFER_DETAILS,
       'seller': {
         '@type': 'Organization',
         'name': 'KGR Enterprises',

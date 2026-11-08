@@ -15,6 +15,38 @@ import { BUSINESS_FACTS } from '@/constants/business';
 // titles, meta descriptions, headings, badges or other page copy.
 export const INVISIBLE_GRILL_PRICE = { from: 100, to: 145 } as const;
 
+// Date the current price range took effect. Used as the offer's validFrom in
+// Merchant listings markup; update it whenever INVISIBLE_GRILL_PRICE changes.
+export const PRICE_VALID_FROM = '2026-11-01';
+
+// Extra Offer fields Google's Merchant listings report asks for on Product
+// pages. The grills are delivered and fitted on site by our own team, so
+// "shipping" is free (included in the installed price) to the states we serve,
+// within the 1–3 day lead time stated elsewhere; returns are not accepted.
+export const MERCHANT_OFFER_DETAILS = {
+  validFrom: PRICE_VALID_FROM,
+  shippingDetails: {
+    '@type': 'OfferShippingDetails',
+    shippingRate: { '@type': 'MonetaryAmount', value: 0, currency: 'INR' },
+    shippingDestination: {
+      '@type': 'DefinedRegion',
+      addressCountry: 'IN',
+      // Karnataka, Telangana, Tamil Nadu, Andhra Pradesh
+      addressRegion: ['KA', 'TG', 'TN', 'AP'],
+    },
+    deliveryTime: {
+      '@type': 'ShippingDeliveryTime',
+      handlingTime: { '@type': 'QuantitativeValue', minValue: 1, maxValue: 3, unitCode: 'DAY' },
+      transitTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 0, unitCode: 'DAY' },
+    },
+  },
+  hasMerchantReturnPolicy: {
+    '@type': 'MerchantReturnPolicy',
+    applicableCountry: 'IN',
+    returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
+  },
+} as const;
+
 // The FAQ wording for the price, shared by every page that answers it.
 export const priceRangeAnswer = (inPlace: string) =>
   `Invisible grills ${inPlace} cost ₹${INVISIBLE_GRILL_PRICE.from} to ₹${INVISIBLE_GRILL_PRICE.to} per sq ft including installation, depending on the quality of materials (SS304 or SS316 cable, thickness and spacing) and the total area. Contact us for a precise quotation — site inspection and quote are free.`;
