@@ -32,7 +32,7 @@ export type ServiceArea = {
 
 export const serviceAreas: Record<string, ServiceArea[]> = {
   bangalore: [
-    { name: 'Whitefield', kind: 'it', nearby: ['Kadugodi', 'Hoodi', 'Varthur'] },
+    { name: 'Whitefield', kind: 'it', nearby: ['Kadugodi', 'Hoodi', 'Varthur'], office: true },
     { name: 'Bellandur', kind: 'it', nearby: ['Sarjapur Road', 'Marathahalli', 'HSR Layout'] },
     { name: 'Electronic City', kind: 'it', nearby: ['Chandapura', 'Begur Road', 'Bommanahalli'] },
     { name: 'Marathahalli', kind: 'it', nearby: ['Bellandur', 'Mahadevapura', 'Panathur'] },
@@ -70,7 +70,7 @@ export const serviceAreas: Record<string, ServiceArea[]> = {
     { name: 'Malleswaram', kind: 'established', nearby: ['Rajajinagar', 'Yeshwantpur', 'Mathikere'] },
     { name: 'Rajajinagar', kind: 'established', nearby: ['Malleswaram', 'Yeshwantpur', 'Basaveshwaranagar'] },
     { name: 'Yeshwantpur', kind: 'mixed', nearby: ['Mathikere', 'Malleswaram', 'Rajajinagar'] },
-    { name: 'Mathikere', kind: 'established', nearby: ['Yeshwantpur', 'Malleswaram', 'Hebbal'], office: true },
+    { name: 'Mathikere', kind: 'established', nearby: ['Yeshwantpur', 'Malleswaram', 'Hebbal'] },
     { name: 'Harlur', kind: 'growth', nearby: ['HSR Layout', 'Sarjapur Road', 'Bellandur'] },
     { name: 'Devanahalli', kind: 'growth', nearby: ['Yelahanka', 'Kogilu', 'Jakkur'] },
   ],

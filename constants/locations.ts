@@ -16,11 +16,11 @@ export const locationData = {
     description: 'Covering Bangalore and Bengaluru Urban areas',
     state: 'Karnataka',
     priority: 1.0,
-    latitude: 13.04266073172332,
-    longitude: 77.55298708465743,
+    latitude: 12.985648067695028,
+    longitude: 77.74439173592239,
     name: 'Bangalore',
-    streetAddress: '367, 2nd A Main Rd, Sharadamba Nagar, Muthyala Nagar, Gokula Extension, Mathikere, Bengaluru',
-    postalCode: '560054'
+    streetAddress: '161, ECC Rd, Pattandur Agrahara, Whitefield, Bengaluru',
+    postalCode: '560066'
   },
   hyderabad: {
     areas: [
